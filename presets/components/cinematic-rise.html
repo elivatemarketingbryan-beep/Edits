@@ -1,0 +1,68 @@
+<!--
+  presets/components/cinematic-rise.html — approved motion direction:
+  "cinematic rise" (emphasis text rises in near the top of frame, feels
+  embedded in the scene rather than a caption bar).
+
+  SUB-COMPOSITION template — copy into a job's
+  hf-graphics/compositions/part-NN.html and:
+    1. Replace __COMP_ID__ with a unique id (must match the host slot's
+       data-composition-id AND data-composition-src filename).
+    2. Replace __TEXT__ with the emphasis line (keep it short — this is
+       a hook/emphasis moment, not a full sentence).
+    3. Set the host slot's data-width/data-height to the job's canvas
+       and data-duration to ~2.5-3s per use.
+  Positioned at top: 22% on a 1920-tall canvas (~422px) — clear of the
+  short-form top-200px excluded band. This is a HOOK treatment: use it
+  sparingly (a handful of times per video, not every beat) or it loses
+  its impact — see hf-graphics/PROJECT.md's beat sheet to decide which
+  beats earn it.
+-->
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8"></head>
+  <body>
+    <template>
+      <style>
+        #root {
+          position: absolute;
+          inset: 0;
+        }
+        .rise-wrap {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 22%;
+          display: flex;
+          justify-content: center;
+          padding: 0 60px;
+        }
+        .rise-text {
+          font-family: 'Inter', sans-serif;
+          font-weight: 800;
+          font-size: 46px;
+          letter-spacing: -0.02em;
+          color: #f5f5f2;
+          text-align: center;
+          line-height: 1.15;
+          opacity: 0;
+          text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+        }
+      </style>
+
+      <div id="root" data-composition-id="__COMP_ID__" data-width="1080" data-height="1920">
+        <div class="rise-wrap">
+          <div class="rise-text" id="rise-text">__TEXT__</div>
+        </div>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        tl.fromTo('#rise-text', { y: 26, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.32, ease: 'expo.out' })
+          .to('#rise-text', { autoAlpha: 1, duration: 1.9 })  // hold
+          .to('#rise-text', { y: -16, autoAlpha: 0, duration: 0.24, ease: 'expo.in' });
+        window.__timelines['__COMP_ID__'] = tl;
+      </script>
+    </template>
+  </body>
+</html>

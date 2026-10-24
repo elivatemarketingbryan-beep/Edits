@@ -1,0 +1,83 @@
+<!doctype html>
+<!-- Level meter: glass vials that fill one after another to their percentages, each tier
+     in its own colour (green, blue, then the brand accent), with the % counting up and the
+     label underneath. --text is "Title || Beginner 25 | Intermediate 60 | Advanced 90"
+     (title optional; one tier works too, as a single big meter). Sounds: "riser-short"
+     while each vial fills, "enter" as it lands. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: __BG__; font-family: "Inter", sans-serif; color: #fff; }
+      .glow { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 60%, __ACCENT_DEEP__55 0%, transparent 60%); }
+      #wrap { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; }
+      #title { font-weight: 800; }
+      #title .spark { color: __ACCENT_LIGHT__; margin-right: .3em; }
+      #row { display: flex; justify-content: center; align-items: flex-end; }
+      .tier { display: flex; flex-direction: column; align-items: center; }
+      .vial { position: relative; border-radius: 999px; overflow: hidden; background: rgba(255, 255, 255, .05);
+        border: 2px solid rgba(255, 255, 255, .16); box-shadow: inset 0 0 30px rgba(255, 255, 255, .04); }
+      .fill { position: absolute; left: 0; right: 0; bottom: 0; height: 0; border-radius: 0 0 999px 999px; }
+      .fill::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10%; background: rgba(255, 255, 255, .35); filter: blur(4px); }
+      .shine { position: absolute; top: 6%; left: 18%; width: 14%; height: 70%; border-radius: 999px; background: rgba(255, 255, 255, .22); }
+      .pct { font-weight: 800; font-variant-numeric: tabular-nums; }
+      .label { font-weight: 600; color: rgba(255, 255, 255, .7); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <div class="glow"></div>
+      <div id="wrap"><div id="title"></div><div id="row"></div></div>
+    </div>
+    <script>
+      const W = __W__, H = __H__, TEXT = __TEXT__, DUR = __DURATION__;
+      const portrait = H > W;
+      const parts = TEXT.split('||').map((s) => s.trim());
+      const [title, list] = parts.length > 1 ? parts : ['', parts[0]];
+      const tiers = list.split('|').map((s) => { const m = s.trim().match(/^(.*?)\s*(\d+(?:\.\d+)?)\s*%?$/); return { name: m ? m[1] : s.trim(), pct: m ? Number(m[2]) : 0 }; });
+      const colours = ['#22C55E', '#38BDF8', '__ACCENT__', '#F59E0B', '#F43F5E'];
+      const single = tiers.length === 1;
+      const vh = H * (portrait ? 0.36 : 0.46) * (single ? 1.15 : 1), vw = vh * (single ? 0.42 : 0.3);
+      const gap = vw * (portrait ? 0.55 : 0.9);
+      const row = document.getElementById('row');
+      row.style.gap = gap + 'px';
+      const t = document.getElementById('title');
+      if (title) {
+        t.style.fontSize = (portrait ? W * 0.065 : W * 0.03) + 'px'; t.style.marginBottom = vh * 0.12 + 'px';
+        const sp = document.createElement('span'); sp.className = 'spark'; sp.textContent = '✦'; t.append(sp, document.createTextNode(title));
+      }
+      const els = tiers.map((tier, i) => {
+        const col = colours[i % colours.length];
+        const d = document.createElement('div'); d.className = 'tier';
+        const pct = document.createElement('div'); pct.className = 'pct'; pct.style.fontSize = vw * (single ? 0.5 : 0.42) + 'px'; pct.style.marginBottom = vw * 0.15 + 'px'; pct.textContent = '0%';
+        const vial = document.createElement('div'); vial.className = 'vial'; Object.assign(vial.style, { width: vw + 'px', height: vh + 'px' });
+        const fill = document.createElement('div'); fill.className = 'fill';
+        fill.style.background = `linear-gradient(180deg, ${col} 0%, ${col}cc 100%)`; fill.style.boxShadow = `0 0 ${vw * 0.5}px ${col}88`;
+        const shine = document.createElement('div'); shine.className = 'shine';
+        vial.append(fill, shine);
+        const label = document.createElement('div'); label.className = 'label'; label.style.fontSize = vw * 0.2 + 'px'; label.style.marginTop = vw * 0.2 + 'px'; label.textContent = tier.name;
+        d.append(pct, vial, label); row.appendChild(d);
+        return { pct, fill, tier };
+      });
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.from('#title', { opacity: 0, y: H * 0.02, duration: 0.5, ease: 'power3.out' }, 0);
+      tl.from('.tier', { opacity: 0, y: H * 0.03, duration: 0.5, ease: 'power3.out', stagger: 0.1 }, 0.1);
+      const fills = [];
+      const step = Math.min(1.4, (DUR - 1.6) / els.length);
+      els.forEach((e, i) => {
+        const at = 0.8 + i * step, d = step * 0.85, state = { v: 0 };
+        fills.push(+(at + d).toFixed(2));
+        tl.to(e.fill, { height: e.tier.pct + '%', duration: d, ease: 'power2.inOut' }, at);
+        tl.to(state, { v: e.tier.pct, duration: d, ease: 'power2.inOut', onUpdate: () => { e.pct.textContent = Math.round(state.v) + '%'; } }, at);
+      });
+      tl.to('#wrap', { scale: 1.03, duration: DUR, ease: 'sine.inOut' }, 0);
+      window.__timelines['main'] = tl;
+      window.__fills = fills;                            // an "enter" sound at each of these
+    </script>
+  </body>
+</html>

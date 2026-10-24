@@ -1,0 +1,43 @@
+{
+  "category": "logo-reveal",
+  "duration_s": 5.0,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Icon-first accent piece. One clean, abstract, hand-drawn line-art chat-bubble icon as the hero visual — the icon IS the message, minimal text. Purple/black brand system matching shared-lead-problem and demand-reputation-flywheel: dark radial bg, accent-purple line art, soft glow blooms, League Gothic for any display type, Montserrat for the small payoff label. Calm draw-on entrance, a lively typing beat, a quick AI sparkle accent, then a punchy short hold.",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8"],
+  "font": "League Gothic + Montserrat",
+  "beats": [0.1, 1.0, 1.3, 1.7, 2.1, 2.5, 2.9, 3.2, 3.6],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "No exact-fit catalog block for a custom minimal-line chat-bubble hero icon; searched catalog first (queries below) and reused named PRIMITIVES + one reference pattern instead of a full block, per reuse-first with hand-author-for-gaps.",
+    "catalog_searches_run": [
+      "chat bubble icon line art draw in",
+      "typing indicator dots animation",
+      "sparkle star pop glow AI icon",
+      "sparkle burst pop confetti twinkle"
+    ],
+    "catalog_findings": {
+      "typing-indicator (component)": "three-dot chat-bubble typing UI — inspiration for the stagger/pulse rhythm, but it renders its own bubble chrome so it doesn't fit inside our custom drawn bubble; motion pattern reused, markup hand-authored",
+      "svg-line-draw-loader / hw-text-cloud": "confirm stroke-dashoffset draw-on is the right family for the bubble outline; hand-authored directly per the shared-lead-problem reference (#connector-svg path pattern: pathLength=1, strokeDasharray:1, strokeDashoffset 1→0)",
+      "sparkle/star pop-glow": "no matching catalog item; hand-authored from motion-vocabulary primitives scale_punch (back.out) + glow (yoyo textShadow/filter)"
+    },
+    "reused_primitives": ["svg draw-on (stroke-dashoffset)", "scale_punch", "glow", "fade_in", "bounce/pulse stagger (typing-indicator inspired)"]
+  },
+
+  "content": {
+    "logo": "inline-svg:hand-drawn-chat-bubble-icon (self-authored line art, not a sourced asset)",
+    "tagline": "ALWAYS ANSWERING.",
+    "url": null,
+    "scene_notes": [
+      "Beat 1 (0.0-1.0s): #bg-fill fades in once (never fades out — no blank-frame gap). Chat-bubble outline draws on via stroke-dashoffset + scales in slightly, centered, accent-purple (#9B5CFF) line art on transparent/dark ground.",
+      "Beat 2 (1.0-2.5s): 3 typing dots inside the bubble animate in sequence, staggered pulse/bounce, looped ~2x within the window, suggesting a live conversation.",
+      "Beat 3 (2.5-3.2s): small sparkle/star glyph pops in near the top-right of the bubble with a quick scale_punch + glow flash, signaling AI.",
+      "Beat 4 (3.2-4.5s): short label 'ALWAYS ANSWERING.' fades up beneath the icon (Montserrat, bold, uppercase, letter-spaced, --text color) and holds.",
+      "Beat 5 (4.5-5.0s): freeze-hold, nothing new animates, clean cut point."
+    ]
+  }
+}

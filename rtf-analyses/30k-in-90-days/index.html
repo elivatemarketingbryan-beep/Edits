@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>30K in 90 Days</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0a08;
+        --bg2: #17140f;
+        --accent: #d9a94a;
+        --accent-bright: #f4d998;
+        --text: #f5f1e6;
+        --muted: #9c9384;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the hook lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export).
+         Non-clip element — stays in the DOM and never toggled off, so the
+         frame is never fully transparent once it lands. */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 40%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+      }
+      .scene-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 160px;
+        box-sizing: border-box;
+        gap: 34px;
+      }
+
+      .stat-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1500px;
+        height: 950px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(closest-side, var(--accent) 0%, transparent 70%);
+        opacity: 0;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      /* ---------------- shared eyebrow / label vocabulary ---------------- */
+      .eyebrow {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        font-size: 30px;
+        color: var(--accent);
+        opacity: 0;
+      }
+      .stat-numeral {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        line-height: 1;
+        color: var(--accent-bright);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.01em;
+      }
+      .stat-numeral-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+      }
+      .stat-plus {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        line-height: 1;
+        color: var(--accent);
+        font-variant-numeric: tabular-nums;
+        margin-left: 6px;
+        opacity: 0;
+      }
+      .stat-label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-size: 40px;
+        color: var(--text);
+        text-align: center;
+        max-width: 1300px;
+        opacity: 0;
+      }
+
+      /* ---------------- scene 1 · case study ---------------- */
+      #case-content {
+        gap: 26px;
+      }
+      .case-top-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+        margin-bottom: 8px;
+      }
+      .location-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        opacity: 0;
+      }
+      .pin-glyph {
+        width: 30px;
+        height: 30px;
+        flex: none;
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      .pin-glyph svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .location-text {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-size: 34px;
+        color: var(--text);
+      }
+      .case-sub {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: 28px;
+        color: var(--muted);
+        opacity: 0;
+      }
+      #case-content .stat-numeral {
+        font-size: 300px;
+      }
+      #case-content .stat-plus {
+        font-size: 220px;
+      }
+      .case-pivot {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-size: 40px;
+        color: var(--accent-bright);
+        margin-top: 10px;
+        opacity: 0;
+      }
+
+      /* ---------------- scene 2 · guarantee ---------------- */
+      #guarantee-content {
+        gap: 30px;
+      }
+      #guarantee-content .stat-numeral-row {
+        margin-top: 26px;
+      }
+      #guarantee-content .stat-numeral {
+        font-size: 320px;
+      }
+      .seal {
+        position: relative;
+        width: 260px;
+        height: 260px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, var(--accent-bright), var(--accent) 70%);
+        box-shadow: 0 0 70px rgba(217, 169, 74, 0.55);
+        transform: rotate(-16deg) scale(0);
+        opacity: 0;
+        margin-top: 8px;
+      }
+      .seal::before {
+        content: "";
+        position: absolute;
+        inset: 14px;
+        border-radius: 50%;
+        border: 3px dashed rgba(11, 10, 8, 0.35);
+      }
+      .seal-text {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        font-size: 30px;
+        line-height: 1.12;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--bg);
+        text-align: center;
+        padding: 0 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-30k0" id="stage" data-composition-id="30k-in-90-days" data-start="0" data-duration="15.0" data-fps="30" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-30k1" id="bg-fill"></div>
+
+      <!-- ============ scene 1 · case study (0.0 - 9.5s) ============ -->
+      <div data-hf-id="hf-30k2" id="scene-case" class="clip scene" data-start="0" data-duration="9.5" data-track-index="0">
+        <div data-hf-id="hf-30k3" class="scene-content" id="case-content">
+          <div data-hf-id="hf-30k4" class="stat-glow" id="case-glow" data-layout-allow-overflow="true"></div>
+
+          <div data-hf-id="hf-30k5" class="case-top-group" id="case-top-group">
+            <div data-hf-id="hf-30k6" class="eyebrow" id="case-eyebrow">REAL RESULTS</div>
+            <div data-hf-id="hf-30k7" class="location-row" id="case-location">
+              <div data-hf-id="hf-30k8" class="pin-glyph" id="case-pin">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C7.86 2 4.5 5.36 4.5 9.5C4.5 15.15 12 22 12 22C12 22 19.5 15.15 19.5 9.5C19.5 5.36 16.14 2 12 2Z" fill="#D9A94A"/>
+                  <circle cx="12" cy="9.5" r="3.2" fill="#0B0A08"/>
+                </svg>
+              </div>
+              <div data-hf-id="hf-30k9" class="location-text">SAN FRANCISCO &amp; SAN JOSE, CA</div>
+            </div>
+            <div data-hf-id="hf-30ka" class="case-sub" id="case-sub">CONCRETE CONTRACTOR &#160;&#183;&#160; FIRST 3 MONTHS</div>
+          </div>
+
+          <div data-hf-id="hf-30kb" class="stat-numeral-row" id="case-numeral-row">
+            <div data-hf-id="hf-30kc" class="stat-numeral" id="val-case">$0</div>
+            <div data-hf-id="hf-30kd" class="stat-plus" id="plus-case">+</div>
+          </div>
+          <div data-hf-id="hf-30ke" class="stat-label" id="label-case">IN CLOSED PROJECTS FROM THEIR WEBSITE ALONE.</div>
+
+          <div data-hf-id="hf-30kf" class="case-pivot" id="case-pivot">AND WE STAND BEHIND IT.</div>
+        </div>
+      </div>
+
+      <!-- ============ scene 2 · guarantee (8.3 - 15.0s, cross-fades in over scene 1's tail) ============ -->
+      <div data-hf-id="hf-30kg" id="scene-guarantee" class="clip scene" data-start="8.3" data-duration="6.7" data-track-index="1">
+        <div data-hf-id="hf-30kh" class="scene-content" id="guarantee-content">
+          <div data-hf-id="hf-30ki" class="stat-glow" id="guar-glow" data-layout-allow-overflow="true"></div>
+
+          <div data-hf-id="hf-30kj" class="eyebrow" id="guar-eyebrow">OUR GUARANTEE</div>
+          <div data-hf-id="hf-30kk" class="stat-numeral-row">
+            <div data-hf-id="hf-30kl" class="stat-numeral" id="val-guar">$0</div>
+          </div>
+          <div data-hf-id="hf-30km" class="stat-label" id="label-guar">IN SOLD JOBS WITHIN 90 DAYS</div>
+
+          <div data-hf-id="hf-30kn" class="seal" id="guar-seal">
+            <div data-hf-id="hf-30ko" class="seal-text">GUARANTEED &#8212; OR YOUR MONEY BACK</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        function formatMoney(n) {
+          n = Math.round(n);
+          var neg = n < 0;
+          var s = String(Math.abs(n));
+          var out = "";
+          for (var i = 0; i < s.length; i++) {
+            if (i > 0 && (s.length - i) % 3 === 0) out += ",";
+            out += s[i];
+          }
+          return (neg ? "-" : "") + "$" + out;
+        }
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= global background ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, 0.0);
+
+        /* ================= scene 1 · case study (0.0 - 9.5s) ================= */
+
+        // explicit resting baseline so any seek before an entrance shows the
+        // correct hidden state regardless of authoring order below
+        tl.set("#case-pivot", { opacity: 0, y: 14 }, 0);
+        tl.set("#case-content", { opacity: 1 }, 0);
+
+        tl.fromTo(
+          "#case-glow",
+          { opacity: 0 },
+          { opacity: 0.4, duration: 0.5, ease: "power2.out" },
+          0.15,
+        );
+
+        // beat 1 (0-2s) — eyebrow + location pin/tag
+        tl.fromTo(
+          "#case-eyebrow",
+          { opacity: 0, y: -16 },
+          { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+          0.15,
+        );
+        tl.fromTo(
+          "#case-pin",
+          { opacity: 0, scale: 0.5 },
+          { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.2)" },
+          0.4,
+        );
+        tl.fromTo(
+          "#case-location",
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+          0.45,
+        );
+
+        // beat 2 (2-3.5s) — sub-label
+        tl.fromTo(
+          "#case-sub",
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+          2.0,
+        );
+
+        // beat 3 (3.5-8s) — hero case-study number, count-up
+        tl.fromTo(
+          "#val-case",
+          { scale: 0.6, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.2)" },
+          3.5,
+        );
+
+        var stCase = { v: 0 };
+        tl.fromTo(
+          stCase,
+          { v: 0 },
+          {
+            v: 30000,
+            duration: 1.8,
+            ease: "power2.out",
+            immediateRender: false,
+            onUpdate: function () {
+              document.getElementById("val-case").textContent = formatMoney(stCase.v);
+            },
+          },
+          3.6,
+        );
+        tl.fromTo(
+          "#plus-case",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.25, ease: "power2.out" },
+          5.3,
+        );
+
+        // landing glow pulse marks the hero moment
+        gsap.set("#val-case", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#val-case",
+          { textShadow: "0 0 0px rgba(244,217,152,0)" },
+          {
+            textShadow: "0 0 60px rgba(244,217,152,0.85)",
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          5.4,
+        );
+
+        tl.fromTo(
+          "#label-case",
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+          5.9,
+        );
+
+        // hold ~6.3 - 7.5s, then declutter the top group and pivot to the
+        // guarantee line before the cross-fade begins
+        tl.fromTo(
+          "#case-top-group",
+          { opacity: 1 },
+          { opacity: 0, duration: 0.35, ease: "power2.in" },
+          7.5,
+        );
+        tl.fromTo(
+          "#case-pivot",
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+          7.9,
+        );
+
+        // cross-fade OUT: animate the inner content wrapper, never the .clip
+        // element itself (the framework owns .clip visibility). Ends at 9.0s,
+        // well inside scene-case's own 0-9.5s active window.
+        tl.fromTo(
+          "#case-content",
+          { opacity: 1 },
+          { opacity: 0, duration: 0.7, ease: "power2.in" },
+          8.3,
+        );
+
+        /* ================= scene 2 · guarantee (8.3 - 15.0s) ================= */
+
+        // explicit resting baseline
+        tl.set("#guarantee-content", { opacity: 0 }, 0);
+        tl.set("#guar-seal", { scale: 0, opacity: 0, rotation: -16, x: 0 }, 0);
+
+        // cross-fade IN: starts before scene-case's fade-out finishes (8.3-9.0s)
+        // so the combined visible opacity never drops to zero — no blank frame.
+        tl.fromTo(
+          "#guarantee-content",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.8, ease: "power2.out", immediateRender: false },
+          8.5,
+        );
+
+        tl.fromTo(
+          "#guar-glow",
+          { opacity: 0 },
+          { opacity: 0.55, duration: 0.5, ease: "power2.out" },
+          8.6,
+        );
+        tl.fromTo(
+          "#guar-eyebrow",
+          { opacity: 0, y: -10 },
+          { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
+          8.6,
+        );
+
+        tl.fromTo(
+          "#val-guar",
+          { scale: 0.6, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.8)" },
+          9.0,
+        );
+
+        var stGuar = { v: 0 };
+        tl.fromTo(
+          stGuar,
+          { v: 0 },
+          {
+            v: 30000,
+            duration: 1.5,
+            ease: "power2.out",
+            immediateRender: false,
+            onUpdate: function () {
+              document.getElementById("val-guar").textContent = formatMoney(stGuar.v);
+            },
+          },
+          9.1,
+        );
+
+        gsap.set("#val-guar", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#val-guar",
+          { textShadow: "0 0 0px rgba(244,217,152,0)" },
+          {
+            textShadow: "0 0 60px rgba(244,217,152,0.85)",
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          10.6,
+        );
+
+        tl.fromTo(
+          "#label-guar",
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+          10.8,
+        );
+
+        // badge-pop-style elastic seal stamp landing on beat
+        tl.fromTo(
+          "#guar-seal",
+          { scale: 0, opacity: 0, rotation: -16 },
+          { scale: 1, opacity: 1, rotation: -8, duration: 0.45, ease: "back.out(2.4)", immediateRender: false },
+          11.4,
+        );
+        // landing shake
+        tl.fromTo("#guar-seal", { x: 0 }, { x: -8, duration: 0.06, ease: "none", immediateRender: false }, 11.85)
+          .fromTo("#guar-seal", { x: -8 }, { x: 8, duration: 0.08, ease: "none", immediateRender: false }, 11.91)
+          .fromTo("#guar-seal", { x: 8 }, { x: -4, duration: 0.07, ease: "none", immediateRender: false }, 11.99)
+          .fromTo("#guar-seal", { x: -4 }, { x: 0, duration: 0.07, ease: "none", immediateRender: false }, 12.06);
+
+        // freeze-hold from ~12.1s to 15.0s for a clean cut back to host footage —
+        // no further tweens scheduled; the last state simply persists.
+
+        window.__timelines["30k-in-90-days"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 13.0,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "purple/black icon-first mini-story, same family as icon-hidden-spotlight / icon-calendar-warning. REVISED per client direction into a clean 3-beat arc: (1) a small abstract shepherd figure (line-art: circle head, line body, one arm extended holding a staff) stands beside the existing sheep-silhouette icon on the horizon line — muted, ordinary, unnoticed, a clear establishing hold so both figures read; (2) the shepherd/sheep scene crossfades into a bold, large, centered kinetic-type word 'PURPOSE' (League Gothic, all caps, bright-accent) which lands then does one text-shadow glow-pulse bloom; (3) 'PURPOSE' crossfades into the existing line-art CROWN icon, now enhanced with 2-3 small gem/jewel circles at its points that pop in and glow one after another (staggered), with a caption 'CHOSEN BY GOD.' fading in beneath it — held to the end for a clean cut. Nothing ever fully exits without an overlapping incoming element, so the alpha-overlay export is never blank; only one text/word beat is ever prominent at a time. League Gothic for labels/word, Montserrat stack for weight consistency with sibling pieces.",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8"],
+  "font": "League Gothic + Montserrat",
+  "beats": [0.15, 0.6, 1.05, 3.0, 3.3, 5.0, 6.3, 6.6, 7.2, 7.9, 8.0, 8.4, 8.8, 9.4, 10.0],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "Ran npx hyperframes catalog before hand-authoring: query 'simple line art person figure standing icon' (no line-art human/shepherd glyph — closest hits were icon-swap/icon-morph-beat, both toolbar/state-change primitives, not a narrative figure); query 'bold word text glow pulse reveal kinetic type' (kinetic-type-swap, kinetic-center-build and the caption-* library are multi-word/karaoke caption treatments, not a single oversized centered hero-word glow landing matching this piece's plain hand-drawn-SVG aesthetic); query 'gem jewel sparkle twinkle glow pop icon' (no jewel/gem-on-icon block — closest were icon-morph-beat and generic pop primitives, not staggered small gems on an existing custom crown path). Logged all three as search-misses via `hyperframes feedback --search-miss`. Hand-authored the shepherd figure, the PURPOSE word beat, and the per-gem pop+glow, reusing: the established purple-brand CSS custom properties, the persistent #bg-fill, the sheep icon's proven stroke-only + currentColor + static-opacity(no concurrent dashoffset) technique for the new shepherd figure, the existing crown SVG/path (jewels now individually toggled instead of inheriting crown opacity), and the story-label glow-pulse pattern (fromTo textShadow, yoyo, repeat:1) reused verbatim for the PURPOSE word and the closing caption."
+  },
+
+  "content": {
+    "scenes": [
+      {
+        "id": "shepherd-and-sheep",
+        "start": 0,
+        "end": 3.0,
+        "text": "(no text — icon only)",
+        "emphasis_words": [],
+        "emotion": "ordinary, unnoticed, quiet duty on the hills",
+        "motion": "bg-fill fades in (0.1-0.25s); the horizon line draws on left-to-right via stroke-dashoffset (0.15-0.75s, power2.out, static opacity throughout — no concurrent opacity tween on the drawing stroke); the sheep icon fades and scales in standing on the horizon (0.6-1.2s, opacity 0->0.6, scale 0.7->0.85, power2.out); a simple abstract shepherd figure (circle head, single vertical line body, two ground-line legs, one arm line extending out to a long staff line, stroke-only, var(--muted), same stroke-width/line-cap language as the sheep) fades and scales in a short distance to the sheep's left, also standing on the horizon (1.05-1.65s, opacity 0->0.65, scale 0.7->0.9, power2.out) — staggered ~0.45s after the sheep so both read as distinct figures, not simultaneous; both hold, small and muted, from ~1.65s to 3.0s so the establishing beat clearly reads before the transition",
+        "beats": [0.15, 0.6, 1.05]
+      },
+      {
+        "id": "purpose-reveal",
+        "start": 3.0,
+        "end": 6.3,
+        "text": "PURPOSE",
+        "emphasis_words": ["PURPOSE"],
+        "emotion": "this matters — quiet destiny becoming clear",
+        "motion": "the shepherd+sheep+horizon group (#field) fades and scales down as one unit (3.0-3.6s, power2.in) while a large, bold, centered kinetic-type word 'PURPOSE' (League Gothic, all caps, var(--accent-bright), ~220px) fades and scales up to fill the same stage (3.3-3.9s, opacity 0->1, scale 0.82->1, power2.out) — the 0.3s overlap crossfades the two so the frame is never empty; holds fully legible from ~3.9s to 5.0s; then one clear glow-pulse bloom (5.0-5.7s, text-shadow 0 -> 46px bright-accent bloom, sine.inOut, yoyo, repeat:1) signals 'this matters'; holds again to 6.3s",
+        "beats": [3.0, 3.3, 5.0]
+      },
+      {
+        "id": "crown-and-chosen",
+        "start": 6.3,
+        "end": 13.0,
+        "text": "CHOSEN BY GOD.",
+        "emphasis_words": ["GOD"],
+        "emotion": "revelation, arrival, chosen made visible",
+        "motion": "'PURPOSE' fades and scales out (6.3-6.8s, power2.in) as the existing line-art crown grows in small/dim (6.6-7.2s, opacity 0->0.5, scale 0.4->0.65, power2.out — 0.2s crossfade overlap with the outgoing word) then pops to full bright size/color with a glow bloom (7.2-7.9s, back.out(1.6), color accent->accent-bright, drop-shadow blooms in) capped by one brighter glow pulse on the crown itself (7.9-8.5s, sine.inOut, yoyo); three small gem/jewel circles at the crown's points then pop in and glow one after another (gem1 8.0-8.45s pop + 8.45-9.05s twinkle, gem2 8.4-8.85s pop + 8.85-9.45s twinkle, gem3 8.8-9.25s pop + 9.25-9.85s twinkle — each opacity 0->1 with a filter drop-shadow bloom, power2.out, then a small yoyo/repeat:1 glow twinkle), reading as jewels catching light; a caption 'CHOSEN BY GOD.' (GOD in var(--accent-bright)) fades up beneath the crown (9.4-10.0s, opacity 0->1, y:24->0, power2.out) with one restrained glow pulse (10.0-10.7s, sine.inOut, yoyo); freeze-holds unchanged from 10.7s to 13.0s for a clean cut — the crown, its lit gems and the caption remain visible throughout",
+        "beats": [6.3, 6.6, 7.2, 7.9, 8.0, 8.4, 8.8, 9.4, 10.0]
+      }
+    ]
+  }
+}

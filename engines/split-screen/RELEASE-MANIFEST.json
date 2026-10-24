@@ -1,0 +1,365 @@
+{
+  "version": "0.1.0",
+  "files": [
+    {
+      "file": ".gitignore",
+      "bytes": 252,
+      "sha256": "2ca50decf2f0cc4f961972f39e301743ae5aeda12afd6db351f1034b696f07b6"
+    },
+    {
+      "file": "AGENTS.md",
+      "bytes": 6485,
+      "sha256": "7b355b1bd35c4d82ba1e1533bfa8cd76483a6f19efe8d5e40bd1bc02763bdde3"
+    },
+    {
+      "file": "CHATGPT_INSTRUCTIONS.md",
+      "bytes": 3249,
+      "sha256": "52ceaddc73bae7960bc2b8419422c816ee1635f0f9ec3ca2f430b437f4dce4cb"
+    },
+    {
+      "file": "LICENSE",
+      "bytes": 1241,
+      "sha256": "e6ade3852116e6a79dae066cf674d6a9ec8fde2d0433366332975ff2e0322a4e"
+    },
+    {
+      "file": "README.md",
+      "bytes": 4297,
+      "sha256": "476c28e6506e1dfeeff06b4e514e7c6288ce11ca95a72bfd05a89c54259dd5d8"
+    },
+    {
+      "file": "START_HERE.md",
+      "bytes": 3173,
+      "sha256": "f7f7ddcc4c6a71600865d99da5b363d2d7040de9d69df9ed0d7f73dddb217983"
+    },
+    {
+      "file": "THIRD_PARTY.md",
+      "bytes": 1693,
+      "sha256": "546a31b62321e6b74690279856858044a782eb107468941ecd6e65f1919ca80a"
+    },
+    {
+      "file": "corpus/README.md",
+      "bytes": 2358,
+      "sha256": "6d1d6e81af1edefe9a5bcd67956efc98bd7b3e6454feba9b1918c50042621685"
+    },
+    {
+      "file": "corpus/annotation.schema.json",
+      "bytes": 2447,
+      "sha256": "0f899295412999df2a162b4b88b0999467f427f9b99801a23231f844da681fa0"
+    },
+    {
+      "file": "corpus/annotations/R01-writing-inspection.json",
+      "bytes": 2525,
+      "sha256": "c3c1fa25aeb4365c2d9e6d793aefd16d6eb6c3ccb14be2f9e5b7e195fc8d8a0c"
+    },
+    {
+      "file": "corpus/annotations/R02-website-brand.json",
+      "bytes": 1961,
+      "sha256": "6ff8957ff7974de273b9f486d2c7a4474e64f11e9aa5c4239d773fa875bb3781"
+    },
+    {
+      "file": "corpus/annotations/R03-animation-gallery.json",
+      "bytes": 2272,
+      "sha256": "d407c4b80173796a2ef6b55d11f70cdd6e871fa42adfe3f72826bd58b0169d27"
+    },
+    {
+      "file": "corpus/annotations/R04-older-screen-demo.json",
+      "bytes": 1606,
+      "sha256": "6dc72339c32dc82e26d0bef94cd7a4d7b9fc3b1cf3c5afb73fd06e66e5fcadbc"
+    },
+    {
+      "file": "corpus/annotations/R05-product-lighting.json",
+      "bytes": 2156,
+      "sha256": "944917c35c94d76b8d5d61df93a9f9b0cf0503bce226499ebc7a7edd4c52e6d6"
+    },
+    {
+      "file": "corpus/examples/illustrative-cooking.json",
+      "bytes": 1161,
+      "sha256": "2ee980552667537e47bbf7e5056625f7a8ebfac4b503d12397eac2fb90ae4dfb"
+    },
+    {
+      "file": "corpus/index.json",
+      "bytes": 1884,
+      "sha256": "c152468215dbc6d43c5c487ebd3513b6b1c39bd63d411e207c8b70865daa7e39"
+    },
+    {
+      "file": "docs/EDITORIAL.md",
+      "bytes": 7952,
+      "sha256": "609a2498593401d52cc1fc3e4bc68ece8f046cf90d9c14cd85462a09ab60fd99"
+    },
+    {
+      "file": "docs/HISTORY.md",
+      "bytes": 1317,
+      "sha256": "d19624c837a04292bd32eca4a694374b4b1cfe91e8d6ba0ce9b8b36cea76b236"
+    },
+    {
+      "file": "docs/PLAN_FORMAT.md",
+      "bytes": 8313,
+      "sha256": "be77cb4682771126d20d4791c035b21bb95a9c2ddf62115bb5e44e540e137e40"
+    },
+    {
+      "file": "docs/REVIEW.md",
+      "bytes": 2721,
+      "sha256": "014f854b692fdd0e43976b82b9f4d9373c8adee00a7e34bad27200e6f7383587"
+    },
+    {
+      "file": "docs/RUNTIME.md",
+      "bytes": 4363,
+      "sha256": "3549f161239e45cc02b33b3ffa4c9666e96364a26898ac4ff48167bebf1d4388"
+    },
+    {
+      "file": "docs/SHARING.md",
+      "bytes": 1906,
+      "sha256": "0da2e338af0cb7a88713ce4ac1ae45b3509caa606b9d7a9f1c81acd3ce8c5d83"
+    },
+    {
+      "file": "docs/STYLE.md",
+      "bytes": 6426,
+      "sha256": "d70607f751c48aacc2bd17e950c8658695b7de353dbf3dac9efcec3df54063a4"
+    },
+    {
+      "file": "docs/VALIDATION.md",
+      "bytes": 5558,
+      "sha256": "d69d4fdba93a516c2d2ec1e35ee8e7925e153e066be850d7fe4083788ba7cdbd"
+    },
+    {
+      "file": "docs/WORKFLOW.md",
+      "bytes": 6356,
+      "sha256": "ef66146532e0e76ffedeedfb8683b8a451d1a531db802500f2d7e9e51f32027d"
+    },
+    {
+      "file": "examples/demo/README.md",
+      "bytes": 1184,
+      "sha256": "c1e8093144845bd2780a948da883ffc160700ef64babf7ffac2bb8aa4ffd4fca"
+    },
+    {
+      "file": "examples/demo/contact-sheet.jpg",
+      "bytes": 76667,
+      "sha256": "a99aac932c6e1401ea443cad16c1e8e00384bbec9d15bace0007a7bb2d61cfca"
+    },
+    {
+      "file": "examples/demo/plan.json",
+      "bytes": 4153,
+      "sha256": "d7b60cdc645dfc858e8a819257f97fe1121432bc9dcafe2276a4ed801dea4232"
+    },
+    {
+      "file": "examples/demo/preview.mp4",
+      "bytes": 775942,
+      "sha256": "4b1bc6d468e5d71c188729c091918872c6bd43d5255bd8cf6ad85dcfa1be01fc"
+    },
+    {
+      "file": "lib/timeline.mjs",
+      "bytes": 3351,
+      "sha256": "b86b7e876bbbc88763e09e03b56180470139856c1cefbb2cebb6c7f51bd9841b"
+    },
+    {
+      "file": "lib/transcript.mjs",
+      "bytes": 4308,
+      "sha256": "b0408f457af1f3fdafd59e1a1dfde6157bb4bfc71d486146c38d65fc6e4504fa"
+    },
+    {
+      "file": "lib/validate.mjs",
+      "bytes": 14514,
+      "sha256": "9ed2859e6ed7a02ab7b672217035f0a242258d71400b6c66e74a6ecd10711358"
+    },
+    {
+      "file": "package-lock.json",
+      "bytes": 148699,
+      "sha256": "65bb7f16296b6a9476ee4a9cdb86813cfb753f5cce81b069fce5cc9c98930f5d"
+    },
+    {
+      "file": "package.json",
+      "bytes": 1118,
+      "sha256": "56513e54b0872b55044e6a119bd827e49fdf7d7d21013958219f112819c172da"
+    },
+    {
+      "file": "prompts/ANNOTATE_REFERENCE.md",
+      "bytes": 801,
+      "sha256": "d445d720fb55765a8869d2332e07dd2b6810484e0bdbbe34887801a5d3ea0223"
+    },
+    {
+      "file": "prompts/REVISE_EDIT.md",
+      "bytes": 446,
+      "sha256": "aac56b4196c647d8015a40fac9f316d11fadc3235500bb2a2da4c8fc8b14a0ac"
+    },
+    {
+      "file": "prompts/START_EDITING.md",
+      "bytes": 1010,
+      "sha256": "2399fbad95c894a2c7ebb7ec99a284c8ae84a16d9335a8fd9bc02b75dd02b2e4"
+    },
+    {
+      "file": "public/assets/mirofish/LICENSE-MiroFish.txt",
+      "bytes": 34523,
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef"
+    },
+    {
+      "file": "public/assets/mirofish/README.md",
+      "bytes": 2229,
+      "sha256": "dc6dc50e509ae64d11ff845638837c47ab0a35ad2cae2f55fd308850d414fca6"
+    },
+    {
+      "file": "public/assets/mirofish/github-invertocat-black.svg",
+      "bytes": 1559,
+      "sha256": "693d7abe6f899646cc2e96856723b45e95f71885a54910b2749f6decdf7e1ee1"
+    },
+    {
+      "file": "public/assets/mirofish/mirofish-logo.jpeg",
+      "bytes": 180620,
+      "sha256": "f2289e76f26f6258e93d08ba10d1cb3ce72dd8663edc7e0efbe0a29ae2128333"
+    },
+    {
+      "file": "public/assets/mirofish/mirofish-screenshot-1.png",
+      "bytes": 68746,
+      "sha256": "d5613d300fc4e8e8c5ed98c376586fa49228dd3ff9cc642bef1a89f0e41d8979"
+    },
+    {
+      "file": "public/assets/mirofish/mirofish-screenshot-2.png",
+      "bytes": 251662,
+      "sha256": "fd2e8f3dfa4b3f687fc0bfbe92ef18bc2c925309fad98f988da72a70e7c8ded2"
+    },
+    {
+      "file": "public/demo/source.mp4",
+      "bytes": 406424,
+      "sha256": "6b8e589f1f2847aa0380bc71dd2f1247de0982cb94f9af37c06428127545cab8"
+    },
+    {
+      "file": "requirements-transcription.txt",
+      "bytes": 167,
+      "sha256": "fc8f5584f29ae8fa1a528bbdd7adeffbdabc2ba9488d8b804977d411cea453e6"
+    },
+    {
+      "file": "research/REFERENCE_RESEARCH.md",
+      "bytes": 10704,
+      "sha256": "da3a704fd8c611698b301a3f68bc6358f3d8bb76446aae13250ddc4ccd9260c8"
+    },
+    {
+      "file": "research/VARIETY_REVIEW.md",
+      "bytes": 10010,
+      "sha256": "28dc1b47c8c57766674c3f37ee4d494812b72eb327abe0537ec6ae5ad7930d3b"
+    },
+    {
+      "file": "scripts/create-demo.mjs",
+      "bytes": 2317,
+      "sha256": "88a2ab6489f1e32d12bb3409c39ae2d6d6507e576c839a7f1d614049b7d1048d"
+    },
+    {
+      "file": "scripts/editor.mjs",
+      "bytes": 23270,
+      "sha256": "124c59eb8f470b582b56e83fd3095a53ab07477f10def1efa2daca15a2e95bd2"
+    },
+    {
+      "file": "scripts/package.py",
+      "bytes": 3021,
+      "sha256": "8214bdcff9d4e1c38292f6735c9479a6e00cf7f64b81f91c790f3bf648245f77"
+    },
+    {
+      "file": "scripts/transcribe.py",
+      "bytes": 1955,
+      "sha256": "e86d9200fceda96a04c014d2ecc6e24cb1209090d755b4c70ae4844a3bbb4445"
+    },
+    {
+      "file": "src/Root.tsx",
+      "bytes": 710,
+      "sha256": "c6fd06c14c6114069b9f5149aeaa3fd6e9ccf6416cc70a621556d6dc59e029eb"
+    },
+    {
+      "file": "src/SourceFixture.tsx",
+      "bytes": 1411,
+      "sha256": "c1749a14de38e9bb48f1db251ec8c0db0b453c317ff0e00c9a2a46e8fe1484e3"
+    },
+    {
+      "file": "src/SplitScreen.tsx",
+      "bytes": 6457,
+      "sha256": "e7df39d72ffa2b6a483805c16ae1142949d33ba40419a5f438e6a656c0b53e07"
+    },
+    {
+      "file": "src/Visual.tsx",
+      "bytes": 7749,
+      "sha256": "2ff66e14b9d1627583f68bce512327ab896649fd432880a2783ce48f259dacd4"
+    },
+    {
+      "file": "src/custom/GrowthCycle.tsx",
+      "bytes": 3981,
+      "sha256": "fed74ee299f7f3e5ea6cb4ad529dd66cdbdf87d98aabe788a70f78ea87a4678d"
+    },
+    {
+      "file": "src/custom/IdeaLens.tsx",
+      "bytes": 5063,
+      "sha256": "b6ad437d51d761355a64071cd4053783a106d5f3382684312c456f1f58593d5b"
+    },
+    {
+      "file": "src/custom/mirofish/AssetScenesV3.tsx",
+      "bytes": 8798,
+      "sha256": "47c4e736922d7762458b9b87d130f31d078f97dff89ac1c90fac03546037d470"
+    },
+    {
+      "file": "src/custom/mirofish/IdentityScenes.tsx",
+      "bytes": 4095,
+      "sha256": "373a4048a01eaf6aa8348b636986e50eb38fde63331338cf6ce1fe9e53329933"
+    },
+    {
+      "file": "src/custom/mirofish/InteractionScenesV3.tsx",
+      "bytes": 12453,
+      "sha256": "a61b4bb27cc7e5a04665ff0d3f2b8bfbf44a4f957f3ec2b9b3a3a5d1bbbd78b0"
+    },
+    {
+      "file": "src/custom/mirofish/SwarmScenes.tsx",
+      "bytes": 8567,
+      "sha256": "4962287a292e39eb5480673e237350209d08427ece15eea93760ee11b284d300"
+    },
+    {
+      "file": "src/custom/mirofish/WorkflowScenes.tsx",
+      "bytes": 13580,
+      "sha256": "f79bce48db449371d1033dfef93f1a46b8ea4c155b45e626b7c5a7aa458e3b4b"
+    },
+    {
+      "file": "src/custom/mirofish/WorldScenesV3.tsx",
+      "bytes": 15234,
+      "sha256": "b6a0a1e32b83681ae1c3b6bb9d41ce4d910abd94b43ad699bbd0d2eaaa285521"
+    },
+    {
+      "file": "src/custom/registry.tsx",
+      "bytes": 3063,
+      "sha256": "c416798402fc23082c796d5efd137584d4446bf895deaff6b9e2d26183429cc5"
+    },
+    {
+      "file": "src/demo.ts",
+      "bytes": 3100,
+      "sha256": "89435c512c3d364feced5df2c53c687b8cdedab743bd2d0a7b8a6d1fa1740f27"
+    },
+    {
+      "file": "src/index.ts",
+      "bytes": 298,
+      "sha256": "e871b1f8d11ee9982d7a1cd112aac9b6dc0b9f97c12bb6fb4f748ecde4e86dc5"
+    },
+    {
+      "file": "src/motion.ts",
+      "bytes": 927,
+      "sha256": "10856cb61142dd09c37c5679dcd12ed261b12aa5d162a6e8ae70f533bd108607"
+    },
+    {
+      "file": "src/types.ts",
+      "bytes": 2060,
+      "sha256": "f760a484296b778331c4738a1cd7f2d6c7e1057d0d6322ddf927b36f325d2c37"
+    },
+    {
+      "file": "tests/timeline.test.mjs",
+      "bytes": 3339,
+      "sha256": "0dad2fd0f1073df8d9c78b851179f52d7e23beab88c45481edb3a40fb392ea2b"
+    },
+    {
+      "file": "tests/transcript-duration.test.mjs",
+      "bytes": 3528,
+      "sha256": "d538ff7d94ab6942c62e1a9019eb47f9f90f98a146602db5cdd8be8c620ef429"
+    },
+    {
+      "file": "tests/validate.test.mjs",
+      "bytes": 4190,
+      "sha256": "cb54fb4d399fdd96d3a0200c0d37b066745521df5899399c7f45ad91074513f0"
+    },
+    {
+      "file": "tsconfig.json",
+      "bytes": 339,
+      "sha256": "1974ca43d0e2f792c4ff2443ccd440f533811054e2abb3603b30633658e52631"
+    }
+  ]
+}

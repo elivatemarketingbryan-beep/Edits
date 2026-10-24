@@ -1,0 +1,3 @@
+# Optional local ASR; the Node renderer works without this dependency.
+# Tested on the development machine. Model weights download on first use.
+faster-whisper==1.2.1

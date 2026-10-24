@@ -1,0 +1,31 @@
+{
+  "id": "R02",
+  "status": "observed",
+  "source": {
+    "url": "https://www.instagram.com/reel/DeMw_H2E_Rq/",
+    "creator": "jackroberts___",
+    "topic": "Website-to-video / Glaido example",
+    "publishedDate": null,
+    "durationSeconds": 34.22,
+    "dimensions": {"width": 1080, "height": 1920},
+    "mediaBundled": false
+  },
+  "inspection": {
+    "date": "2026-10-07",
+    "method": "Direct visible playback in Chrome; selected muted frames and player metadata.",
+    "continuousReview": false,
+    "audioReviewed": false,
+    "coverageNote": "Two approximate playback observation points. These do not establish transition boundaries or the full sequence."
+  },
+  "observations": [
+    {"atSeconds": 14.84, "timingMeaning": "approximate_observation_point", "layout": "full-height graphic", "visibleEvidence": "Pink, purple, and orange stage, luminous center, orbital rings, sparkles, translucent metric cards, and oversized mixed sans/italic-serif type. Short caption below the central type.", "relationships": ["hierarchy", "emphasis"]},
+    {"atSeconds": 19.36, "timingMeaning": "approximate_observation_point", "layout": "upper graphic / lower presenter", "visibleEvidence": "Black product/site card on lime stage with three color swatches beneath. Presenter below; caption at seam.", "relationships": ["demonstration", "brand identification"]}
+  ],
+  "principles": [
+    "Palette can come from the demonstrated subject rather than a compulsory global skin.",
+    "A specific product card and its swatches explain a brand relationship visually.",
+    "Full-height expressive graphics and restrained split demonstrations can coexist."
+  ],
+  "unknowns": ["Meaning and accuracy of visible metric cards", "Complete speech", "Exact fonts", "Full sequence", "Animation curves", "Audio treatment", "Performance"],
+  "notes": ["Visible metrics are not evidence for using invented numbers in this editor. New quantitative content needs its own source."]
+}

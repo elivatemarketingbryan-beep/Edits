@@ -1,0 +1,2393 @@
+<?xml version='1.0' encoding='UTF-8' ?><!--
+Created by Alight Motion (http://alightmotion.com)
+Exported: 2026-09-04 09:19 PM
+5.0.161.106019 (106019)
+d914fff (30 Aug 2023 8:06:06 pm)
+-->
+<scene title="project 1" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#ff000000" totalTime="14782" fps="60" modifiedTime="1788536974332" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="freeze" retimeAdaptFPS="false">
+  <media uri="content://media/external/audio/media/1000074869" filename="ElevenLabs_2026-03-01T15_45_01_Zara – The Warm, Real-World Conversationalist_pvc_sp91_s100_sb50_se31_b_m2.mp3" title="ElevenLabs_2026-03-01T15_45_01_Zara – The Warm, Real-World Conversationalist_pvc_sp91_s100_sb50_se31_b_m2.mp3" type="audio/mpeg" duration="14889750" size="254891" infoUpdated="1788502108415" />
+  <media uri="content://media/external/images/media/1000086148" type="image/png" duration="0" orientation="0" infoUpdated="1788502108415" width="0" height="0" />
+  <media uri="content://media/external/images/media/1000074927" type="image/png" duration="0" orientation="0" infoUpdated="1788502108415" width="0" height="0" />
+  <media uri="content://media/external/images/media/1000120465" type="image/png" duration="0" orientation="0" infoUpdated="1788502108415" width="0" height="0" />
+  <media uri="content://media/external/images/media/1000075832" filename="image_search_1772871522271.png" title="image_search_1772871522271.png" type="image/png" size="44418" orientation="0" infoUpdated="1788502108415" width="1280" height="433" />
+  <media uri="content://media/external/images/media/1000086149" type="image/png" duration="0" orientation="0" infoUpdated="1788502108415" width="0" height="0" />
+  <media uri="content://media/external/images/media/1000069648" filename="PhotoRoom-20260127_151352.png" title="PhotoRoom-20260127_151352.png" type="image/png" size="10606" orientation="0" infoUpdated="1788502108415" width="640" height="640" />
+  <media uri="content://media/external/audio/media/1000086109" filename="Project 7 [186F02D]-enhanced-v2.mp3" title="Project 7 [186F02D]-enhanced-v2.mp3" type="audio/mpeg" duration="1080000" size="17516" infoUpdated="1788502108415" />
+  <media uri="content://media/external/audio/media/1000086331" filename="Project 7 [735AF2D] (1) (mp3cut.net)-enhanced-v2.mp3" title="Project 7 [735AF2D] (1) (mp3cut.net)-enhanced-v2.mp3" type="audio/mpeg" duration="14472000" size="231788" infoUpdated="1788502108415" />
+  <media uri="content://media/external/audio/media/1000086110" filename="Project 7 [735AF2D] (1)-enhanced-v2.mp3" title="Project 7 [735AF2D] (1)-enhanced-v2.mp3" type="audio/mpeg" duration="13032000" size="208748" infoUpdated="1788502108415" />
+  <media uri="content://media/external/images/media/1000121578" filename="PhotoRoom-20260828_173218.png" title="PhotoRoom-20260828_173218.png" type="image/png" size="34940" orientation="0" infoUpdated="1788502108415" width="900" height="631" />
+  <media uri="content://media/external/images/media/1000121577" type="image/png" duration="0" orientation="0" infoUpdated="1788502108415" width="0" height="0" />
+  <media uri="content://media/external/video/media/1000122334" filename="lv_0_20260831220404.mp4" title="lv_0_20260831220404.mp4" type="video/mp4" duration="14838000" size="23652516" fps="0.60" orientation="0" infoUpdated="1788502108415" width="1080" height="1920" />
+  <media uri="content://media/external/video/media/1000075923" type="video/mp4" duration="16042700" orientation="90" infoUpdated="1788502108415" width="1920" height="1080" />
+  <media uri="content://media/external/images/media/1000120858" filename="Picsart_26-08-26_12-23-24-059.png" title="Picsart_26-08-26_12-23-24-059.png" type="image/png" size="5100892" orientation="0" infoUpdated="1788502108415" width="4096" height="2730" />
+  <media uri="content://media/external/images/media/1000074877" filename="PhotoRoom-20260301_222144.png" title="PhotoRoom-20260301_222144.png" type="image/png" size="624980" orientation="0" infoUpdated="1788502108415" width="2000" height="2000" />
+  <media uri="content://media/external/images/media/1000074875" filename="Picsart_26-03-01_22-20-44-791.png" title="Picsart_26-03-01_22-20-44-791.png" type="image/png" size="162216" orientation="0" infoUpdated="1788502108415" width="2944" height="2944" />
+  <bookmark t="13841" />
+  <bookmark t="975" />
+  <bookmark t="4341" />
+  <shape id="40026496" label="Rounded Rectangle 1" startTime="0" endTime="14782" fillType="color" mediaFillMode="fill" s=".roundrect">
+    <transform>
+      <location value="1947.781738,6000.544922,5000.000000" />
+      <scale value="4.486938,4.486938" />
+    </transform>
+    <fillColor>
+      <kf t="0.671425" v="#fff3f3fb" />
+      <kf t="0.702949" v="#ffffffff" e="cubicBezier 0.42 0.0 0.58 1.0" />
+      <kf t="0.160669" v="#fff3f3fb" e="cubicBezier 0.9318547 0.0041831792 0.02472508 1.0" />
+      <kf t="0.132458" v="#ffffffff" />
+    </fillColor>
+    <property name="size" type="vec2" value="2386.000000,2358.714844" />
+    <property name="cornerRadius" type="float" value="25.000000" />
+  </shape>
+  <audio id="40026504" label="ElevenLabs_2026-03-01T15_45_01_Zara – The Warm, Real-World Conversationalist_pvc_sp91_s100_sb50_se31_b_m2.mp3" startTime="-116" endTime="1083" src="content://media/external/audio/media/1000074869" outTime="1199" mediaFillMode="fill" />
+  <text id="40026497" label="Video Editors Copy" startTime="0" endTime="1649" fillType="color" mediaFillMode="fill" parent="40026499" size="32.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="942" align="center">
+    <transform>
+      <location>
+        <kf t="0.712553" v="0.000000,-0.054688,0.000000" e="elastic 0.2808742 1.0 0.0 0.4491595" />
+        <kf t="0.000000" v="0.000000,208.234192,0.000000" />
+      </location>
+      <scale>
+        <kf t="0.353547" v="1.115711,1.115711" e="cubicBezier 0.24022004 0.35731778 0.42545867 0.86042076" />
+        <kf t="0.000000" v="1.525478,1.525478" />
+      </scale>
+      <opacity>
+        <kf t="0.000000" v="0.000000" />
+        <kf t="0.394179" v="1.000000" e="cubicBezier 0.42 0.0 0.0 1.0" />
+        <kf t="0.651910" v="1.000000" />
+        <kf t="0.864160" v="0.000000" e="cubicBezier 0.3 0.19 0.36 0.92" />
+      </opacity>
+    </transform>
+    <fillColor>
+      <kf t="0.313524" v="#ff171717" e="cubicBezier 1.0 0.0 0.0 1.0" />
+      <kf t="0.004851" v="#ff3b87ff" />
+    </fillColor>
+    <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+      <property name="letterspacing" type="float" value="-0.030000" />
+      <property name="linespacing" type="float" value="1.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.wipe2" locallyApplied="true">
+      <property name="start" type="float" value="0.192000" />
+      <property name="end" type="float" value="0.479000" />
+      <property name="angle" type="float" value="0.000000" />
+      <property name="feather" type="float" value="0.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <content>Video Editors</content>
+  </text>
+  <text id="40026498" label="Video Editors Copy 2" startTime="100" endTime="1616" fillType="color" mediaFillMode="fill" parent="40026499" size="32.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="942" align="center">
+    <transform>
+      <location>
+        <kf t="0.775066" v="0.000000,-0.070801,0.000000" e="elastic 0.2808742 1.0 0.0 0.4491595" />
+        <kf t="0.000000" v="0.000000,208.217651,0.000000" />
+      </location>
+      <scale>
+        <kf t="0.384565" v="1.115711,1.115711" e="cubicBezier 0.24022004 0.35731778 0.42545867 0.86042076" />
+        <kf t="0.000000" v="1.525478,1.525478" />
+      </scale>
+      <opacity>
+        <kf t="0.000000" v="0.000000" />
+        <kf t="0.428760" v="1.000000" e="cubicBezier 0.42 0.0 0.0 1.0" />
+        <kf t="0.643140" v="1.000000" />
+        <kf t="0.874011" v="0.000000" e="cubicBezier 0.3 0.19 0.35597306 0.9187583" />
+      </opacity>
+    </transform>
+    <fillColor>
+      <kf t="0.341029" v="#ff171717" e="cubicBezier 1.0 0.0 0.0 1.0" />
+      <kf t="0.005277" v="#ff3d88ff" />
+    </fillColor>
+    <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+      <property name="letterspacing" type="float" value="-0.030000" />
+      <property name="linespacing" type="float" value="1.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.wipe2" locallyApplied="true">
+      <property name="start" type="float" value="0.479000" />
+      <property name="end" type="float" value="1.000000" />
+      <property name="angle" type="float" value="0.000000" />
+      <property name="feather" type="float" value="0.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <content>Video Editors</content>
+  </text>
+  <nullobj id="40026499" label="Null 1" startTime="650" endTime="2449" mediaFillMode="fill" parent="40026501" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.143412" v="0.000000,0.000000,0.000000" />
+        <kf t="0.653140" v="0.000000,-358.283264,0.000000" e="cubicBezier 0.39859813 0.21906304 0.14178008 0.9306507" />
+      </location>
+    </transform>
+  </nullobj>
+  <text id="40026500" startTime="1066" endTime="2582" fillType="color" mediaFillMode="fill" parent="40026499" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+    <transform>
+      <location value="19.052589,358.283264,0.000000" />
+      <scale value="2.281250,2.281250" />
+      <opacity>
+        <kf t="0.313324" v="1.000000" e="cubicBezier 0.9847988 0.0 0.09360254 1.0" />
+        <kf t="0.000000" v="0.000000" />
+        <kf t="0.786279" v="1.000000" />
+        <kf t="1.000000" v="0.000000" e="cubicBezier 0.7920574 0.001981506 0.0 1.0" />
+      </opacity>
+    </transform>
+    <fillColor>
+      <kf t="0.445251" v="#ff000000" e="cubicBezier 0.7912706 0.0 0.12683761 1.0" />
+      <kf t="0.005277" v="#ff3b87ff" />
+    </fillColor>
+    <effect id="com.alightcreative.effects.wipe2" locallyApplied="true">
+      <property name="start" type="float" value="0.000000" />
+      <property name="end" type="float" value="0.408000" />
+      <property name="angle" type="float" value="0.000000" />
+      <property name="feather" type="float" value="0.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+      <property name="posz" type="float" value="1.000000" />
+      <property name="posx" type="float" value="0.000000" />
+      <property name="posy" type="float">
+        <kf t="1.000000" v="0.000000" e="elastic 0.2756131 1.0 0.0 0.70922506" />
+        <kf t="0.000000" v="150.000000" />
+      </property>
+      <property name="angle" type="float" value="0.000000" />
+      <property name="zinv" type="bool" value="false" />
+      <property name="xinv" type="bool" value="false" />
+      <property name="yinv" type="bool" value="false" />
+      <property name="ainv" type="bool" value="false" />
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <content>Still Wasting </content>
+  </text>
+  <text id="40026502" label="Still Wasting Copy" startTime="1250" endTime="2749" fillType="color" mediaFillMode="fill" parent="40026499" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+    <transform>
+      <location value="19.052589,358.283264,0.000000" />
+      <scale value="2.281250,2.281250" />
+      <opacity>
+        <kf t="0.316878" v="1.000000" e="cubicBezier 0.9847988 0.0 0.09360254 1.0" />
+        <kf t="0.000000" v="0.000000" />
+        <kf t="0.527685" v="1.000000" />
+        <kf t="0.872582" v="0.000000" e="cubicBezier 0.4720908 0.0 0.0 1.0" />
+      </opacity>
+    </transform>
+    <fillColor>
+      <kf t="0.444962" v="#ff000000" e="cubicBezier 0.79 0.0 0.13 1.0" />
+      <kf t="0.000000" v="#ff3b87ff" />
+    </fillColor>
+    <effect id="com.alightcreative.effects.wipe2" locallyApplied="true">
+      <property name="start" type="float" value="0.400000" />
+      <property name="end" type="float" value="1.064000" />
+      <property name="angle" type="float" value="0.000000" />
+      <property name="feather" type="float" value="0.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+      <property name="posz" type="float" value="1.000000" />
+      <property name="posx" type="float" value="0.000000" />
+      <property name="posy" type="float">
+        <kf t="1.000000" v="0.000000" e="elastic 0.2756131 1.0 0.0 0.70922506" />
+        <kf t="0.000000" v="150.000000" />
+      </property>
+      <property name="angle" type="float" value="0.000000" />
+      <property name="zinv" type="bool" value="false" />
+      <property name="xinv" type="bool" value="false" />
+      <property name="yinv" type="bool" value="false" />
+      <property name="ainv" type="bool" value="false" />
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <content>Still Wasting </content>
+  </text>
+  <nullobj id="40026501" label="Null 2" startTime="733" endTime="2432" mediaFillMode="fill" parent="40026803" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.000000" v="15.424713,-9.337158,0.000000" />
+        <kf t="1.000000" v="-499.416321,-12.037476,-500.000000" e="cubicBezier 0.434076 0.038305674 0.47181803 1.0" />
+      </location>
+    </transform>
+  </nullobj>
+  <shape id="40026508" label="Shape 1" startTime="1366" endTime="2015" fillType="none" mediaFillMode="fill" parent="40026501">
+    <transform>
+      <location value="114.312683,0.000000,0.000000" />
+    </transform>
+    <fillColor value="#ff45e1d1" />
+    <effect id="com.alightcreative.effects.drawing.progress" locallyApplied="true">
+      <property name="start" type="float">
+        <kf t="-0.015176" v="0.000000" />
+        <kf t="3.326655" v="100.000000" e="elastic 0.5 1.0 0.06657126 1.0" />
+      </property>
+      <property name="end" type="float">
+        <kf t="0.000000" v="0.000000" />
+        <kf t="2.734977" v="100.000000" e="elastic 0.5 1.0 0.0 1.0" />
+      </property>
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#ff00aaff" />
+      <size value="17.000000" />
+    </path-stroke>
+    <path d="M -138.99219 -14.25C -138.99219 -14.25, -157.1394 -153.63647, -305.60645 -173.74512C -454.0735 -193.85376, -504.92993 -146.12012, -534.9043 -67.87305C -564.87866 10.374016, -518.1553 183.86133, -379.1631 291.6162C -240.1709 399.3711, -8.310547 413.29883, 153.67773 341.05078C 315.66602 268.80273, 387.53906 72.24805, 387.53906 72.24805L -138.99219 -14.25" />
+  </shape>
+  <shape id="40026510" label="Circle 1" startTime="1883" endTime="3898" fillType="color" mediaFillMode="fill" parent="40026509" s=".circle">
+    <transform>
+      <location value="-6.719483,-0.054375,33.906250" />
+      <scale>
+        <kf t="0.000000" v="0.000000,0.000000" />
+        <kf t="0.591563" v="15.638479,15.638479" e="elastic 0.5 1.0 0.0 1.0" />
+      </scale>
+      <rotation value="0.463636" />
+      <opacity>
+        <kf t="-0.003970" v="1.000000" />
+        <kf t="0.483871" v="0.000000" e="cubicBezier 0.0 0.0 0.0 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff07afff" />
+    <property name="size" type="vec2" value="100.000000,100.000000" />
+  </shape>
+  <shape id="40026509" label="Rounded Rectangle 2" startTime="1750" endTime="4349" fillType="color" mediaFillMode="fill" parent="40026501" s=".roundrect">
+    <transform>
+      <location>
+        <kf t="0.362062" v="486.835938,15.219727,-1.007751" e="elastic 0.38707387 1.0 0.0 0.6102359" />
+        <kf t="0.000000" v="452.250275,170.523041,-1.007751" />
+      </location>
+      <scale>
+        <kf t="0.355907" v="0.745000,0.745000" e="elastic 0.38707387 1.0 0.0 0.6102359" />
+        <kf t="0.003079" v="0.000000,0.000000" />
+      </scale>
+      <rotation>
+        <kf t="0.003079" v="9.878049" />
+        <kf t="0.432859" v="-0.000000" e="elastic 0.40487182 1.0 0.0 1.0" />
+      </rotation>
+      <opacity>
+        <kf t="1.048481" v="1.000000" />
+        <kf t="1.138130" v="0.000000" e="cubicBezier 0.42 0.0 1.0 1.0" />
+      </opacity>
+    </transform>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <shadow direction="outside">
+      <opacity value="0.050000" />
+      <size value="30.000000" />
+      <offset value="20.000000,20.000000" />
+    </shadow>
+    <property name="size" type="vec2">
+      <kf t="0.202001" v="100.000000,100.000000" />
+      <kf t="0.586762" v="610.000000,80.000000" e="elastic 0.46992403 1.0 0.0 0.23531437" />
+    </property>
+    <property name="cornerRadius" type="float">
+      <kf t="0.592920" v="323.000000" e="elastic 0.39377657 1.0 0.0 0.23531437" />
+      <kf t="0.202001" v="51.000000" />
+      <kf t="0.804541" v="323.000000" />
+    </property>
+  </shape>
+  <shape id="40028653" label="plus.png" startTime="1750" endTime="4349" clippingMask="true" fillType="media" fillImage="content://media/external/images/media/1000086148" mediaFillMode="fill" parent="40026509" s=".rect">
+    <transform>
+      <location>
+        <kf t="0.541746" v="-431.754700,-13.090034,-181.525208" e="elastic 0.39377657 1.0 0.0 0.23531437" />
+        <kf t="0.147365" v="-243.043854,-250.853912,-181.525208" />
+      </location>
+      <scale value="0.062143,0.062143" />
+      <rotation>
+        <kf t="0.734129" v="0.000000" e="cubicBezier 0.3568065 0.0 0.0 1.0" />
+        <kf t="0.144287" v="-200.000000" />
+      </rotation>
+    </transform>
+    <property name="size" type="vec2" value="540.000000,540.000000" />
+  </shape>
+  <shape id="40026545" label="image_search_1770302428224.png Copy" startTime="1750" endTime="4349" clippingMask="true" fillType="media" fillImage="content://media/external/images/media/1000074927" mediaFillMode="fill" parent="40026509" s=".rect">
+    <transform>
+      <location>
+        <kf t="1.125433" v="51.840893,116.457535,-169.296204" e="elastic 0.2792302 1.0 0.080023475 0.25773478" />
+        <kf t="0.644479" v="51.840893,-12.386856,-169.296204" />
+      </location>
+      <scale value="1.124783,1.124783" />
+    </transform>
+    <property name="size" type="vec2" value="540.000000,540.000000" />
+  </shape>
+  <text id="40026809" startTime="1750" endTime="4349" clippingMask="true" fillType="color" mediaFillMode="fill" parent="40026509" size="16.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="left">
+    <transform>
+      <location value="46.407547,-3.378354,-2.890505" />
+      <scale value="1.812500,1.812500" />
+      <rotation value="0.000011" />
+      <opacity>
+        <kf t="0.471335" v="0.000000" />
+        <kf t="0.484032" v="1.000000" />
+        <kf t="1.048481" v="1.000000" />
+        <kf t="1.138130" v="0.000000" e="cubicBezier 0.42 0.0 1.0 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff000000" />
+    <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+      <property name="letterspacing" type="float" value="-0.030000" />
+      <property name="linespacing" type="float" value="1.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.texttransform" locallyApplied="true">
+      <property name="start" type="float">
+        <kf t="0.413621" v="0.000000" />
+        <kf t="0.888034" v="1.000000" />
+      </property>
+      <property name="end" type="float" value="1.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="component" type="int" value="1" />
+      <property name="anchor" type="int" value="1" />
+      <property name="angle" type="float" value="0.000000" />
+      <property name="scale" type="float" value="0.000000" />
+      <property name="stretch" type="float" value="0.000000" />
+      <property name="alpha" type="float" value="-1.000000" />
+      <property name="useFillColor" type="bool" value="true" />
+      <property name="fillColor" type="color" value="#ff0063ff" />
+      <property name="easeIn" type="float" value="-0.860000" />
+      <property name="easeOut" type="float" value="0.000000" />
+      <property name="overlap" type="float" value="0.200000" />
+      <property name="shape" type="int" value="0" />
+      <property name="randomOrder" type="bool" value="false" />
+      <property name="seed" type="float" value="0.000000" />
+    </effect>
+    <content>Perfect Sound Effects?</content>
+  </text>
+  <shape id="40026810" label="upload-big-arrow.png" startTime="1750" endTime="4349" fillType="media" fillImage="content://media/external/images/media/1000120465" mediaFillMode="fill" parent="40026808" s=".rect">
+    <transform>
+      <location>
+        <kf t="0.933051" v="623.043579,46.594238,-966.934753" e="elastic 0.36878312 1.0 0.0 0.16150498" />
+        <kf t="0.612157" v="603.159058,-66.057983,-966.000000" />
+      </location>
+      <scale value="0.058333,0.058333" />
+      <opacity>
+        <kf t="0.529051" v="1.000000" />
+        <kf t="0.509811" v="0.000000" />
+        <kf t="1.048481" v="1.000000" />
+        <kf t="1.138130" v="0.000000" e="cubicBezier 0.42 0.0 1.0 1.0" />
+      </opacity>
+    </transform>
+    <property name="size" type="vec2" value="540.000000,540.000000" />
+  </shape>
+  <embedScene id="40026535" label="Group 1" startTime="1850" endTime="4349" fillType="intrinsic" outTime="8622" speed="3.450000" mediaFillMode="fill" parent="40026509">
+    <transform>
+      <location value="0.302584,-0.570760,-4.737518" />
+      <scale value="0.357099,0.357099" />
+      <rotation value="-0.070683" />
+      <opacity>
+        <kf t="0.163265" v="1.000000" />
+        <kf t="0.234894" v="0.000000" e="cubicBezier 0.95742464 0.034346104 0.0 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff000000" />
+    <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2024" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+      <shape id="40026516" label="PhotoRoom-20260301_222144.png" startTime="8" endTime="2024" fillType="media" fillImage="content://media/external/images/media/1000074877" mediaFillMode="fill" s=".rect">
+        <transform>
+          <location value="540.000000,960.000000,0.000000" />
+        </transform>
+        <property name="size" type="vec2" value="540.000000,540.000000" />
+      </shape>
+      <embedScene id="40026531" label="Group and Mask 4" startTime="8" endTime="2024" fillType="intrinsic" outTime="2016" mediaFillMode="fill">
+        <transform>
+          <location value="540.000000,960.000000,0.000000" />
+          <pivot value="1.248718,-1.497681" />
+        </transform>
+        <fillColor value="#ff000000" />
+        <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2016" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <shape id="40026517" label="Picsart_26-03-01_22-20-44-791.png" startTime="0" endTime="2015" fillType="media" fillImage="content://media/external/images/media/1000074875" mediaFillMode="fill" s=".rect">
+            <transform>
+              <location value="540.000000,960.000000,0.000000" />
+            </transform>
+            <property name="size" type="vec2" value="540.000000,540.000000" />
+          </shape>
+          <shape id="40026530" label="Circle 1" startTime="0" endTime="2016" fillType="color" blending="mask" mediaFillMode="fill" s=".circle">
+            <transform>
+              <location value="541.248718,958.502319,0.000000" />
+              <scale value="0.200000,0.200000" />
+            </transform>
+            <fillColor value="#ff8ec63b" />
+            <property name="size" type="vec2" value="100.000000,100.000000" />
+          </shape>
+        </scene>
+      </embedScene>
+      <embedScene id="40026529" label="Group and Mask 3" startTime="8" endTime="2024" fillType="intrinsic" outTime="2016" mediaFillMode="fill">
+        <transform>
+          <location value="540.000000,960.000000,0.000000" />
+          <pivot value="1.680191,0.000000" />
+          <rotation>
+            <kf t="0.003968" v="0.000000" />
+            <kf t="0.999504" v="450.000000" />
+          </rotation>
+        </transform>
+        <fillColor value="#ff000000" />
+        <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2015" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <shape id="40026528" label="Picsart_26-03-01_22-20-44-791.png Copy" startTime="0" endTime="2015" fillType="media" fillImage="content://media/external/images/media/1000074875" mediaFillMode="fill" s=".rect">
+            <transform>
+              <location value="540.000000,960.000000,0.000000" />
+            </transform>
+            <property name="size" type="vec2" value="540.000000,540.000000" />
+          </shape>
+          <shape id="40026524" label="Shape 1" startTime="0" endTime="2015" fillType="color" blending="mask" mediaFillMode="fill">
+            <transform>
+              <location value="620.319702,891.411255,0.000000" />
+              <scale value="0.439943,0.439943" />
+            </transform>
+            <fillColor value="#ff526ea2" />
+            <path d="M -195.82812 202.57849L -452.38138 363.10773L -486.1897 320.91537L -193.69543 143.90898L -193.69543 143.90898L -195.82812 202.57849" />
+          </shape>
+        </scene>
+      </embedScene>
+      <embedScene id="40026523" label="Group and Mask 2" startTime="8" endTime="2024" fillType="intrinsic" outTime="2016" mediaFillMode="fill">
+        <transform>
+          <location value="540.000000,960.000000,0.000000" />
+          <pivot value="1.094719,-1.185493" />
+          <rotation>
+            <kf t="0.003968" v="0.000000" />
+            <kf t="0.999504" v="252.439026" />
+          </rotation>
+        </transform>
+        <fillColor value="#ff000000" />
+        <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2015" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <shape id="40026522" label="Picsart_26-03-01_22-20-44-791.png Copy" startTime="0" endTime="2015" fillType="media" fillImage="content://media/external/images/media/1000074875" mediaFillMode="fill" s=".rect">
+            <transform>
+              <location value="540.000000,960.000000,0.000000" />
+            </transform>
+            <property name="size" type="vec2" value="540.000000,540.000000" />
+          </shape>
+          <shape id="40026521" label="Shape 1" startTime="0" endTime="2015" fillType="color" blending="mask" mediaFillMode="fill">
+            <transform>
+              <location value="620.319702,891.411255,0.000000" />
+              <scale value="0.439943,0.439943" />
+            </transform>
+            <fillColor value="#ffcf85cd" />
+            <path d="M -191.63141 176.15239L -134.95078 112.79138L 109.38495 252.9373L 69.891815 377.95288L -191.63141 176.15239" />
+          </shape>
+        </scene>
+      </embedScene>
+      <embedScene id="40026520" label="Group and Mask 1" startTime="8" endTime="2024" fillType="intrinsic" outTime="2016" mediaFillMode="fill">
+        <transform>
+          <location value="540.000000,960.000000,0.000000" />
+          <pivot value="0.000000,-0.715637" />
+          <rotation>
+            <kf t="0.003968" v="0.000000" />
+            <kf t="0.999504" v="90.000000" />
+          </rotation>
+        </transform>
+        <fillColor value="#ff000000" />
+        <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2015" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <shape id="40026519" label="Picsart_26-03-01_22-20-44-791.png Copy" startTime="0" endTime="2015" fillType="media" fillImage="content://media/external/images/media/1000074875" mediaFillMode="fill" s=".rect">
+            <transform>
+              <location value="540.000000,960.000000,0.000000" />
+            </transform>
+            <property name="size" type="vec2" value="540.000000,540.000000" />
+          </shape>
+          <shape id="40026518" label="Shape 1" startTime="0" endTime="2015" fillType="color" blending="mask" mediaFillMode="fill">
+            <transform>
+              <location value="620.319702,891.411255,0.000000" />
+              <scale value="0.439943,0.439943" />
+            </transform>
+            <fillColor value="#fff2a55a" />
+            <path d="M -144.18524 154.27698L -144.18529 -116.63141L -283.54468 -112.36789L -203.1416 141.91898L -144.18524 154.27698" />
+          </shape>
+        </scene>
+      </embedScene>
+    </scene>
+  </embedScene>
+  <nullobj id="40026803" label="Null 3" startTime="2083" endTime="4099" mediaFillMode="fill" parent="40026806" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.000000" v="0.000000,0.000000,0.000000" />
+        <kf t="0.425595" v="0.000000,50.924561,369.343872" e="cubicBezier 0.8030989 0.0 0.0 1.0" />
+      </location>
+    </transform>
+  </nullobj>
+  <shape id="40026804" label="image_search_1772871522271.png" startTime="2250" endTime="4349" fillType="media" fillImage="content://media/external/images/media/1000075832" mediaFillMode="fill" parent="40026803" s=".rect">
+    <transform>
+      <location>
+        <kf t="0.440686" v="1.762329,-209.919739,-520.277283" e="elastic 0.3479304 1.0 0.0 0.3060248" />
+        <kf t="0.000000" v="5.181458,-413.684052,-520.277283" />
+      </location>
+      <scale value="0.698148,0.698148" />
+      <opacity>
+        <kf t="0.162459" v="1.000000" e="cubicBezier 0.99133074 0.0 0.0 1.0" />
+        <kf t="0.003813" v="0.000000" />
+        <kf t="1.060029" v="1.000000" />
+        <kf t="1.171034" v="0.000000" e="cubicBezier 0.42 0.0 1.0 1.0" />
+      </opacity>
+    </transform>
+    <property name="size" type="vec2" value="540.000000,182.500000" />
+  </shape>
+  <shape id="40027750" label="Picsart_26-03-21_13-16-06-837.png Copy" startTime="2250" endTime="4349" fillType="media" fillImage="content://media/external/images/media/1000086149" mediaFillMode="fill" parent="40026806" s=".rect">
+    <transform>
+      <location>
+        <kf t="0.837542" v="-14.325256,-145.998093,-150.804138" e="elastic 0.26571476 1.0 0.0 0.16598916" />
+        <kf t="0.051453" v="-8.007851,-329.691833,-150.000000" />
+      </location>
+      <scale value="0.712037,0.712037" />
+      <opacity>
+        <kf t="0.281562" v="1.000000" e="cubicBezier 0.96812165 0.0 0.0 0.9674152" />
+        <kf t="0.003812" v="0.000000" />
+        <kf t="1.060028" v="1.000000" />
+        <kf t="1.171034" v="0.000000" e="cubicBezier 0.42 0.0 1.0 1.0" />
+      </opacity>
+    </transform>
+    <effect id="com.alightcreative.effects.satvib" locallyApplied="true">
+      <property name="saturation" type="float" value="0.100000" />
+      <property name="vib" type="float" value="1.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <property name="size" type="vec2" value="540.000000,182.500000" />
+  </shape>
+  <nullobj id="40026806" label="Null 4" startTime="2366" endTime="4415" mediaFillMode="fill" parent="40026808" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.003904" v="0.000061,0.000000,0.000000" />
+        <kf t="0.752074" v="269.589081,-7.021621,-800.000000" e="cubicBezier 0.27634513 0.11316256 0.31 0.82" />
+      </location>
+    </transform>
+  </nullobj>
+  <shape id="40026879" label="Rounded Rectangle 3" startTime="2500" endTime="4349" fillType="color" mediaFillMode="fill" s=".roundrect">
+    <transform>
+      <location value="544.909790,1043.210815,-1366.090576" />
+    </transform>
+    <fillColor value="#ffa64e5a" />
+    <effect id="com.alightcreative.effects.lift" locallyApplied="true">
+      <property name="fill" type="float" value="0.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.flip3" locallyApplied="true">
+      <property name="angle" type="float">
+        <kf t="0.000000" v="0.000000" />
+        <kf t="0.635479" v="7.000000" e="cubicBezier 0.4 0.02 0.41 0.85" />
+      </property>
+      <property name="axis" type="float" value="193.000000" />
+      <property name="crop" type="float" value="1.000000" />
+      <property name="zdist" type="float" value="0.000000" />
+      <property name="solid" type="bool" value="false" />
+      <property name="solidColor" type="color" value="#ffdd4455" />
+      <property name="thickness" type="float" value="1.000000" />
+      <property name="enableLight" type="bool" value="false" />
+      <property name="lightIntensity" type="float" value="1.000000" />
+      <property name="lightColor" type="color" value="#ffffffff" />
+      <property name="shine" type="float" value="0.800000" />
+      <property name="spec" type="float" value="30.000000" />
+      <property name="ambient" type="float" value="0.100000" />
+      <property name="lightDir" type="vec2" value="75.000000,-75.000000" />
+      <property name="lightDepth" type="float" value="-100.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="2.600000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <property name="size" type="vec2" value="117.945679,593.648804" />
+    <property name="cornerRadius" type="float" value="25.000000" />
+  </shape>
+  <nullobj id="40026808" label="Null 5" startTime="2700" endTime="5433" mediaFillMode="fill" parent="40026881" type="perspective">
+    <transform>
+      <location>
+        <kf t="-0.002927" v="0.000000,0.000000,0.000000" />
+        <kf t="0.539700" v="-471.091553,-5.106750,0.000000" e="cubicBezier 0.21264045 0.057683833 0.3568738 0.83367044" />
+      </location>
+    </transform>
+    <effect id="com.alightcreative.effects.motionblur4" locallyApplied="true">
+      <property name="tune" type="float" value="3.600000" />
+      <property name="samplesMin" type="float" value="32.000000" />
+      <property name="samplesMax" type="float" value="256.000000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+    </effect>
+  </nullobj>
+  <shape id="40026880" label="PhotoRoom-20260127_151352.png" startTime="3300" endTime="4349" fillType="media" fillImage="content://media/external/images/media/1000069648" mediaFillMode="fill" parent="40026881" s=".rect">
+    <transform>
+      <location>
+        <kf t="1.024784" v="161.198425,66.830872,-983.209717" e="cubicBezier 0.3085955 0.030162923 0.11500442 1.0" />
+        <kf t="0.000000" v="-224.553009,218.387329,-983.000000" />
+      </location>
+      <scale value="0.246953,0.246953" />
+    </transform>
+    <property name="size" type="vec2" value="540.000000,540.000000" />
+  </shape>
+  <nullobj id="40026881" label="Null 6" startTime="3433" endTime="5483" speed="0.800000" mediaFillMode="fill" parent="40032509" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.004878" v="0.000000,0.000000,0.000000" />
+        <kf t="0.898537" v="2.999023,-310.762756,0.000000" e="cubicBezier 0.86201 0.023774631 0.118503235 1.0" />
+      </location>
+    </transform>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+  </nullobj>
+  <embedScene id="40028673" label="Group 1" startTime="4333" endTime="5516" fillType="intrinsic" inTime="142" outTime="1266" speed="0.950000" mediaFillMode="fill" parent="40032509">
+    <transform>
+      <location value="0.200988,-2.110108,-27.918980" />
+      <pivot value="-1.780029,48.041992" />
+    </transform>
+    <fillColor value="#ff000000" />
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="1266" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+      <bookmark t="75" />
+      <text id="40028669" startTime="0" endTime="1265" fillType="color" mediaFillMode="fill" size="28.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+        <transform>
+          <location value="538.739258,941.866882,-481.702576" />
+          <scale value="0.992188,0.992188" />
+          <opacity>
+            <kf t="0.283004" v="1.000000" e="cubicBezier 1.0 0.0 0.0 1.0" />
+            <kf t="0.000000" v="0.000000" />
+            <kf t="0.638735" v="1.000000" />
+            <kf t="0.901976" v="0.000000" />
+          </opacity>
+        </transform>
+        <fillColor>
+          <kf t="0.678261" v="#ff000000" e="cubicBezier 0.42 0.0 0.38005736 1.0" />
+          <kf t="0.085375" v="#ff5c9bff" />
+        </fillColor>
+        <effect id="com.alightcreative.effects.wipe2" locallyApplied="true">
+          <property name="start" type="float" value="-0.060000" />
+          <property name="end" type="float" value="0.304000" />
+          <property name="angle" type="float" value="0.000000" />
+          <property name="feather" type="float" value="0.000000" />
+        </effect>
+        <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+          <property name="letterspacing" type="float" value="-0.050000" />
+          <property name="linespacing" type="float" value="1.000000" />
+        </effect>
+        <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+          <property name="posz" type="float" value="1.000000" />
+          <property name="posx" type="float" value="0.500000" />
+          <property name="posy" type="float">
+            <kf t="0.717786" v="0.000000" e="elastic 0.36189735 1.0 0.0 0.55160344" />
+            <kf t="-0.005491" v="150.000000" />
+          </property>
+          <property name="angle" type="float" value="0.000000" />
+          <property name="zinv" type="bool" value="false" />
+          <property name="xinv" type="bool" value="false" />
+          <property name="yinv" type="bool" value="false" />
+          <property name="ainv" type="bool" value="false" />
+        </effect>
+        <content>Not Anymore </content>
+      </text>
+      <text id="40028670" label="Not Anymore Copy" startTime="100" endTime="1266" fillType="color" mediaFillMode="fill" size="28.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+        <transform>
+          <location value="544.707520,940.649719,-481.702576" />
+          <scale value="0.992188,0.992188" />
+          <opacity>
+            <kf t="0.307033" v="1.000000" e="cubicBezier 1.0 0.0 0.0 1.0" />
+            <kf t="0.000000" v="0.000000" />
+            <kf t="0.664666" v="1.000000" />
+            <kf t="0.921098" v="0.000000" />
+          </opacity>
+        </transform>
+        <fillColor>
+          <kf t="0.677530" v="#ff000000" e="cubicBezier 0.42 0.0 0.38005736 1.0" />
+          <kf t="0.084906" v="#ff5c9bff" />
+        </fillColor>
+        <effect id="com.alightcreative.effects.wipe2" locallyApplied="true">
+          <property name="start" type="float" value="0.307000" />
+          <property name="end" type="float" value="1.178000" />
+          <property name="angle" type="float" value="0.000000" />
+          <property name="feather" type="float" value="0.000000" />
+        </effect>
+        <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+          <property name="letterspacing" type="float" value="-0.050000" />
+          <property name="linespacing" type="float" value="1.000000" />
+        </effect>
+        <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+          <property name="posz" type="float" value="1.000000" />
+          <property name="posx" type="float" value="0.500000" />
+          <property name="posy" type="float">
+            <kf t="0.713551" v="0.000000" e="elastic 0.36189735 1.0 0.0 0.55160344" />
+            <kf t="0.007719" v="150.000000" />
+          </property>
+          <property name="angle" type="float" value="0.000000" />
+          <property name="zinv" type="bool" value="false" />
+          <property name="xinv" type="bool" value="false" />
+          <property name="yinv" type="bool" value="false" />
+          <property name="ainv" type="bool" value="false" />
+        </effect>
+        <content>Not Anymore </content>
+      </text>
+    </scene>
+  </embedScene>
+  <nullobj id="40032509" label="Null 7" startTime="4700" endTime="6716" mediaFillMode="fill" parent="40032524" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.000000" v="0.740112,0.000000,0.000000" />
+        <kf t="0.937996" v="-960.445496,-0.050782,0.000000" e="cubicBezier 0.3473455 0.0 0.17122021 0.9980185" />
+      </location>
+    </transform>
+  </nullobj>
+  <nullobj id="40032524" label="Null 8" startTime="5550" endTime="7565" mediaFillMode="fill" parent="40032526" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.003970" v="0.000000,0.000000,0.000000" />
+        <kf t="1.000000" v="-832.929504,-0.530762,0.000000" e="cubicBezier 0.4215029 0.0 0.23869619 1.0" />
+      </location>
+    </transform>
+  </nullobj>
+  <audio id="40028651" label="Project 7 [186F02D]-enhanced-v2.mp3" startTime="0" endTime="1095" src="content://media/external/audio/media/1000086109" outTime="1080" mediaFillMode="fill">
+    <gain value="1.500000" />
+  </audio>
+  <audio id="40028693" label="Project 7 [735AF2D] (1) (mp3cut.net)-enhanced-v2.mp3" startTime="1166" endTime="5282" src="content://media/external/audio/media/1000086331" outTime="4116" mediaFillMode="fill">
+    <gain>
+      <kf t="0.961856" v="1.500000" />
+      <kf t="0.998299" v="0.000000" />
+    </gain>
+  </audio>
+  <audio id="40028694" label="Project 7 [735AF2D] (1)-enhanced-v2.mp3" startTime="5150" endTime="7815" src="content://media/external/audio/media/1000086110" inTime="3516" outTime="6181" mediaFillMode="fill">
+    <gain>
+      <kf t="0.003376" v="0.000000" />
+      <kf t="0.059664" v="1.500000" />
+      <kf t="0.872420" v="1.500000" />
+      <kf t="0.997373" v="0.000000" />
+    </gain>
+  </audio>
+  <text id="40032523" startTime="5250" endTime="6599" fillType="color" mediaFillMode="fill" parent="40032509" size="28.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="1366" align="center">
+    <transform>
+      <location value="928.346252,-26.072021,0.000000" />
+      <scale value="0.920205,0.920205" />
+      <opacity>
+        <kf t="0.673091" v="1.000000" />
+        <kf t="0.932543" v="0.000000" e="cubicBezier 0.0 0.0 0.0 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff000000" />
+    <effect id="com.alightcreative.effects.texttransform" locallyApplied="true">
+      <property name="start" type="float">
+        <kf t="0.000000" v="0.000000" />
+        <kf t="1.809488" v="1.000000" e="cubicBezier 0.0 0.0 0.7994312 1.0" />
+      </property>
+      <property name="end" type="float" value="1.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="component" type="int" value="2" />
+      <property name="anchor" type="int" value="1" />
+      <property name="offset" type="vec2" value="60.000000,0.000000" />
+      <property name="angle" type="float" value="0.000000" />
+      <property name="scale" type="float" value="0.000000" />
+      <property name="stretch" type="float" value="0.000000" />
+      <property name="alpha" type="float" value="-1.000000" />
+      <property name="useFillColor" type="bool" value="true" />
+      <property name="fillColor" type="color" value="#ff0063ff" />
+      <property name="easeIn" type="float" value="0.000000" />
+      <property name="easeOut" type="float" value="0.000000" />
+      <property name="overlap" type="float" value="2.000000" />
+      <property name="shape" type="int" value="0" />
+      <property name="randomOrder" type="bool" value="false" />
+      <property name="seed" type="float" value="0.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <content>I've Created My All Premium</content>
+  </text>
+  <shape id="40032530" label="Rounded Rectangle 4" startTime="5133" endTime="5465" fillType="color" mediaFillMode="fill" s=".roundrect">
+    <transform>
+      <location value="453.418640,1317.775269,0.000000" />
+    </transform>
+    <fillColor value="#ff6e7d44" />
+    <effect id="com.alightcreative.effects.lift" locallyApplied="true">
+      <property name="fill" type="float" value="0.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.gaussianblur" locallyApplied="true">
+      <property name="strength" type="float">
+        <kf t="0.000000" v="0.000000" />
+        <kf t="0.978917" v="0.000000" e="cubicBezier 0.0 0.0 0.47000003 1.0" />
+        <kf t="0.475902" v="0.100000" e="cubicBezier 0.42000002 0.0 1.0 1.0" />
+      </property>
+    </effect>
+    <property name="size" type="vec2" value="648.468628,1555.199951" />
+    <property name="cornerRadius" type="float" value="25.000000" />
+  </shape>
+  <text id="40032525" startTime="6250" endTime="8716" fillType="color" mediaFillMode="fill" parent="40032509" size="28.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="1366" align="center">
+    <transform>
+      <location value="1505.949463,-51.609314,0.000000" />
+      <scale value="1.661054,1.661054" />
+      <opacity>
+        <kf t="0.172344" v="1.000000" />
+        <kf t="0.375101" v="0.000000" e="cubicBezier 0.42 0.0 0.58 1.0" />
+        <kf t="0.158556" v="1.000000" />
+        <kf t="0.003244" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff000000" />
+    <effect id="com.alightcreative.effects.texttransform" locallyApplied="true">
+      <property name="start" type="float">
+        <kf t="-0.405515" v="0.000000" />
+        <kf t="0.584347" v="1.000000" e="cubicBezier 0.0 0.0 0.77572656 1.0" />
+      </property>
+      <property name="end" type="float" value="1.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="component" type="int" value="2" />
+      <property name="anchor" type="int" value="1" />
+      <property name="offset" type="vec2" value="60.000000,0.000000" />
+      <property name="angle" type="float" value="0.000000" />
+      <property name="scale" type="float" value="0.000000" />
+      <property name="stretch" type="float" value="0.000000" />
+      <property name="alpha" type="float" value="-1.000000" />
+      <property name="useFillColor" type="bool" value="true" />
+      <property name="fillColor" type="color" value="#ff0063ff" />
+      <property name="easeIn" type="float" value="0.000000" />
+      <property name="easeOut" type="float" value="0.000000" />
+      <property name="overlap" type="float" value="2.000000" />
+      <property name="shape" type="int" value="0" />
+      <property name="randomOrder" type="bool" value="false" />
+      <property name="seed" type="float" value="0.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <content>I've Created My All Premium</content>
+  </text>
+  <nullobj id="40032526" label="Null 9" startTime="6333" endTime="8815" mediaFillMode="fill" parent="40032709" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.000000" v="0.000000,0.000000,0.000000" />
+        <kf t="0.587429" v="0.000000,0.000000,951.265625" e="cubicBezier 0.42 0.0 0.16322026 1.0" />
+      </location>
+    </transform>
+  </nullobj>
+  <shape id="40032527" label="Rounded Rectangle 4" startTime="6083" endTime="6415" fillType="color" mediaFillMode="fill" s=".roundrect">
+    <transform>
+      <location value="453.418640,1317.775269,0.000000" />
+    </transform>
+    <fillColor value="#ff6e7d44" />
+    <effect id="com.alightcreative.effects.lift" locallyApplied="true">
+      <property name="fill" type="float" value="0.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.gaussianblur" locallyApplied="true">
+      <property name="strength" type="float">
+        <kf t="0.000000" v="0.000000" />
+        <kf t="0.978917" v="0.000000" e="cubicBezier 0.0 0.0 0.47000003 1.0" />
+        <kf t="0.475902" v="0.100000" e="cubicBezier 0.42000002 0.0 1.0 1.0" />
+      </property>
+    </effect>
+    <property name="size" type="vec2" value="648.468628,1555.199951" />
+    <property name="cornerRadius" type="float" value="25.000000" />
+  </shape>
+  <embedScene id="40032528" label="Group 1" startTime="6916" endTime="10931" fillType="intrinsic" outTime="4015" mediaFillMode="fill" parent="40032526">
+    <transform>
+      <location value="0.000000,0.046997,-988.695251" />
+      <pivot value="-33.907959,-17.251892" />
+      <scale value="1.030907,1.030907" />
+      <opacity>
+        <kf t="0.072727" v="1.000000" e="cubicBezier 0.599104 0.0 0.26617283 1.0" />
+        <kf t="0.000000" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff000000" />
+    <effect id="com.alightcreative.effects.wipe2" locallyApplied="true">
+      <property name="start" type="float" value="-0.172000" />
+      <property name="end" type="float">
+        <kf t="0.000000" v="0.125000" />
+        <kf t="0.267746" v="1.100000" e="cubicBezier 0.01 0.0 0.54 1.0" />
+      </property>
+      <property name="angle" type="float" value="90.000000" />
+      <property name="feather" type="float" value="20.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="4015" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+      <bookmark t="1991" />
+      <bookmark t="808" />
+      <bookmark t="2175" />
+      <bookmark t="8" />
+      <shape id="40029765" label="Rounded Rectangle 4" startTime="0" endTime="4015" fillType="color" mediaFillMode="fill" s=".roundrect">
+        <transform>
+          <location value="541.000000,960.000000,0.000000" />
+          <scale value="1.400593,1.400593" />
+        </transform>
+        <shadow direction="outside">
+          <opacity value="0.050000" />
+          <size value="55.000000" />
+          <offset value="20.000000,18.000000" />
+        </shadow>
+        <property name="size" type="vec2">
+          <kf t="0.209465" v="241.000000,314.000000" />
+        </property>
+        <property name="cornerRadius" type="float">
+          <kf t="0.213699" v="100.000000" />
+        </property>
+      </shape>
+      <embedScene id="40029808" label="Group 2" startTime="50" endTime="583" fillType="intrinsic" outTime="533" mediaFillMode="fill">
+        <transform>
+          <location value="542.865723,996.005188,0.000000" />
+          <pivot value="45.424805,-186.680054" />
+          <scale value="0.973856,0.973856" />
+          <rotation value="0.230994" />
+          <opacity>
+            <kf t="0.748596" v="1.000000" />
+            <kf t="-0.016887" v="0.000000" />
+            <kf t="1.422141" v="1.000000" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+          <property name="posz" type="float" value="1.000000" />
+          <property name="posx" type="float" value="0.000000" />
+          <property name="posy" type="float">
+            <kf t="1.923077" v="0.000000" e="cubicBezier 0.0 0.0 0.0 1.0" />
+            <kf t="0.000000" v="50.000000" />
+          </property>
+          <property name="angle" type="float" value="0.000000" />
+          <property name="zinv" type="bool" value="false" />
+          <property name="xinv" type="bool" value="false" />
+          <property name="yinv" type="bool" value="false" />
+          <property name="ainv" type="bool" value="false" />
+        </effect>
+        <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2732" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <text id="40029077" startTime="0" endTime="2732" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="456.536499,773.319946,0.000000" />
+              <scale value="1.134766,1.134766" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>Whoosh </content>
+          </text>
+          <text id="40029079" label="Whoosh Copy" startTime="0" endTime="2732" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="738.313110,776.343384,0.000000" />
+              <opacity value="0.400000" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>124MB</content>
+          </text>
+          <shape id="40029078" label="Picsart_26-04-26_12-06-12-363.png" startTime="0" endTime="2732" fillType="media" fillImage="content://media/external/images/media/1000086303" mediaFillMode="fill" s=".rect">
+            <transform>
+              <location value="291.369019,773.319946,0.000000" />
+              <scale value="0.075000,0.075000" />
+              <opacity value="0.700000" />
+            </transform>
+            <property name="size" type="vec2" value="540.000000,540.000000" />
+          </shape>
+        </scene>
+      </embedScene>
+      <embedScene id="40029768" label="Group 2 Copy" startTime="116" endTime="4015" fillType="intrinsic" outTime="3574" speed="0.750000" mediaFillMode="fill" parent="40029765">
+        <transform>
+          <location value="-12.877556,146.749542,0.000000" />
+          <pivot value="45.424805,-186.680054" />
+          <scale value="0.695317,0.695317" />
+          <opacity>
+            <kf t="0.102334" v="1.000000" />
+            <kf t="-0.002052" v="0.000000" />
+            <kf t="0.177481" v="1.000000" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+          <property name="posz" type="float" value="1.000000" />
+          <property name="posx" type="float" value="0.000000" />
+          <property name="posy" type="float">
+            <kf t="0.262632" v="0.000000" e="cubicBezier 0.0 0.0 0.0 1.0" />
+            <kf t="0.000000" v="50.000000" />
+          </property>
+          <property name="angle" type="float" value="0.000000" />
+          <property name="zinv" type="bool" value="false" />
+          <property name="xinv" type="bool" value="false" />
+          <property name="yinv" type="bool" value="false" />
+          <property name="ainv" type="bool" value="false" />
+        </effect>
+        <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2015" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <text id="40029077" startTime="0" endTime="2015" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="417.875824,772.968384,0.000000" />
+              <scale value="1.134766,1.134766" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>Riser</content>
+          </text>
+          <text id="40029079" label="Whoosh Copy" startTime="0" endTime="2015" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="749.467407,776.343384,0.000000" />
+              <opacity value="0.400000" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>84MB</content>
+          </text>
+          <shape id="40029078" label="Picsart_26-04-26_12-06-12-363.png" startTime="0" endTime="2015" fillType="media" fillImage="content://media/external/images/media/1000086303" mediaFillMode="fill" s=".rect">
+            <transform>
+              <location value="291.369019,773.319946,0.000000" />
+              <scale value="0.075000,0.075000" />
+              <opacity value="0.700000" />
+            </transform>
+            <property name="size" type="vec2" value="540.000000,540.000000" />
+          </shape>
+        </scene>
+      </embedScene>
+      <embedScene id="40029769" label="Group 2 Copy 2" startTime="183" endTime="4015" fillType="intrinsic" outTime="3524" speed="0.750000" mediaFillMode="fill" parent="40029765">
+        <transform>
+          <location value="-13.657211,211.064163,0.000000" />
+          <pivot value="45.424805,-186.680054" />
+          <scale value="0.695317,0.695317" />
+          <opacity>
+            <kf t="0.103601" v="1.000000" />
+            <kf t="-0.002088" v="0.000000" />
+            <kf t="0.163100" v="1.000000" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+          <property name="posz" type="float" value="1.000000" />
+          <property name="posx" type="float" value="0.000000" />
+          <property name="posy" type="float">
+            <kf t="0.266180" v="0.000000" e="cubicBezier 0.0 0.0 0.0 1.0" />
+            <kf t="0.000000" v="50.000000" />
+          </property>
+          <property name="angle" type="float" value="0.000000" />
+          <property name="zinv" type="bool" value="false" />
+          <property name="xinv" type="bool" value="false" />
+          <property name="yinv" type="bool" value="false" />
+          <property name="ainv" type="bool" value="false" />
+        </effect>
+        <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2723" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <text id="40029083" label="Riser Copy" startTime="0" endTime="2723" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="452.416046,772.968384,0.000000" />
+              <scale value="1.134766,1.134766" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>Impact </content>
+          </text>
+          <text id="40029079" label="Whoosh Copy" startTime="0" endTime="2723" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="752.342407,776.343384,0.000000" />
+              <opacity value="0.400000" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>54MB</content>
+          </text>
+          <shape id="40029078" label="Picsart_26-04-26_12-06-12-363.png" startTime="0" endTime="2723" fillType="media" fillImage="content://media/external/images/media/1000086303" mediaFillMode="fill" s=".rect">
+            <transform>
+              <location value="291.369019,773.319946,0.000000" />
+              <scale value="0.075000,0.075000" />
+              <opacity value="0.700000" />
+            </transform>
+            <property name="size" type="vec2" value="540.000000,540.000000" />
+          </shape>
+        </scene>
+      </embedScene>
+      <embedScene id="40029770" label="Group 2 Copy 3" startTime="250" endTime="4015" fillType="intrinsic" outTime="3474" speed="0.750000" mediaFillMode="fill" parent="40029765">
+        <transform>
+          <location value="-13.039799,275.221375,0.000000" />
+          <pivot value="45.424805,-186.680054" />
+          <scale value="0.695317,0.695317" />
+          <opacity>
+            <kf t="0.105976" v="1.000000" />
+            <kf t="-0.002125" v="0.000000" />
+            <kf t="0.148207" v="1.000000" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+          <property name="posz" type="float" value="1.000000" />
+          <property name="posx" type="float" value="0.000000" />
+          <property name="posy" type="float">
+            <kf t="0.271979" v="0.000000" e="cubicBezier 0.0 0.0 0.0 1.0" />
+            <kf t="0.000000" v="50.000000" />
+          </property>
+          <property name="angle" type="float" value="0.000000" />
+          <property name="zinv" type="bool" value="false" />
+          <property name="xinv" type="bool" value="false" />
+          <property name="yinv" type="bool" value="false" />
+          <property name="ainv" type="bool" value="false" />
+        </effect>
+        <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2015" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <text id="40029085" label="Riser Copy 2" startTime="0" endTime="2015" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="404.909515,772.968384,0.000000" />
+              <scale value="1.134766,1.134766" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>Pop</content>
+          </text>
+          <text id="40029079" label="Whoosh Copy" startTime="0" endTime="2015" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="751.467407,776.343384,0.000000" />
+              <opacity value="0.400000" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>43MB</content>
+          </text>
+          <shape id="40029078" label="Picsart_26-04-26_12-06-12-363.png" startTime="0" endTime="2015" fillType="media" fillImage="content://media/external/images/media/1000086303" mediaFillMode="fill" s=".rect">
+            <transform>
+              <location value="291.369019,773.319946,0.000000" />
+              <scale value="0.075000,0.075000" />
+              <opacity value="0.700000" />
+            </transform>
+            <property name="size" type="vec2" value="540.000000,540.000000" />
+          </shape>
+        </scene>
+      </embedScene>
+      <embedScene id="40029771" label="Group 2 Copy 4" startTime="316" endTime="4015" fillType="intrinsic" outTime="3424" speed="0.750000" mediaFillMode="fill" parent="40029765">
+        <transform>
+          <location value="-13.039799,339.878876,0.000000" />
+          <pivot value="45.424805,-186.680054" />
+          <scale value="0.695317,0.695317" />
+          <opacity>
+            <kf t="0.107867" v="1.000000" />
+            <kf t="-0.002163" v="0.000000" />
+            <kf t="0.133009" v="1.000000" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+          <property name="posz" type="float" value="1.000000" />
+          <property name="posx" type="float" value="0.000000" />
+          <property name="posy" type="float">
+            <kf t="0.276832" v="0.000000" e="cubicBezier 0.0 0.0 0.0 1.0" />
+            <kf t="0.000000" v="50.000000" />
+          </property>
+          <property name="angle" type="float" value="0.000000" />
+          <property name="zinv" type="bool" value="false" />
+          <property name="xinv" type="bool" value="false" />
+          <property name="yinv" type="bool" value="false" />
+          <property name="ainv" type="bool" value="false" />
+        </effect>
+        <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2015" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <text id="40029085" label="Riser Copy 2" startTime="0" endTime="2015" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="420.064789,772.968384,0.000000" />
+              <scale value="1.134766,1.134766" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>Click</content>
+          </text>
+          <text id="40029079" label="Whoosh Copy" startTime="0" endTime="2015" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="755.873169,776.343384,0.000000" />
+              <opacity value="0.400000" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>27MB</content>
+          </text>
+          <shape id="40029078" label="Picsart_26-04-26_12-06-12-363.png" startTime="0" endTime="2015" fillType="media" fillImage="content://media/external/images/media/1000086303" mediaFillMode="fill" s=".rect">
+            <transform>
+              <location value="291.369019,773.319946,0.000000" />
+              <scale value="0.075000,0.075000" />
+              <opacity value="0.700000" />
+            </transform>
+            <property name="size" type="vec2" value="540.000000,540.000000" />
+          </shape>
+        </scene>
+      </embedScene>
+      <embedScene id="40029772" label="Group 2 Copy 5" startTime="383" endTime="4015" fillType="intrinsic" outTime="3374" speed="0.750000" mediaFillMode="fill" parent="40029765">
+        <transform>
+          <location value="-12.877556,403.471252,0.000000" />
+          <pivot value="45.424805,-186.680054" />
+          <scale value="0.695317,0.695317" />
+          <opacity>
+            <kf t="0.109857" v="1.000000" />
+            <kf t="-0.002202" v="0.000000" />
+            <kf t="0.117016" v="1.000000" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+          <property name="posz" type="float" value="1.000000" />
+          <property name="posx" type="float" value="0.000000" />
+          <property name="posy" type="float">
+            <kf t="0.281938" v="0.000000" e="cubicBezier 0.0 0.0 0.0 1.0" />
+            <kf t="0.000000" v="50.000000" />
+          </property>
+          <property name="angle" type="float" value="0.000000" />
+          <property name="zinv" type="bool" value="false" />
+          <property name="xinv" type="bool" value="false" />
+          <property name="yinv" type="bool" value="false" />
+          <property name="ainv" type="bool" value="false" />
+        </effect>
+        <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2015" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <text id="40029085" label="Riser Copy 2" startTime="0" endTime="2015" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="421.220551,772.968384,0.000000" />
+              <scale value="1.134766,1.134766" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>Gear</content>
+          </text>
+          <text id="40029079" label="Whoosh Copy" startTime="0" endTime="2015" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+            <transform>
+              <location value="752.373169,776.343384,0.000000" />
+              <opacity value="0.400000" />
+            </transform>
+            <fillColor value="#ff000000" />
+            <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+              <property name="letterspacing" type="float" value="-0.030000" />
+              <property name="linespacing" type="float" value="1.000000" />
+            </effect>
+            <content>36MB</content>
+          </text>
+          <shape id="40029078" label="Picsart_26-04-26_12-06-12-363.png" startTime="0" endTime="2015" fillType="media" fillImage="content://media/external/images/media/1000086303" mediaFillMode="fill" s=".rect">
+            <transform>
+              <location value="291.369019,773.319946,0.000000" />
+              <scale value="0.075000,0.075000" />
+              <opacity value="0.700000" />
+            </transform>
+            <property name="size" type="vec2" value="540.000000,540.000000" />
+          </shape>
+        </scene>
+      </embedScene>
+      <shape id="40029774" label="search-interface-symbol.png" startTime="0" endTime="4015" fillType="media" fillImage="content://media/external/images/media/1000120465" mediaFillMode="fill" parent="40029765" s=".rect">
+        <transform>
+          <location value="140.041122,-199.242111,0.000000" />
+          <scale value="0.060821,0.060821" />
+          <opacity>
+            <kf t="0.000000" v="0.000000" />
+            <kf t="0.089165" v="0.600000" />
+            <kf t="0.201245" v="0.600000" />
+          </opacity>
+        </transform>
+        <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+          <property name="posz" type="float" value="1.000000" />
+          <property name="posx" type="float" value="0.000000" />
+          <property name="posy" type="float">
+            <kf t="0.255114" v="0.000000" e="cubicBezier 0.0 0.0 0.0 1.0" />
+            <kf t="0.000000" v="50.000000" />
+          </property>
+          <property name="angle" type="float" value="0.000000" />
+          <property name="zinv" type="bool" value="false" />
+          <property name="xinv" type="bool" value="false" />
+          <property name="yinv" type="bool" value="false" />
+          <property name="ainv" type="bool" value="false" />
+        </effect>
+        <property name="size" type="vec2" value="540.000000,540.000000" />
+      </shape>
+      <text id="40029779" startTime="0" endTime="4015" fillType="color" mediaFillMode="fill" size="24.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+        <transform>
+          <location value="470.846130,665.914856,0.000000" />
+          <scale value="1.792956,1.792956" />
+          <rotation value="0.219448" />
+          <opacity>
+            <kf t="0.087173" v="0.600000" />
+            <kf t="0.000000" v="0.000000" />
+            <kf t="0.201245" v="0.600000" e="cubicBezier 0.0 0.0 0.58 1.0" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff7f7f7f" />
+        <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+          <property name="posz" type="float" value="1.000000" />
+          <property name="posx" type="float" value="0.000000" />
+          <property name="posy" type="float">
+            <kf t="0.254552" v="0.000000" e="cubicBezier 0.0 0.0 0.0 1.0" />
+            <kf t="0.000000" v="50.000000" />
+          </property>
+          <property name="angle" type="float" value="0.000000" />
+          <property name="zinv" type="bool" value="false" />
+          <property name="xinv" type="bool" value="false" />
+          <property name="yinv" type="bool" value="false" />
+          <property name="ainv" type="bool" value="false" />
+        </effect>
+        <content>Drive </content>
+      </text>
+      <shape id="40032531" label="Picsart_26-08-26_12-23-24-059.png" hidden="true" startTime="850" endTime="4015" fillType="media" fillImage="content://media/external/images/media/1000120858" mediaFillMode="fill" s=".rect">
+        <transform>
+          <location value="830.623657,1156.407227,0.000000" />
+        </transform>
+        <property name="size" type="vec2" value="540.000000,359.500000" />
+      </shape>
+    </scene>
+  </embedScene>
+  <embedScene id="40032529" label="Group 1 Copy" startTime="6833" endTime="8099" fillType="intrinsic" outTime="3033" mediaFillMode="fill" parent="40032528">
+    <transform>
+      <location value="0.000000,0.000000,-1.000000" />
+      <pivot value="-33.907959,-17.251892" />
+      <scale value="1.005781,1.005781" />
+      <opacity>
+        <kf t="0.717220" v="0.667969" />
+        <kf t="0.849131" v="0.667969" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff000000" />
+    <effect id="com.alightcreative.effects.wipe2" locallyApplied="true">
+      <property name="start" type="float">
+        <kf t="0.006319" v="0.000000" />
+        <kf t="1.000000" v="1.309000" e="cubicBezier 0.0 0.0 0.76394796 1.0" />
+      </property>
+      <property name="end" type="float">
+        <kf t="0.000000" v="0.125000" />
+        <kf t="0.849132" v="1.100000" e="cubicBezier 0.01 0.0 0.54 1.0" />
+      </property>
+      <property name="angle" type="float" value="90.000000" />
+      <property name="feather" type="float" value="20.000000" />
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="3033" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+      <bookmark t="1408" />
+      <shape id="40029765" label="Rounded Rectangle 4" startTime="0" endTime="3033" fillType="color" mediaFillMode="fill" s=".roundrect">
+        <transform>
+          <location value="541.000000,960.000000,0.000000" />
+          <scale value="1.400593,1.400593" />
+        </transform>
+        <fillColor value="#ff5c9bff" />
+        <shadow direction="outside" enabled="false">
+          <opacity value="0.050000" />
+          <size value="55.000000" />
+          <offset value="20.000000,18.000000" />
+        </shadow>
+        <property name="size" type="vec2" value="241.000000,314.000000" />
+        <property name="cornerRadius" type="float" value="100.000000" />
+      </shape>
+    </scene>
+  </embedScene>
+  <embedScene id="40032677" label="Group 2" startTime="7466" endTime="11015" fillType="intrinsic" inTime="216" outTime="3765" mediaFillMode="fill" parent="40032702">
+    <transform>
+      <location value="1611.124878,717.134338,73.975952" />
+      <pivot value="45.424805,-186.680054" />
+      <scale value="15.984995,15.984995" />
+      <rotation value="0.230994" />
+    </transform>
+    <fillColor value="#ff000000" />
+    <effect id="com.alightcreative.solidcolor" locallyApplied="true">
+      <property name="color" type="color" value="#ff5c9bff" />
+      <property name="alpha" type="float">
+        <kf t="0.246548" v="0.000000" e="cubicBezier 0.0 0.0 0.58 1.0" />
+        <kf t="0.000000" v="0.800000" />
+      </property>
+      <property name="blendMode" type="int" value="0" />
+    </effect>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <scene title="" width="1080" height="1920" exportWidth="1080" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="3765" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+      <shape id="40032678" label="Rectangle 1" startTime="0" endTime="3765" fillType="color" mediaFillMode="fill" s=".rect">
+        <transform>
+          <location value="540.000000,773.319946,0.000000" />
+        </transform>
+        <property name="size" type="vec2" value="317.000000,46.000000" />
+      </shape>
+      <text id="40029077" startTime="0" endTime="3765" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+        <transform>
+          <location value="456.536499,773.319946,0.000000" />
+          <scale value="1.134766,1.134766" />
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+          <property name="letterspacing" type="float" value="-0.030000" />
+          <property name="linespacing" type="float" value="1.000000" />
+        </effect>
+        <content>Whoosh </content>
+      </text>
+      <text id="40029079" label="Whoosh Copy" startTime="0" endTime="3765" fillType="color" mediaFillMode="fill" size="18.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="512" align="center">
+        <transform>
+          <location value="738.313110,776.343384,0.000000" />
+          <opacity value="0.400000" />
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.textspacing" locallyApplied="true">
+          <property name="letterspacing" type="float" value="-0.030000" />
+          <property name="linespacing" type="float" value="1.000000" />
+        </effect>
+        <content>124MB</content>
+      </text>
+      <shape id="40029078" label="Picsart_26-04-26_12-06-12-363.png" startTime="0" endTime="3765" fillType="media" fillImage="content://media/external/images/media/1000086303" mediaFillMode="fill" s=".rect">
+        <transform>
+          <location value="291.369019,773.319946,0.000000" />
+          <scale value="0.075000,0.075000" />
+          <opacity value="0.700000" />
+        </transform>
+        <property name="size" type="vec2" value="540.000000,540.000000" />
+      </shape>
+    </scene>
+  </embedScene>
+  <shape id="40032676" label="PhotoRoom-20260828_173218.png" startTime="6483" endTime="7483" fillType="media" fillImage="content://media/external/images/media/1000121578" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location>
+        <kf t="0.007999" v="-278.301331,1965.009521,-155.603027" />
+        <kf t="1.108000" v="539.940918,820.923035,-521.526306" e="cubicBezier 0.0 0.0 0.39312306 1.0" />
+      </location>
+      <scale value="0.064815,0.064815" />
+    </transform>
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <property name="size" type="vec2" value="540.000000,378.500000" />
+  </shape>
+  <shape id="40032702" label="PhotoRoom-20260828_173218.png Copy" startTime="7466" endTime="9666" fillType="media" fillImage="content://media/external/images/media/1000121577" mediaFillMode="fill" parent="40032709" s=".rect">
+    <transform>
+      <location>
+        <kf t="-0.443183" v="-885.955200,1004.928040,-155.603027" />
+        <kf t="0.026818" v="-50.283630,-141.752197,-521.526306" e="cubicBezier 0.0 0.0 0.39312306 1.0" />
+      </location>
+      <scale>
+        <kf t="-0.003636" v="0.048338,0.048338" />
+        <kf t="0.928182" v="0.000000,0.000000" e="cubicBezier 0.98 0.0 1.0 0.41" />
+        <kf t="0.511364" v="0.037764,0.037764" e="cubicBezier 0.3314636 0.0 0.26753128 1.0" />
+        <kf t="0.738636" v="0.047583,0.047583" e="cubicBezier 0.3782683 0.0 0.15240756 1.0" />
+      </scale>
+      <rotation>
+        <kf t="0.511364" v="0.000000" />
+        <kf t="0.928182" v="6.585366" e="cubicBezier 0.98 0.0 1.0 0.40754345" />
+        <kf t="0.738636" v="-5.487793" e="cubicBezier 0.38 0.0 0.15 1.0" />
+      </rotation>
+    </transform>
+    <effect id="com.alightcreative.effects.transform2" locallyApplied="true">
+      <property name="posz" type="float" value="1.000000" />
+      <property name="posx" type="float">
+        <kf t="0.000000" v="0.000000" />
+        <kf t="0.549545" v="-1066.000000" e="cubicBezier 0.3751703 0.10986006 0.5694108 0.84875196" />
+      </property>
+      <property name="posy" type="float" value="0.000000" />
+      <property name="angle" type="float" value="0.000000" />
+      <property name="zinv" type="bool" value="false" />
+      <property name="xinv" type="bool" value="false" />
+      <property name="yinv" type="bool" value="false" />
+      <property name="ainv" type="bool" value="false" />
+    </effect>
+    <property name="size" type="vec2" value="540.000000,662.000000" />
+  </shape>
+  <embedScene id="202415785" label="Group and Mask 2" startTime="7200" endTime="13916" fillType="intrinsic" outTime="6716" mediaFillMode="fill" parent="40032709">
+    <transform>
+      <location value="-1658.288818,-5.414856,0.000000" />
+      <pivot value="-664.597412,2.000244" />
+      <opacity>
+        <kf t="0.378350" v="1.000000" />
+        <kf t="0.445354" v="0.000000" e="cubicBezier 1.0 0.0 0.0 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff000000" />
+    <shadow direction="outside">
+      <opacity value="0.070000" />
+      <size value="40.000000" />
+      <offset value="12.000000,12.000000" />
+    </shadow>
+    <scene title="" width="2047" height="1920" exportWidth="2047" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="6716" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+      <bookmark t="3158" />
+      <shape id="40032706" label="Rounded Rectangle 5" startTime="0" endTime="6716" fillType="media" fillVideo="content://media/external/video/media/1000075923" inTime="466" outTime="7182" mediaFillMode="fill" s=".roundrect">
+        <transform>
+          <location value="1517.095703,951.412415,0.000000" />
+          <pivot value="0.000000,-0.000000" />
+          <skew value="-0.000000,-0.000000" />
+          <rotation value="90.000000" />
+        </transform>
+        <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+          <property name="tune" type="float" value="1.000000" />
+          <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+          <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+          <property name="samples" type="float" value="128.000000" />
+          <property name="shutter" type="float" value="180.000000" />
+          <property name="phase" type="float" value="0.000000" />
+          <property name="shutterSamples" type="float" value="128.000000" />
+          <property name="shutterBias" type="float" value="0.000000" />
+          <property name="shutterCurve" type="float" value="1.000000" />
+          <property name="shutterShape" type="float" value="2.000000" />
+          <property name="gaussSigma" type="float" value="0.350000" />
+          <property name="exposureComp" type="float" value="1.000000" />
+          <property name="softenHi" type="float" value="0.500000" />
+          <property name="blueNoiseSeed" type="float" value="0.000000" />
+          <property name="useHybrid" type="bool" value="false" />
+          <property name="hybridMix" type="float" value="0.600000" />
+          <property name="zoomMix" type="float" value="0.500000" />
+          <property name="usePos" type="bool" value="true" />
+          <property name="useScale" type="bool" value="true" />
+          <property name="useAngle" type="bool" value="true" />
+          <property name="swirlStrength" type="float" value="1.500000" />
+          <property name="quality" type="float" value="1.000000" />
+        </effect>
+        <gain value="0.000000" />
+        <shadow direction="outside">
+          <opacity value="0.080000" />
+          <size value="28.000000" />
+          <offset value="16.000000,16.000000" />
+        </shadow>
+        <property name="size" type="vec2" value="529.000000,331.000000" />
+        <property name="cornerRadius" type="float" value="110.000000" />
+      </shape>
+      <embedScene id="40032715" label="Group and Mask 1" startTime="2216" endTime="4326" fillType="intrinsic" outTime="2215" speed="1.050000" mediaFillMode="fill">
+        <transform>
+          <location value="1567.326172,808.623657,-74.762253" />
+          <opacity>
+            <kf t="0.000000" v="1.000000" />
+            <kf t="0.553047" v="0.000000" e="cubicBezier 0.0 0.0 0.58 1.0" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.turbulent_displace" locallyApplied="true">
+          <property name="amount" type="float" value="0.140000" />
+          <property name="scale" type="float" value="2.000000" />
+          <property name="octaves" type="float" value="4.000000" />
+          <property name="lacunarity" type="float" value="2.000000" />
+          <property name="gain" type="float" value="0.500000" />
+          <property name="xStrength" type="float" value="1.000000" />
+          <property name="yStrength" type="float" value="1.000000" />
+          <property name="warpAmount" type="float" value="0.250000" />
+          <property name="evolution" type="float" value="0.000000" />
+          <property name="evolutionSpeed" type="float" value="0.200000" />
+          <property name="seed" type="float" value="0.000000" />
+          <property name="mode" type="int" value="0" />
+          <property name="wrapMode" type="int" value="2" />
+          <property name="alpha" type="float" value="1.000000" />
+        </effect>
+        <effect id="com.alightcreative.effects.mosaic" locallyApplied="true">
+          <property name="size" type="float" value="32.500000" />
+        </effect>
+        <effect id="com.alightcreative.solidcolor" locallyApplied="true">
+          <property name="color" type="color" value="#ff5c9bff" />
+          <property name="alpha" type="float" value="1.000000" />
+          <property name="blendMode" type="int" value="1" />
+        </effect>
+        <scene title="" width="1454" height="1920" exportWidth="1454" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2215" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <shape id="40032711" label="Circle 1" startTime="0" endTime="2015" fillType="gradient" mediaFillMode="fill" s=".circle">
+            <transform>
+              <location value="727.000000,960.000000,0.000000" />
+              <scale>
+                <kf t="0.003970" v="0.000000,0.000000" />
+                <kf t="0.466998" v="7.270000,7.270000" e="cubicBezier 0.26955718 0.066566214 0.3097651 0.8284965" />
+              </scale>
+            </transform>
+            <gradient type="radial" startColor="#00000000" endColor="#ff67b3ff" start="0.466055,0.526492" end="1.000000,1.000000" />
+            <property name="size" type="vec2" value="100.000000,100.000000" />
+          </shape>
+          <shape id="40032712" label="Circle 1 Copy" hidden="true" startTime="233" endTime="2215" fillType="color" blending="exclude" mediaFillMode="fill" s=".circle">
+            <transform>
+              <location value="727.000000,960.000000,0.000000" />
+              <scale>
+                <kf t="0.004036" v="0.000000,0.000000" />
+                <kf t="0.474773" v="7.270000,7.270000" e="cubicBezier 0.27 0.07 0.31 0.83" />
+              </scale>
+            </transform>
+            <fillColor value="#ff5c9bff" />
+            <property name="size" type="vec2" value="100.000000,100.000000" />
+          </shape>
+        </scene>
+      </embedScene>
+      <shape id="202415782" label="Rounded Rectangle 5 Copy" startTime="0" endTime="6716" fillType="media" blending="mask" fillVideo="content://media/external/video/media/1000075923" inTime="466" outTime="7182" mediaFillMode="fill" s=".roundrect">
+        <transform>
+          <location value="1517.095703,951.412415,0.000000" />
+          <pivot value="0.000000,-0.000000" />
+          <skew value="-0.000000,-0.000000" />
+          <rotation value="90.000000" />
+        </transform>
+        <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+          <property name="tune" type="float" value="1.000000" />
+          <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+          <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+          <property name="samples" type="float" value="128.000000" />
+          <property name="shutter" type="float" value="180.000000" />
+          <property name="phase" type="float" value="0.000000" />
+          <property name="shutterSamples" type="float" value="128.000000" />
+          <property name="shutterBias" type="float" value="0.000000" />
+          <property name="shutterCurve" type="float" value="1.000000" />
+          <property name="shutterShape" type="float" value="2.000000" />
+          <property name="gaussSigma" type="float" value="0.350000" />
+          <property name="exposureComp" type="float" value="1.000000" />
+          <property name="softenHi" type="float" value="0.500000" />
+          <property name="blueNoiseSeed" type="float" value="0.000000" />
+          <property name="useHybrid" type="bool" value="false" />
+          <property name="hybridMix" type="float" value="0.600000" />
+          <property name="zoomMix" type="float" value="0.500000" />
+          <property name="usePos" type="bool" value="true" />
+          <property name="useScale" type="bool" value="true" />
+          <property name="useAngle" type="bool" value="true" />
+          <property name="swirlStrength" type="float" value="1.500000" />
+          <property name="quality" type="float" value="1.000000" />
+        </effect>
+        <gain value="0.000000" />
+        <shadow direction="outside">
+          <opacity value="0.080000" />
+          <size value="28.000000" />
+          <offset value="16.000000,16.000000" />
+        </shadow>
+        <property name="size" type="vec2" value="529.000000,331.000000" />
+        <property name="cornerRadius" type="float" value="110.000000" />
+      </shape>
+    </scene>
+  </embedScene>
+  <audio id="40032707" label="Project 7 [735AF2D] (1)-enhanced-v2.mp3" startTime="7916" endTime="14782" src="content://media/external/audio/media/1000086110" inTime="6166" outTime="13032" mediaFillMode="fill">
+    <gain>
+      <kf t="-0.384649" v="0.000000" />
+      <kf t="-0.362801" v="1.500000" />
+      <kf t="0.040052" v="1.500000" />
+      <kf t="-0.001165" v="0.000000" />
+    </gain>
+  </audio>
+  <nullobj id="40032709" label="Null 10" startTime="7150" endTime="9349" mediaFillMode="fill" parent="202415786" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.003638" v="0.000000,0.000000,0.000000" />
+        <kf t="1.000000" v="1174.691650,5.414856,0.000000" e="cubicBezier 0.52059996 0.0011008367 0.18867755 1.0" />
+      </location>
+    </transform>
+  </nullobj>
+  <nullobj id="202415786" label="Null 11" startTime="8833" endTime="10848" mediaFillMode="fill" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.000000" v="540.000000,960.000000,0.000000" />
+        <kf t="0.864020" v="540.000000,960.000000,1200.000000" e="cubicBezier 1.0 0.0 0.34165013 1.0" />
+      </location>
+    </transform>
+  </nullobj>
+  <embedScene id="202415841" label="Group 3" startTime="9933" endTime="14054" fillType="intrinsic" outTime="4327" speed="1.050000" mediaFillMode="fill" parent="202415842">
+    <transform>
+      <opacity>
+        <kf t="0.936181" v="1.000000" />
+        <kf t="0.976705" v="0.000000" e="cubicBezier 1.0 0.0 0.0 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff000000" />
+    <scene title="" width="2309" height="1920" exportWidth="2309" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="4327" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+      <bookmark t="2191" />
+      <text id="202415814" label="Premium Copy" startTime="0" endTime="4163" fillType="color" mediaFillMode="fill" size="36.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="983" align="center">
+        <transform>
+          <location value="1154.500122,960.000000,0.000000" />
+          <scale>
+            <kf t="0.222195" v="0.000000,0.000000" e="cubicBezier 0.08572188 0.7890832 0.81695324 0.41986254" />
+            <kf t="0.000000" v="2.348932,2.348932" />
+          </scale>
+          <opacity>
+            <kf t="0.070141" v="1.000000" />
+            <kf t="0.001922" v="0.000000" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+          <property name="tune" type="float" value="1.000000" />
+          <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+          <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+          <property name="samples" type="float" value="128.000000" />
+          <property name="shutter" type="float" value="180.000000" />
+          <property name="phase" type="float" value="0.000000" />
+          <property name="shutterSamples" type="float" value="128.000000" />
+          <property name="shutterBias" type="float" value="0.000000" />
+          <property name="shutterCurve" type="float" value="1.000000" />
+          <property name="shutterShape" type="float" value="2.000000" />
+          <property name="gaussSigma" type="float" value="0.350000" />
+          <property name="exposureComp" type="float" value="1.000000" />
+          <property name="softenHi" type="float" value="0.500000" />
+          <property name="blueNoiseSeed" type="float" value="0.000000" />
+          <property name="useHybrid" type="bool" value="false" />
+          <property name="hybridMix" type="float" value="0.600000" />
+          <property name="zoomMix" type="float" value="0.500000" />
+          <property name="usePos" type="bool" value="true" />
+          <property name="useScale" type="bool" value="true" />
+          <property name="useAngle" type="bool" value="true" />
+          <property name="swirlStrength" type="float" value="1.500000" />
+          <property name="quality" type="float" value="1.000000" />
+        </effect>
+        <content>
+Premium 
+</content>
+      </text>
+      <text id="202415815" label="Premium Copy 2" startTime="884" endTime="4163" fillType="color" mediaFillMode="fill" size="36.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="983" align="center">
+        <transform>
+          <location value="1154.500122,960.000000,0.000000" />
+          <scale>
+            <kf t="0.281793" v="0.000000,0.000000" e="cubicBezier 0.09 0.79 0.82 0.42" />
+            <kf t="0.000000" v="2.348932,2.348932" />
+          </scale>
+          <opacity>
+            <kf t="0.089051" v="1.000000" />
+            <kf t="0.002439" v="0.000000" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+          <property name="tune" type="float" value="1.000000" />
+          <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+          <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+          <property name="samples" type="float" value="128.000000" />
+          <property name="shutter" type="float" value="180.000000" />
+          <property name="phase" type="float" value="0.000000" />
+          <property name="shutterSamples" type="float" value="128.000000" />
+          <property name="shutterBias" type="float" value="0.000000" />
+          <property name="shutterCurve" type="float" value="1.000000" />
+          <property name="shutterShape" type="float" value="2.000000" />
+          <property name="gaussSigma" type="float" value="0.350000" />
+          <property name="exposureComp" type="float" value="1.000000" />
+          <property name="softenHi" type="float" value="0.500000" />
+          <property name="blueNoiseSeed" type="float" value="0.000000" />
+          <property name="useHybrid" type="bool" value="false" />
+          <property name="hybridMix" type="float" value="0.600000" />
+          <property name="zoomMix" type="float" value="0.500000" />
+          <property name="usePos" type="bool" value="true" />
+          <property name="useScale" type="bool" value="true" />
+          <property name="useAngle" type="bool" value="true" />
+          <property name="swirlStrength" type="float" value="1.500000" />
+          <property name="quality" type="float" value="1.000000" />
+        </effect>
+        <content>
+Professional 
+</content>
+      </text>
+      <text id="202415816" label="Premium Copy 3" startTime="1767" endTime="4163" fillType="color" mediaFillMode="fill" size="36.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="983" align="center">
+        <transform>
+          <location>
+            <kf t="0.149416" v="1153.500122,960.000000,0.000000" />
+            <kf t="0.830968" v="468.422974,960.000000,0.000000" e="cubicBezier 0.44827354 0.0 0.19329798 1.0" />
+          </location>
+          <scale>
+            <kf t="0.000000" v="2.348932,2.348932" />
+            <kf t="0.385642" v="0.792472,0.792472" e="cubicBezier 0.0 0.0 0.0 1.0" />
+          </scale>
+          <opacity>
+            <kf t="0.121869" v="1.000000" />
+            <kf t="0.003338" v="0.000000" />
+            <kf t="0.274625" v="1.000000" />
+            <kf t="0.462438" v="0.000000" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff000000" />
+        <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+          <property name="tune" type="float" value="1.000000" />
+          <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+          <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+          <property name="samples" type="float" value="128.000000" />
+          <property name="shutter" type="float" value="180.000000" />
+          <property name="phase" type="float" value="0.000000" />
+          <property name="shutterSamples" type="float" value="128.000000" />
+          <property name="shutterBias" type="float" value="0.000000" />
+          <property name="shutterCurve" type="float" value="1.000000" />
+          <property name="shutterShape" type="float" value="2.000000" />
+          <property name="gaussSigma" type="float" value="0.350000" />
+          <property name="exposureComp" type="float" value="1.000000" />
+          <property name="softenHi" type="float" value="0.500000" />
+          <property name="blueNoiseSeed" type="float" value="0.000000" />
+          <property name="useHybrid" type="bool" value="false" />
+          <property name="hybridMix" type="float" value="0.600000" />
+          <property name="zoomMix" type="float" value="0.500000" />
+          <property name="usePos" type="bool" value="true" />
+          <property name="useScale" type="bool" value="true" />
+          <property name="useAngle" type="bool" value="true" />
+          <property name="swirlStrength" type="float" value="1.500000" />
+          <property name="quality" type="float" value="1.000000" />
+        </effect>
+        <content>
+Cinematic 
+</content>
+      </text>
+      <embedScene id="202415823" label="Group 1" startTime="1683" endTime="4327" fillType="intrinsic" outTime="2380" speed="0.900000" mediaFillMode="fill">
+        <transform>
+          <location value="991.451660,970.556152,0.000000" />
+          <pivot value="110.833984,-3.541138" />
+          <scale value="0.854742,0.854742" />
+        </transform>
+        <fillColor value="#ff000000" />
+        <scene title="" width="2309" height="1920" exportWidth="2309" exportHeight="1920" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2100" fps="60" modifiedTime="0" amver="106019" ffver="106" am="com.alightcreative.aftermotionskexnxx/5.0.161.106019" amplatform="android" retime="off" retimeAdaptFPS="false">
+          <text id="202415820" label="Premium Copy 4" startTime="0" endTime="2099" fillType="color" mediaFillMode="fill" size="36.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="983" align="center">
+            <transform>
+              <location>
+                <kf t="0.948546" v="864.027344,957.594727,0.000000" e="cubicBezier 0.45706028 0.0 0.13258278 1.0" />
+                <kf t="0.249643" v="1489.066406,957.594727,0.000000" />
+              </location>
+              <scale value="0.792472,0.792472" />
+              <opacity>
+                <kf t="0.575512" v="1.000000" e="cubicBezier 0.8109893 0.012549537 0.08403212 1.0" />
+                <kf t="0.416865" v="0.000000" />
+              </opacity>
+            </transform>
+            <fillColor>
+              <kf t="0.456883" v="#ff000000" />
+              <kf t="0.004287" v="#ff5c9bff" />
+            </fillColor>
+            <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+              <property name="tune" type="float" value="1.000000" />
+              <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+              <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+              <property name="samples" type="float" value="128.000000" />
+              <property name="shutter" type="float" value="180.000000" />
+              <property name="phase" type="float" value="0.000000" />
+              <property name="shutterSamples" type="float" value="128.000000" />
+              <property name="shutterBias" type="float" value="0.000000" />
+              <property name="shutterCurve" type="float" value="1.000000" />
+              <property name="shutterShape" type="float" value="2.000000" />
+              <property name="gaussSigma" type="float" value="0.350000" />
+              <property name="exposureComp" type="float" value="1.000000" />
+              <property name="softenHi" type="float" value="0.500000" />
+              <property name="blueNoiseSeed" type="float" value="0.000000" />
+              <property name="useHybrid" type="bool" value="false" />
+              <property name="hybridMix" type="float" value="0.600000" />
+              <property name="zoomMix" type="float" value="0.500000" />
+              <property name="usePos" type="bool" value="true" />
+              <property name="useScale" type="bool" value="true" />
+              <property name="useAngle" type="bool" value="true" />
+              <property name="swirlStrength" type="float" value="1.500000" />
+              <property name="quality" type="float" value="1.000000" />
+            </effect>
+            <content>
+Want
+</content>
+          </text>
+          <text id="202415821" label="Premium Copy 5" startTime="83" endTime="2099" fillType="color" mediaFillMode="fill" size="36.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="983" align="center">
+            <transform>
+              <location>
+                <kf t="0.987599" v="1052.289307,956.926514,0.000000" e="cubicBezier 0.45706028 0.0 0.13258278 1.0" />
+                <kf t="0.259921" v="1677.328369,956.926514,0.000000" />
+              </location>
+              <scale value="0.792472,0.792472" />
+              <opacity>
+                <kf t="0.599206" v="1.000000" e="cubicBezier 0.81 0.01 0.08 1.0" />
+                <kf t="0.434028" v="0.000000" />
+              </opacity>
+            </transform>
+            <fillColor>
+              <kf t="0.475693" v="#ff000000" />
+              <kf t="0.004463" v="#ff5c9bff" />
+            </fillColor>
+            <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+              <property name="tune" type="float" value="1.000000" />
+              <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+              <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+              <property name="samples" type="float" value="128.000000" />
+              <property name="shutter" type="float" value="180.000000" />
+              <property name="phase" type="float" value="0.000000" />
+              <property name="shutterSamples" type="float" value="128.000000" />
+              <property name="shutterBias" type="float" value="0.000000" />
+              <property name="shutterCurve" type="float" value="1.000000" />
+              <property name="shutterShape" type="float" value="2.000000" />
+              <property name="gaussSigma" type="float" value="0.350000" />
+              <property name="exposureComp" type="float" value="1.000000" />
+              <property name="softenHi" type="float" value="0.500000" />
+              <property name="blueNoiseSeed" type="float" value="0.000000" />
+              <property name="useHybrid" type="bool" value="false" />
+              <property name="hybridMix" type="float" value="0.600000" />
+              <property name="zoomMix" type="float" value="0.500000" />
+              <property name="usePos" type="bool" value="true" />
+              <property name="useScale" type="bool" value="true" />
+              <property name="useAngle" type="bool" value="true" />
+              <property name="swirlStrength" type="float" value="1.500000" />
+              <property name="quality" type="float" value="1.000000" />
+            </effect>
+            <content>
+This
+</content>
+          </text>
+          <text id="202415827" label="Premium Copy" startTime="233" endTime="2099" fillType="color" mediaFillMode="fill" size="36.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="983" align="center">
+            <transform>
+              <location>
+                <kf t="1.066987" v="1282.506592,955.723877,0.000000" e="cubicBezier 0.45706028 0.0 0.13258278 1.0" />
+                <kf t="0.280815" v="1907.545654,955.723877,0.000000" />
+              </location>
+              <scale value="0.792472,0.792472" />
+              <opacity>
+                <kf t="0.647374" v="1.000000" e="cubicBezier 0.81 0.01 0.08 1.0" />
+                <kf t="0.468917" v="0.000000" />
+              </opacity>
+            </transform>
+            <fillColor>
+              <kf t="0.513932" v="#ff000000" />
+              <kf t="0.004822" v="#ff5c9bff" />
+            </fillColor>
+            <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+              <property name="tune" type="float" value="1.000000" />
+              <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+              <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+              <property name="samples" type="float" value="128.000000" />
+              <property name="shutter" type="float" value="180.000000" />
+              <property name="phase" type="float" value="0.000000" />
+              <property name="shutterSamples" type="float" value="128.000000" />
+              <property name="shutterBias" type="float" value="0.000000" />
+              <property name="shutterCurve" type="float" value="1.000000" />
+              <property name="shutterShape" type="float" value="2.000000" />
+              <property name="gaussSigma" type="float" value="0.350000" />
+              <property name="exposureComp" type="float" value="1.000000" />
+              <property name="softenHi" type="float" value="0.500000" />
+              <property name="blueNoiseSeed" type="float" value="0.000000" />
+              <property name="useHybrid" type="bool" value="false" />
+              <property name="hybridMix" type="float" value="0.600000" />
+              <property name="zoomMix" type="float" value="0.500000" />
+              <property name="usePos" type="bool" value="true" />
+              <property name="useScale" type="bool" value="true" />
+              <property name="useAngle" type="bool" value="true" />
+              <property name="swirlStrength" type="float" value="1.500000" />
+              <property name="quality" type="float" value="1.000000" />
+            </effect>
+            <content>
+Sound 
+</content>
+          </text>
+          <text id="202415828" label="Premium Copy 2" startTime="333" endTime="2099" fillType="color" mediaFillMode="fill" size="36.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="983" align="center">
+            <transform>
+              <location>
+                <kf t="1.127406" v="1553.345215,955.990967,0.000000" e="cubicBezier 0.45706028 0.0 0.13258278 1.0" />
+                <kf t="0.296716" v="2178.384277,955.990967,0.000000" />
+              </location>
+              <scale value="0.792472,0.792472" />
+              <opacity>
+                <kf t="0.684031" v="1.000000" e="cubicBezier 0.81 0.01 0.08 1.0" />
+                <kf t="0.495470" v="0.000000" />
+              </opacity>
+            </transform>
+            <fillColor>
+              <kf t="0.543034" v="#ff000000" />
+              <kf t="0.005095" v="#ff5c9bff" />
+            </fillColor>
+            <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+              <property name="tune" type="float" value="1.000000" />
+              <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+              <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+              <property name="samples" type="float" value="128.000000" />
+              <property name="shutter" type="float" value="180.000000" />
+              <property name="phase" type="float" value="0.000000" />
+              <property name="shutterSamples" type="float" value="128.000000" />
+              <property name="shutterBias" type="float" value="0.000000" />
+              <property name="shutterCurve" type="float" value="1.000000" />
+              <property name="shutterShape" type="float" value="2.000000" />
+              <property name="gaussSigma" type="float" value="0.350000" />
+              <property name="exposureComp" type="float" value="1.000000" />
+              <property name="softenHi" type="float" value="0.500000" />
+              <property name="blueNoiseSeed" type="float" value="0.000000" />
+              <property name="useHybrid" type="bool" value="false" />
+              <property name="hybridMix" type="float" value="0.600000" />
+              <property name="zoomMix" type="float" value="0.500000" />
+              <property name="usePos" type="bool" value="true" />
+              <property name="useScale" type="bool" value="true" />
+              <property name="useAngle" type="bool" value="true" />
+              <property name="swirlStrength" type="float" value="1.500000" />
+              <property name="quality" type="float" value="1.000000" />
+            </effect>
+            <content>
+Effects 
+</content>
+          </text>
+          <text id="202415829" label="Premium Copy 3" startTime="433" endTime="2100" fillType="color" mediaFillMode="fill" size="36.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="983" align="center">
+            <transform>
+              <location>
+                <kf t="1.194360" v="1794.521729,955.456543,0.000000" e="cubicBezier 0.45706028 0.0 0.13258278 1.0" />
+                <kf t="0.314337" v="2419.559082,955.456543,0.000000" />
+              </location>
+              <scale value="0.792472,0.792472" />
+              <opacity>
+                <kf t="0.724655" v="1.000000" e="cubicBezier 0.81 0.01 0.08 1.0" />
+                <kf t="0.524895" v="0.000000" />
+              </opacity>
+            </transform>
+            <fillColor>
+              <kf t="0.575284" v="#ff000000" />
+              <kf t="0.005398" v="#ff5c9bff" />
+            </fillColor>
+            <content>
+Pack 
+</content>
+          </text>
+        </scene>
+      </embedScene>
+    </scene>
+  </embedScene>
+  <nullobj id="202415842" label="Null 12" startTime="12800" endTime="14782" mediaFillMode="fill" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.004541" v="540.000000,960.000000,0.000000" />
+        <kf t="1.033804" v="540.000000,960.000000,3221.832031" e="cubicBezier 0.8293448 0.0 0.12818941 1.0" />
+      </location>
+    </transform>
+  </nullobj>
+  <text id="202415843" label="Premium Copy 4" startTime="13883" endTime="14782" fillType="color" mediaFillMode="fill" size="36.000000" font="imported?name=SFProDisplay-Medium.ttf" wrapWidth="983" align="center">
+    <transform>
+      <location value="557.340698,960.045044,-1.670898" />
+      <scale>
+        <kf t="-0.509455" v="1.727365,1.727365" />
+        <kf t="1.299221" v="0.739573,0.739573" e="cubicBezier 0.56333435 0.0 0.0 1.0" />
+      </scale>
+      <opacity>
+        <kf t="-0.509455" v="1.000000" />
+        <kf t="0.045606" v="1.000000" />
+        <kf t="0.008899" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff000000" />
+    <effect id="com.alightcreative.effects.moblurae" locallyApplied="true">
+      <property name="tune" type="float" value="1.000000" />
+      <property name="PANGLE" type="vec2" value="0.500000,0.500000" />
+      <property name="PSCALE" type="vec2" value="0.500000,0.500000" />
+      <property name="samples" type="float" value="128.000000" />
+      <property name="shutter" type="float" value="180.000000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="shutterSamples" type="float" value="128.000000" />
+      <property name="shutterBias" type="float" value="0.000000" />
+      <property name="shutterCurve" type="float" value="1.000000" />
+      <property name="shutterShape" type="float" value="2.000000" />
+      <property name="gaussSigma" type="float" value="0.350000" />
+      <property name="exposureComp" type="float" value="1.000000" />
+      <property name="softenHi" type="float" value="0.500000" />
+      <property name="blueNoiseSeed" type="float" value="0.000000" />
+      <property name="useHybrid" type="bool" value="false" />
+      <property name="hybridMix" type="float" value="0.600000" />
+      <property name="zoomMix" type="float" value="0.500000" />
+      <property name="usePos" type="bool" value="true" />
+      <property name="useScale" type="bool" value="true" />
+      <property name="useAngle" type="bool" value="true" />
+      <property name="swirlStrength" type="float" value="1.500000" />
+      <property name="quality" type="float" value="1.000000" />
+    </effect>
+    <content>Comment "Pack"</content>
+  </text>
+  <audio id="202415876" label="lv_0_20260831220404.mp4" startTime="0" endTime="14782" src="content://media/external/video/media/1000122334" outTime="14782" mediaFillMode="fill" />
+</scene>

@@ -1,0 +1,63 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 13.0,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "purple/black problem-friction brand piece; League Gothic display + Montserrat labels; confident positive hook flips into stark muted negative reveal, then bold payoff line. Continuous accumulating flow — every scene transition crossfades (next scene begins entering before the prior scene finishes exiting) so no frame is ever blank on the alpha-overlay export.",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8"],
+  "font": "League Gothic + Montserrat",
+  "beats": [0.1, 2.1, 2.4, 3.0, 3.6, 5.4, 6.2, 7.2, 8.2, 9.8, 10.6],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "No catalog block matched an abstract storefront motif or a positive-checkmark/negative-X comparison closely enough (searched 'storefront building silhouette outline' and 'checklist positive to negative reveal crossed out x mark' via npx hyperframes catalog — nearest hits were generic icon-morph/outline-draw/grid-card-assemble primitives, not this specific pairing). Hand-authored per builder-contract, reusing the established purple-brand CSS custom properties, check-row/check-mark list pattern, and lane/card layout rhythm already proven in sibling projects shared-lead-problem/index.html and speed-wins-the-job/index.html: same :root palette vars (--bg #0D0817, --bg2 #1B1130, --accent #9B5CFF, --accent-bright #C9A8FF, --text #F3EFFA, --muted #9088A8, --negative #B5675C), same font stack, same full-bleed #bg-fill persistent background, same back.out/power-eased entrance vocabulary, and the same overlapping-clip crossfade technique (next scene's data-start begins before the previous scene's data-start+data-duration ends) used there to avoid any blank alpha frame."
+  },
+
+  "content": {
+    "scenes": [
+      {
+        "id": "hook",
+        "start": 0,
+        "end": 2.6,
+        "text": "THE BEST RESTAURANT IN TOWN.",
+        "emphasis_words": ["BEST"],
+        "emotion": "confident, positive, warm",
+        "motion": "scale_punch/slam entrance on a beat at 0.1s, brief hold, then fade+lift exit starting 2.1s that crossfades under the positive-list scene",
+        "beats": [0.1, 2.1]
+      },
+      {
+        "id": "positive-list",
+        "start": 2.2,
+        "end": 5.5,
+        "text": "Incredible food / Every customer leaves happy / People rave about it",
+        "emphasis_words": [],
+        "emotion": "bright, upbeat, quick positive build-up",
+        "motion": "three check-mark rows stagger in (power3.out slide+fade) on beats 2.4/3.0/3.6, hold, then fade+lift exit starting 4.9s that crossfades under the twist scene",
+        "beats": [2.4, 3.0, 3.6]
+      },
+      {
+        "id": "twist",
+        "start": 5.1,
+        "end": 10.0,
+        "text": "No Sign Outside / No Website / No Reviews",
+        "emphasis_words": ["No Sign Outside", "No Website", "No Reviews"],
+        "emotion": "muted, negative, stark contrast against the prior positive build-up; building sits dark/unlit and unremarkable",
+        "motion": "an abstract line-art storefront silhouette (rect body, flat roofline, door, two window squares — unfilled, dim stroke) settles in first (5.3-5.8s); three X-mark rows then appear one by one, each dim/muted with a small ✕ glyph, on beats 6.2/7.2/8.2; hold, then fade+lift exit starting 9.6s that crossfades under the payoff scene",
+        "beats": [5.4, 6.2, 7.2, 8.2]
+      },
+      {
+        "id": "payoff",
+        "start": 9.6,
+        "end": 13.0,
+        "text": "IT'S NOT A QUALITY PROBLEM. IT'S A VISIBILITY PROBLEM.",
+        "emphasis_words": ["VISIBILITY"],
+        "emotion": "bold, resolute payoff",
+        "motion": "two-line bold statement enters (power4.out slide-up + back.out on the emphasis word) at 9.8s/10.6s, VISIBILITY glows in accent-bright, then freeze-holds unchanged to the end of the timeline (13.0s) for a clean cut back to host footage",
+        "beats": [9.8, 10.6]
+      }
+    ]
+  }
+}

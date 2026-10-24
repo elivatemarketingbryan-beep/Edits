@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Speed Wins The Job</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+        --negative: #b5675c;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background: fades in with the hook and persists for the
+         whole piece so no scene boundary ever exposes a fully transparent
+         frame (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 110px 140px;
+        box-sizing: border-box;
+      }
+
+      /* ---------------- scene 1 · hook (0.0 - 2.0s) ---------------- */
+      #hook-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 44px;
+      }
+      .lead-icon-badge {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, var(--accent-bright), var(--accent) 70%);
+        box-shadow: 0 0 60px rgba(155, 92, 255, 0.5);
+        opacity: 0;
+        transform: scale(0);
+      }
+      .lead-icon-badge svg {
+        width: 52px;
+        height: 52px;
+        display: block;
+      }
+      .eyebrow-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        max-width: 1650px;
+      }
+      .eyebrow-word {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 132px;
+        line-height: 1;
+        color: var(--text);
+        opacity: 0;
+      }
+      .eyebrow-word.emph {
+        color: var(--accent-bright);
+      }
+
+      /* ---------------- scene 2 · the split race + close (1.6 - 13.5s) ---------------- */
+      #race-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 56px;
+        width: 100%;
+      }
+      .lanes-row {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: center;
+        gap: 100px;
+      }
+      .lane-card {
+        position: relative;
+        width: 620px;
+        min-height: 620px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        padding: 56px 46px;
+        border-radius: 28px;
+        background: var(--bg2);
+        border: 2px solid rgba(243, 239, 250, 0.08);
+        text-align: center;
+        opacity: 0;
+      }
+      #lane-b {
+        border-color: rgba(155, 92, 255, 0.5);
+      }
+      .lane-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 900px;
+        height: 900px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(closest-side, var(--accent) 0%, transparent 70%);
+        opacity: 0;
+        pointer-events: none;
+        z-index: -1;
+      }
+      .lane-eyebrow {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        font-size: 26px;
+      }
+      #lane-a .lane-eyebrow {
+        color: var(--muted);
+      }
+      #lane-b .lane-eyebrow {
+        color: var(--accent-bright);
+      }
+
+      .clock-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 28px;
+        border-radius: 999px;
+      }
+      #pill-a {
+        background: rgba(156, 147, 132, 0.1);
+        border: 1px solid rgba(156, 147, 132, 0.35);
+      }
+      #pill-b {
+        background: linear-gradient(90deg, var(--accent) 0%, var(--accent-bright) 100%);
+        box-shadow: 0 10px 32px rgba(155, 92, 255, 0.4);
+      }
+      .clock-pill svg {
+        width: 28px;
+        height: 28px;
+        flex: none;
+        display: block;
+      }
+      .tick-wrap {
+        position: relative;
+        min-width: 210px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tick-span {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        font-size: 30px;
+        letter-spacing: 0.02em;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      #tickA-num,
+      #tickA-final {
+        color: var(--muted);
+      }
+      #tickB-num,
+      #tickB-final {
+        color: var(--bg);
+      }
+
+      .lane-checklist {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .check-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        font-size: 27px;
+        color: var(--text);
+        opacity: 0;
+      }
+      .check-mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: var(--bg);
+        font-size: 18px;
+        font-weight: 800;
+        flex: none;
+      }
+
+      .verdict-stamp {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px 34px;
+        border-radius: 16px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        font-size: 32px;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        opacity: 0;
+      }
+      #stamp-a {
+        color: var(--muted);
+        background: rgba(181, 103, 92, 0.1);
+        border: 2px solid rgba(181, 103, 92, 0.55);
+      }
+      #stamp-a .stamp-glyph {
+        color: var(--negative);
+        font-size: 34px;
+      }
+      #stamp-b {
+        color: var(--bg);
+        background: linear-gradient(90deg, var(--accent) 0%, var(--accent-bright) 100%);
+        box-shadow: 0 14px 44px rgba(155, 92, 255, 0.55);
+      }
+      #stamp-b .stamp-glyph {
+        color: var(--bg);
+        font-size: 34px;
+      }
+
+      .vs-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 92px;
+        height: 92px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 2px solid var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        font-size: 28px;
+        letter-spacing: 0.04em;
+        color: var(--accent-bright);
+        opacity: 0;
+        z-index: 2;
+      }
+
+      .closing-line {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 54px;
+        color: var(--text);
+        text-align: center;
+        opacity: 0;
+      }
+      .closing-line .em {
+        color: var(--accent-bright);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="speed-wins-the-job" data-start="0" data-duration="13.5" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ scene 1 · hook (0.0 - 2.0s) ============ -->
+      <div id="scene-hook" class="clip scene" data-start="0" data-duration="2.0" data-track-index="0">
+        <div id="hook-group">
+          <div class="lead-icon-badge" id="lead-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.3 0 .7-.2 1L6.6 10.8z"
+                fill="#0d0817"
+              ></path>
+            </svg>
+          </div>
+          <div class="eyebrow-line" id="eyebrow-line">
+            <span class="eyebrow-word" id="hw-0">A</span>
+            <span class="eyebrow-word emph" id="hw-1">$20,000</span>
+            <span class="eyebrow-word" id="hw-2">LEAD</span>
+            <span class="eyebrow-word" id="hw-3">COMES</span>
+            <span class="eyebrow-word" id="hw-4">IN.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ scene 2 · the split race + closer (1.6 - 13.5s) ============ -->
+      <div id="scene-race" class="clip scene" data-start="1.6" data-duration="11.9" data-track-index="0">
+        <div id="race-group">
+          <div class="lanes-row" id="lanes-row">
+            <!-- ---- lane A · slow / loses ---- -->
+            <div class="lane-card" id="lane-a">
+              <div class="lane-eyebrow">CONTRACTOR A</div>
+              <div class="clock-pill" id="pill-a">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="16" cy="16" r="13" stroke="#9088a8" stroke-width="2.4"></circle>
+                  <path d="M16 8.5V16L21 19" stroke="#9088a8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <div class="tick-wrap">
+                  <span class="tick-span" id="tickA-num" data-layout-allow-overlap="true">0h 00m</span>
+                  <span class="tick-span" id="tickA-final" data-layout-allow-overlap="true">NEXT DAY</span>
+                </div>
+              </div>
+              <div class="verdict-stamp" id="stamp-a"><span class="stamp-glyph">&#10005;</span>LOST THE JOB</div>
+            </div>
+
+            <div class="vs-badge" id="vs-badge">VS</div>
+
+            <!-- ---- lane B · fast / wins ---- -->
+            <div class="lane-card" id="lane-b">
+              <div class="lane-glow" id="lane-b-glow" data-layout-allow-overflow="true"></div>
+              <div class="lane-eyebrow">CONTRACTOR B</div>
+              <div class="clock-pill" id="pill-b">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="16" cy="16" r="13" stroke="#0d0817" stroke-width="2.4"></circle>
+                  <path d="M16 8.5V16L21 19" stroke="#0d0817" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <div class="tick-wrap">
+                  <span class="tick-span" id="tickB-num" data-layout-allow-overlap="true">0:00</span>
+                  <span class="tick-span" id="tickB-final" data-layout-allow-overlap="true">9 MINUTES</span>
+                </div>
+              </div>
+              <ul class="lane-checklist" id="checklist-b">
+                <li class="check-row" id="cb-0"><span class="check-mark">&#10003;</span>ANSWERED QUESTIONS</li>
+                <li class="check-row" id="cb-1"><span class="check-mark">&#10003;</span>SENT PROOF</li>
+                <li class="check-row" id="cb-2"><span class="check-mark">&#10003;</span>CLEAR NEXT STEPS</li>
+              </ul>
+              <div class="verdict-stamp" id="stamp-b"><span class="stamp-glyph">&#10003;</span>BOOKED THE JOB</div>
+            </div>
+          </div>
+
+          <div class="closing-line" id="closing-line">SPEED MAKES THEM <span class="em">FEEL SAFE.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        function pad2(n) {
+          n = Math.round(n);
+          return (n < 10 ? "0" : "") + n;
+        }
+        function fmtElapsed(totalMin) {
+          totalMin = Math.round(totalMin);
+          var h = Math.floor(totalMin / 60);
+          var m = totalMin % 60;
+          return h + "h " + pad2(m) + "m";
+        }
+        function fmtClock(totalSec) {
+          totalSec = Math.round(totalSec);
+          var m = Math.floor(totalSec / 60);
+          var s = totalSec % 60;
+          return m + ":" + pad2(s);
+        }
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= persistent background ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, 0.05);
+
+        /* ================= scene 1 · hook (0.0 - 2.0s) ================= */
+        tl.fromTo(
+          "#lead-icon",
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.4)" },
+          0.1,
+        );
+
+        var eyebrowWords = ["#hw-0", "#hw-1", "#hw-2", "#hw-3", "#hw-4"];
+        var eyebrowStarts = [0.3, 0.38, 0.46, 0.54, 0.62];
+        var eyebrowFroms = [
+          { y: -100, opacity: 0 },
+          { scale: 0.5, opacity: 0 },
+          { x: -180, opacity: 0 },
+          { x: 180, opacity: 0 },
+          { y: 90, opacity: 0 },
+        ];
+        var eyebrowEases = ["back.out(1.8)", "back.out(2.4)", "expo.out", "expo.out", "power3.out"];
+        eyebrowWords.forEach(function (sel, i) {
+          var to = { opacity: 1, duration: 0.24, ease: eyebrowEases[i] };
+          if (eyebrowFroms[i].y !== undefined) to.y = 0;
+          if (eyebrowFroms[i].x !== undefined) to.x = 0;
+          if (eyebrowFroms[i].scale !== undefined) to.scale = 1;
+          tl.fromTo(sel, eyebrowFroms[i], to, eyebrowStarts[i]);
+        });
+
+        // hold, then lift + fade the whole hook group out — crossfading under
+        // scene-race, which starts entering at 1.65s, so the frame is never
+        // without visible content
+        tl.fromTo(
+          "#hook-group",
+          { opacity: 1, y: 0 },
+          { opacity: 0, y: -26, duration: 0.35, ease: "power2.in", immediateRender: false },
+          1.55,
+        );
+
+        /* ================= scene 2 · the split race (1.6 - 13.5s) ================= */
+        tl.fromTo(
+          "#lane-a",
+          { x: -200, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" },
+          1.65,
+        );
+        tl.fromTo(
+          "#lane-b",
+          { x: 200, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" },
+          1.75,
+        );
+        tl.fromTo("#lane-b-glow", { opacity: 0 }, { opacity: 0.35, duration: 0.6, ease: "power2.out" }, 1.75);
+
+        tl.fromTo(
+          "#vs-badge",
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.4)" },
+          2.25,
+        );
+
+        // ---- lane A · slow ticking clock, 2.4s -> 6.9s, ends on "NEXT DAY" ----
+        tl.fromTo("#tickA-num", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, 2.4);
+        var stA = { v: 0 };
+        tl.fromTo(
+          stA,
+          { v: 0 },
+          {
+            v: 1290,
+            duration: 4.5,
+            ease: "power1.inOut",
+            immediateRender: false,
+            onUpdate: function () {
+              document.getElementById("tickA-num").textContent = fmtElapsed(stA.v);
+            },
+          },
+          2.4,
+        );
+        tl.fromTo(
+          "#tickA-num",
+          { opacity: 1 },
+          { opacity: 0, duration: 0.2, ease: "power1.in", immediateRender: false },
+          6.9,
+        );
+        tl.fromTo(
+          "#tickA-final",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.25, ease: "power2.out" },
+          6.95,
+        );
+
+        // ---- lane B · fast ticking clock, 2.4s -> 3.4s, ends on "9 MINUTES" ----
+        tl.fromTo("#tickB-num", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 2.4);
+        var stB = { v: 0 };
+        tl.fromTo(
+          stB,
+          { v: 0 },
+          {
+            v: 540,
+            duration: 1.0,
+            ease: "power3.out",
+            immediateRender: false,
+            onUpdate: function () {
+              document.getElementById("tickB-num").textContent = fmtClock(stB.v);
+            },
+          },
+          2.4,
+        );
+        tl.fromTo(
+          "#tickB-num",
+          { opacity: 1 },
+          { opacity: 0, duration: 0.15, ease: "power1.in", immediateRender: false },
+          3.4,
+        );
+        tl.fromTo(
+          "#tickB-final",
+          { opacity: 0, scale: 0.7 },
+          { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.2)" },
+          3.45,
+        );
+        // glow pulse marking Contractor B's speed
+        tl.fromTo(
+          "#pill-b",
+          { boxShadow: "0 10px 32px rgba(155,92,255,0.4)" },
+          {
+            boxShadow: "0 10px 52px rgba(201,168,255,0.85)",
+            duration: 0.32,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          3.55,
+        );
+
+        // ---- lane B checklist, staggered after the timestamp resolves ----
+        var checklistStarts = [3.95, 4.4, 4.85];
+        for (var ci = 0; ci < 3; ci++) {
+          tl.fromTo(
+            "#cb-" + ci,
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.32, ease: "power3.out" },
+            checklistStarts[ci],
+          );
+        }
+
+        // ---- verdict stamps land together on the same beat ----
+        tl.fromTo(
+          "#stamp-a",
+          { scale: 0.6, opacity: 0, rotation: -8 },
+          { scale: 1, opacity: 1, rotation: -3, duration: 0.4, ease: "back.out(2.4)" },
+          7.2,
+        );
+        tl.fromTo(
+          "#stamp-b",
+          { scale: 0.6, opacity: 0, rotation: 8 },
+          { scale: 1, opacity: 1, rotation: 3, duration: 0.4, ease: "back.out(2.6)" },
+          7.2,
+        );
+        // landing shake + glow only on the winning stamp — the loser stays deadpan
+        gsap.set("#stamp-b", { transformOrigin: "50% 50%" });
+        tl.fromTo("#stamp-b", { x: 0 }, { x: -7, duration: 0.05, ease: "none", immediateRender: false }, 7.6)
+          .fromTo("#stamp-b", { x: -7 }, { x: 7, duration: 0.06, ease: "none", immediateRender: false }, 7.65)
+          .fromTo("#stamp-b", { x: 7 }, { x: 0, duration: 0.06, ease: "none", immediateRender: false }, 7.71);
+        tl.fromTo(
+          "#stamp-b",
+          { boxShadow: "0 14px 44px rgba(155,92,255,0.55)" },
+          {
+            boxShadow: "0 14px 60px rgba(201,168,255,0.9)",
+            duration: 0.32,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          7.8,
+        );
+
+        // ---- closing line fades in beneath the held comparison — nothing
+        // clears, the scene only accumulates — then freeze-hold to the end
+        // (13.5s) for a clean cut back to host footage.
+        tl.fromTo(
+          "#closing-line",
+          { opacity: 0, y: 22 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+          8.6,
+        );
+
+        window.__timelines["speed-wins-the-job"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

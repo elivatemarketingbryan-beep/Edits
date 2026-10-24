@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>SEO Search Intent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0a08;
+        --bg2: #17140f;
+        --accent: #d9a94a;
+        --accent-bright: #f4d998;
+        --text: #f5f1e6;
+        --muted: #9c9384;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the hook lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 40%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+      }
+
+      #scene-search {
+        padding: 120px 220px;
+      }
+
+      #scene-results {
+        padding: 90px 220px;
+      }
+
+      /* ================= shared search-bar chassis (abstract, non-Google) ================= */
+      .search-bar {
+        position: relative;
+        width: 1240px;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        padding: 34px 46px;
+        border-radius: 60px;
+        background: var(--bg2);
+        border: 2px solid rgba(217, 169, 74, 0.4);
+        box-shadow: 0 0 60px rgba(217, 169, 74, 0.12);
+        opacity: 0;
+        transform-origin: 50% 50%;
+      }
+      .search-bar.compact {
+        width: 980px;
+        padding: 22px 40px;
+        border-radius: 48px;
+      }
+      .search-glyph {
+        flex: none;
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .search-bar.compact .search-glyph {
+        width: 34px;
+        height: 34px;
+      }
+      .search-glyph svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .search-text-wrap {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+      .search-text {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 44px;
+        color: var(--text);
+        white-space: nowrap;
+      }
+      .search-bar.compact .search-text {
+        font-size: 32px;
+      }
+      .search-caret {
+        display: inline-block;
+        width: 4px;
+        height: 40px;
+        margin-left: 4px;
+        background: var(--accent-bright);
+        vertical-align: middle;
+      }
+
+      /* ================= scene 2 layout ================= */
+      .results-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 32px;
+      }
+
+      /* -- ad result: deliberately smaller + dimmer, no pin -- no trust signal -- */
+      .ad-row {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        width: 980px;
+        padding: 14px 36px;
+        border-radius: 16px;
+        background: rgba(23, 20, 15, 0.55);
+        border: 1px solid rgba(245, 241, 230, 0.06);
+        opacity: 0;
+      }
+      .ad-badge {
+        flex: none;
+        padding: 5px 12px;
+        border-radius: 6px;
+        background: rgba(156, 147, 132, 0.22);
+        color: var(--muted);
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        letter-spacing: 0.1em;
+      }
+      .ad-bar {
+        flex: 1;
+        max-width: 260px;
+        height: 14px;
+        border-radius: 5px;
+        background: rgba(245, 241, 230, 0.18);
+      }
+
+      /* -- result rows (generic map-pack visual language, no Google branding) -- */
+      .result-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 1180px;
+      }
+      .result-row {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        padding: 18px 36px;
+        border-radius: 22px;
+        background: var(--bg2);
+        border: 1px solid rgba(245, 241, 230, 0.08);
+        box-shadow: 0 0 0px rgba(217, 169, 74, 0);
+        opacity: 0;
+      }
+      .row-pin {
+        flex: none;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, var(--accent-bright), var(--accent) 75%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 22px rgba(217, 169, 74, 0.3);
+      }
+      .row-pin svg {
+        width: 26px;
+        height: 26px;
+      }
+      .row-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .row-name-bar {
+        width: 300px;
+        max-width: 55%;
+        height: 22px;
+        border-radius: 7px;
+        background: rgba(245, 241, 230, 0.7);
+      }
+      .row-stars {
+        display: flex;
+        gap: 9px;
+      }
+      .row-star {
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        background: var(--accent);
+        opacity: 0;
+        transform: scale(0.4);
+      }
+      .row-star.empty {
+        background: rgba(245, 241, 230, 0.14);
+      }
+
+      /* cursor + click-ripple, anchored inside row-1 (no global coordinate math) */
+      .cursor-badge {
+        position: absolute;
+        top: -16px;
+        right: -16px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--accent-bright);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 24px rgba(244, 217, 152, 0.6);
+        opacity: 0;
+        transform: scale(0);
+        z-index: 2;
+      }
+      .cursor-badge svg {
+        width: 22px;
+        height: 22px;
+      }
+      .click-ripple {
+        position: absolute;
+        top: -16px;
+        right: -16px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 3px solid var(--accent-bright);
+        opacity: 0;
+        transform: scale(0.6);
+        pointer-events: none;
+      }
+
+      /* -- trust label -- */
+      .trust-label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 40px;
+        line-height: 1.3;
+        color: var(--accent-bright);
+        text-align: center;
+        max-width: 1300px;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-69kx" id="stage" data-composition-id="seo-search-intent" data-start="0" data-duration="9.6" data-fps="30" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-02i2" id="bg-fill"></div>
+
+      <!-- ============ scene 1 · search bar + typewriter (0.0 - 2.6s) ============ -->
+      <div data-hf-id="hf-we6f" id="scene-search" class="clip scene" data-start="0" data-duration="2.6" data-track-index="0">
+        <div data-hf-id="hf-wfqq" class="search-bar" id="search-bar">
+          <div data-hf-id="hf-6rpd" class="search-glyph">
+            <svg data-hf-id="hf-aq7j" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle data-hf-id="hf-5rir" cx="10.5" cy="10.5" r="7" stroke="#D9A94A" stroke-width="2.4" />
+              <line data-hf-id="hf-e2w0" x1="20.5" y1="20.5" x2="15.5" y2="15.5" stroke="#D9A94A" stroke-width="2.4" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div data-hf-id="hf-gtkp" class="search-text-wrap">
+            <span data-hf-id="hf-jmgz" class="search-text" id="search-text"></span><span data-hf-id="hf-9p7n" class="search-caret" id="search-caret"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ scene 2 · results resolve into a trust choice (2.6 - 9.6s) ============ -->
+      <div data-hf-id="hf-xfj0" id="scene-results" class="clip scene" data-start="2.6" data-duration="7.0" data-track-index="0">
+        <div data-hf-id="hf-if5b" class="results-col">
+          <div data-hf-id="hf-ww1l" class="search-bar compact" id="search-bar-2" style="opacity: 1;">
+            <div data-hf-id="hf-r8wl" class="search-glyph">
+              <svg data-hf-id="hf-i4pb" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle data-hf-id="hf-h4hf" cx="10.5" cy="10.5" r="7" stroke="#D9A94A" stroke-width="2.4" />
+                <line data-hf-id="hf-o2s8" x1="20.5" y1="20.5" x2="15.5" y2="15.5" stroke="#D9A94A" stroke-width="2.4" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div data-hf-id="hf-5rpp" class="search-text-wrap">
+              <span data-hf-id="hf-72d2" class="search-text">roof repair near me</span>
+            </div>
+          </div>
+
+          <div data-hf-id="hf-gkxm" class="ad-row" id="ad-row">
+            <div data-hf-id="hf-zwlo" class="ad-badge">AD</div>
+            <div data-hf-id="hf-tc7z" class="ad-bar"></div>
+          </div>
+
+          <div data-hf-id="hf-s2z8" class="result-rows" id="result-rows">
+            <div data-hf-id="hf-hic1" class="result-row" id="row-0">
+              <div data-hf-id="hf-ygvy" class="row-pin">
+                <svg data-hf-id="hf-hqea" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path data-hf-id="hf-t1ia" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#0B0A08" />
+                  <circle data-hf-id="hf-7jm2" cx="12" cy="9" r="2.4" fill="#0B0A08" />
+                </svg>
+              </div>
+              <div data-hf-id="hf-w7bl" class="row-body">
+                <div data-hf-id="hf-9aeo" class="row-name-bar"></div>
+                <div data-hf-id="hf-waxw" class="row-stars">
+                  <div data-hf-id="hf-iqur" class="row-star" id="star-0-0"></div>
+                  <div data-hf-id="hf-esqq" class="row-star" id="star-0-1"></div>
+                  <div data-hf-id="hf-aump" class="row-star" id="star-0-2"></div>
+                  <div data-hf-id="hf-a2yw" class="row-star" id="star-0-3"></div>
+                  <div data-hf-id="hf-otpo" class="row-star empty" id="star-0-4"></div>
+                </div>
+              </div>
+            </div>
+
+            <div data-hf-id="hf-gqo8" class="result-row" id="row-1">
+              <div data-hf-id="hf-k4bm" class="row-pin">
+                <svg data-hf-id="hf-hc39" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path data-hf-id="hf-8ssm" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#0B0A08" />
+                  <circle data-hf-id="hf-6rbi" cx="12" cy="9" r="2.4" fill="#0B0A08" />
+                </svg>
+              </div>
+              <div data-hf-id="hf-6w05" class="row-body">
+                <div data-hf-id="hf-y3t4" class="row-name-bar"></div>
+                <div data-hf-id="hf-us64" class="row-stars">
+                  <div data-hf-id="hf-twvy" class="row-star" id="star-1-0"></div>
+                  <div data-hf-id="hf-02lr" class="row-star" id="star-1-1"></div>
+                  <div data-hf-id="hf-p744" class="row-star" id="star-1-2"></div>
+                  <div data-hf-id="hf-pyrx" class="row-star" id="star-1-3"></div>
+                  <div data-hf-id="hf-8qhm" class="row-star" id="star-1-4"></div>
+                </div>
+              </div>
+              <div data-hf-id="hf-mxze" class="cursor-badge" id="cursor-badge">
+                <svg data-hf-id="hf-k48g" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path data-hf-id="hf-rmez" d="M5 12.5L10 17.5L19 7" stroke="#0B0A08" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </div>
+              <div data-hf-id="hf-puy6" class="click-ripple" id="click-ripple"></div>
+            </div>
+
+            <div data-hf-id="hf-pek3" class="result-row" id="row-2">
+              <div data-hf-id="hf-kimn" class="row-pin">
+                <svg data-hf-id="hf-jpxf" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path data-hf-id="hf-973n" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#0B0A08" />
+                  <circle data-hf-id="hf-75mj" cx="12" cy="9" r="2.4" fill="#0B0A08" />
+                </svg>
+              </div>
+              <div data-hf-id="hf-82x8" class="row-body">
+                <div data-hf-id="hf-www1" class="row-name-bar"></div>
+                <div data-hf-id="hf-tl91" class="row-stars">
+                  <div data-hf-id="hf-l12t" class="row-star" id="star-2-0"></div>
+                  <div data-hf-id="hf-k9f0" class="row-star" id="star-2-1"></div>
+                  <div data-hf-id="hf-v4wn" class="row-star" id="star-2-2"></div>
+                  <div data-hf-id="hf-oz6u" class="row-star" id="star-2-3"></div>
+                  <div data-hf-id="hf-auw2" class="row-star empty" id="star-2-4"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div data-hf-id="hf-kjpj" class="trust-label" id="trust-label">THEY'RE NOT INTERRUPTED. THEY'RE CHOOSING.</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var QUERY = "roof repair near me";
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= scene 1 · search bar + typewriter (0.0 - 2.6s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, 0.08);
+
+        tl.fromTo(
+          "#search-bar",
+          { scale: 0.7, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.0)" },
+          0.15,
+        );
+
+        // caret blink loop (finite repeat, deterministic)
+        tl.to("#search-caret", { opacity: 0, duration: 0.22, repeat: 7, yoyo: true, ease: "none" }, 0.55);
+
+        // typewriter: reveal one character of QUERY at a time via a proxy + onUpdate (seek-safe)
+        var typeProxy = { n: 0 };
+        var searchTextEl = document.getElementById("search-text");
+        tl.to(
+          typeProxy,
+          {
+            n: QUERY.length,
+            duration: 1.3,
+            ease: "none",
+            immediateRender: false,
+            onUpdate: function () {
+              searchTextEl.textContent = QUERY.slice(0, Math.round(typeProxy.n));
+            },
+          },
+          0.65,
+        );
+
+        // confirm pulse just before the cut — reads as "hitting enter", intent locked in
+        tl.to("#search-bar", { scale: 1.035, duration: 0.16, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.2);
+
+        /* ================= scene 2 · results resolve into a trust choice (2.6 - 9.6s) ================= */
+        // search bar settles to its smaller, already-typed state (clip swap mirrors scene 1's landed state)
+        tl.fromTo(
+          "#search-bar-2",
+          { y: 24, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" },
+          2.6,
+        );
+
+        // ad result appears first, small and dim ...
+        tl.fromTo(
+          "#ad-row",
+          { y: 16, opacity: 0 },
+          { y: 0, opacity: 0.85, duration: 0.3, ease: "power2.out" },
+          2.75,
+        );
+        // ... then visibly recedes — skimmed past, not what earns the click
+        tl.to("#ad-row", { opacity: 0.28, duration: 0.5, ease: "power2.in" }, 3.45);
+
+        // three organic map-pack rows stagger in
+        var rowStarts = [3.7, 3.92, 4.14];
+        var rowStarCounts = [4, 5, 4];
+        for (var r = 0; r < 3; r++) {
+          tl.fromTo(
+            "#row-" + r,
+            { y: 50, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
+            rowStarts[r],
+          );
+          for (var s = 0; s < 5; s++) {
+            var filled = s < rowStarCounts[r];
+            tl.fromTo(
+              "#star-" + r + "-" + s,
+              { scale: 0.4, opacity: 0 },
+              { scale: 1, opacity: filled ? 1 : 0.5, duration: 0.18, ease: "back.out(2.4)" },
+              rowStarts[r] + 0.28 + s * 0.05,
+            );
+          }
+        }
+
+        // trust-signal moment: cursor lands on the best-reviewed row (row-1), click-ripple, glow highlight
+        gsap.set("#row-1", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#row-1",
+          { boxShadow: "0 0 0px rgba(217,169,74,0)", borderColor: "rgba(245,241,230,0.08)" },
+          {
+            boxShadow: "0 0 46px rgba(217,169,74,0.5)",
+            borderColor: "rgba(244,217,152,0.85)",
+            duration: 0.45,
+            ease: "power2.out",
+            immediateRender: false,
+          },
+          6.2,
+        );
+        tl.fromTo(
+          "#cursor-badge",
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.6)" },
+          6.25,
+        );
+        tl.fromTo(
+          "#click-ripple",
+          { scale: 0.6, opacity: 0.8 },
+          { scale: 2.4, opacity: 0, duration: 0.6, ease: "power2.out", immediateRender: false },
+          6.35,
+        );
+
+        // message lands
+        tl.fromTo(
+          "#trust-label",
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" },
+          6.9,
+        );
+
+        // freeze-hold from ~7.35s to the end (9.6s) for a clean cut back to host footage —
+        // no further tweens scheduled; the last state simply persists.
+
+        window.__timelines["seo-search-intent"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

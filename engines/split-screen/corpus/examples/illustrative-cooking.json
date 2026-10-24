@@ -1,0 +1,25 @@
+{
+  "id": "EXAMPLE-COOKING-NOT-OBSERVED",
+  "status": "illustrative",
+  "source": {
+    "url": null,
+    "creator": null,
+    "topic": "Fictional cooking explanation used only to demonstrate annotation format",
+    "publishedDate": null,
+    "durationSeconds": null,
+    "dimensions": null,
+    "mediaBundled": false
+  },
+  "inspection": {
+    "date": "2026-10-07",
+    "method": "No media inspected; invented schema example.",
+    "continuousReview": false,
+    "audioReviewed": false,
+    "coverageNote": "Illustrative only. This is not a Jack Roberts reel and is not a completed edit."
+  },
+  "observations": [
+    {"atSeconds": null, "timingMeaning": "illustrative", "layout": "hypothetical split composition", "visibleEvidence": "Example design idea: a simple pan cross-section highlights where heat enters while the presenter explains the action.", "relationships": ["causal explanation", "spatial model"]}
+  ],
+  "principles": ["Transfer the idea of making a mechanism visible to a new subject using original graphics; verify any physical explanation against the actual source."],
+  "unknowns": ["No real source, transcript, timing, or review exists"]
+}

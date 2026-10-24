@@ -1,0 +1,54 @@
+<!doctype html>
+<!-- Motion background: turns one still image into a premium moving background without
+     changing its colours or look: slow push and drift, a gentle breathing scale, and a
+     fine film grain on top. --image is the picture (rotated to fit the format if it's the
+     wrong way round). Use behind titles, chapter cards or a cut-out presenter. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: #000; }
+      #bg { position: absolute; left: 50%; top: 50%; background: url("__IMAGE__") center / cover no-repeat; }
+      #grain { position: absolute; inset: 0; mix-blend-mode: overlay; opacity: .22; pointer-events: none; }
+      #vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, .28) 100%); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <div id="bg"></div><div id="vignette"></div><canvas id="grain"></canvas>
+    </div>
+    <script>
+      const W = __W__, H = __H__, DUR = __DURATION__, ROTATE = __ROTATE__;
+      const bg = document.getElementById('bg');
+      // When the image is rotated 90 degrees, its box is sized the other way round.
+      const bw = ROTATE ? H : W, bh = ROTATE ? W : H;
+      Object.assign(bg.style, { width: bw * 1.25 + 'px', height: bh * 1.25 + 'px', marginLeft: -bw * 0.625 + 'px', marginTop: -bh * 0.625 + 'px' });
+
+      // Grain: a small noise tile redrawn per frame from the frame number, so every render
+      // is identical (no Math.random, no timers).
+      const g = document.getElementById('grain'), gs = 256;
+      g.width = gs; g.height = gs; g.style.width = W + 'px'; g.style.height = H + 'px'; g.style.imageRendering = 'pixelated';
+      const ctx = g.getContext('2d'), img = ctx.createImageData(gs, gs);
+      function grain(frame) {
+        let s = (frame * 9301 + 49297) % 233280 || 1;
+        for (let i = 0; i < img.data.length; i += 4) {
+          s = (s * 16807) % 2147483647; const v = s & 255;
+          img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255;
+        }
+        ctx.putImageData(img, 0, 0);
+      }
+      const state = { p: 0 };
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      gsap.set(bg, { rotation: ROTATE ? 90 : 0, scale: 1.0 });
+      tl.to(bg, { scale: 1.12, x: W * 0.035, y: -H * 0.025, duration: DUR, ease: 'sine.inOut' }, 0);
+      tl.to(bg, { rotation: (ROTATE ? 90 : 0) + 1.2, duration: DUR, ease: 'sine.inOut' }, 0);
+      tl.to(state, { p: 1, duration: DUR, ease: 'none', onUpdate: () => grain(Math.floor(state.p * DUR * 24)) }, 0);
+      window.__timelines['main'] = tl;
+      grain(0);
+    </script>
+  </body>
+</html>

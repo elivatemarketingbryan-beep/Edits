@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Qualified Leads Funnel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0a08;
+        --bg2: #17140f;
+        --accent: #d9a94a;
+        --accent-bright: #f4d998;
+        --text: #f5f1e6;
+        --muted: #9c9384;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the hook lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 160px;
+        box-sizing: border-box;
+      }
+
+      /* ---------------- scene 1 · negative setup ---------------- */
+      .neg-wrap {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+        max-width: 1650px;
+      }
+      .neg-word {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 112px;
+        line-height: 1;
+        color: var(--muted);
+        opacity: 0;
+      }
+      .neg-strike {
+        /* anchored to neg-wrap's own left edge (== the text's left edge,
+           since neg-wrap shrink-wraps its content) so its width maps
+           directly onto the text block with no center-based transform
+           math to get wrong */
+        position: absolute;
+        left: 0;
+        top: 46%;
+        width: 0px;
+        height: 8px;
+        margin-top: -4px;
+        border-radius: 6px;
+        background: var(--accent-bright);
+        transform-origin: left center;
+        transform: scaleX(0);
+      }
+
+      /* ---------------- scene 2 · positive correction ---------------- */
+      .pos-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        max-width: 1680px;
+      }
+      .pos-word {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 108px;
+        line-height: 1;
+        color: var(--accent-bright);
+        opacity: 0;
+      }
+
+      /* ---------------- scene 3 · the funnel (hero motif) ---------------- */
+      #funnel-svg {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        z-index: 1;
+        pointer-events: none;
+      }
+      #funnel-svg path {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0.85;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+      #funnel-svg .funnel-body {
+        fill: rgba(217, 169, 74, 0.05);
+      }
+
+      .funnel-eyebrow {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        font-size: 26px;
+        text-align: center;
+        opacity: 0;
+      }
+      #eyebrow-top {
+        top: 96px;
+        color: var(--muted);
+      }
+      #eyebrow-bottom {
+        top: 966px;
+        color: var(--accent-bright);
+      }
+
+      .neck-glow {
+        position: absolute;
+        left: 960px;
+        top: 620px;
+        width: 260px;
+        height: 260px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(closest-side, var(--accent-bright) 0%, transparent 72%);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .raw-chip,
+      .good-chip {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        border-radius: 999px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        opacity: 0;
+      }
+      .raw-chip {
+        padding: 14px 26px;
+        border: 2px solid rgba(156, 147, 132, 0.5);
+        background: rgba(23, 20, 15, 0.7);
+        color: var(--muted);
+        font-size: 24px;
+        letter-spacing: 0.04em;
+      }
+      .raw-chip.is-dot {
+        padding: 0;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: none;
+        background: var(--muted);
+      }
+      .good-chip {
+        padding: 20px 40px;
+        border: 2px solid var(--accent-bright);
+        background: linear-gradient(180deg, var(--accent-bright) 0%, var(--accent) 100%);
+        color: var(--bg);
+        font-size: 32px;
+        letter-spacing: 0.03em;
+        box-shadow: 0 0 40px rgba(244, 217, 152, 0.5);
+      }
+
+      .landing-underline {
+        position: absolute;
+        left: 280px;
+        top: 946px;
+        width: 1360px;
+        height: 6px;
+        border-radius: 4px;
+        background: linear-gradient(90deg, var(--accent) 0%, var(--accent-bright) 50%, var(--accent) 100%);
+        transform-origin: left center;
+        transform: scaleX(0);
+        z-index: 1;
+      }
+
+      /* ---------------- scene 4 · closing line ---------------- */
+      .close-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .close-line {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        font-size: 54px;
+        line-height: 1.35;
+        color: var(--text);
+        text-align: center;
+        max-width: 1520px;
+        opacity: 0;
+      }
+      .close-line .em {
+        color: var(--accent-bright);
+        font-weight: 800;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-qlf1" id="stage" data-composition-id="qualified-leads-funnel" data-start="0" data-duration="13.5" data-fps="30" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-qlf2" id="bg-fill"></div>
+
+      <!-- ============ scene 1 · negative setup (0.0 - 1.5s) ============ -->
+      <div data-hf-id="hf-qlf3" id="scene-neg" class="clip scene" data-start="0" data-duration="1.5" data-track-index="0">
+        <div data-hf-id="hf-qlf4" class="neg-wrap" id="neg-wrap">
+          <span data-hf-id="hf-qlf5" class="neg-word" id="nw-0">MORE</span>
+          <span data-hf-id="hf-qlf6" class="neg-word" id="nw-1">LEADS</span>
+          <span data-hf-id="hf-qlf7" class="neg-word" id="nw-2">ISN'T</span>
+          <span data-hf-id="hf-qlf8" class="neg-word" id="nw-3">THE</span>
+          <span data-hf-id="hf-qlf9" class="neg-word" id="nw-4">GOAL.</span>
+          <div data-hf-id="hf-qlfa" class="neg-strike" id="neg-strike"></div>
+        </div>
+      </div>
+
+      <!-- ============ scene 2 · positive correction (1.5 - 3.0s) ============ -->
+      <div data-hf-id="hf-qlfb" id="scene-pos" class="clip scene" data-start="1.5" data-duration="1.5" data-track-index="0">
+        <div data-hf-id="hf-qlfc" class="pos-wrap" id="pos-wrap">
+          <span data-hf-id="hf-qlfd" class="pos-word" id="pw-0">MORE</span>
+          <span data-hf-id="hf-qlfe" class="pos-word" id="pw-1">QUALIFIED</span>
+          <span data-hf-id="hf-qlff" class="pos-word" id="pw-2">OPPORTUNITIES</span>
+          <span data-hf-id="hf-qlfg" class="pos-word" id="pw-3">IS.</span>
+        </div>
+      </div>
+
+      <!-- ============ scene 3 · the funnel (3.0 - 9.5s) ============ -->
+      <div data-hf-id="hf-qlfh" id="scene-funnel" class="clip scene" data-start="3.0" data-duration="6.5" data-track-index="0">
+        <svg data-hf-id="hf-qlfi" id="funnel-svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+          <path data-hf-id="hf-qlfj" id="funnel-shape" class="funnel-body" pathLength="1" d="M640,190 L1280,190 L1015,620 L905,620 Z" />
+          <path data-hf-id="hf-qlfk" id="funnel-spout-l" pathLength="1" d="M905,620 L905,700" />
+          <path data-hf-id="hf-qlfl" id="funnel-spout-r" pathLength="1" d="M1015,620 L1015,700" />
+        </svg>
+
+        <div data-hf-id="hf-qlfm" class="neck-glow" id="neck-glow" data-layout-allow-overflow="true"></div>
+
+        <div data-hf-id="hf-qlfn" class="funnel-eyebrow" id="eyebrow-top" data-layout-allow-occlusion="true">RAW LEADS</div>
+        <div data-hf-id="hf-qlfo" class="funnel-eyebrow" id="eyebrow-bottom">QUALIFIED OPPORTUNITIES</div>
+
+        <!-- raw messy chips / dots, falling into the neck -->
+        <div data-hf-id="hf-qlfp" data-layout-allow-overlap="true" class="raw-chip" id="raw-0" style="left: 620px; top: 170px;">NO BUDGET</div>
+        <div data-hf-id="hf-qlfq" data-layout-allow-overlap="true" class="raw-chip" id="raw-1" style="left: 760px; top: 130px;">JUST BROWSING</div>
+        <div data-hf-id="hf-qlfr" data-layout-allow-overlap="true" class="raw-chip is-dot" id="raw-2" style="left: 860px; top: 215px;"></div>
+        <div data-hf-id="hf-qlfs" data-layout-allow-overlap="true" class="raw-chip" id="raw-3" style="left: 980px; top: 150px;">WRONG AREA</div>
+        <div data-hf-id="hf-qlft" data-layout-allow-overlap="true" class="raw-chip" id="raw-4" style="left: 1100px; top: 195px;">CHEAPEST ONLY</div>
+        <div data-hf-id="hf-qlfu" data-layout-allow-overlap="true" class="raw-chip" id="raw-5" style="left: 1210px; top: 140px;">NO BUDGET</div>
+        <div data-hf-id="hf-qlfv" data-layout-allow-overlap="true" class="raw-chip is-dot" id="raw-6" style="left: 1310px; top: 185px;"></div>
+        <div data-hf-id="hf-qlfw" data-layout-allow-overlap="true" class="raw-chip" id="raw-7" style="left: 700px; top: 215px;">JUST BROWSING</div>
+        <div data-hf-id="hf-qlfx" data-layout-allow-overlap="true" class="raw-chip" id="raw-8" style="left: 1060px; top: 215px;">WRONG AREA</div>
+        <div data-hf-id="hf-qlfy" data-layout-allow-overlap="true" class="raw-chip" id="raw-9" style="left: 900px; top: 170px;">CHEAPEST ONLY</div>
+
+        <!-- surviving good chips, pre-staged at the neck, travel to the landing row -->
+        <div data-hf-id="hf-qlfz" data-layout-allow-overlap="true" class="good-chip" id="good-0" style="left: 960px; top: 620px;">REAL BUDGET</div>
+        <div data-hf-id="hf-qlg0" data-layout-allow-overlap="true" class="good-chip" id="good-1" style="left: 960px; top: 620px;">REAL TIMELINE</div>
+        <div data-hf-id="hf-qlg1" data-layout-allow-overlap="true" class="good-chip" id="good-2" style="left: 960px; top: 620px;">READY TO HIRE</div>
+
+        <div data-hf-id="hf-qlg2" class="landing-underline" id="landing-underline"></div>
+      </div>
+
+      <!-- ============ scene 4 · closing line (8.9 - 13.5s, overlaps scene 3's tail for a cross-fade) ============ -->
+      <div data-hf-id="hf-qlg3" id="scene-close" class="clip scene" data-start="8.9" data-duration="4.6" data-track-index="0">
+        <div data-hf-id="hf-qlg4" class="close-wrap">
+          <div data-hf-id="hf-qlg5" class="close-line" id="close-line">
+            <span data-hf-id="hf-qlg6" class="em">SPEED + QUALIFICATION</span> TURNS INTEREST INTO
+            <span data-hf-id="hf-qlg7" class="em">BOOKED ESTIMATES.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        // ---- centering anchors: every travelling element is authored at its
+        // CSS left/top center point, then GSAP animates x/y deltas on top of
+        // that fixed xPercent/yPercent anchor (same pattern as the clone
+        // travel in shared-lead-problem) ----
+        var rawIds = ["#raw-0", "#raw-1", "#raw-2", "#raw-3", "#raw-4", "#raw-5", "#raw-6", "#raw-7", "#raw-8", "#raw-9"];
+        var goodIds = ["#good-0", "#good-1", "#good-2"];
+        gsap.set(rawIds, { xPercent: -50, yPercent: -50 });
+        gsap.set(goodIds, { xPercent: -50, yPercent: -50 });
+
+        // measure the negative line so the strike-through matches its box
+        // exactly (deterministic layout read, not time/random dependent —
+        // same pattern as the hook-underline measurement in pricing-tiers-reveal).
+        // Read once immediately, then re-read once webfonts finish loading:
+        // an inline <script> runs before "League Gothic" has necessarily
+        // swapped in, so the very first read can capture the wider fallback
+        // font's (wrapped) layout width and freeze the strike at that stale
+        // value. document.fonts.ready is a one-time deterministic gate (not
+        // wall-clock/random), and both reads land well before the strike's
+        // scaleX tween (started at 0.78s) is ever evaluated.
+        var negWrap = document.getElementById("neg-wrap");
+        var negStrike = document.getElementById("neg-strike");
+        function measureNegStrike() {
+          negStrike.style.width = negWrap.getBoundingClientRect().width + "px";
+        }
+        measureNegStrike();
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(measureNegStrike);
+        }
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= scene 1 · negative setup (0.0 - 1.5s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 0.1);
+
+        var negWords = ["#nw-0", "#nw-1", "#nw-2", "#nw-3", "#nw-4"];
+        var negStarts = [0.08, 0.15, 0.22, 0.29, 0.36];
+        negWords.forEach(function (sel, i) {
+          tl.fromTo(sel, { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.22, ease: "power3.out" }, negStarts[i]);
+        });
+
+        tl.fromTo("#neg-strike", { scaleX: 0 }, { scaleX: 1, duration: 0.28, ease: "power2.out" }, 0.78);
+        tl.to("#neg-wrap", { opacity: 0, filter: "blur(10px)", duration: 0.24, ease: "power2.in" }, 1.24);
+
+        /* ================= scene 2 · positive correction (1.5 - 3.0s) ================= */
+        var posWords = ["#pw-0", "#pw-1", "#pw-2", "#pw-3"];
+        var posStarts = [1.55, 1.6, 1.65, 1.7];
+        posWords.forEach(function (sel, i) {
+          tl.fromTo(
+            sel,
+            { scale: 0.55, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.32, ease: "back.out(2.2)" },
+            posStarts[i],
+          );
+        });
+        gsap.set("#pw-3", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#pw-3",
+          { textShadow: "0 0 0px rgba(244,217,152,0)" },
+          { textShadow: "0 0 40px rgba(244,217,152,0.85)", duration: 0.3, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false },
+          2.15,
+        );
+        tl.to("#pos-wrap", { opacity: 0, duration: 0.18, ease: "power1.in" }, 2.82);
+
+        /* ================= scene 3 · the funnel (3.0 - 9.0s) ================= */
+        tl.fromTo("#funnel-shape", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5, ease: "power2.inOut" }, 3.0);
+        tl.fromTo("#funnel-spout-l", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.2, ease: "power2.out" }, 3.3);
+        tl.fromTo("#funnel-spout-r", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.2, ease: "power2.out" }, 3.3);
+        tl.fromTo("#eyebrow-top", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, 3.15);
+
+        // ---- raw chip data: label position (cx,cy), entrance start, fall
+        // duration + ease (deliberately varied per chip = "messy"), and
+        // whether it survives the filter ----
+        var NECK_X = 960, NECK_Y = 620;
+        var raw = [
+          { id: "#raw-0", cx: 620, cy: 170, start: 3.3, fallDur: 1.1, ease: "power1.in", survivor: false },
+          { id: "#raw-1", cx: 760, cy: 130, start: 3.45, fallDur: 1.25, ease: "power2.in", survivor: false },
+          { id: "#raw-2", cx: 860, cy: 215, start: 3.6, fallDur: 1.15, ease: "sine.in", survivor: true, good: "#good-0" },
+          { id: "#raw-3", cx: 980, cy: 150, start: 3.75, fallDur: 1.35, ease: "circ.in", survivor: false },
+          { id: "#raw-4", cx: 1100, cy: 195, start: 3.9, fallDur: 1.2, ease: "power1.in", survivor: false },
+          { id: "#raw-5", cx: 1210, cy: 140, start: 4.05, fallDur: 1.3, ease: "power2.in", survivor: true, good: "#good-1" },
+          { id: "#raw-6", cx: 1310, cy: 185, start: 4.2, fallDur: 1.05, ease: "sine.in", survivor: false },
+          { id: "#raw-7", cx: 700, cy: 215, start: 4.35, fallDur: 1.4, ease: "circ.in", survivor: false },
+          { id: "#raw-8", cx: 1060, cy: 215, start: 4.5, fallDur: 1.15, ease: "power1.in", survivor: false },
+          { id: "#raw-9", cx: 900, cy: 170, start: 4.65, fallDur: 1.25, ease: "power2.in", survivor: true, good: "#good-2" },
+        ];
+
+        var goodSlots = {
+          "#good-0": { x: 480, y: 900 },
+          "#good-1": { x: 960, y: 900 },
+          "#good-2": { x: 1440, y: 900 },
+        };
+
+        raw.forEach(function (chip) {
+          // entrance: pop into place, messy stagger
+          tl.fromTo(chip.id, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(1.6)" }, chip.start);
+
+          // fall: converge on the funnel neck
+          var fallStart = chip.start + 0.22;
+          tl.fromTo(
+            chip.id,
+            { x: 0, y: 0 },
+            { x: NECK_X - chip.cx, y: NECK_Y - chip.cy, duration: chip.fallDur, ease: chip.ease },
+            fallStart,
+          );
+
+          var arrival = fallStart + chip.fallDur;
+
+          if (!chip.survivor) {
+            // filtered out: dissolve exactly at the neck
+            tl.to(chip.id, { scale: 0.15, opacity: 0, duration: 0.22, ease: "power2.in" }, arrival);
+          } else {
+            // survives: raw chip dissolves fast while the pre-staged good chip
+            // pops at the neck (already recolored/relabeled) then travels to
+            // its landing slot
+            tl.to(chip.id, { scale: 0.15, opacity: 0, duration: 0.15, ease: "power2.in" }, arrival);
+
+            tl.fromTo(
+              "#neck-glow",
+              { opacity: 0, scale: 0.7 },
+              { opacity: 0.55, scale: 1, duration: 0.15, ease: "power2.out" },
+              arrival,
+            ).to("#neck-glow", { opacity: 0, duration: 0.35, ease: "power1.in" }, arrival + 0.15);
+
+            tl.fromTo(
+              chip.good,
+              { scale: 0.6, opacity: 0 },
+              { scale: 1, opacity: 1, duration: 0.2, ease: "back.out(2.2)" },
+              arrival,
+            );
+
+            var slot = goodSlots[chip.good];
+            var goodTravelStart = arrival + 0.15;
+            tl.fromTo(
+              chip.good,
+              { x: 0, y: 0 },
+              { x: slot.x - NECK_X, y: slot.y - NECK_Y, duration: 0.6, ease: "power3.out" },
+              goodTravelStart,
+            );
+          }
+        });
+
+        // landing accents, timed after the last good chip lands (~6.87s)
+        tl.fromTo("#landing-underline", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, 7.02);
+        tl.fromTo("#eyebrow-bottom", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, 7.1);
+
+        // freeze-hold from ~7.45s to 8.9s — no further tweens scheduled; the
+        // landed row simply persists until the closing line begins its
+        // cross-fade in on top of it. The funnel clip itself stays visible
+        // until 9.5s (data-duration extended past the close scene's 8.9s
+        // start), so the two full-screen scenes overlap for 0.6s instead of
+        // hard-cutting through a blank frame.
+
+        /* ================= scene 4 · closing line (8.9 - 13.5s) ================= */
+        // fade-in starts at 8.9s (the close scene's own data-start) so it
+        // begins cross-fading in while the funnel scene is still fully
+        // visible; close-line reaches full opacity at 9.4s, still 0.1s
+        // before the funnel clip hard-cuts out at 9.5s.
+        tl.fromTo("#close-line", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 8.9);
+
+        var emphSpans = document.querySelectorAll("#close-line .em");
+        emphSpans.forEach(function (el, i) {
+          gsap.set(el, { transformOrigin: "50% 50%" });
+          tl.fromTo(
+            el,
+            { textShadow: "0 0 0px rgba(244,217,152,0)" },
+            { textShadow: "0 0 34px rgba(244,217,152,0.75)", duration: 0.3, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false },
+            9.6 + i * 0.15,
+          );
+        });
+
+        // freeze-hold from ~10.2s to the end (13.5s) for a clean cut back to
+        // host footage — no further tweens scheduled; the last state persists.
+
+        window.__timelines["qualified-leads-funnel"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

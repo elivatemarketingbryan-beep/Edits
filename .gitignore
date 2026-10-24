@@ -1,0 +1,43 @@
+# Installs (reinstall with npm ci / uv sync)
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# Footage, renders and per-job work: big, personal, regenerable
+projects/
+jobs/
+raw/*
+!raw/.gitkeep
+transcript/*
+!transcript/.gitkeep
+vendor/
+renders/
+engines/split-screen/inputs/*
+!engines/split-screen/inputs/PUT_YOUR_VIDEO_HERE.txt
+engines/split-screen/public/demo/source.*
+*.mp4
+*.mov
+*.webm
+*.m4a
+*.wav.tmp
+cut.mp4
+
+# Scraped research reports (other creators' posts and signed image links)
+engines/content-os/research/*.html
+engines/legacy-editor/projects/
+
+# Secrets and machine-specific settings
+.env
+.env.*
+!.env.example
+.mcp.json
+*.pem
+.claude/settings.local.json
+
+# OS and editor clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+.cache*/
+*.log

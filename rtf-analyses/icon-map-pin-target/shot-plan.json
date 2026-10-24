@@ -1,0 +1,40 @@
+{
+  "category": "maps",
+  "duration_s": 6.0,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Icon-focused accent animation, not a real map — a generic abstract 3x3 grid of stylized 'zone' cells (line-art, rounded squares) standing in for a targeting/map metaphor. Purple/black brand system, restrained motion, one dominant motif per beat, no decorative glows beyond the specified landing pulse.",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8"],
+  "font": "League Gothic + Montserrat",
+  "beats": [1.5, 3.5, 4.5, 5.5, 6.0],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "No catalog block matched an abstract zone-grid + pin-drop-landing accent (searched 'grid of zones highlight target cell map pin drop' and 'map pin marker drop bounce landing icon' — closest hits were us-map-hex/us-map-bubble/pin-rollout, all real-geography US map blocks, wrong fit for a generic non-geographic icon accent). Logged via hyperframes feedback --search-miss. Hand-authored per categories/maps/module.md vector-lane signatures (pin drop + pulse ring) using hand-drawn line-art SVG, not the US map family."
+  },
+
+  "content": {
+    "lane": "vector",
+    "shot": "zone-target-pin (custom, non-geographic)",
+    "regions": [
+      { "id": "cell-0", "row": 0, "col": 0, "state": "dim" },
+      { "id": "cell-1", "row": 0, "col": 1, "state": "bright-secondary" },
+      { "id": "cell-2", "row": 0, "col": 2, "state": "dim" },
+      { "id": "cell-3", "row": 1, "col": 0, "state": "dim" },
+      { "id": "cell-4", "row": 1, "col": 1, "state": "bright-primary-pin-target" },
+      { "id": "cell-5", "row": 1, "col": 2, "state": "dim" },
+      { "id": "cell-6", "row": 2, "col": 0, "state": "dim" },
+      { "id": "cell-7", "row": 2, "col": 1, "state": "dim" },
+      { "id": "cell-8", "row": 2, "col": 2, "state": "dim" }
+    ],
+    "points": [{ "id": "map-pin", "target": "cell-4", "icon": "line-art teardrop map pin" }],
+    "headline": null,
+    "overlays": ["label"],
+    "label_text": "TARGETED, NOT SCATTERED."
+  },
+
+  "shot_brief": "A clean 3x3 grid of muted zone cells fades and scales into frame in a quiet stagger, all reading as roughly equal. Two specific cells then brighten into the accent purple — a clear 'these are the good ones' contrast beat while the rest recede further into shadow. A simple line-art map-pin icon falls from above and lands on the brightest (center) cell with a small bounce and a glow-pulse ring, visually confirming the target. A short punchy label fades in beneath — TARGETED, NOT SCATTERED. — and the frame holds for a clean cut. One motif per beat: fade/stagger-in, then color contrast, then pin landing, then label; the persistent bg-fill never drops to empty."
+}

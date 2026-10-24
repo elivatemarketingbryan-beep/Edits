@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Pay Once Pay Twice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+        --warn: #b5675c;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background: fades in with the hook and persists for the
+         whole piece so no scene boundary ever exposes a fully transparent
+         frame (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 160px;
+        box-sizing: border-box;
+      }
+
+      /* ---------------- scene 1 · hook (0.0 - 2.5s) ---------------- */
+      .hook-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hook-line {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 92px;
+        line-height: 1.18;
+        color: var(--text);
+        text-align: center;
+        max-width: 1560px;
+        opacity: 0;
+      }
+      .hook-line .em {
+        color: var(--accent-bright);
+      }
+
+      /* ---------------- scene 2 · the cost stack (2.0 - 6.3s) ---------------- */
+      .stack-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 34px;
+        width: 100%;
+      }
+      .stack-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 1040px;
+      }
+      .row-label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-size: 38px;
+        color: var(--text);
+        opacity: 0;
+      }
+      .row-value {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        font-size: 100px;
+        line-height: 1;
+        opacity: 0;
+      }
+      #row1-value {
+        color: var(--accent-bright);
+      }
+      #row2-value {
+        color: var(--warn);
+      }
+      .warn-glyph {
+        font-family: "Montserrat", sans-serif;
+        font-size: 34px;
+        color: var(--warn);
+      }
+      .stack-plus {
+        font-family: "League Gothic", sans-serif;
+        font-size: 56px;
+        color: var(--muted);
+        opacity: 0;
+      }
+      .stack-rule {
+        width: 1040px;
+        height: 4px;
+        border-radius: 3px;
+        background: var(--accent);
+        transform-origin: left center;
+        transform: scaleX(0);
+      }
+      .stack-total {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+      }
+      #stack-eq {
+        font-family: "League Gothic", sans-serif;
+        font-size: 76px;
+        color: var(--muted);
+        opacity: 0;
+      }
+      #stack-total-value {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        font-size: 148px;
+        line-height: 1;
+        color: var(--accent-bright);
+        opacity: 0;
+      }
+
+      /* ---------------- scene 3 · the reveal (6.0 - 9.5s) ---------------- */
+      .reveal-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+      }
+      .reveal-hero {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 200px;
+        line-height: 1;
+        color: var(--accent-bright);
+        text-align: center;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      .reveal-sub {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 48px;
+        color: var(--muted);
+        text-align: center;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="pay-once-pay-twice" data-start="0" data-duration="9.5" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ scene 1 · hook (0.0 - 2.5s) ============ -->
+      <div id="scene-hook" class="clip scene" data-start="0" data-duration="2.5" data-track-index="0">
+        <div class="hook-wrap" id="hook-wrap">
+          <div class="hook-line" id="hook-line">THE CHEAPEST BID ISN'T ALWAYS THE <span class="em">SMARTEST.</span></div>
+        </div>
+      </div>
+
+      <!-- ============ scene 2 · the cost stack (2.0 - 6.3s) ============ -->
+      <div id="scene-stack" class="clip scene" data-start="2.0" data-duration="4.3" data-track-index="0">
+        <div class="stack-wrap" id="stack-wrap">
+          <div class="stack-row">
+            <div class="row-label" id="row1-label">THE CHEAP JOB</div>
+            <div class="row-value" id="row1-value">1&times;</div>
+          </div>
+          <div class="stack-plus" id="stack-plus">+</div>
+          <div class="stack-row">
+            <div class="row-label" id="row2-label">TO FIX IT LATER</div>
+            <div class="row-value" id="row2-value"><span class="warn-glyph">&#9888;</span>+1&times;</div>
+          </div>
+          <div class="stack-rule" id="stack-rule"></div>
+          <div class="stack-total">
+            <div id="stack-eq">=</div>
+            <div id="stack-total-value">2&times;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ scene 3 · the reveal (6.0 - 9.5s) ============ -->
+      <div id="scene-reveal" class="clip scene" data-start="6.0" data-duration="3.5" data-track-index="0">
+        <div class="reveal-wrap" id="reveal-wrap">
+          <div class="reveal-hero" id="reveal-hero" data-layout-allow-overlap="true">YOU PAY TWICE.</div>
+          <div class="reveal-sub" id="reveal-sub">CHEAP ISN'T ALWAYS SMART.</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= persistent background ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, 0.05);
+
+        /* ================= scene 1 · hook (0.0 - 2.5s) ================= */
+        tl.fromTo(
+          "#hook-line",
+          { opacity: 0, y: 44, filter: "blur(6px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55, ease: "power3.out" },
+          0.15,
+        );
+
+        // hold, then lift + fade the hook out — crossfading under scene-stack,
+        // whose first row starts entering at 2.05s, so the frame is never
+        // without visible content
+        tl.fromTo(
+          "#hook-wrap",
+          { opacity: 1, y: 0 },
+          { opacity: 0, y: -28, duration: 0.4, ease: "power2.in", immediateRender: false },
+          1.9,
+        );
+
+        /* ================= scene 2 · the cost stack (2.0 - 6.3s) ================= */
+        tl.fromTo(
+          "#row1-label",
+          { opacity: 0, x: -30 },
+          { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" },
+          2.05,
+        );
+        tl.fromTo(
+          "#row1-value",
+          { opacity: 0, scale: 0.6, x: 30 },
+          { opacity: 1, scale: 1, x: 0, duration: 0.4, ease: "back.out(2.2)" },
+          2.15,
+        );
+
+        tl.fromTo(
+          "#stack-plus",
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.25, ease: "power2.out" },
+          2.65,
+        );
+
+        tl.fromTo(
+          "#row2-label",
+          { opacity: 0, x: -30 },
+          { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" },
+          2.95,
+        );
+        tl.fromTo(
+          "#row2-value",
+          { opacity: 0, scale: 0.6, x: 30 },
+          { opacity: 1, scale: 1, x: 0, duration: 0.4, ease: "back.out(2.2)" },
+          3.05,
+        );
+
+        tl.fromTo(
+          "#stack-rule",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.5, ease: "power2.inOut" },
+          3.55,
+        );
+
+        tl.fromTo(
+          "#stack-eq",
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.25, ease: "power2.out" },
+          4.15,
+        );
+        tl.fromTo(
+          "#stack-total-value",
+          { opacity: 0, scale: 0.5 },
+          { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2.4)" },
+          4.35,
+        );
+        gsap.set("#stack-total-value", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#stack-total-value",
+          { textShadow: "0 0 0px rgba(201,168,255,0)" },
+          {
+            textShadow: "0 0 60px rgba(201,168,255,0.85)",
+            duration: 0.35,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          4.9,
+        );
+
+        // hold the total, then scale + fade the whole stack out — crossfading
+        // under scene-reveal, whose hero starts entering at 6.05s, so the
+        // frame is never without visible content
+        tl.fromTo(
+          "#stack-wrap",
+          { opacity: 1, scale: 1 },
+          { opacity: 0, scale: 1.05, duration: 0.4, ease: "power2.in", immediateRender: false },
+          5.85,
+        );
+
+        /* ================= scene 3 · the reveal (6.0 - 9.5s) ================= */
+        tl.fromTo(
+          "#reveal-hero",
+          { opacity: 0, scale: 0.6 },
+          { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(2.3)" },
+          6.05,
+        );
+        gsap.set("#reveal-hero", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#reveal-hero",
+          { textShadow: "0 0 0px rgba(201,168,255,0)" },
+          {
+            textShadow: "0 0 70px rgba(201,168,255,0.9)",
+            duration: 0.4,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          6.7,
+        );
+
+        tl.fromTo(
+          "#reveal-sub",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+          7.3,
+        );
+
+        // freeze-hold from ~7.8s to the end (9.5s) for a clean cut back to
+        // host footage — no further tweens scheduled; the last state persists.
+
+        window.__timelines["pay-once-pay-twice"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Secretary No Salary</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0a08;
+        --bg2: #17140f;
+        --accent: #d9a94a;
+        --accent-bright: #f4d998;
+        --text: #f5f1e6;
+        --muted: #9c9384;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background: fades in with the hook and persists for the
+         whole piece so no scene boundary ever exposes a fully transparent
+         frame (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 110px 140px;
+        box-sizing: border-box;
+      }
+
+      /* ---------------- scene 1 · hook + sub-line ---------------- */
+      #beat12-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 36px;
+      }
+      .headline-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+      }
+      .headline-word {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 168px;
+        line-height: 1;
+        color: var(--accent-bright);
+        opacity: 0;
+      }
+      .subline-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+      }
+      .subline-word {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-size: 66px;
+        line-height: 1;
+        color: var(--text);
+        opacity: 0;
+      }
+
+      /* ---------------- scene 2 · cost comparison ---------------- */
+      #beat34-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 64px;
+        width: 100%;
+      }
+      .cards-row {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: center;
+        gap: 96px;
+      }
+      .compare-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+        width: 600px;
+        padding: 56px 52px;
+        border-radius: 28px;
+        background: var(--bg2);
+        border: 2px solid rgba(245, 241, 230, 0.08);
+        text-align: center;
+        opacity: 0;
+      }
+      #card-right {
+        border-color: rgba(217, 169, 74, 0.5);
+      }
+      .card-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 900px;
+        height: 900px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(closest-side, var(--accent) 0%, transparent 70%);
+        opacity: 0;
+        pointer-events: none;
+        z-index: -1;
+      }
+      .card-eyebrow {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        font-size: 26px;
+      }
+      #card-left .card-eyebrow {
+        color: var(--muted);
+      }
+      #card-right .card-eyebrow {
+        color: var(--accent-bright);
+      }
+      .card-price {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        line-height: 1;
+        font-size: 128px;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.01em;
+      }
+      #card-left .card-price {
+        color: var(--muted);
+        /* native text-decoration sizes itself to the rendered text box on
+           every paint — never a stale JS measurement, so it can never
+           overshoot the digits or sit crooked, at any seek time */
+        text-decoration-line: line-through;
+        text-decoration-color: var(--muted);
+        text-decoration-thickness: 7px;
+      }
+      #card-right .card-price {
+        color: var(--accent-bright);
+      }
+      .card-caption {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 26px;
+        color: var(--muted);
+        max-width: 480px;
+      }
+      #card-right .card-caption {
+        color: rgba(245, 241, 230, 0.75);
+      }
+
+      .vs-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 2px solid var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        font-size: 30px;
+        letter-spacing: 0.04em;
+        color: var(--accent-bright);
+        opacity: 0;
+        z-index: 2;
+      }
+
+      .clock-badge {
+        position: absolute;
+        top: -34px;
+        right: 36px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 22px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent) 0%, var(--accent-bright) 100%);
+        box-shadow: 0 10px 34px rgba(217, 169, 74, 0.4);
+        transform: scale(0) rotate(-10deg);
+        opacity: 0;
+        transform-origin: center center;
+      }
+      .clock-badge svg {
+        width: 30px;
+        height: 30px;
+        flex: none;
+        display: block;
+      }
+      .clock-badge span {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        font-size: 24px;
+        letter-spacing: 0.03em;
+        color: var(--bg);
+        white-space: nowrap;
+      }
+
+      .closing-line {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 56px;
+        color: var(--text);
+        text-align: center;
+        opacity: 0;
+      }
+      .closing-line .em {
+        color: var(--accent-bright);
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-sns1" id="stage" data-composition-id="secretary-no-salary" data-start="0" data-duration="9.5" data-fps="30" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-sns2" id="bg-fill"></div>
+
+      <!-- ============ scene 1 · hook + sub-line (0.0 - 3.7s) ============ -->
+      <div data-hf-id="hf-sns3" id="scene-hook" class="clip scene" data-start="0" data-duration="3.7" data-track-index="0">
+        <div data-hf-id="hf-sns4" id="beat12-group">
+          <div data-hf-id="hf-sns5" class="headline-line" id="headline-line">
+            <span data-hf-id="hf-sns6" class="headline-word" id="hw-0">A</span>
+            <span data-hf-id="hf-sns7" class="headline-word" id="hw-1">24/7</span>
+            <span data-hf-id="hf-sns8" class="headline-word" id="hw-2">SECRETARY.</span>
+          </div>
+          <div data-hf-id="hf-sns9" class="subline-line" id="subline-line">
+            <span data-hf-id="hf-snsa" class="subline-word" id="sw-0">WITHOUT</span>
+            <span data-hf-id="hf-snsb" class="subline-word" id="sw-1">THE</span>
+            <span data-hf-id="hf-snsc" class="subline-word" id="sw-2">SALARY.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ scene 2 · cost comparison + closer (3.3 - 9.5s) ============ -->
+      <div data-hf-id="hf-snsd" id="scene-compare" class="clip scene" data-start="3.3" data-duration="6.2" data-track-index="0">
+        <div data-hf-id="hf-snse" id="beat34-group">
+          <div data-hf-id="hf-snsf" class="cards-row" id="cards-row">
+            <div data-hf-id="hf-snsg" class="compare-card" id="card-left">
+              <div data-hf-id="hf-snsh" class="card-eyebrow">TRADITIONAL RECEPTIONIST</div>
+              <div data-hf-id="hf-snsi" class="card-price" id="price-left">~$3,000+/MO</div>
+              <div data-hf-id="hf-snsj" class="card-caption">Salary &#160;·&#160; Benefits &#160;·&#160; Turnover risk</div>
+            </div>
+            <div data-hf-id="hf-snsk" class="compare-card" id="card-right">
+              <div data-hf-id="hf-snsl" class="card-glow" id="glow-right" data-layout-allow-overflow="true"></div>
+              <div data-hf-id="hf-snsm" class="clock-badge" id="clock-badge">
+                <svg data-hf-id="hf-snsn" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="16" cy="16" r="13" stroke="#0b0a08" stroke-width="2.4"></circle>
+                  <path d="M16 8.5V16L21 19" stroke="#0b0a08" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span data-hf-id="hf-snso">24/7 &#160;·&#160; ALWAYS ON</span>
+              </div>
+              <div data-hf-id="hf-snsp" class="card-eyebrow">YOUR SYSTEM</div>
+              <div data-hf-id="hf-snsq" class="card-price" id="price-right">CREDITS ONLY</div>
+              <div data-hf-id="hf-snsr" class="card-caption">Never sleeps &#160;·&#160; Never misses a lead</div>
+            </div>
+            <div data-hf-id="hf-snss" class="vs-badge" id="vs-badge">VS</div>
+          </div>
+          <div data-hf-id="hf-snst" class="closing-line" id="closing-line">
+            <span data-hf-id="hf-snsu" class="em">ATTENTION IN.</span> <span data-hf-id="hf-snsv" class="em">APPOINTMENTS OUT.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= persistent background ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, 0.05);
+
+        /* ================= scene 1 · hook (0.0 - 3.7s) ================= */
+        var headlineWords = ["#hw-0", "#hw-1", "#hw-2"];
+        var headlineStarts = [0.15, 0.25, 0.35];
+        var headlineFroms = [
+          { y: -110, opacity: 0 },
+          { scale: 0.5, opacity: 0 },
+          { x: 220, opacity: 0 },
+        ];
+        var headlineEases = ["back.out(1.8)", "back.out(2.4)", "expo.out"];
+        headlineWords.forEach(function (sel, i) {
+          var to = { opacity: 1, duration: 0.24, ease: headlineEases[i] };
+          if (headlineFroms[i].y !== undefined) to.y = 0;
+          if (headlineFroms[i].x !== undefined) to.x = 0;
+          if (headlineFroms[i].scale !== undefined) to.scale = 1;
+          tl.fromTo(sel, headlineFroms[i], to, headlineStarts[i]);
+        });
+        // landing shake on the "24/7" emphasis word
+        gsap.set("#hw-1", { transformOrigin: "50% 50%" });
+        tl.fromTo("#hw-1", { x: 0 }, { x: -6, duration: 0.05, ease: "none", immediateRender: false }, 0.6)
+          .fromTo("#hw-1", { x: -6 }, { x: 6, duration: 0.06, ease: "none", immediateRender: false }, 0.65)
+          .fromTo("#hw-1", { x: 6 }, { x: 0, duration: 0.06, ease: "none", immediateRender: false }, 0.71);
+
+        // sub-line "WITHOUT THE SALARY." — staggered word reveal, second beat
+        var sublineWords = ["#sw-0", "#sw-1", "#sw-2"];
+        var sublineStarts = [2.0, 2.08, 2.16];
+        sublineWords.forEach(function (sel, i) {
+          tl.fromTo(
+            sel,
+            { y: 26, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" },
+            sublineStarts[i],
+          );
+        });
+
+        // hold, then lift + fade the whole hook group out — crossfading under
+        // scene 2, which starts fading in at 3.3s, so the frame is never
+        // without visible content
+        tl.fromTo(
+          "#beat12-group",
+          { opacity: 1, y: 0 },
+          { opacity: 0, y: -26, duration: 0.4, ease: "power2.in", immediateRender: false },
+          3.1,
+        );
+
+        /* ================= scene 2 · cost comparison (3.3 - 9.5s) ================= */
+        tl.fromTo(
+          "#card-left",
+          { x: -200, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" },
+          3.4,
+        );
+        tl.fromTo(
+          "#card-right",
+          { x: 200, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" },
+          3.5,
+        );
+        tl.fromTo("#glow-right", { opacity: 0 }, { opacity: 0.4, duration: 0.6, ease: "power2.out" }, 3.5);
+
+        tl.fromTo(
+          "#vs-badge",
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.4)" },
+          3.85,
+        );
+
+        // clock/24-7 badge pop on the winning card
+        tl.fromTo(
+          "#clock-badge",
+          { scale: 0, opacity: 0, rotation: -10 },
+          { scale: 1, opacity: 1, rotation: -4, duration: 0.4, ease: "back.out(2.6)" },
+          4.1,
+        );
+
+        // glow pulse on "$0 EXTRA" — marks the winning value
+        gsap.set("#price-right", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#price-right",
+          { textShadow: "0 0 0px rgba(244,217,152,0)" },
+          {
+            textShadow: "0 0 44px rgba(244,217,152,0.85)",
+            duration: 0.32,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          4.35,
+        );
+
+        // closing line fades in beneath the cards, then freeze-hold to the end
+        tl.fromTo(
+          "#closing-line",
+          { opacity: 0, y: 22 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+          7.2,
+        );
+
+        // freeze-hold from ~7.7s to the end (9.5s) for a clean cut back to
+        // host footage — no further tweens scheduled; the last state persists.
+
+        window.__timelines["secretary-no-salary"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

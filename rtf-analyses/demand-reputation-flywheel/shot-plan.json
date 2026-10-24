@@ -1,0 +1,88 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 11.5,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Same dark-gold editorial system as pricing-tiers-reveal / revenue-math-reveal: near-black radial bg, League Gothic display caps, Montserrat labels, gold accent. Continuous single-scene build (no hard cuts) so a circular flywheel diagram accumulates state instead of cutting between scenes — this sidesteps the blank-frame transition defect entirely.",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384"],
+  "font": "League Gothic + Montserrat (Google Fonts, same as sibling projects)",
+  "beats": [1.5, 5.0, 8.5, 11.5],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "Catalog searched via `npx hyperframes catalog --query` for orbit/loop/flywheel/cycle/SVG-draw blocks (see catalog-map notes below) — no exact flywheel/cycle-with-traveling-marker block exists in the registry. Closest matches (mk-usage-arc / Hairline Arc Gauge, locked-nucleus-orbit) informed the technique (SVG stroke-dasharray/dashoffset progress ring + a rotated pivot for the traveling marker dot) but are hand-adapted here per builder-contract's 'gap no block covers' clause. Reused verbatim from siblings: :root palette tokens, #bg-fill radial reveal, .scene/.clip padding contract, eyebrow typography, check-mark badge pattern, freeze-hold-to-end ending."
+  },
+
+  "content": {
+    "scenes": [
+      {
+        "id": "eyebrow",
+        "start": 0,
+        "end": 1.5,
+        "text": "A SYSTEM THAT ADAPTS",
+        "emphasis_words": [],
+        "emotion": "calm, confident opening",
+        "motion": "slide_top + fade_in (eyebrow), ring track fades in underneath as the diagram's static stage so nothing is ever blank",
+        "beats": [0.2]
+      },
+      {
+        "id": "state1",
+        "start": 1.5,
+        "end": 5.0,
+        "text": "NEED OPPORTUNITIES → SYSTEM CREATES DEMAND",
+        "emphasis_words": ["SYSTEM CREATES DEMAND"],
+        "emotion": "building, energizing",
+        "motion": "left node column: icon badge scale_punch, label slide_left fade_in, arrow fade_in, emphasis line slide_left + glow pulse; ring progress arc + traveling marker dot continue their single continuous sweep (started at 1.6s) through this beat",
+        "beats": [1.7, 2.3]
+      },
+      {
+        "id": "state2",
+        "start": 5.0,
+        "end": 8.5,
+        "text": "FULLY BOOKED → SYSTEM BUILDS REPUTATION",
+        "emphasis_words": ["SYSTEM BUILDS REPUTATION"],
+        "emotion": "building, energizing (mirrored, sustaining momentum)",
+        "motion": "right node column: icon badge scale_punch (mirrored), label slide_right fade_in, arrow fade_in, emphasis line slide_right + glow pulse; ring sweep keeps traveling toward full closure",
+        "beats": [5.1, 5.7]
+      },
+      {
+        "id": "closing",
+        "start": 8.5,
+        "end": 11.5,
+        "text": "GROWTH THAT NEVER RESETS.",
+        "emphasis_words": ["NEVER RESETS"],
+        "emotion": "resolved, confident, loop-complete",
+        "motion": "ring sweep lands at full closure ~8.7s with a glow pulse on the whole ring (loop-complete beat), caption fade_in + slide_bottom beneath the ring at ~9.0s, freeze-hold to 11.5s for clean cut back to host footage",
+        "beats": [8.7, 9.0]
+      }
+    ],
+
+    "diagram": {
+      "type": "hand-authored circular flywheel (SVG progress-ring + CSS pivot-rotated marker)",
+      "ring": {
+        "center": [960, 560],
+        "radius": 230,
+        "track": "dim static full circle, rgba(245,241,230,0.12) stroke, fades in with the eyebrow (~0.3-0.9s) so the diagram's stage is visible from the start",
+        "progress": "bright gold (var(--accent)/var(--accent-bright) gradient) stroke-dashoffset sweep driven by one proxy value v:0->1 tweened 1.6s->8.7s, standard -90deg-rotated top-start clockwise technique",
+        "marker": "small bright dot on a CSS-rotated pivot (transform-origin: center) driven by the SAME proxy v (rotation = v*360), so it is always exactly at the arc's leading tip — guarantees sync without hand-tuned angles",
+        "completion_pulse": "at v=1 (~8.7s) a box-shadow/glow pulse (yoyo, repeat 1) marks the loop closing"
+      },
+      "node1": {
+        "position": "left column, vertically centered with the ring (~x=380, y=560), clear of the ring's bounding box",
+        "icon": "84px accent-bg circle badge, dark glyph ↑↗ (growth arrow) — same chassis as sibling check-mark badges",
+        "label": "NEED OPPORTUNITIES (muted eyebrow-style caps)",
+        "emphasis": "SYSTEM CREATES DEMAND (accent-bright, bold, glow pulse on beat)"
+      },
+      "node2": {
+        "position": "right column, mirrored (~x=1540, y=560)",
+        "icon": "84px accent-bg circle badge, dark glyph ✓ (checkmark) — reuses the pricing-tiers-reveal check-mark pattern",
+        "label": "FULLY BOOKED (muted eyebrow-style caps)",
+        "emphasis": "SYSTEM BUILDS REPUTATION (accent-bright, bold, glow pulse on beat)"
+      },
+      "collision_check": "ring spans x:730-1190 / y:330-790; node1 column ~140-620; node2 column ~1300-1780; eyebrow at y~130 (above ring top 330); closing caption at y~900 (below ring bottom 790) — all clear with >=100px gaps"
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 11.5,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Panic-spiral downward cascade. Purple/black brand system reused verbatim from shared-lead-problem and speed-wins-the-job (same CSS custom properties, League Gothic + Montserrat, persistent radial bg-fill that never clears). Escalating warning-color creep down four staggered lines visualizes a literal downward spiral of bad decisions, landing on a bright payoff line.",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8", "#B5675C"],
+  "font": "League Gothic (display/headline) + Montserrat (labels/body)",
+  "beats": [0, 1.5, 2.5, 4.1, 5.6, 7.1, 8.5, 11.5],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": null,
+  "reuse_note": "Searched catalog for 'descending list stagger cascade text reveal', 'escalating warning sequence spiral downward text', and 'kinetic type headline punch in caption' (npx hyperframes catalog --json). Closest matches (text-stagger, stagger-cascade, kinetic-center-build, caption-kinetic-slam) are generic word/tile staggers with no notion of escalating brand-warning color or a descending vertical cascade tied to this exact purple/black system. Hand-authored per builder.md gap rule, following the proven bespoke pattern already used in the sibling projects shared-lead-problem and speed-wins-the-job (same file structure, same persistent bg-fill, same crossfade-not-hard-cut scene technique).",
+
+  "content": {
+    "scenes": [
+      {
+        "id": "scene-intro-hook",
+        "start": 0,
+        "end": 1.5,
+        "text": "THE PHONE GOES QUIET.",
+        "emphasis_words": [],
+        "emotion": "flat, ominous calm — the trigger moment, no urgency yet",
+        "motion": "slide_bottom + fade_in, muted color, holds then lifts/fades as PANIC line punches in",
+        "beats": [0.1, 1.5]
+      },
+      {
+        "id": "scene-intro-panic",
+        "start": 1.5,
+        "end": 2.9,
+        "text": "THEN THEY PANIC.",
+        "emphasis_words": ["PANIC"],
+        "emotion": "sudden urgency — brighter, warmer than the hook, first crack in composure",
+        "motion": "scale_punch (back.out) in the same centered spot the hook vacates, small shake + glow landing beat, then fades/lifts as the spiral scene crossfades in beneath it (overlap 2.5-2.9s so the frame is never empty)",
+        "beats": [1.5, 1.75]
+      },
+      {
+        "id": "scene-spiral",
+        "start": 2.5,
+        "end": 8.5,
+        "text": "Money into ads with no system / Prices get discounted / Bad-fit jobs get taken anyway / Panic creates more chaos",
+        "emphasis_words": ["no system", "discounted", "anyway", "more chaos"],
+        "emotion": "escalating loss of control — each line sits lower on screen and further down the color ramp from muted-purple toward warning-red than the last",
+        "motion": "4-line descending stagger: each line slide_bottom + fade_in + slight scale_down (1.05->1), staggered starts 2.6/4.1/5.6/7.1s, connected by a small down-arrow glyph that fades/drops in ahead of each new line; color ramps var(--muted) -> var(--accent) -> warm-mix -> var(--negative) across the four lines; the whole stack persists (never clears) through to the end of the piece so it can dim-not-vanish under the payoff line",
+        "beats": [2.6, 4.1, 5.6, 7.1]
+      },
+      {
+        "id": "scene-payoff",
+        "start": 8.5,
+        "end": 11.5,
+        "text": "PANIC IS NOT A MARKETING STRATEGY.",
+        "emphasis_words": ["NOT", "MARKETING STRATEGY"],
+        "emotion": "the payoff / release — bright, confident, contrasts against the muted-to-warning cascade above it",
+        "motion": "fade_in + scale_grow (0.92->1) with a glow pulse on landing, bright accent color (var(--accent-bright)); the spiral stack dims (opacity ~1 -> ~0.32, never to 0) rather than exiting, so nothing is ever fully blank; freeze-hold to end (11.5s) for a clean cut back to host footage",
+        "beats": [8.5, 9.0]
+      }
+    ]
+  }
+}

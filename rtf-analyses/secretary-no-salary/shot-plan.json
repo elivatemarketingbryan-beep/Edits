@@ -1,0 +1,41 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 9.5,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "confident, editorial, gold-on-near-black brand system shared with pricing-tiers-reveal and revenue-math-reveal — League Gothic display numerals/headlines, Montserrat labels, restrained slam/pop entrances, glow accents on the winning value",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384"],
+  "font": "League Gothic + Montserrat",
+  "beats": [0.15, 2.0, 3.3, 3.6, 4.3, 7.2],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {},
+
+  "content": {
+    "scenes": [
+      {
+        "id": "hook-sub",
+        "start": 0,
+        "end": 3.7,
+        "text": "A 24/7 SECRETARY. WITHOUT THE SALARY.",
+        "emphasis_words": ["24/7", "SECRETARY.", "WITHOUT", "SALARY."],
+        "emotion": "confident, punchy hook completing into a wry punchline",
+        "motion": "word-by-word slam/scale/slide entrance for the headline (0.15-0.6s), staggered word_reveal for the sub-line completing the thought (2.0-2.5s), hold, then the whole group lifts+fades out (3.1-3.5s) crossfading under the next scene",
+        "beats": [0.15, 2.0, 3.1]
+      },
+      {
+        "id": "cost-comparison",
+        "start": 3.3,
+        "end": 9.5,
+        "text": "TRADITIONAL RECEPTIONIST ~$3,000+/MO vs YOUR SYSTEM $0 EXTRA · 24/7 ALWAYS ON — ATTENTION IN. APPOINTMENTS OUT.",
+        "emphasis_words": ["$0 EXTRA", "24/7", "ATTENTION IN.", "APPOINTMENTS OUT."],
+        "emotion": "cost-relief reveal building to a mechanism-reinforcing closer",
+        "motion": "two cards slide in from opposite sides (left muted/crossed-out price via native line-through, right bright-gold glowing price), VS divider pops center, clock/24-7 badge pops on the winning card, hold ~3s, closing line fades up beneath the cards, freeze-hold to the final frame for a clean cut back to host footage",
+        "beats": [3.3 /*crossfade-in start*/, 3.5, 3.6, 4.1, 4.3, 7.2]
+      }
+    ]
+  }
+}

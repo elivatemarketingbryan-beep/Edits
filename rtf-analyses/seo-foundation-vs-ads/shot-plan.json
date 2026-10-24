@@ -1,0 +1,90 @@
+{
+  "category": "charts",
+  "duration_s": 7,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Same dark-gold editorial system as sibling pieces in this video (pricing-tiers-reveal / revenue-math-reveal / demand-reputation-flywheel): near-black radial bg, League Gothic display caps + tabular-nums numerals, Montserrat labels, gold accent glow. Restrained, confident, no gimmicks — full-frame alpha-overlay replacement for a talking-head shot, not a corner bug. Complementary framing (SEO + ADS as one system), never 'ads bad / SEO good'.",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384"],
+  "font": "League Gothic (numerals/headlines) + Montserrat (labels)",
+  "beats": [0.2, 0.9, 1.3, 4.9, 5.3, 5.7],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "Attempted `npx hyperframes@0.7.68 catalog --tag=chart --json` — the pinned CLI's registry fetch timed out on essentially every item in this environment (network-degraded), so live catalog ranking couldn't be evaluated directly. Consistent with this same video's own precedent (revenue-math-reveal, demand-reputation-flywheel both searched the catalog and hand-authored anyway to preserve exact brand match — the registry's data-chart/bar-chart-race blocks bake in their own generic styling and would break the established CSS custom-property system), hand-authored here too, reusing this project's OWN proven local primitives verbatim: :root palette tokens, #bg-fill radial reveal, .scene/.clip padding contract, stat-glow/card-glow radial halo, the tier-track + tier-track-fill vertical-bar-growth chassis from pricing-tiers-reveal (rotated to vertical columns), and the divide-tick sequential-light-up pattern from revenue-math-reveal (reused for SEO's compounding-tick growth) rather than reinventing an equivalent."
+  },
+
+  "content": {
+    "type": "bar",
+    "axes": false,
+    "headline": "SEO + ADS",
+    "labels": ["SEO", "ADS"],
+    "data": [
+      { "series": "seo", "growth": "gradual — linear tick-by-tick fill from 0 to full across ~4.0s (0.9s-4.9s), reads as compounding/steady", "end_value": 1.0 },
+      { "series": "ads", "growth": "near-instant — snaps 0 to full in 0.35s (0.9s-1.25s) with a flash + glow pulse + landing shake, reads as immediate", "end_value": 1.0 }
+    ],
+    "scenes": [
+      {
+        "id": "scene-setup",
+        "start": 0,
+        "end": 0.9,
+        "text": "SEO + ADS",
+        "emphasis_words": [],
+        "emotion": "calm open — establishes the two-column comparison stage, complementary not adversarial (a plus, not a vs)",
+        "motion": "bg-fill fade_in, eyebrow slide_top+fade_in, two empty vertical track outlines fade_in (dim, both visibly present from the start so neither reads as 'already ahead'), SEO/ADS column labels fade_in",
+        "beats": [0.2]
+      },
+      {
+        "id": "scene-ads-spike",
+        "start": 0.9,
+        "end": 1.6,
+        "text": "IMMEDIATE VISIBILITY",
+        "emphasis_words": ["IMMEDIATE"],
+        "emotion": "sudden, punchy — ads turns on instantly",
+        "motion": "ads-track-fill scaleY 0->1 in 0.35s ease power3.out (near-vertical snap, not eased-in like SEO) + glow-flash pulse on the ADS column + brief landing shake on the fill top edge; ADS caption slide_bottom+fade_in right after the snap lands",
+        "beats": [0.9, 1.25]
+      },
+      {
+        "id": "scene-seo-build",
+        "start": 0.9,
+        "end": 4.9,
+        "text": "COMPOUNDS OVER TIME",
+        "emphasis_words": ["COMPOUNDS"],
+        "emotion": "steady, building, durable — the slow-and-sure counterpoint running the whole time the ADS side already sits finished",
+        "motion": "seo-track-fill grows in 8 discrete tick-segments (reused divide-tick sequential scaleY pattern) staggered evenly across 0.9s-4.9s, each tick landing with a small back.out pop (never a smooth continuous ramp — the discreteness IS the 'built step by step, compounding' read); SEO caption slide_bottom+fade_in once the climb is clearly reading as gradual (~4.5s)",
+        "beats": [0.9, 4.9]
+      },
+      {
+        "id": "scene-unify",
+        "start": 4.9,
+        "end": 7.0,
+        "text": "BOTH PART OF ONE SYSTEM",
+        "emphasis_words": ["ONE SYSTEM"],
+        "emotion": "resolved, confident — the two speeds land on the same result, together; freeze-hold for a clean cut back to host",
+        "motion": "a horizontal glow-bridge bar wipes in beneath both full columns (bar-wipe pattern, reused from pricing-tiers-reveal), joining them visually; closing caption fade_in+slide_bottom directly beneath the bridge at ~5.5s; hold to 7.0s",
+        "beats": [5.3, 5.5]
+      }
+    ],
+
+    "columns": {
+      "layout": "two vertical track columns, mirrored, centered as a pair with a shared vertical center divider gap; SEO on the left, ADS on the right — same chassis on both sides so neither visually dominates",
+      "track": {
+        "width": 140,
+        "height": 620,
+        "position": "center ~y=540 (vertically centered in the stage, clear of top eyebrow and bottom closing caption)",
+        "seo_x_center": 660,
+        "ads_x_center": 1260,
+        "track_bg": "rgba(245,241,230,0.12), rounded, same visual weight as pricing-tiers-reveal .tier-track",
+        "fill": "linear-gradient(180deg, var(--accent-bright) 0%, var(--accent) 100%), grows bottom-to-top (transform-origin: bottom center)"
+      },
+      "labels": {
+        "seo": { "eyebrow": "SEO", "caption": "COMPOUNDS OVER TIME" },
+        "ads": { "eyebrow": "ADS", "caption": "IMMEDIATE VISIBILITY" }
+      },
+      "divider": "thin vertical rule + small '+' glyph at the shared centerline between the two columns, present from t=0 — establishes 'together' before either bar moves",
+      "collision_check": "columns span x: 590-730 (SEO) and 1190-1330 (ADS), both track height 620 centered at y=540 (y: 230-850); top eyebrow row at y~150 (clear above track top 230); bottom captions at y~910 (clear below track bottom 850); closing bridge+caption at y~950-1010, well inside the 1080 frame and the >=80px title-safe margin"
+    }
+  }
+}

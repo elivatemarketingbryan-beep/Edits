@@ -1,0 +1,56 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 6.0,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "abstract hand-drawn line-art icon accent, purple/black brand, minimal, confident, icon-is-the-message",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8"],
+  "font": "League Gothic + Montserrat",
+  "beats": [0.15, 0.55, 1.5, 1.9, 2.55, 4.0, 5.5],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {},
+
+  "content": {
+    "icon_scene": {
+      "description": "Single continuous full-duration scene (0-6s), nothing exits, no blank frames. A minimal rod/hand icon at top-center casts fishing lines down through a hand-drawn wavy water-line divider (y=560). Beat 1: one muted line drops straight down and ends bare below the water (reads as sparse/limited). Beat 2: three more lines fan out at staggered angles, each in bright accent, each landing a small abstract fish/catch glyph at its end with a ripple at the water-crossing point (reads as multiplying opportunity). Beat 3: short label fades in beneath the icon. Beat 4: freeze-hold to 6.0s for a clean cut.",
+      "coords": {
+        "rod_tip": [1060, 160],
+        "rod_grip": [860, 110],
+        "reel": [900, 122],
+        "water_y": 560,
+        "water_span": [440, 1480],
+        "line_0": { "water_x": 960, "end": [960, 660], "catch": false, "color": "muted" },
+        "line_1": { "water_x": 800, "end": [770, 690], "catch": true, "color": "accent-bright" },
+        "line_2": { "water_x": 1160, "end": [1190, 700], "catch": true, "color": "accent-bright" },
+        "line_3": { "water_x": 650, "end": [610, 720], "catch": true, "color": "accent-bright" }
+      },
+      "beats": [
+        { "t": 0.0, "event": "bg-fill fades in" },
+        { "t": 0.15, "event": "rod + reel pop in" },
+        { "t": 0.4, "event": "water-line draws on (wavy divider)" },
+        { "t": 0.55, "event": "line-0 draws down, muted, ends bare below water — reads sparse/limited" },
+        { "t": 1.5, "event": "line-1 draws (bright accent), ripple at water crossing, catch-1 lands" },
+        { "t": 1.85, "event": "line-2 draws (bright accent), ripple, catch-2 lands" },
+        { "t": 2.2, "event": "line-3 draws (bright accent), ripple, catch-3 lands" },
+        { "t": 4.0, "event": "label fades/slides in beneath icon" },
+        { "t": 5.5, "event": "freeze-hold to end (6.0s) for clean cut" }
+      ]
+    },
+    "scenes": [
+      {
+        "id": "label",
+        "start": 4.0,
+        "end": 6.0,
+        "text": "MORE LINES, MORE CATCHES.",
+        "emphasis_words": ["LINES", "CATCHES"],
+        "emotion": "confident, clear, payoff",
+        "motion": "fade_in + slide_bottom",
+        "beats": [4.0]
+      }
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+Put your own raw or cut video in this folder.
+Open the project in your coding-capable AI environment and read START_HERE.md.

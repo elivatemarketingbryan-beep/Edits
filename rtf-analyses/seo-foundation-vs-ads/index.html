@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>SEO Foundation vs Ads</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0a08;
+        --bg2: #17140f;
+        --accent: #d9a94a;
+        --accent-bright: #f4d998;
+        --text: #f5f1e6;
+        --muted: #9c9384;
+        --track-dim: rgba(245, 241, 230, 0.12);
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the open lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 80px 160px;
+        box-sizing: border-box;
+      }
+
+      .content-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 36px;
+        width: 100%;
+      }
+
+      /* ---------------- top kicker ---------------- */
+      .eyebrow {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        font-size: 28px;
+        color: var(--muted);
+        opacity: 0;
+      }
+
+      /* ---------------- two-column comparison ---------------- */
+      .columns-row {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 140px;
+      }
+
+      .column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        width: 360px;
+      }
+
+      .col-label {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        font-size: 64px;
+        line-height: 1;
+        opacity: 0;
+      }
+      #seo-label {
+        color: var(--accent);
+      }
+      #ads-label {
+        color: var(--accent-bright);
+      }
+
+      .track-wrap {
+        position: relative;
+        width: 130px;
+        height: 460px;
+      }
+
+      /* SEO — discrete step-lit ticks (compounding, built one step at a time) */
+      .seo-track {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 7px;
+        width: 130px;
+        height: 460px;
+      }
+      .seo-tick {
+        flex: 1 1 auto;
+        border-radius: 8px;
+        background: var(--track-dim);
+        transform-origin: center center;
+      }
+
+      /* ADS — single track that snaps full in one beat (immediate) */
+      .ads-track {
+        position: relative;
+        width: 130px;
+        height: 460px;
+        border-radius: 10px;
+        background: var(--track-dim);
+        overflow: hidden;
+      }
+      .ads-flash {
+        position: absolute;
+        inset: -40px;
+        border-radius: 30px;
+        background: var(--accent-bright);
+        filter: blur(30px);
+        opacity: 0;
+        pointer-events: none;
+      }
+      .ads-fill {
+        position: absolute;
+        inset: 0;
+        border-radius: 10px;
+        background: linear-gradient(180deg, var(--accent-bright) 0%, var(--accent) 100%);
+        transform-origin: bottom center;
+        transform: scaleY(0);
+      }
+
+      .col-caption {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        font-size: 30px;
+        line-height: 1.3;
+        color: var(--muted);
+        text-align: center;
+        max-width: 340px;
+        opacity: 0;
+      }
+      .col-caption .em {
+        color: var(--accent-bright);
+        font-weight: 700;
+      }
+
+      /* center divider — present from the start: "together", not "versus" */
+      .divider-line {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 2px;
+        height: 360px;
+        background: linear-gradient(180deg, transparent 0%, var(--muted) 18%, var(--muted) 82%, transparent 100%);
+        transform: translate(-50%, -50%) scaleY(0);
+        transform-origin: center center;
+      }
+      .divider-badge {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 2px solid var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+      }
+      .divider-badge-text {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        font-size: 30px;
+        line-height: 1;
+        color: var(--accent-bright);
+      }
+
+      /* ---------------- closing unify beat ---------------- */
+      .closing-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+        width: 100%;
+      }
+      .bridge {
+        width: 900px;
+        height: 6px;
+        border-radius: 4px;
+        background: linear-gradient(90deg, var(--accent) 0%, var(--accent-bright) 50%, var(--accent) 100%);
+        transform-origin: center center;
+        transform: scaleX(0);
+      }
+      .closing-caption {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        font-size: 44px;
+        color: var(--text);
+        text-align: center;
+        max-width: 1400px;
+        opacity: 0;
+      }
+      .closing-caption .em {
+        color: var(--accent-bright);
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-y26q" id="stage" data-composition-id="seo-foundation-vs-ads" data-start="0" data-duration="7" data-fps="30" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-02i2" id="bg-fill"></div>
+
+      <!-- ============ single continuous scene (0.0 - 7.0s) ============ -->
+      <div data-hf-id="hf-f5ph" id="scene-main" class="clip scene" data-start="0" data-duration="7" data-track-index="0">
+        <div data-hf-id="hf-hy2m" class="content-wrap" id="content-wrap">
+          <div data-hf-id="hf-58v1" class="eyebrow" id="eyebrow">GOOGLE VISIBILITY</div>
+
+          <div data-hf-id="hf-vtea" class="columns-row" id="columns-row">
+            <div data-hf-id="hf-8482" class="divider-line" id="divider-line"></div>
+            <div data-hf-id="hf-22qk" class="divider-badge" id="divider-badge">
+              <div data-hf-id="hf-gaz8" class="divider-badge-text">+</div>
+            </div>
+
+            <!-- SEO column -->
+            <div data-hf-id="hf-c89q" class="column" id="col-seo">
+              <div data-hf-id="hf-fffi" class="col-label" id="seo-label">SEO</div>
+              <div data-hf-id="hf-t0ae" class="track-wrap">
+                <div data-hf-id="hf-s13o" class="seo-track" id="seo-track">
+                  <div data-hf-id="hf-x1v1" class="seo-tick" id="seo-tick-0"></div>
+                  <div data-hf-id="hf-wa78" class="seo-tick" id="seo-tick-1"></div>
+                  <div data-hf-id="hf-4y33" class="seo-tick" id="seo-tick-2"></div>
+                  <div data-hf-id="hf-0zz2" class="seo-tick" id="seo-tick-3"></div>
+                  <div data-hf-id="hf-bvgp" class="seo-tick" id="seo-tick-4"></div>
+                  <div data-hf-id="hf-8w74" class="seo-tick" id="seo-tick-5"></div>
+                  <div data-hf-id="hf-jror" class="seo-tick" id="seo-tick-6"></div>
+                  <div data-hf-id="hf-ftkq" class="seo-tick" id="seo-tick-7"></div>
+                </div>
+              </div>
+              <div data-hf-id="hf-8hj0" class="col-caption" id="seo-caption"><span data-hf-id="hf-fmd7" class="em">COMPOUNDS</span> OVER TIME</div>
+            </div>
+
+            <!-- ADS column -->
+            <div data-hf-id="hf-1uv3" class="column" id="col-ads">
+              <div data-hf-id="hf-7why" class="col-label" id="ads-label">ADS</div>
+              <div data-hf-id="hf-05y2" class="track-wrap">
+                <div data-hf-id="hf-8qso" class="ads-flash" id="ads-flash"></div>
+                <div data-hf-id="hf-ftac" class="ads-track">
+                  <div data-hf-id="hf-zo6e" class="ads-fill" id="ads-fill"></div>
+                </div>
+              </div>
+              <div data-hf-id="hf-2kb0" class="col-caption" id="ads-caption"><span data-hf-id="hf-bl8s" class="em">IMMEDIATE</span> VISIBILITY</div>
+            </div>
+          </div>
+
+          <div data-hf-id="hf-eaqo" class="closing-group" id="closing-group">
+            <div data-hf-id="hf-vkty" class="bridge" id="bridge"></div>
+            <div data-hf-id="hf-mvt7" class="closing-caption" id="closing-caption">ONE SYSTEM. <span data-hf-id="hf-onfi" class="em">WORKING TOGETHER.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= open (0.0 - 0.9s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, 0.1);
+
+        tl.fromTo(
+          "#eyebrow",
+          { opacity: 0, y: -14 },
+          { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
+          0.2,
+        );
+
+        tl.fromTo(
+          "#divider-line",
+          { scaleY: 0 },
+          { scaleY: 1, duration: 0.35, ease: "power2.out" },
+          0.25,
+        );
+        tl.fromTo(
+          "#divider-badge",
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.2)" },
+          0.45,
+        );
+
+        tl.fromTo(
+          "#seo-label",
+          { opacity: 0, x: -24 },
+          { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" },
+          0.3,
+        );
+        tl.fromTo(
+          "#ads-label",
+          { opacity: 0, x: 24 },
+          { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" },
+          0.3,
+        );
+
+        // empty track chassis fades in for both columns together — neither
+        // side reads as already ahead before either bar moves
+        tl.fromTo(
+          "#seo-track",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.3, ease: "power1.out" },
+          0.45,
+        );
+        tl.fromTo(
+          ".ads-track",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.3, ease: "power1.out" },
+          0.45,
+        );
+
+        /* ================= ads — instant spike (0.9 - 1.6s) ================= */
+        tl.fromTo(
+          "#ads-fill",
+          { scaleY: 0 },
+          { scaleY: 1, duration: 0.35, ease: "power3.out" },
+          0.9,
+        );
+        tl.fromTo(
+          "#ads-flash",
+          { opacity: 0 },
+          { opacity: 0.55, duration: 0.16, yoyo: true, repeat: 1, ease: "power1.inOut" },
+          0.9,
+        );
+        // brief landing shake on the fill's top edge to sell the "snap"
+        tl.fromTo("#ads-fill", { x: 0 }, { x: -5, duration: 0.05, ease: "none", immediateRender: false }, 1.25)
+          .fromTo("#ads-fill", { x: -5 }, { x: 5, duration: 0.06, ease: "none", immediateRender: false }, 1.3)
+          .fromTo("#ads-fill", { x: 5 }, { x: 0, duration: 0.06, ease: "none", immediateRender: false }, 1.36);
+
+        tl.fromTo(
+          "#ads-caption",
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+          1.3,
+        );
+
+        /* ================= seo — compounding step-build (0.9 - 4.9s) ================= */
+        var seoStarts = [0.9, 1.4, 1.9, 2.4, 2.9, 3.4, 3.9, 4.4];
+        for (var i = 0; i < 8; i++) {
+          tl.fromTo(
+            "#seo-tick-" + i,
+            { backgroundColor: "rgba(245,241,230,0.12)", scaleY: 0.85 },
+            {
+              backgroundColor: "#d9a94a",
+              scaleY: 1,
+              duration: 0.3,
+              ease: "back.out(1.8)",
+              immediateRender: false,
+            },
+            seoStarts[i],
+          );
+        }
+        // the last two ticks land brightest, marking the climb closing in
+        tl.to("#seo-tick-6", { backgroundColor: "#e8c377", duration: 0.25, immediateRender: false }, 3.9 + 0.1);
+        tl.to("#seo-tick-7", { backgroundColor: "#f4d998", duration: 0.25, immediateRender: false }, 4.4 + 0.1);
+
+        tl.fromTo(
+          "#seo-caption",
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+          4.6,
+        );
+
+        /* ================= unify (4.9 - 7.0s) ================= */
+        tl.fromTo(
+          "#bridge",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.4, ease: "power2.inOut" },
+          5.0,
+        );
+        tl.fromTo(
+          "#closing-caption",
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+          5.5,
+        );
+        gsap.set("#closing-caption", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#closing-caption",
+          { textShadow: "0 0 0px rgba(244,217,152,0)" },
+          {
+            textShadow: "0 0 40px rgba(244,217,152,0.6)",
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          5.9,
+        );
+
+        // freeze-hold from ~6.2s to the end (7.0s) for a clean cut back to
+        // host footage — no further tweens scheduled.
+
+        window.__timelines["seo-foundation-vs-ads"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

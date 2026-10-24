@@ -1,0 +1,45 @@
+{
+  "category": "stat",
+  "duration_s": 11.5,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Dark premium results/analytics dashboard card. Same visual system as sibling pieces pricing-tiers-reveal and revenue-math-reveal: near-black bg, gold numerals on a KPI tile, restrained Montserrat labels, League Gothic display numerals. Motion is additive/accumulating (no scene hard-cuts) — header locks in, then two KPI tiles build in staggered, then a closing caption lands under both. Nothing ever replaces or hides prior content, so there is no blank-frame risk.",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384"],
+  "font": "League Gothic + Montserrat",
+  "beats": [1.5, 3.5, 8.0],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": "mk-progress-stat (pattern reference only, hand-authored dual-tile dashboard layout — no single-value block covers a two-metric side-by-side KPI dashboard)",
+  "customize": {
+    "note": "Reuse the proven tier-card / stat-card CSS chassis + count-up-via-proxy pattern from pricing-tiers-reveal and revenue-math-reveal (same palette tokens, same fromTo count-up idiom). Hand-author two KPI tiles instead of the single-card block since the catalog has no dual-tile dashboard block (checked via `hyperframes catalog --query \"dashboard KPI card\"` and `\"dual stat tiles side by side\"` — closest hits were single-card `mk-progress-stat` and `apple-money-count`)."
+  },
+
+  "content": {
+    "eyebrow": "ORGANIC SEO PAYOFF",
+    "sub_label": "ONCE MOMENTUM BUILDS",
+    "metrics": [
+      {
+        "id": "calls",
+        "icon": "phone",
+        "value_lead": 40,
+        "value_suffix": "-60",
+        "label": "CALLS PER MONTH",
+        "side": "left"
+      },
+      {
+        "id": "leads",
+        "icon": "lead-form",
+        "value_lead": 28,
+        "value_suffix": "-30",
+        "label": "ORGANIC WEBSITE LEADS / MONTH",
+        "side": "right"
+      }
+    ],
+    "closing_caption": "JUST FROM SEO MOMENTUM.",
+    "ring": false
+  },
+
+  "shot_brief": "An 11.5s dashboard-style results reveal for a mid-video payoff beat. A quiet eyebrow label locks in top-center ('ORGANIC SEO PAYOFF' / 'ONCE MOMENTUM BUILDS'), then two KPI tiles build in beneath it, staggered left-then-right, each with a line-icon, a gold count-up numeral formatted as a range ('40-60', '28-30'), and a label. Once both tiles have landed side by side as a clean two-tile dashboard, a connecting caption fades in beneath: 'JUST FROM SEO MOMENTUM.' The whole piece freeze-holds for a clean cut back to host footage. Motion is purely additive — nothing is ever removed or hidden after it appears — so the transparent alpha-overlay export never shows a blank frame at any point in the timeline. The single dominant motif is the staggered dual-KPI build; pattern-interrupt is the caption landing as a settle beat after the two-tile reveal."
+}

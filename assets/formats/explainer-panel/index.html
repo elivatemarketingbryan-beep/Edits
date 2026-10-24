@@ -1,0 +1,145 @@
+<!doctype html>
+<!-- Explainer panel (9:16): black canvas with a faint dot grid, the presenter in a rounded
+     panel at the bottom, animated explanations on top, and a caption line between them.
+     Emphasis beats cut to the presenter full frame. See STYLE-GUIDE.md#explainer-panel.
+     --face is the edited talking-head video (its sound is kept). --file is beats.json:
+     { "beats": [ { "at": 0, "kind": "title|steps|grid|counter|face", ... } ],
+       "captions": [ { "at": 0.2, "end": 1.4, "text": "post every day", "accent": "clients" } ] }
+       title:   { "text": "Posting daily, [[zero]] clients" }      ([[word]] = italic accent)
+       steps:   { "title": "3 steps", "items": ["Hook","Story","Offer"], "active": 0 }
+       grid:    { "title": "Do it for [[30]] days", "cells": 30, "fill": 30 }
+       counter: { "title": "New clients", "value": 12, "prefix": "+" }
+       face:    presenter full frame (no graphic)
+     A beat runs until the next one starts. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: __BG__; font-family: "__FONT_SANS__", "Inter", sans-serif; color: #fff; }
+      #dots { position: absolute; inset: 0; background-image: radial-gradient(rgba(255, 255, 255, .09) 1.6px, transparent 1.6px); background-size: 38px 38px; }
+      #glow { position: absolute; left: 10%; right: 10%; top: 12%; height: 45%; background: radial-gradient(ellipse at center, __ACCENT_DEEP__55, transparent 65%); }
+      /* One video: #cam is full frame; in panel mode it is scaled into the bottom panel and
+         clipped to it (transform + clip-path only, so it stays smooth and frame-exact). */
+      #frame { position: absolute; left: 5%; right: 5%; bottom: 4.5%; height: 27%; border-radius: 34px;
+        border: 1.5px solid rgba(255, 255, 255, .12); box-shadow: 0 30px 80px rgba(0, 0, 0, .6); background: #111; }
+      #cam { position: absolute; left: 0; top: 0; width: __W__px; height: __H__px; transform-origin: 0 0; }
+      #cam video, #cam img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .beat { position: absolute; left: 7%; right: 7%; top: 9%; height: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; }
+      .title { font-weight: 800; text-align: center; line-height: 1.12; }
+      .title em, .acc { font-family: "__FONT_SERIF__", Georgia, serif; font-style: italic; font-weight: 400; color: __ACCENT_LIGHT__; }
+      .title em { border-bottom: 3px solid __ACCENT__; padding: 0 .05em; }
+      .row { display: flex; align-items: center; width: 82%; border-radius: 14px; font-weight: 700; color: rgba(255, 255, 255, .45); }
+      .row b { width: 2.2em; color: rgba(255, 255, 255, .35); }
+      .row.on { color: #fff; background: rgba(255, 255, 255, .05); box-shadow: inset 5px 0 0 __ACCENT__; }
+      .row.on b { color: __ACCENT_LIGHT__; }
+      .grid { display: grid; grid-template-columns: repeat(10, 1fr); }
+      .cell { border-radius: 6px; background: rgba(255, 255, 255, .07); }
+      .num { font-weight: 800; font-variant-numeric: tabular-nums; }
+      #cap { position: absolute; left: 6%; right: 6%; text-align: center; font-weight: 800; text-shadow: 0 3px 12px rgba(0, 0, 0, .8); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <div id="dots"></div><div id="glow"></div>
+      <div id="frame"></div>
+      <div id="cam">__FACE__</div>
+      <div id="cap"></div>
+    </div>
+    <script>
+      const W = __W__, H = __H__, DUR = __DURATION__, DATA = __BEATS__;
+      const root = document.getElementById('root'), u = W / 1080;
+      const tl = gsap.timeline({ paused: true });
+      const sfx = [];
+      const accent = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])).replace(/\[\[(.+?)\]\]/g, '<em>$1</em>');
+      const beats = DATA.beats.map((b, i) => ({ ...b, end: i + 1 < DATA.beats.length ? DATA.beats[i + 1].at : DUR }));
+
+      // Panel placement: the frame scales to the panel width and shifts so the face (about
+      // 32% down the shot) sits in the middle of the panel; the clip shows only the panel.
+      const pTop = H * 0.685, pH = H * 0.27, sc = 0.9, faceY = H * 0.32;
+      const ty = pTop + pH / 2 - faceY * sc, r = 34 / sc;
+      const top = (pTop - ty) / sc, bottom = H - (pTop + pH - ty) / sc;
+      const PANEL = { x: W * 0.05, y: ty, scale: sc, clipPath: `inset(${top}px 0px ${bottom}px 0px round ${r}px)` };
+      const FULL = { x: 0, y: 0, scale: 1, clipPath: 'inset(0px 0px 0px 0px round 0px)' };
+      gsap.set('#cam', PANEL);
+      for (const b of beats) {
+        if (b.kind === 'face') {
+          // Emphasis: the presenter grows out of the panel to full frame, then back.
+          tl.to('#cam', { ...FULL, duration: 0.45, ease: 'power3.inOut' }, b.at);
+          tl.set('#frame', { opacity: 0 }, b.at);
+          tl.to('#cam', { ...PANEL, duration: 0.45, ease: 'power3.inOut' }, b.end - 0.2);
+          tl.set('#frame', { opacity: 1 }, b.end + 0.25);
+          sfx.push({ cue: 'whoosh-simple', at: b.at, note: 'cut to full frame', volume: 0.08 });
+          continue;
+        }
+        const el = document.createElement('div'); el.className = 'beat'; root.appendChild(el);
+        tl.set(el, { opacity: 1 }, b.at);
+        tl.to(el, { opacity: 0, duration: 0.15 }, b.end - 0.15);
+        const titleEl = (txt, size) => { const t = document.createElement('div'); t.className = 'title'; t.style.fontSize = size * u + 'px'; t.innerHTML = accent(txt); el.appendChild(t); return t; };
+        sfx.push({ cue: 'whoosh', at: b.at, note: b.kind + ' beat' });
+
+        if (b.kind === 'title') {
+          const t = titleEl(b.text, 92);
+          tl.from(t, { opacity: 0, y: 40 * u, duration: 0.5, ease: 'power3.out' }, b.at);
+          const em = t.querySelector('em'); if (em) tl.from(em, { opacity: 0, duration: 0.3 }, b.at + 0.35);
+        }
+        if (b.kind === 'steps') {
+          const t = titleEl(b.title || '', 60); t.style.marginBottom = 40 * u + 'px';
+          tl.from(t, { opacity: 0, y: 20 * u, duration: 0.4, ease: 'power3.out' }, b.at);
+          b.items.forEach((it, i) => {
+            const r = document.createElement('div'); r.className = 'row'; Object.assign(r.style, { fontSize: 52 * u + 'px', padding: `${22 * u}px ${30 * u}px`, marginTop: 14 * u + 'px' });
+            r.innerHTML = `<b>0${i + 1}</b>${it}`; el.appendChild(r);
+            const at = b.at + 0.25 + i * 0.12;
+            tl.from(r, { opacity: 0, x: -40 * u, duration: 0.4, ease: 'power3.out' }, at);
+            sfx.push({ cue: 'tick', at: +at.toFixed(2), note: 'step row' });
+          });
+          // Rows light up one after another across the beat (or stop at "active" if given).
+          const rows = [...el.querySelectorAll('.row')], last = b.active ?? rows.length - 1;
+          const t0 = b.at + 0.25 + rows.length * 0.12 + 0.15, step = (b.end - t0 - 0.3) / (last + 1);
+          rows.slice(0, last + 1).forEach((row, i) => {
+            const at = t0 + i * step;
+            if (i > 0) tl.set(rows[i - 1], { attr: { class: 'row' } }, at);
+            tl.set(row, { attr: { class: 'row on' } }, at);
+            sfx.push({ cue: 'click', at: +at.toFixed(2), note: 'step lights' });
+          });
+        }
+        if (b.kind === 'grid') {
+          const t = titleEl(b.title || '', 76); t.style.marginBottom = 44 * u + 'px';
+          tl.from(t, { opacity: 0, y: 20 * u, duration: 0.4, ease: 'power3.out' }, b.at);
+          const g = document.createElement('div'); g.className = 'grid'; Object.assign(g.style, { gap: 12 * u + 'px', width: '78%' }); el.appendChild(g);
+          const cells = [...Array(b.cells || 30)].map(() => { const c = document.createElement('div'); c.className = 'cell'; c.style.height = 58 * u + 'px'; g.appendChild(c); return c; });
+          const fill = Math.min(cells.length, b.fill ?? cells.length), span = Math.max(0.8, (b.end - b.at) * 0.6);
+          cells.slice(0, fill).forEach((c, i) => tl.to(c, { backgroundColor: '__ACCENT__', boxShadow: '0 0 14px __ACCENT__88', duration: 0.08 }, b.at + 0.4 + (span * i) / fill));
+          sfx.push({ cue: 'riser-short', at: +(b.at + 0.4 + span).toFixed(2), note: 'grid filled' });
+        }
+        if (b.kind === 'counter') {
+          const t = titleEl(b.title || '', 60);
+          const n = document.createElement('div'); n.className = 'num'; n.style.fontSize = 230 * u + 'px'; el.appendChild(n);
+          const st = { v: 0 }, pre = b.prefix || '', post = b.suffix || '';
+          n.textContent = pre + '0' + post;
+          tl.from(t, { opacity: 0, y: 20 * u, duration: 0.4, ease: 'power3.out' }, b.at);
+          tl.to(st, { v: b.value, duration: Math.min(1.6, (b.end - b.at) * 0.6), ease: 'power2.inOut', onUpdate: () => { n.textContent = pre + Math.round(st.v).toLocaleString('en-US') + post; } }, b.at + 0.3);
+          n.style.color = '__ACCENT_LIGHT__';
+          sfx.push({ cue: 'counting', at: +(b.at + 0.3).toFixed(2), note: 'counter' });
+        }
+      }
+
+      // Caption line between the graphic and the panel (or low on full-frame beats).
+      const cap = document.getElementById('cap');
+      cap.style.fontSize = 54 * u + 'px';
+      for (const c of DATA.captions || []) {
+        const full = beats.some((b) => b.kind === 'face' && c.at >= b.at && c.at < b.end);
+        tl.call(() => {}, [], c.at);
+        tl.set(cap, { top: (full ? H * 0.74 : H * 0.6) + 'px', innerHTML: accent(c.accent ? c.text.replace(c.accent, `[[${c.accent}]]`) : c.text).replace(/<em>/g, '<span class="acc">').replace(/<\/em>/g, '</span>'), opacity: 1 }, c.at);
+        tl.fromTo(cap, { y: 12 * u }, { y: 0, duration: 0.15, ease: 'power2.out' }, c.at);
+        tl.set(cap, { opacity: 0 }, c.end);
+      }
+      tl.set({}, {}, DUR);
+      window.__timelines = window.__timelines || {};
+      window.__timelines['main'] = tl;
+      window.__sfx = sfx;
+    </script>
+  </body>
+</html>

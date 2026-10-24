@@ -1,0 +1,60 @@
+{
+  "id": "R05",
+  "status": "observed",
+  "source": {
+    "url": "https://www.instagram.com/jackroberts___/reel/DeCfnUmjRw4/",
+    "creator": "jackroberts___",
+    "topic": "Product pricing hierarchy and prompt interaction",
+    "publishedDate": null,
+    "durationSeconds": null,
+    "dimensions": null,
+    "mediaBundled": false
+  },
+  "inspection": {
+    "date": "2026-10-07",
+    "method": "Direct browser screenshots of selected muted playback frames during the variety review.",
+    "continuousReview": false,
+    "audioReviewed": false,
+    "coverageNote": "Two approximate observation points; product claims and exact asset origin were not independently verified."
+  },
+  "observations": [
+    {
+      "atSeconds": 3.53,
+      "timingMeaning": "approximate_observation_point",
+      "layout": "graphic above presenter",
+      "visibleEvidence": "A white pricing/feature panel sits above the presenter on a saturated blue/cyan/purple stage. Large dark price typography dominates the smaller feature labels and button.",
+      "relationships": [
+        "hierarchy",
+        "product presentation"
+      ]
+    },
+    {
+      "atSeconds": 15.2,
+      "timingMeaning": "approximate_observation_point",
+      "layout": "graphic above presenter",
+      "visibleEvidence": "A compact black prompt-entry object has a blue/green iridescent rim, in front of a luminous white/cyan vertical bar and atmospheric blue-white glow.",
+      "relationships": [
+        "focused interaction",
+        "material emphasis"
+      ]
+    }
+  ],
+  "principles": [
+    "Visual hierarchy can center one source-backed product detail.",
+    "Lighting and material can distinguish a focused interaction from a pricing or feature display.",
+    "Different constructions can appear within the same split-screen format."
+  ],
+  "unknowns": [
+    "Complete speech",
+    "Exact scene boundaries",
+    "Current product pricing",
+    "Full duration and dimensions",
+    "Source-asset provenance",
+    "Animation implementation",
+    "Audio treatment",
+    "Audience performance"
+  ],
+  "notes": [
+    "See research/VARIETY_REVIEW.md for direct observations and interpretation."
+  ]
+}

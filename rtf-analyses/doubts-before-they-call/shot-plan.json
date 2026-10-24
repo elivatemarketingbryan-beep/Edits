@@ -1,0 +1,70 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 11.5,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "anxious-questions doubt spiral → confident resolve; purple/black brand system reused verbatim from shared-lead-problem and speed-wins-the-job (radial-gradient bg-fill, League Gothic display + Montserrat labels, back.out entrances, freeze-hold ending for clean cut back to host footage)",
+  "palette": {
+    "bg": "#0D0817",
+    "bg2": "#1B1130",
+    "accent": "#9B5CFF",
+    "accent_bright": "#C9A8FF",
+    "text": "#F3EFFA",
+    "muted": "#9088A8"
+  },
+  "font": "League Gothic (display/headline) + Montserrat (labels)",
+  "beats": [2.05, 3.35, 4.65, 6.05, 8.3],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "catalog_search_performed": [
+    "scattered questions stagger worried mind racing thoughts",
+    "caption kinetic type editorial emphasis glitch jitter",
+    "scattered overlapping text cluster different sizes rotation wobble"
+  ],
+  "catalog_search_result": "No registry block matches a scattered/overlapping anxious-question cluster motif (closest hits were generic stagger/grid components: text-stagger, stagger-lattice, per-word-rise — all rigid-grid or single-line, not scattered/rotated racing-thoughts). Hand-authoring per kinetic-type module fallback rule. Logged via `npx hyperframes feedback --search-miss`.",
+  "block": null,
+  "customize": {},
+
+  "content": {
+    "scenes": [
+      {
+        "id": "scene-hook",
+        "start": 0,
+        "end": 2.4,
+        "text": "WHAT'S GOING THROUGH THEIR MIND",
+        "emphasis_words": [],
+        "emotion": "quiet, muted, setting up unease",
+        "motion": "fade_in + slide_top (small), Montserrat eyebrow, muted color; crossfades out under scene-cluster (overlap 1.9-2.4s) so the frame is never empty of foreground content",
+        "beats": [0.25]
+      },
+      {
+        "id": "scene-cluster",
+        "start": 1.9,
+        "end": 9.0,
+        "text": "CAN I TRUST THEM? / WILL THEY SHOW UP? / WILL THEY DISAPPEAR WITH MY DEPOSIT? / AM I MAKING THE RIGHT CALL?",
+        "emphasis_words": ["TRUST", "SHOW UP", "DEPOSIT", "RIGHT CALL"],
+        "emotion": "anxious, racing, intrusive-thought spiral — jittery but each line still gets a clear readable beat",
+        "motion": "4 questions scattered around the frame corners (top-left, top-right, bottom-left, bottom-right), different sizes/weights/rotations; each pops in with a quick scale+rotation-wobble (back.out overshoot then settle), holds bright as the 'active' thought for ~1.2-1.4s, then recedes to a low dim opacity (never to zero) as the next one pops in — clutter accumulates rather than hard-cutting, avoiding any blank beat. Center of frame stays visually clear for the scene-close payoff line that lands on top. All four dim further together at 7.6s as the resolve line begins to enter (crossfade, overlap 7.8-9.0s with scene-close).",
+        "beats": [2.05, 3.35, 4.65, 6.05, 7.6],
+        "sub_beats": [
+          { "q": "CAN I TRUST THEM?", "enter": 2.05, "recede": 3.3, "pos": "top-left", "rotation_deg": -4 },
+          { "q": "WILL THEY SHOW UP?", "enter": 3.35, "recede": 4.6, "pos": "top-right", "rotation_deg": 3 },
+          { "q": "WILL THEY DISAPPEAR WITH MY DEPOSIT?", "enter": 4.65, "recede": 6.0, "pos": "bottom-left", "rotation_deg": -2 },
+          { "q": "AM I MAKING THE RIGHT CALL?", "enter": 6.05, "recede": 7.6, "pos": "bottom-right", "rotation_deg": 2.5 }
+        ]
+      },
+      {
+        "id": "scene-close",
+        "start": 7.8,
+        "end": 11.5,
+        "text": "TRUST IS WON BEFORE THE FIRST CALL.",
+        "emphasis_words": [],
+        "emotion": "calm, grounded, confident — deliberate contrast to the jittery doubts above",
+        "motion": "fade_in + slide_bottom (small), full accent-bright color, no jitter/wobble; entrance starts at 8.3s (tight on the doubts' 7.6-8.1s dim-out, no flat gap); a single soft one-shot glow settles in after landing (no yoyo/pulse — stays calm); freeze-hold from ~9.5s to 11.5s for a clean cut back to host footage",
+        "beats": [8.3, 8.9]
+      }
+    ]
+  }
+}

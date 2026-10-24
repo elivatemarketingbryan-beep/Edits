@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Icon · AI Chat Bubble</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* persistent full-bleed background — fades in once at the start and
+         never fades out again (no blank-frame gap mid-piece) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 160px;
+        gap: 56px;
+        box-sizing: border-box;
+      }
+
+      /* ---------------- hero icon ---------------- */
+      #icon-wrap {
+        position: relative;
+        width: 480px;
+        height: 416px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform-origin: 50% 50%;
+      }
+      #bubble-svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      #bubble-outline,
+      #bubble-tail {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        filter: drop-shadow(0 0 18px rgba(155, 92, 255, 0.35));
+      }
+      .typing-dot {
+        fill: var(--accent-bright);
+      }
+
+      #sparkle {
+        position: absolute;
+        top: -8px;
+        right: -4px;
+        width: 104px;
+        height: 104px;
+        transform-origin: 50% 50%;
+      }
+      #sparkle path {
+        fill: var(--accent-bright);
+      }
+
+      /* ---------------- payoff label ---------------- */
+      #label {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 82px;
+        line-height: 1;
+        color: var(--text);
+        text-align: center;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="icon-ai-chat-bubble"
+      data-start="0"
+      data-duration="5"
+      data-fps="30"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="bg-fill"></div>
+
+      <!-- ============ single hero scene (0.0 - 5.0s) ============ -->
+      <div id="scene-main" class="clip scene" data-start="0" data-duration="5" data-track-index="0">
+        <div id="icon-wrap">
+          <svg id="bubble-svg" viewBox="0 0 300 260" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <!-- rounded speech-bubble outline, drawn on via stroke-dashoffset -->
+            <rect id="bubble-outline" x="20" y="20" width="260" height="170" rx="46" ry="46" pathLength="1" />
+            <!-- small tail, drawn on right after the outline -->
+            <path id="bubble-tail" d="M75,188 L50,232 L108,188" pathLength="1" />
+            <!-- three typing-indicator dots, centered inside the bubble -->
+            <circle id="dot-0" class="typing-dot" cx="105" cy="104" r="14" />
+            <circle id="dot-1" class="typing-dot" cx="150" cy="104" r="14" />
+            <circle id="dot-2" class="typing-dot" cx="195" cy="104" r="14" />
+          </svg>
+
+          <!-- AI sparkle accent, pops in near the top-right of the bubble -->
+          <svg id="sparkle" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2 L14.2 9.4 L21.5 12 L14.2 14.6 L12 22 L9.8 14.6 L2.5 12 L9.8 9.4 Z" />
+          </svg>
+        </div>
+
+        <div id="label">Always Answering.</div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= persistent background (fades in once) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, 0.05);
+
+        /* ================= beat 1 · bubble draws on + scales in (0.0 - 1.0s) ================= */
+        tl.fromTo(
+          "#icon-wrap",
+          { opacity: 0, scale: 0.82 },
+          { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(1.5)" },
+          0.12,
+        );
+        tl.fromTo(
+          "#bubble-outline",
+          { strokeDashoffset: 1 },
+          { strokeDashoffset: 0, duration: 0.62, ease: "power2.inOut" },
+          0.15,
+        );
+        tl.fromTo(
+          "#bubble-tail",
+          { strokeDashoffset: 1 },
+          { strokeDashoffset: 0, duration: 0.22, ease: "power2.out" },
+          0.75,
+        );
+
+        /* ================= beat 2 · typing dots, staggered, two bounce loops (1.0 - 2.44s) ================= */
+        var dotEntrance = [1.0, 1.14, 1.28];
+        dotEntrance.forEach(function (t, i) {
+          tl.fromTo(
+            "#dot-" + i,
+            { opacity: 0, scale: 0 },
+            { opacity: 1, scale: 1, duration: 0.22, ease: "back.out(2.4)" },
+            t,
+          );
+        });
+
+        // real typing-indicator rhythm: each dot bounces up and settles, one
+        // after another, looped twice — then rests flat before the sparkle beat
+        var bounceCycles = [1.42, 1.82];
+        bounceCycles.forEach(function (cycleStart) {
+          [0, 1, 2].forEach(function (i) {
+            var t = cycleStart + i * 0.13;
+            tl.to("#dot-" + i, { y: -13, duration: 0.16, ease: "sine.out" }, t).to(
+              "#dot-" + i,
+              { y: 0, duration: 0.2, ease: "sine.in" },
+              t + 0.16,
+            );
+          });
+        });
+
+        /* ================= beat 3 · AI sparkle pop + glow flash (2.5 - 3.2s) ================= */
+        tl.fromTo(
+          "#sparkle",
+          { opacity: 0, scale: 0.2, rotation: -25 },
+          { opacity: 1, scale: 1, rotation: 0, duration: 0.32, ease: "back.out(2.6)" },
+          2.55,
+        );
+        tl.fromTo(
+          "#sparkle",
+          { filter: "drop-shadow(0 0 0px rgba(201,168,255,0))" },
+          {
+            filter: "drop-shadow(0 0 26px rgba(201,168,255,0.95))",
+            duration: 0.26,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          2.82,
+        );
+
+        /* ================= beat 4 · payoff label fades up (3.2 - 4.5s) ================= */
+        tl.fromTo("#label", { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 3.3);
+
+        // beat 5 (4.5 - 5.0s): freeze-hold — no further tweens scheduled, last
+        // state persists to the end for a clean cut.
+
+        window.__timelines["icon-ai-chat-bubble"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

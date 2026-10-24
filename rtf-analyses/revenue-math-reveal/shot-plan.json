@@ -1,0 +1,58 @@
+{
+  "category": "stat",
+  "duration_s": 10,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Premium contractor-marketing brand. Near-black stage, warm gold halo behind big League Gothic numerals, Montserrat supporting labels. Same visual system as sibling piece pricing-tiers-reveal — restrained, confident, no gimmicks. Full-frame replacement for a talking-head shot, not a corner bug.",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384"],
+  "font": "League Gothic (numerals/headlines) + Montserrat (labels)",
+  "beats": [0, 3.0, 4.3, 5.6, 6.6, 7.1],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "Hand-authored to brand-match pricing-tiers-reveal exactly (same CSS custom properties, same League Gothic tabular-nums numeral treatment, same card-glow radial halo, same proxy-tween count-up pattern). Catalog searched (`money counter with glow halo`, `number divide split into segments transition`) — apple-money-count is finance-flavored (green flash + money burst + SFX) and would break brand match; number-wheel/number-pop-in components are generic digit primitives without the halo+numeral CSS this brand needs. Reused the proven proxy-tween count-up + card-glow pattern from pricing-tiers-reveal instead of those blocks."
+  },
+
+  "content": {
+    "value": "41-42K",
+    "prefix": "$",
+    "suffix": "K",
+    "label": "PER MONTH",
+    "ring": false,
+    "scenes": [
+      {
+        "id": "scene-goal",
+        "start": 0,
+        "end": 3.0,
+        "text": "$500,000 / PER YEAR",
+        "emphasis_words": ["$500,000"],
+        "emotion": "hook — the big, slightly intimidating goal number",
+        "motion": "halo fade-in + scale_punch numeral + count_up($0→$500,000) + label_stagger(PER YEAR)",
+        "beats": [0.2, 1.4]
+      },
+      {
+        "id": "scene-divide",
+        "start": 3.0,
+        "end": 4.3,
+        "text": "÷ 12 MONTHS",
+        "emphasis_words": ["12", "MONTHS"],
+        "emotion": "clean transform beat — reframing the annual number into monthly terms",
+        "motion": "scale_punch(÷ symbol) + slide_bottom(12 MONTHS label) + stagger fill of a 12-segment tick bar (division made visible, not gimmicky)",
+        "beats": [3.0, 3.3]
+      },
+      {
+        "id": "scene-hero",
+        "start": 4.3,
+        "end": 10.0,
+        "text": "$41K–$42K / PER MONTH / THAT'S JUST A FEW STRONG PROJECTS A MONTH",
+        "emphasis_words": ["$41K–$42K"],
+        "emotion": "resolve — the real, achievable number; biggest/boldest moment, then reassurance, then freeze-hold for a clean cut back to host",
+        "motion": "halo fade-in (brighter/bigger than scene-goal) + scale_punch numeral + count_up($0→$41K) + slide-in range-extension(–$42K) + glow pulse on landing + label_stagger(PER MONTH) + fade_in(closing reassurance line) + hold",
+        "beats": [4.3, 4.5, 5.6, 5.9, 6.6, 7.1]
+      }
+    ]
+  }
+}

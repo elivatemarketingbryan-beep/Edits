@@ -1,0 +1,56 @@
+<!doctype html>
+<!-- Brand background: a custom moving background from your own colours instead of stock:
+     two brand tones blended through a soft feathered mask (circle, split or corner), a
+     texture on top (scan lines, grain or a light streak) and a slow drift. Use behind
+     titles, chapter cards, counters, cut-out presenters and shape transitions.
+     --text picks the look: "circle", "split" or "corner", plus optional "lines", "grain",
+     "streak" (e.g. "circle lines streak"). From the Patrik Key breakdown in REFERENCES.md. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: __BG__; }
+      .layer { position: absolute; inset: -10%; }
+      #tone { background: radial-gradient(ellipse 55% 60% at 50% 40%, __ACCENT__ 0%, __ACCENT_DEEP__ 45%, transparent 75%); }
+      #lines { inset: 0; opacity: .14; mix-blend-mode: overlay;
+        background: repeating-linear-gradient(0deg, rgba(255, 255, 255, .9) 0px, rgba(255, 255, 255, .9) 1px, transparent 1px, transparent 4px); }
+      #streak { inset: 0; mix-blend-mode: screen; opacity: .5;
+        background: linear-gradient(115deg, transparent 35%, __ACCENT_LIGHT__55 48%, #ffffff40 50%, __ACCENT_LIGHT__55 52%, transparent 65%); }
+      #grain { inset: 0; mix-blend-mode: overlay; opacity: .18; }
+      #vig { inset: 0; background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, .55) 100%); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <div class="layer" id="tone"></div><div class="layer" id="lines"></div><div class="layer" id="streak"></div>
+      <canvas class="layer" id="grain"></canvas><div class="layer" id="vig"></div>
+    </div>
+    <script>
+      const W = __W__, H = __H__, DUR = __DURATION__, LOOK = (__TEXT__ || 'circle lines').toLowerCase();
+      const tone = document.getElementById('tone');
+      // Mask shapes: a soft circle of light, a feathered diagonal split, or a corner glow.
+      if (LOOK.includes('split')) tone.style.background = 'linear-gradient(160deg, __ACCENT__ 0%, __ACCENT_DEEP__ 38%, __BG__ 62%)';
+      else if (LOOK.includes('corner')) tone.style.background = 'radial-gradient(ellipse 70% 70% at 0% 0%, __ACCENT__ 0%, __ACCENT_DEEP__ 40%, transparent 72%), radial-gradient(ellipse 50% 50% at 100% 100%, __ACCENT_DEEP__ 0%, transparent 70%)';
+      for (const [id, key] of [['lines', 'lines'], ['streak', 'streak'], ['grain', 'grain']]) if (!LOOK.includes(key)) document.getElementById(id).style.display = 'none';
+
+      // Grain redrawn from the frame number so every render is identical.
+      const g = document.getElementById('grain'), gs = 200;
+      g.width = gs; g.height = gs; g.style.width = W + 'px'; g.style.height = H + 'px';
+      const ctx = g.getContext('2d'), img = ctx.createImageData(gs, gs);
+      const grain = (f) => { let s = (f * 9301 + 49297) % 233280 || 1; for (let i = 0; i < img.data.length; i += 4) { s = (s * 16807) % 2147483647; img.data[i] = img.data[i + 1] = img.data[i + 2] = s & 255; img.data[i + 3] = 255; } ctx.putImageData(img, 0, 0); };
+
+      const st = { p: 0 };
+      const tl = gsap.timeline({ paused: true });
+      tl.to('#tone', { x: W * 0.04, y: -H * 0.03, scale: 1.08, duration: DUR, ease: 'sine.inOut' }, 0);
+      tl.fromTo('#streak', { xPercent: -40 }, { xPercent: 40, duration: DUR, ease: 'sine.inOut' }, 0);
+      tl.fromTo('#lines', { backgroundPositionY: '0px' }, { backgroundPositionY: H * 0.05 + 'px', duration: DUR, ease: 'none' }, 0);
+      if (LOOK.includes('grain')) tl.to(st, { p: 1, duration: DUR, ease: 'none', onUpdate: () => grain(Math.floor(st.p * DUR * 24)) }, 0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines['main'] = tl;
+      grain(0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 13.5,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "icon-first mini-story, same family as icon-fishing-lines / icon-calendar-warning: minimal hand-drawn line-art SVG icon beats (stroke-dashoffset draw-ons, generous 0.5-0.7s durations, power2.out easing) building through a failure beat into a contrast-and-growth payoff, closing on one short line. Purple/black brand, no literal illustration. A full farmer stick-figure (hat + head + torso + limbs + boots) replaces the earlier abstract sowing-arm-only icon; the figure performs two distinct actions -- throwing (bad soil) and digging (good soil).",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8", "#B5675C"],
+  "font": "League Gothic + Montserrat",
+  "beats": [0.0, 0.15, 0.7, 1.6, 5.0, 5.7, 6.1, 6.5, 7.35, 7.9, 8.35, 9.15, 9.9],
+  "export": "alpha-overlay",
+  "asset_needs": [],
+  "block": null,
+  "customize": {},
+  "shot_brief": "A full farmer stick-figure -- circle head, brimmed hat, stick torso, one free gesture arm, two legs ending in small boots -- stands and throws four seeds onto a jagged, cracked ground line -- visibly bad soil. Each seed arcs down and withers in place instead of sprouting: same effort, no growth. The whole bad-soil tableau (farmer included) then dims and slides aside as one unit while a second ground line draws in beside it -- smooth and gently curved, the deliberate visual opposite of the jagged crack line: good soil. The same farmer character re-stands on the good-soil side, this time holding a simple line-art spade. He digs: a quick jab-down-and-back motion kicks up 2-3 small dirt flecks that pop and fade, then he drops a single seed straight down into the dug spot (a drop, not a toss -- visually distinct from the throw in act 1). Instead of withering, it grows -- a line-art sprout (stem + two leaf strokes) draws upward via stroke-dashoffset, bright accent color, gentle glow pulse once fully grown. A closing line resolves the contrast: 'SAME EFFORT. DIFFERENT GROUND.' with GROUND in bright accent. Freeze-hold to the end for a clean cut.",
+  "content": {
+    "scenes": [
+      {
+        "id": "beat1-farmer-and-ground",
+        "start": 0.0,
+        "end": 1.3,
+        "text": "",
+        "emphasis_words": [],
+        "emotion": "deliberate, calm effort",
+        "motion": "bg-fill fades in once (0-0.3s); full farmer stick-figure (hat, head, torso, back arm, legs, boots) stands into place via plain opacity+scale (0-0.4s, power2.out) -- a different technique from the throwing arm's draw-on, so the two never double-motion; sowing/throwing arm stroke draws on via dashoffset only (0.15-0.65s, power2.out, no simultaneous opacity tween on the path), reading as the farmer's own arm since it originates at his shoulder; fist pops in with back.out scale+opacity (0.5-0.85s); jagged cracked-ground path draws on via dashoffset only (0.7-1.3s); 2-3 short crack/fissure marks draw on staggered right after (1.0-1.5s)",
+        "beats": [0.0, 0.15, 0.5, 0.7]
+      },
+      {
+        "id": "beat2-scatter-and-wither",
+        "start": 1.3,
+        "end": 4.15,
+        "text": "",
+        "emphasis_words": [],
+        "emotion": "hope, then quiet failure",
+        "motion": "4 seed-dots released from the farmer's hand, staggered 0.45s apart starting 1.6s; each seed is a two-step tween (rise-arc leg power2.out ~0.35s, then falling leg power2.in ~0.35s = 0.7s total flight) landing on the cracked ground; on landing each seed immediately withers in place -- scale to ~0.45, fill shifts accent-bright -> muted warning tone (#B5675C), opacity settles ~0.6, duration 0.5s power2.out -- no sprout, no growth, ever",
+        "beats": [1.6, 2.05, 2.5, 2.95]
+      },
+      {
+        "id": "beat3-hold",
+        "start": 4.15,
+        "end": 5.0,
+        "text": "",
+        "emphasis_words": [],
+        "emotion": "quiet, unresolved",
+        "motion": "no new motion -- the withered bad-soil tableau (farmer included) simply sits for a beat before the contrast transition, keeping only one visual idea on screen at a time",
+        "beats": []
+      },
+      {
+        "id": "beat4-contrast-transition",
+        "start": 5.0,
+        "end": 6.5,
+        "text": "",
+        "emphasis_words": [],
+        "emotion": "pivot, a second chance",
+        "motion": "the entire bad-soil group (farmer, cracked ground, withered seeds) dims to opacity 0.25 and slides left (x:-220px) as one unit via a single opacity+x tween on the wrapping <g> -- not a stroke-draw, so it never collides with the per-element dashoffset-only rule (5.0-5.6s, power2.out); a second ground line draws in beside it via dashoffset only -- smooth, unbroken, gently curved, the deliberate opposite of the jagged crack line (5.7-6.3s, power2.out); the same farmer character re-stands on the good-soil side via the same opacity+scale technique (6.1-6.5s, power2.out)",
+        "beats": [5.0, 5.7, 6.1]
+      },
+      {
+        "id": "beat5-good-soil-digging",
+        "start": 6.5,
+        "end": 9.45,
+        "text": "",
+        "emphasis_words": [],
+        "emotion": "hope, deliberate care, payoff",
+        "motion": "the farmer's arm draws on again (dashoffset 6.5-7.0s); hand + spade pop in together as one unit, back.out scale+opacity (6.85-7.2s, no separate entrance tween on the spade); a quick jab-down-and-back translate on the hand+spade group reads as digging (down 7.35-7.57s power2.in, back up 7.57-7.82s power2.out); 3 small dirt flecks kick up at the moment the spade hits bottom, each a quick pop-in-then-fade, staggered ~0.06s apart (7.5-7.9s) -- a technique distinct from the seeds' arc/wither; one seed is dropped straight down into the dug spot -- a single falling leg, not the two-step arc used for the throw in act 1 (7.9-8.3s, power2.in); instead of withering it grows -- a line-art sprout stem draws upward via dashoffset alone (8.35-8.85s, power2.out), two small leaf strokes draw on staggered right after (8.6-8.95s, 8.75-9.1s), then a gentle glow pulse (drop-shadow intensity yoyo, 9.15-9.75s) marks the hopeful payoff in clear contrast to the earlier withering",
+        "beats": [6.5, 6.85, 7.35, 7.9, 8.35, 8.6, 8.75, 9.15]
+      },
+      {
+        "id": "beat6-closing-line",
+        "start": 9.9,
+        "end": 11.5,
+        "text": "SAME EFFORT. DIFFERENT GROUND.",
+        "emphasis_words": ["GROUND"],
+        "emotion": "resolve, clarity",
+        "motion": "label fades + rises in (fromTo autoAlpha/y, 0.55s power2.out) at 9.9s; brief soft glow pulse on the whole label once settled (10.7-11.5s); freeze-hold from ~11.5s to 13.5s for a clean cut",
+        "beats": [9.9]
+      }
+    ]
+  }
+}

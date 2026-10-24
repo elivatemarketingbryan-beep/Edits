@@ -1,0 +1,131 @@
+<!doctype html>
+<!-- Search bar: a glass pill with two glows orbiting its edge on opposite sides, then a
+     query types in like a real person: uneven speed, a few typos backspaced and fixed.
+     Made with `node studio/anim.mjs new search-bar <9x16|16x9> <dir> --text "..."`;
+     the placeholder tokens are filled from that command and styles/brand.json. Seek-safe: every
+     frame is computed from timeline time, nothing runs on wall-clock timers. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: __BG__; }
+      #stage { position: absolute; inset: 0; }
+      .ambient { position: absolute; left: 50%; top: 50%; width: 140%; height: 70%; transform: translate(-50%, -50%);
+        background: radial-gradient(ellipse at center, __ACCENT_DEEP__55 0%, transparent 60%); }
+      #pill { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+        border-radius: 999px; background: rgba(18, 16, 26, .82); border: 1.5px solid rgba(255, 255, 255, .10);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 30px 80px rgba(0, 0, 0, .6);
+        display: flex; align-items: center; overflow: visible; }
+      #text { font-family: "Montserrat", sans-serif; font-weight: 500; color: #fff; white-space: pre-wrap; line-height: 1.25; }
+      #caret { display: inline-block; width: 3px; margin-left: 4px; background: __ACCENT_LIGHT__; border-radius: 2px; vertical-align: middle; }
+      .icon { flex: none; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .45); position: relative; }
+      .icon::after { content: ""; position: absolute; width: 40%; height: 3px; background: rgba(255, 255, 255, .45);
+        right: -30%; bottom: -12%; transform: rotate(45deg); border-radius: 2px; }
+      .orb { position: absolute; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; }
+      .orb.core { background: radial-gradient(circle, #fff 0%, __ACCENT_LIGHT__ 25%, __ACCENT__ 55%, transparent 72%); }
+      .orb.halo { background: radial-gradient(circle, __ACCENT__aa 0%, __ACCENT__33 40%, transparent 70%); filter: blur(10px); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <div id="stage">
+        <div class="ambient"></div>
+        <div id="pill"><div class="icon" id="icon"></div><div style="flex: 1; min-width: 0"><span id="text"></span><span id="caret"></span></div></div>
+        <div class="orb halo" id="h1"></div><div class="orb halo" id="h2"></div>
+        <div class="orb core" id="o1"></div><div class="orb core" id="o2"></div>
+      </div>
+    </div>
+    <script>
+      const W = __W__, H = __H__, TEXT = __TEXT__, DUR = __DURATION__;
+      const portrait = H > W;
+      // Landscape: one wide line. Portrait: phone-readable text that may wrap to two or
+      // three lines; the bar is sized to the finished query so it never grows mid-type.
+      const pillW = Math.round(W * (portrait ? 0.88 : 0.62));
+      const fontPx = portrait ? W * 0.046 : Math.min(W * 0.025, (pillW * 0.8) / (TEXT.length * 0.56));
+      const pad = fontPx * 1.2, iconS = fontPx * 0.95;
+      const pill = document.getElementById('pill');
+      const textEl = document.getElementById('text'), caret = document.getElementById('caret');
+      textEl.style.fontSize = fontPx + 'px';
+      caret.style.height = fontPx * 1.15 + 'px';
+      Object.assign(pill.style, { width: pillW + 'px', padding: `${pad * 0.8}px ${pad}px`, gap: pad * 0.6 + 'px' });
+      Object.assign(document.getElementById('icon').style, { width: iconS + 'px', height: iconS + 'px' });
+      textEl.textContent = TEXT;                           // measure the finished query once
+      const pillH = Math.max(fontPx * 2.6, pill.getBoundingClientRect().height);
+      textEl.textContent = '';
+      pill.style.height = pillH + 'px';
+      const R = Math.min(pillH / 2, fontPx * 1.6);         // corner radius: a stadium when short
+      pill.style.borderRadius = R + 'px';
+      const coreS = fontPx * 0.95, haloS = fontPx * 4;
+      for (const id of ['o1', 'o2']) Object.assign(document.getElementById(id).style, { width: coreS + 'px', height: coreS + 'px' });
+      for (const id of ['h1', 'h2']) Object.assign(document.getElementById(id).style, { width: haloS + 'px', height: haloS + 'px' });
+
+      // Point on the bar's outer edge (a rounded rectangle, radius R) at fraction u of the
+      // perimeter, walking clockwise from the top-left end of the top edge.
+      const cx = W / 2, cy = H / 2, sw = pillW - 2 * R, sh = pillH - 2 * R, arc = Math.PI / 2 * R;
+      const per = 2 * sw + 2 * sh + 4 * arc;
+      const corners = [[cx + sw / 2, cy - sh / 2], [cx + sw / 2, cy + sh / 2], [cx - sw / 2, cy + sh / 2], [cx - sw / 2, cy - sh / 2]];
+      function edge(u) {
+        let d = (((u % 1) + 1) % 1) * per;
+        const sides = [[sw, (k) => [cx - sw / 2 + k, cy - pillH / 2]], [sh, (k) => [cx + pillW / 2, cy - sh / 2 + k]],
+                       [sw, (k) => [cx + sw / 2 - k, cy + pillH / 2]], [sh, (k) => [cx - pillW / 2, cy + sh / 2 - k]]];
+        for (let i = 0; i < 4; i++) {
+          if (d < sides[i][0]) return sides[i][1](d);
+          d -= sides[i][0];
+          if (d < arc) { const a = -Math.PI / 2 + i * Math.PI / 2 + d / R; return [corners[i][0] + R * Math.cos(a), corners[i][1] + R * Math.sin(a)]; }
+          d -= arc;
+        }
+        return sides[0][1](0);
+      }
+      function place(id, [x, y], s) { const el = document.getElementById(id); el.style.left = x - s / 2 + 'px'; el.style.top = y - s / 2 + 'px'; }
+
+      // Typing script: seeded so every render is identical. Mixed speed, pauses after
+      // words, and a few wrong letters that are noticed, backspaced and retyped.
+      let seed = 7; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+      const near = 'qwertyuiopasdfghjklzxcvbnm';
+      const frames = []; let t = 0.9, cur = '';
+      const typoAt = new Set();
+      while (typoAt.size < Math.min(3, Math.floor(TEXT.length / 15))) {
+        const i = 4 + Math.floor(rand() * (TEXT.length - 8));
+        if (/[a-z]/i.test(TEXT[i])) typoAt.add(i);
+      }
+      for (let i = 0; i < TEXT.length; i++) {
+        if (typoAt.has(i)) {
+          const wrong = near[Math.floor(rand() * near.length)];
+          cur += wrong; t += 0.06 + rand() * 0.06; frames.push([t, cur]);
+          t += 0.28 + rand() * 0.25;                       // notices the mistake
+          cur = cur.slice(0, -1); frames.push([t, cur]);   // backspace
+          t += 0.12;
+        }
+        cur += TEXT[i];
+        t += TEXT[i] === ' ' ? 0.08 + rand() * 0.14 : 0.045 + rand() * 0.09;
+        if (/[,.?!]/.test(TEXT[i])) t += 0.25;
+        frames.push([t, cur]);
+      }
+      const typingEnd = t;
+
+      const state = { p: 0 };
+      function render(time) {
+        let txt = '';
+        for (const [ft, s] of frames) { if (ft <= time) txt = s; else break; }
+        textEl.textContent = txt;
+        const typing = time > 0.9 && time < typingEnd + 0.1;
+        // An empty --text makes the plain glowing pill (no caret, no typing).
+        caret.style.opacity = TEXT && (typing || Math.floor(time * 2.2) % 2 === 0) ? 1 : 0;
+        const u = time / 3.2;                              // one lap every 3.2s
+        place('o1', edge(u), coreS); place('h1', edge(u), haloS);
+        place('o2', edge(u + 0.5), coreS); place('h2', edge(u + 0.5), haloS);
+      }
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.from('#pill', { opacity: 0, scale: 0.92, duration: 0.6, ease: 'power3.out' }, 0);
+      tl.from('.orb', { opacity: 0, duration: 0.8, ease: 'power2.out' }, 0.2);
+      tl.to(state, { p: 1, duration: DUR, ease: 'none', onUpdate: () => render(state.p * DUR) }, 0);
+      window.__timelines['main'] = tl;
+      window.__typingEnd = typingEnd;                      // the keyboard sound should stop here
+      render(0);
+    </script>
+  </body>
+</html>

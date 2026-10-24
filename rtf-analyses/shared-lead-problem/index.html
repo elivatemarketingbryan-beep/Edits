@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Shared Lead Problem</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the hook lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export;
+         plays as a full replacement of the talking-head shot) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 40%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 160px;
+        box-sizing: border-box;
+      }
+
+      /* ---------------- scene 1 · hook / platform chips ---------------- */
+      .hook-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 48px;
+      }
+      .hook-eyebrow {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        font-size: 34px;
+        color: var(--muted);
+        opacity: 0;
+      }
+      .hook-chip-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        flex-wrap: wrap;
+      }
+      .hook-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 22px 46px;
+        border-radius: 999px;
+        border: 2px solid rgba(155, 92, 255, 0.32);
+        background: rgba(27, 17, 48, 0.65);
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        font-size: 52px;
+        color: var(--text);
+        opacity: 0;
+      }
+
+      /* ---------------- scene 2 · one lead becomes many ---------------- */
+      #connector-svg {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        z-index: 1;
+        pointer-events: none;
+      }
+      #connector-svg path {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 3;
+        stroke-linecap: round;
+        opacity: 0.55;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+
+      .homeowner-card {
+        position: absolute;
+        top: 78px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        opacity: 0;
+      }
+      .lead-icon-badge {
+        position: relative;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 35% 30%, var(--accent-bright), var(--accent) 70%);
+        box-shadow: 0 0 60px rgba(155, 92, 255, 0.45);
+        color: var(--bg);
+      }
+      .lead-icon-badge svg,
+      .lead-clone svg {
+        width: 56%;
+        height: 56%;
+      }
+      .homeowner-label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: 32px;
+        color: var(--text);
+        text-align: center;
+      }
+
+      .lead-clone {
+        position: absolute;
+        left: 932px;
+        top: 202px;
+        z-index: 3;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 35% 30%, var(--accent-bright), var(--accent) 70%);
+        box-shadow: 0 0 24px rgba(155, 92, 255, 0.55);
+        color: var(--bg);
+        opacity: 0;
+      }
+
+      .contractor-row {
+        position: absolute;
+        top: 700px;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 90px;
+      }
+      .contractor-slot {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        width: 300px;
+        opacity: 0;
+      }
+      .contractor-ring {
+        position: relative;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        border: 3px solid rgba(155, 92, 255, 0.45);
+        background: var(--bg2);
+      }
+      .contractor-ring-fill {
+        position: absolute;
+        inset: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+        opacity: 0;
+        transform: scale(0.4);
+      }
+      .contractor-label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-size: 27px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .split-caption {
+        position: absolute;
+        bottom: 96px;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        text-align: center;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 40px;
+        color: var(--text);
+        opacity: 0;
+      }
+      .split-caption .em {
+        color: var(--accent-bright);
+        font-weight: 800;
+      }
+
+      /* ---------------- scene 3 · the question flip (hero beat) ---------------- */
+      .flip-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1700px;
+        height: 1000px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(closest-side, var(--accent) 0%, transparent 70%);
+        opacity: 0;
+        pointer-events: none;
+        z-index: -1;
+      }
+      .flip-stack {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 56px;
+        width: 100%;
+      }
+      .question-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #old-question-wrap {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+      }
+      .old-question {
+        position: relative;
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 130px;
+        line-height: 1;
+        color: var(--muted);
+        white-space: nowrap;
+        opacity: 0;
+        filter: blur(14px);
+      }
+      .strike-line {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 10px;
+        margin-top: -5px;
+        border-radius: 6px;
+        background: var(--accent-bright);
+        transform-origin: left center;
+        transform: scaleX(0);
+      }
+      .new-question {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 208px;
+        line-height: 1;
+        color: var(--accent-bright);
+        white-space: nowrap;
+        opacity: 0;
+      }
+      .flip-caption {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 44px;
+        line-height: 1.3;
+        color: var(--muted);
+        max-width: 1500px;
+        text-align: center;
+        opacity: 0;
+      }
+      .flip-caption .em {
+        color: var(--accent-bright);
+        font-weight: 800;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="icon-phone" viewBox="0 0 24 24">
+          <path
+            d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"
+            fill="currentColor"
+          />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div id="stage" data-composition-id="shared-lead-problem" data-start="0" data-duration="14" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ scene 1 · hook / shared-lead platforms (0.0 - 2.2s) ============ -->
+      <div id="scene-hook" class="clip scene" data-start="0" data-duration="2.2" data-track-index="0">
+        <div class="hook-wrap" id="hook-wrap">
+          <div class="hook-eyebrow" id="hook-eyebrow">SHARED LEAD PLATFORMS</div>
+          <div class="hook-chip-row" id="hook-chip-row">
+            <div class="hook-chip" id="chip-0">HomeAdvisor</div>
+            <div class="hook-chip" id="chip-1">Angie's</div>
+            <div class="hook-chip" id="chip-2">Thumbtack</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ scene 2 · one lead becomes many (2.2 - 6.6s) ============ -->
+      <div id="scene-split" class="clip scene" data-start="2.2" data-duration="4.4" data-track-index="0">
+        <svg id="connector-svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+          <path id="line-0" pathLength="1" d="M960,230 L375,745" />
+          <path id="line-1" pathLength="1" d="M960,230 L765,745" />
+          <path id="line-2" pathLength="1" d="M960,230 L1155,745" />
+          <path id="line-3" pathLength="1" d="M960,230 L1545,745" />
+        </svg>
+
+        <div class="homeowner-card" id="homeowner-card">
+          <div class="lead-icon-badge"><svg viewBox="0 0 24 24"><use href="#icon-phone"></use></svg></div>
+          <div class="homeowner-label">1 Homeowner Lead</div>
+        </div>
+
+        <div class="lead-clone" id="clone-0"><svg viewBox="0 0 24 24"><use href="#icon-phone"></use></svg></div>
+        <div class="lead-clone" id="clone-1"><svg viewBox="0 0 24 24"><use href="#icon-phone"></use></svg></div>
+        <div class="lead-clone" id="clone-2"><svg viewBox="0 0 24 24"><use href="#icon-phone"></use></svg></div>
+        <div class="lead-clone" id="clone-3"><svg viewBox="0 0 24 24"><use href="#icon-phone"></use></svg></div>
+
+        <div class="contractor-row" id="contractor-row">
+          <div class="contractor-slot" id="slot-0">
+            <div class="contractor-ring"><div class="contractor-ring-fill" id="ring-fill-0"></div></div>
+            <div class="contractor-label">Contractor A</div>
+          </div>
+          <div class="contractor-slot" id="slot-1">
+            <div class="contractor-ring"><div class="contractor-ring-fill" id="ring-fill-1"></div></div>
+            <div class="contractor-label">Contractor B</div>
+          </div>
+          <div class="contractor-slot" id="slot-2">
+            <div class="contractor-ring"><div class="contractor-ring-fill" id="ring-fill-2"></div></div>
+            <div class="contractor-label">Contractor C</div>
+          </div>
+          <div class="contractor-slot" id="slot-3">
+            <div class="contractor-ring"><div class="contractor-ring-fill" id="ring-fill-3"></div></div>
+            <div class="contractor-label">Contractor D</div>
+          </div>
+        </div>
+
+        <div class="split-caption" id="split-caption">THE SAME LEAD. SOLD TO <span class="em">EVERYONE.</span></div>
+      </div>
+
+      <!-- ============ scene 3 · the question flip + closing line (6.6 - 14.0s) ============ -->
+      <div id="scene-flip" class="clip scene" data-start="6.6" data-duration="7.4" data-track-index="0">
+        <div class="flip-glow" id="flip-glow" data-layout-allow-overflow="true"></div>
+        <div class="flip-stack">
+          <div class="question-wrap">
+            <div id="old-question-wrap">
+              <div class="old-question" id="old-question">
+                WHO CAN I TRUST?
+                <div class="strike-line" id="strike-line"></div>
+              </div>
+            </div>
+            <div class="new-question" id="new-question">WHO'S THE CHEAPEST?</div>
+          </div>
+          <div class="flip-caption" id="flip-caption">
+            WHEN THEY ONLY SEE A NUMBER, THEY DON'T SEE YOUR <span class="em">VALUE.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        // static centering for the old-question stack — GSAP-tracked (xPercent/
+        // yPercent) rather than a baked CSS transform, so the later y-tween on
+        // this element composes with it instead of overwriting it
+        gsap.set("#old-question-wrap", { xPercent: -50, yPercent: -50 });
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= scene 1 · hook / platform chips (0.0 - 2.2s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, 0.1);
+
+        tl.fromTo(
+          "#hook-eyebrow",
+          { opacity: 0, y: -14 },
+          { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
+          0.2,
+        );
+
+        var chipStarts = [0.4, 0.55, 0.7];
+        chipStarts.forEach(function (t, i) {
+          tl.fromTo(
+            "#chip-" + i,
+            { scale: 0.6, opacity: 0, y: 20 },
+            { scale: 1, opacity: 1, y: 0, duration: 0.35, ease: "back.out(2.2)" },
+            t,
+          );
+        });
+
+        /* ================= scene 2 · one lead becomes many (2.2 - 6.6s) ================= */
+        tl.fromTo(
+          "#homeowner-card",
+          { scale: 0.6, opacity: 0, y: -20 },
+          { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: "back.out(2.2)" },
+          2.2,
+        );
+
+        var slotStarts = [2.8, 2.9, 3.0, 3.1];
+        slotStarts.forEach(function (t, i) {
+          tl.fromTo(
+            "#slot-" + i,
+            { opacity: 0, y: 24 },
+            { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+            t,
+          );
+        });
+
+        var lineStarts = [3.3, 3.42, 3.54, 3.66];
+        lineStarts.forEach(function (t, i) {
+          tl.fromTo(
+            "#line-" + i,
+            { strokeDashoffset: 1 },
+            { strokeDashoffset: 0, duration: 0.5, ease: "power2.inOut" },
+            t,
+          );
+        });
+
+        // clones travel from the homeowner card out along each connector to a
+        // contractor slot — the literal "one lead becomes many" visualization.
+        // Positions are expressed as transform deltas (x/y) from the clone's
+        // resting CSS position (932,202 — the homeowner icon's location), not
+        // left/top, so the seek-by-frame render engine interpolates smoothly.
+        var cloneDeltas = [
+          { x: 347 - 932, y: 717 - 202 },
+          { x: 737 - 932, y: 717 - 202 },
+          { x: 1127 - 932, y: 717 - 202 },
+          { x: 1517 - 932, y: 717 - 202 },
+        ];
+        var cloneStarts = [3.35, 3.47, 3.59, 3.71];
+        cloneStarts.forEach(function (t, i) {
+          tl.fromTo(
+            "#clone-" + i,
+            { opacity: 0, x: 0, y: 0 },
+            { opacity: 1, duration: 0.15, ease: "power1.out" },
+            t,
+          );
+          tl.to(
+            "#clone-" + i,
+            { x: cloneDeltas[i].x, y: cloneDeltas[i].y, duration: 0.55, ease: "power3.inOut" },
+            t,
+          );
+          tl.to(
+            "#clone-" + i,
+            { opacity: 0, duration: 0.18, ease: "power1.in" },
+            t + 0.55,
+          );
+          // receive-pulse on the landing contractor ring
+          tl.fromTo(
+            "#ring-fill-" + i,
+            { opacity: 0, scale: 0.4 },
+            { opacity: 0.85, scale: 1, duration: 0.2, ease: "power2.out" },
+            t + 0.52,
+          ).to(
+            "#ring-fill-" + i,
+            { opacity: 0, duration: 0.35, ease: "power1.in" },
+            t + 0.78,
+          );
+        });
+
+        tl.fromTo(
+          "#split-caption",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+          4.6,
+        );
+
+        /* ================= scene 3 · the question flip (6.6 - 14.0s, hero beat) ================= */
+        tl.fromTo("#flip-glow", { opacity: 0 }, { opacity: 0.5, duration: 0.6, ease: "power2.out" }, 6.6);
+
+        tl.fromTo(
+          "#old-question",
+          { opacity: 0, filter: "blur(14px)" },
+          { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out" },
+          6.6,
+        );
+
+        tl.fromTo(
+          "#strike-line",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.35, ease: "power2.out" },
+          7.35,
+        );
+
+        tl.to(
+          "#old-question-wrap",
+          { opacity: 0, y: -14, duration: 0.3, ease: "power2.in" },
+          7.9,
+        );
+
+        tl.fromTo(
+          "#new-question",
+          { scale: 0.5, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(2.4)" },
+          8.05,
+        );
+
+        gsap.set("#new-question", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#new-question",
+          { textShadow: "0 0 0px rgba(201,168,255,0)" },
+          {
+            textShadow: "0 0 70px rgba(201,168,255,0.9)",
+            duration: 0.35,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          8.6,
+        );
+
+        tl.fromTo(
+          "#flip-caption",
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+          10.6,
+        );
+
+        // freeze-hold from ~11.1s to the end (14.0s) for a clean cut back to
+        // host footage — no further tweens scheduled; the last state persists.
+
+        window.__timelines["shared-lead-problem"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

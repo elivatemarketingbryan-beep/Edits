@@ -1,0 +1,149 @@
+{
+  "$schema": "skills-lock v1",
+  "generatedBy": "npx hyperframes@0.7.68 skills",
+  "hyperframesVersion": "0.7.68",
+  "generatedAt": "2026-09-13T18:45:31.938Z",
+  "note": "Managed file. Never hand-edit. Regenerate via scripts/update-hyperframes-skills.sh after running the hyperframes CLI.",
+  "skills": {
+    "embedded-captions": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/embedded-captions",
+      "skillMdSha256": "019e382b13a3b9080010f115051683eeb347bfacbcee44116ba6e9cc1ac8c7e7"
+    },
+    "faceless-explainer": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/faceless-explainer",
+      "skillMdSha256": "a04604b6ad486848271ef7b6138f186543ff45ae83fd540db5f2a59b93c29527"
+    },
+    "figma": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/figma",
+      "skillMdSha256": "dea20962550679b9b085b747b1f290c9b2a5a6d5bd91a0a56f3ca40afe7b9f44"
+    },
+    "general-video": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/general-video",
+      "skillMdSha256": "7f4b71d94919107ee98d23927d6ed119be39c91efef690719183cb3db42df927"
+    },
+    "hyperframes": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/hyperframes",
+      "skillMdSha256": "2db1ae716b596774c111ff59473efe60a73c89347fd4fa6ce616adef7c42dedc"
+    },
+    "hyperframes-animation": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/hyperframes-animation",
+      "skillMdSha256": "69a9903796e65c66edbe9ec9621eca8953c7cc2a93a718687306891daf0463d4"
+    },
+    "hyperframes-audio": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/hyperframes-audio",
+      "skillMdSha256": "350732899d50648f5d287c43fea17b5cfd20643cf30521918c8828c3f919481a"
+    },
+    "hyperframes-cli": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/hyperframes-cli",
+      "skillMdSha256": "c2933721ae82a50ce7985d9d5666a168cf0a09f62f1a46d24c9e6fe0694cc1db"
+    },
+    "hyperframes-core": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/hyperframes-core",
+      "skillMdSha256": "4dda519b1ed10ccbefffd001bef6e72c091ccdcf57ff68aaf4563100130cf002"
+    },
+    "hyperframes-creative": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/hyperframes-creative",
+      "skillMdSha256": "488782fc741a43e002b5c6ac0da69cc2b12abaa42b6c0056df2aa53bea553c16"
+    },
+    "hyperframes-keyframes": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/hyperframes-keyframes",
+      "skillMdSha256": "924d038dc7eb20d16e05fa0e9837fa50bdcac0ce131aee80ebd8188cb67110d1"
+    },
+    "hyperframes-registry": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/hyperframes-registry",
+      "skillMdSha256": "0694f970b3613b9f0a63dc44c06404ea4f6506819f4afdbc9da3323b420cb9ae"
+    },
+    "media-use": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/media-use",
+      "skillMdSha256": "1301ea7cb53a0a44f5c7d62c34cba7e00b9e69b31bed57dc8d645417cea0da7c"
+    },
+    "motion-graphics": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/motion-graphics",
+      "skillMdSha256": "4cec384fc754a6ba10d77001f10566d2d3292f9767da6983abce77708c56fd84"
+    },
+    "music-to-video": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/music-to-video",
+      "skillMdSha256": "83edf3e9d0adaf2f2eca666c24f5cbd15545e3c27fccb8a0297dc9abdb4eb3d2"
+    },
+    "pr-to-video": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/pr-to-video",
+      "skillMdSha256": "d5661b3dc501a1439b56de6b90cc00c7ea295623feb902935e2e1230b111ed42"
+    },
+    "product-launch-video": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/product-launch-video",
+      "skillMdSha256": "c3f83d1e61d5362dc8c815ccc2f23bee00c6d7bff221654ca69618c64624d4d4"
+    },
+    "remotion-to-hyperframes": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/remotion-to-hyperframes",
+      "skillMdSha256": "cd901c3b87725a1efa0b30d69e21aeed8b3a8bd771a52618cb961cc4b7b17e99"
+    },
+    "slideshow": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/slideshow",
+      "skillMdSha256": "744852349744c5e0a5919e661df580624aeaf9d9a5d3bd6c7758698da115c91d"
+    },
+    "talking-head-recut": {
+      "source": "npx hyperframes@0.7.68 skills",
+      "package": "hyperframes",
+      "version": "0.7.68",
+      "path": ".claude/skills/talking-head-recut",
+      "skillMdSha256": "98f572c6d1195e25653dddf7ee855571125cc46e908619095149a0030af666ff"
+    }
+  }
+}

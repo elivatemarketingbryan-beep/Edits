@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Icon Funnel Stages</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the row starts landing,
+         then opaque near-black for the rest of the piece (alpha-overlay
+         export; fades in once, never out — no blank-frame gap) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 44%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      /* single continuous full-duration scene: everything accumulates,
+         nothing exits, so there is never a blank frame between beats */
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* ---------------- connectors (drawn behind icons) ---------------- */
+      #connector-svg {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        z-index: 1;
+        pointer-events: none;
+      }
+      #connector-svg .connector-line {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 4;
+        stroke-linecap: round;
+        opacity: 0.7;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+      #connector-svg .connector-arrow {
+        fill: var(--accent);
+        opacity: 0;
+      }
+
+      /* ---------------- icon columns ---------------- */
+      .icon-col {
+        position: absolute;
+        top: 385px;
+        width: 260px;
+        margin-left: -130px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 2;
+      }
+
+      .icon-badge-wrap {
+        position: relative;
+        width: 150px;
+        height: 150px;
+      }
+      .icon-glow-pulse {
+        position: absolute;
+        inset: -22px;
+        border-radius: 50%;
+        box-shadow: 0 0 0px rgba(201, 168, 255, 0);
+        pointer-events: none;
+      }
+      .icon-badge {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: var(--bg2);
+        border: 2.5px solid rgba(155, 92, 255, 0.5);
+        box-shadow: 0 0 40px rgba(155, 92, 255, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      .icon-badge svg {
+        width: 72px;
+        height: 72px;
+        stroke: var(--accent-bright);
+        fill: none;
+        stroke-width: 1.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .icon-label {
+        margin-top: 40px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 38px;
+        color: var(--text);
+        text-align: center;
+        opacity: 0;
+      }
+
+      /* ---------------- unifying system sweep ---------------- */
+      #sweep-glow {
+        position: absolute;
+        top: 300px;
+        left: -260px;
+        width: 340px;
+        height: 320px;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(201, 168, 255, 0.55) 0%, rgba(155, 92, 255, 0) 72%);
+        z-index: 3;
+        opacity: 0;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="icon-megaphone" viewBox="0 0 24 24">
+          <path d="M3 10.5v3a1 1 0 0 0 1 1h1l1 4h2l-1-4h1l9 4V5.5L8 9.5H4a1 1 0 0 0-1 1z" />
+          <path d="M18 8.2a4 4 0 0 1 0 7.6" />
+        </symbol>
+        <symbol id="icon-funnel" viewBox="0 0 24 24">
+          <path d="M4 4h16l-6.2 8.4v5.6l-3.6 2v-7.6z" />
+        </symbol>
+        <symbol id="icon-heart" viewBox="0 0 24 24">
+          <path d="M12 20s-7-4.35-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 5c-2.5 4.65-9.5 9-9.5 9z" />
+        </symbol>
+        <symbol id="icon-checkmark" viewBox="0 0 24 24">
+          <path d="M5 12.5l4.5 4.5L19 7" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div id="stage" data-composition-id="icon-funnel-stages" data-start="0" data-duration="7" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ single continuous scene (0 - 7.0s) ============ -->
+      <div id="scene-main" class="clip scene" data-start="0" data-duration="7" data-track-index="0">
+        <svg id="connector-svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+          <path class="connector-line" id="line-0" pathLength="1" d="M419,460 L661,460" />
+          <polygon class="connector-arrow" id="arrow-0" points="661,460 645,451 645,469" />
+
+          <path class="connector-line" id="line-1" pathLength="1" d="M839,460 L1081,460" />
+          <polygon class="connector-arrow" id="arrow-1" points="1081,460 1065,451 1065,469" />
+
+          <path class="connector-line" id="line-2" pathLength="1" d="M1259,460 L1501,460" />
+          <polygon class="connector-arrow" id="arrow-2" points="1501,460 1485,451 1485,469" />
+        </svg>
+
+        <div id="sweep-glow"></div>
+
+        <!-- icon 0 · attract -->
+        <div class="icon-col" id="col-0" style="left: 330px;">
+          <div class="icon-badge-wrap">
+            <div class="icon-glow-pulse" id="glow-0"></div>
+            <div class="icon-badge" id="badge-0"><svg><use href="#icon-megaphone"></use></svg></div>
+          </div>
+          <div class="icon-label" id="label-0">Attract</div>
+        </div>
+
+        <!-- icon 1 · capture -->
+        <div class="icon-col" id="col-1" style="left: 750px;">
+          <div class="icon-badge-wrap">
+            <div class="icon-glow-pulse" id="glow-1"></div>
+            <div class="icon-badge" id="badge-1"><svg><use href="#icon-funnel"></use></svg></div>
+          </div>
+          <div class="icon-label" id="label-1">Capture</div>
+        </div>
+
+        <!-- icon 2 · nurture -->
+        <div class="icon-col" id="col-2" style="left: 1170px;">
+          <div class="icon-badge-wrap">
+            <div class="icon-glow-pulse" id="glow-2"></div>
+            <div class="icon-badge" id="badge-2"><svg><use href="#icon-heart"></use></svg></div>
+          </div>
+          <div class="icon-label" id="label-2">Nurture</div>
+        </div>
+
+        <!-- icon 3 · close -->
+        <div class="icon-col" id="col-3" style="left: 1590px;">
+          <div class="icon-badge-wrap">
+            <div class="icon-glow-pulse" id="glow-3"></div>
+            <div class="icon-badge" id="badge-3"><svg><use href="#icon-checkmark"></use></svg></div>
+          </div>
+          <div class="icon-label" id="label-3">Close</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= beat 0 · scene fill (0 - 0.4s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0.05);
+
+        /* helper: one icon's land + glow-pulse + label */
+        function landIcon(i, landAt, labelAt) {
+          tl.fromTo(
+            "#badge-" + i,
+            { scale: 0.5, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2.4)" },
+            landAt,
+          );
+          tl.fromTo(
+            "#glow-" + i,
+            { boxShadow: "0 0 0px rgba(201,168,255,0)" },
+            {
+              boxShadow: "0 0 60px rgba(201,168,255,0.85)",
+              duration: 0.3,
+              yoyo: true,
+              repeat: 1,
+              ease: "sine.inOut",
+              immediateRender: false,
+            },
+            landAt + 0.05,
+          );
+          tl.fromTo(
+            "#label-" + i,
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+            labelAt,
+          );
+        }
+
+        /* helper: one connector line draw + arrowhead */
+        function drawLine(i, startAt) {
+          tl.fromTo(
+            "#line-" + i,
+            { strokeDashoffset: 1 },
+            { strokeDashoffset: 0, duration: 0.5, ease: "power2.inOut" },
+            startAt,
+          );
+          tl.fromTo(
+            "#arrow-" + i,
+            { opacity: 0 },
+            { opacity: 0.85, duration: 0.2, ease: "power1.out" },
+            startAt + 0.35,
+          );
+        }
+
+        /* ================= beat 2 · icons land left to right (1.0 - 4.8s) ================= */
+        landIcon(0, 1.0, 1.15);
+        drawLine(0, 1.5);
+
+        landIcon(1, 2.1, 2.25);
+        drawLine(1, 2.6);
+
+        landIcon(2, 3.2, 3.35);
+        drawLine(2, 3.7);
+
+        landIcon(3, 4.3, 4.45);
+
+        /* ================= beat 3 · unifying system sweep (5.5 - 6.3s) ================= */
+        gsap.set("#sweep-glow", { x: 0 });
+        tl.fromTo(
+          "#sweep-glow",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.15, ease: "power1.out", immediateRender: false },
+          5.5,
+        );
+        tl.to("#sweep-glow", { x: 2020, duration: 0.85, ease: "power1.inOut" }, 5.5);
+        tl.to("#sweep-glow", { opacity: 0, duration: 0.2, ease: "power1.in" }, 6.15);
+
+        // re-pulse each badge + connector as the sweep passes it (~0.2s apart,
+        // matching the sweep's left-to-right travel across the row)
+        [0, 1, 2, 3].forEach(function (i, idx) {
+          var t = 5.55 + idx * 0.2;
+          tl.fromTo(
+            "#glow-" + i,
+            { boxShadow: "0 0 0px rgba(201,168,255,0)" },
+            {
+              boxShadow: "0 0 50px rgba(201,168,255,0.7)",
+              duration: 0.25,
+              yoyo: true,
+              repeat: 1,
+              ease: "sine.inOut",
+              immediateRender: false,
+            },
+            t,
+          );
+        });
+        [0, 1, 2].forEach(function (i, idx) {
+          var t = 5.65 + idx * 0.2;
+          tl.fromTo(
+            "#line-" + i,
+            { opacity: 0.7 },
+            {
+              opacity: 1,
+              duration: 0.2,
+              yoyo: true,
+              repeat: 1,
+              ease: "sine.inOut",
+              immediateRender: false,
+            },
+            t,
+          );
+        });
+
+        // freeze-hold from ~6.5s to the end (7.0s) for a clean cut — no further
+        // tweens scheduled; the last state simply persists.
+
+        window.__timelines["icon-funnel-stages"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

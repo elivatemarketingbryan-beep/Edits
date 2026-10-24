@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Icon 24/7 Gear</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the hook lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export;
+         plays as a full replacement of the talking-head shot). Persistent —
+         fades in once, never fades out, so the frame is never blank. */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      /* single continuous full-duration scene: everything accumulates,
+         nothing exits, so there is never a blank frame between beats */
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 120px 160px;
+        gap: 56px;
+        box-sizing: border-box;
+      }
+
+      /* ---------------- gear hero ---------------- */
+      #gear-stage {
+        position: relative;
+        width: 460px;
+        height: 460px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+      }
+
+      #gear-icon {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        transform-origin: 50% 50%;
+        filter: drop-shadow(0 0 40px rgba(155, 92, 255, 0.35));
+      }
+      #gear-icon .gear-line {
+        fill: none;
+        stroke: var(--accent-bright);
+        stroke-width: 9;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      #gear-icon .gear-hub {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 9;
+      }
+      #gear-icon .gear-spoke {
+        stroke: var(--accent);
+        stroke-width: 6;
+        stroke-linecap: round;
+        opacity: 0.75;
+      }
+
+      /* ---------------- 24/7 badge — sibling of #gear-icon, so it never
+         inherits the gear's rotation transform and always stays upright ---------------- */
+      #badge {
+        position: absolute;
+        right: -8px;
+        bottom: 46px;
+        z-index: 2;
+        width: 148px;
+        height: 148px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at 35% 30%, var(--bg2) 0%, var(--bg) 78%);
+        border: 5px solid var(--accent-bright);
+        box-shadow: 0 0 30px rgba(155, 92, 255, 0.45);
+        opacity: 0;
+      }
+      #badge-text {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        letter-spacing: 0.01em;
+        font-size: 52px;
+        line-height: 1;
+        color: var(--text);
+        white-space: nowrap;
+      }
+
+      /* ---------------- label ---------------- */
+      #label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 44px;
+        color: var(--text);
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="icon-24-7-gear"
+      data-start="0"
+      data-duration="5.0"
+      data-fps="30"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="bg-fill"></div>
+
+      <!-- ============ single continuous scene (0 - 5.0s) ============ -->
+      <div id="scene-main" class="clip scene" data-start="0" data-duration="5.0" data-track-index="0">
+        <div id="gear-stage">
+          <svg id="gear-icon" viewBox="0 0 200 200">
+            <!-- gear body ring -->
+            <circle class="gear-line" cx="100" cy="100" r="62" />
+            <!-- 8 teeth, one every 45deg -->
+            <g class="gear-line">
+              <rect x="86" y="8" width="28" height="26" rx="6" transform="rotate(0 100 100)" />
+              <rect x="86" y="8" width="28" height="26" rx="6" transform="rotate(45 100 100)" />
+              <rect x="86" y="8" width="28" height="26" rx="6" transform="rotate(90 100 100)" />
+              <rect x="86" y="8" width="28" height="26" rx="6" transform="rotate(135 100 100)" />
+              <rect x="86" y="8" width="28" height="26" rx="6" transform="rotate(180 100 100)" />
+              <rect x="86" y="8" width="28" height="26" rx="6" transform="rotate(225 100 100)" />
+              <rect x="86" y="8" width="28" height="26" rx="6" transform="rotate(270 100 100)" />
+              <rect x="86" y="8" width="28" height="26" rx="6" transform="rotate(315 100 100)" />
+            </g>
+            <!-- 4 spokes -->
+            <g class="gear-spoke">
+              <line x1="100" y1="66" x2="100" y2="46" transform="rotate(0 100 100)" />
+              <line x1="100" y1="66" x2="100" y2="46" transform="rotate(90 100 100)" />
+              <line x1="100" y1="66" x2="100" y2="46" transform="rotate(180 100 100)" />
+              <line x1="100" y1="66" x2="100" y2="46" transform="rotate(270 100 100)" />
+            </g>
+            <!-- hub -->
+            <circle class="gear-hub" cx="100" cy="100" r="22" />
+          </svg>
+
+          <div id="badge">
+            <div id="badge-text">24/7</div>
+          </div>
+        </div>
+
+        <div id="label">RUNNING WHILE YOU SLEEP.</div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= beat 1 · gear in (0 - 1.0s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, 0.1);
+
+        tl.fromTo(
+          "#gear-stage",
+          { opacity: 0, scale: 0.55 },
+          { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.8)" },
+          0.15,
+        );
+        gsap.set("#gear-icon", { transformOrigin: "50% 50%" });
+
+        // Continuous gear spin — a single finite, deterministic GSAP rotation
+        // tween (no repeat:-1) that starts right after the entrance and runs
+        // uninterrupted to the exact end of data-duration (5.0s). This mirrors
+        // the safe pattern used by demand-reputation-flywheel's ring sweep: one
+        // long fromTo covering the whole remaining timeline rather than an
+        // infinite/looping tween, so the render always completes deterministically
+        // no matter where the timeline is seeked.
+        tl.fromTo(
+          "#gear-icon",
+          { rotation: 0 },
+          { rotation: 480, duration: 4.8, ease: "power1.inOut", immediateRender: false },
+          0.2,
+        );
+
+        /* ================= beat 2 · 24/7 badge pop (1.0 - 2.0s) ================= */
+        tl.fromTo(
+          "#badge",
+          { opacity: 0, scale: 0.4 },
+          { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.4)" },
+          1.0,
+        );
+        tl.fromTo(
+          "#badge",
+          { boxShadow: "0 0 30px rgba(155,92,255,0.45)" },
+          {
+            boxShadow: "0 0 70px rgba(201,168,255,0.9)",
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          1.3,
+        );
+
+        /* ================= beat 3 · label (2.0 - 4.0s) ================= */
+        tl.fromTo(
+          "#label",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+          2.0,
+        );
+
+        // beat 4 · hold (4.0 - 5.0s): label stays frozen for a clean cut; the
+        // gear's rotation tween above already runs all the way to t=5.0, so it
+        // keeps turning gently right through the final hold with nothing left
+        // scheduled past the composition's own data-duration.
+
+        window.__timelines["icon-24-7-gear"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

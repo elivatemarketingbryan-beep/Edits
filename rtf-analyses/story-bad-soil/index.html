@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Story Bad Soil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+        --warn: #b5675c;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the hook lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export);
+         fades in once and never fades out, so the frame is never blank */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 40%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      /* single continuous full-duration scene: everything accumulates,
+         nothing exits, so there is never a blank frame between beats */
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* ---------------- icon: sowing arm + seeds + cracked ground ---------------- */
+      #soil-svg {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      /* sowing arm: a single stroke-draw carries the whole reveal (dashoffset
+         only) -- base opacity is a static value in CSS, never animated
+         alongside the draw, so it never double-motions (snap + draw) */
+      #arm-path {
+        fill: none;
+        stroke: var(--accent-bright);
+        stroke-width: 9;
+        stroke-linecap: round;
+        opacity: 0.95;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+
+      /* fist: a filled shape, not a stroke-draw -- its entrance is a plain
+         scale+opacity tween, a different technique from the arm's draw-on */
+      #fist-group {
+        opacity: 0;
+        transform-box: fill-box;
+        transform-origin: 50% 50%;
+      }
+      #fist-ring {
+        fill: var(--bg2);
+        stroke: var(--accent-bright);
+        stroke-width: 6;
+      }
+
+      /* farmer stick-figure body: full character (hat, head, torso, back
+         arm, legs, boots) revealed as ONE static line-art unit via a plain
+         opacity+scale tween -- a different technique from the throwing
+         arm's dashoffset draw-on, so the two never double-motion the same
+         element. The throwing/digging arm-path itself starts exactly at
+         this group's local origin (its outer translate), so it reads as
+         the figure's own arm rather than a separate floating limb. */
+      .farmer-body {
+        opacity: 0;
+        transform-box: fill-box;
+        transform-origin: 50% 100%;
+      }
+      .farmer-body path,
+      .farmer-body line,
+      .farmer-body circle {
+        fill: none;
+        stroke: var(--accent-bright);
+        stroke-width: 7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* cracked / jagged ground line -- draw-on only, same technique as the arm */
+      #ground-line {
+        fill: none;
+        stroke: var(--muted);
+        stroke-width: 6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0.8;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+      .crack {
+        fill: none;
+        stroke: var(--warn);
+        stroke-width: 4;
+        stroke-linecap: round;
+        opacity: 0.6;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+
+      /* seeds: each is a plain filled circle positioned by its outer static
+         SVG transform; GSAP only ever animates the circle's own CSS
+         transform (x/y offsets in local space), never the outer group's
+         attribute transform, so the two never fight each other */
+      .seed {
+        fill: var(--accent-bright);
+        opacity: 0;
+        filter: drop-shadow(0 0 14px rgba(155, 92, 255, 0.5));
+        transform-box: fill-box;
+        transform-origin: 50% 50%;
+      }
+
+      /* ---------------- contrast beat: bad-soil group dims aside ---------------- */
+      /* wraps the whole first act (hand, cracked ground, withered seeds) so a
+         single opacity+x tween can dim and slide it aside as one unit --
+         a plain fade+slide exit, not a stroke-draw, so it never collides with
+         the no-double-motion rule (no element inside gets its own opacity or
+         dashoffset touched again by this tween) */
+      #bad-soil-group {
+        transform-box: fill-box;
+        transform-origin: 50% 50%;
+      }
+
+      /* ---------------- good-soil group: same hand, different ground ---------------- */
+      #arm-path-2 {
+        fill: none;
+        stroke: var(--accent-bright);
+        stroke-width: 9;
+        stroke-linecap: round;
+        opacity: 0.95;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+      #fist-group-2 {
+        opacity: 0;
+        transform-box: fill-box;
+        transform-origin: 50% 50%;
+      }
+      #fist-ring-2,
+      #fist-ring-2b {
+        fill: var(--bg2);
+        stroke: var(--accent-bright);
+        stroke-width: 6;
+      }
+      /* spade held in the hand: static line-art, appears together with the
+         fist's own scale+opacity pop (no separate entrance of its own, so
+         it never introduces a competing tween on the same element) --
+         a real handle + flat blade silhouette, not a bare arrow glyph */
+      #spade-shaft,
+      #spade-blade {
+        fill: none;
+        stroke: var(--accent-bright);
+        stroke-width: 5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      /* dirt flecks kicked up by the dig: small filled dots, quick
+         pop-and-fade, a distinct technique from the seeds' arc/wither */
+      .dirt-fleck {
+        fill: var(--accent-bright);
+        opacity: 0;
+        filter: drop-shadow(0 0 10px rgba(155, 92, 255, 0.5));
+        transform-box: fill-box;
+        transform-origin: 50% 50%;
+      }
+      /* smooth, unbroken, gently curved good-soil line -- deliberate contrast
+         to the jagged #ground-line above */
+      #ground-line-2 {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0.85;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+      .seed-good {
+        fill: var(--accent-bright);
+        opacity: 0;
+        filter: drop-shadow(0 0 14px rgba(155, 92, 255, 0.5));
+        transform-box: fill-box;
+        transform-origin: 50% 50%;
+      }
+      /* sprout: stem + two leaf strokes, draw-on only (dashoffset), static
+         base opacity -- same technique as the arm/ground draw-ons, never an
+         opacity tween layered on top */
+      #sprout-stem,
+      .sprout-leaf {
+        fill: none;
+        stroke: var(--accent-bright);
+        stroke-width: 5;
+        stroke-linecap: round;
+        opacity: 0.95;
+        filter: drop-shadow(0 0 12px rgba(201, 168, 255, 0.55));
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+
+      /* ---------------- label ---------------- */
+      .label-wrap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 96px;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 200px;
+      }
+      .label-text {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        font-size: 76px;
+        line-height: 1.15;
+        color: var(--text);
+        text-align: center;
+        opacity: 0;
+      }
+      .label-text .em {
+        color: var(--accent-bright);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="story-bad-soil"
+      data-start="0"
+      data-duration="13.5"
+      data-fps="30"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="bg-fill"></div>
+
+      <!-- ============ single continuous scene (0 - 13.5s) ============ -->
+      <div id="scene-main" class="clip scene" data-start="0" data-duration="13.5" data-track-index="0">
+        <svg id="soil-svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+          <!-- ============ act 1: bad soil (same effort, wrong ground) ============ -->
+          <g id="bad-soil-group">
+            <!-- full farmer stick-figure: hat, head, torso, back arm, legs,
+                 boots -- static line art, revealed as one unit. Its local
+                 origin (0,0) sits exactly at the throwing arm's start
+                 point (600,150), so the arm-path below reads as this
+                 figure's own throwing arm rather than a separate icon. -->
+            <g class="farmer-body" id="farmer-body-1" transform="translate(600,150)">
+              <circle cx="0" cy="-70" r="22" />
+              <path d="M-16,-96 Q0,-128 16,-96" />
+              <path d="M-30,-90 Q0,-98 30,-90" />
+              <line x1="0" y1="-48" x2="0" y2="70" />
+              <path d="M0,0 L-20,22 L-14,46" />
+              <line x1="0" y1="70" x2="-22" y2="130" />
+              <line x1="0" y1="70" x2="22" y2="130" />
+              <line x1="-22" y1="130" x2="-36" y2="136" />
+              <line x1="22" y1="130" x2="36" y2="136" />
+            </g>
+
+            <!-- sowing arm: abstract curved swoop ending at the release point -->
+            <path id="arm-path" pathLength="1" d="M600,150 Q700,140 760,190 T 840,255" />
+
+            <!-- fist / hand at the release point, positioned via static outer transform -->
+            <g id="fist-group" transform="translate(840,255)">
+              <circle id="fist-ring" cx="0" cy="0" r="24" />
+            </g>
+
+            <!-- cracked / jagged ground line -- sharp zigzag reads as broken earth,
+                 not smooth soil -->
+            <path
+              id="ground-line"
+              pathLength="1"
+              d="M480,620 L600,596 L654,636 L724,590 L800,632 L884,594 L958,638 L1036,600 L1112,636 L1192,596 L1272,632 L1344,602 L1420,620"
+            />
+
+            <!-- small fissures branching off the jagged line -->
+            <path id="crack-1" class="crack" pathLength="1" d="M724,590 L706,648" />
+            <path id="crack-2" class="crack" pathLength="1" d="M958,638 L980,690" />
+            <path id="crack-3" class="crack" pathLength="1" d="M1192,596 L1174,652" />
+
+            <!-- 4 seeds, each positioned at its own landing point on the ground line;
+                 GSAP animates only the inner circle's x/y (never this outer transform) -->
+            <g transform="translate(650,600)"><circle id="seed-1" class="seed" r="15" cx="0" cy="0" /></g>
+            <g transform="translate(870,596)"><circle id="seed-2" class="seed" r="15" cx="0" cy="0" /></g>
+            <g transform="translate(1080,602)"><circle id="seed-3" class="seed" r="15" cx="0" cy="0" /></g>
+            <g transform="translate(1290,598)"><circle id="seed-4" class="seed" r="15" cx="0" cy="0" /></g>
+          </g>
+
+          <!-- ============ act 2: good soil (same effort, right ground) ============ -->
+          <g id="good-soil-group">
+            <!-- same farmer character, repositioned to the good-soil side;
+                 same construction as farmer-body-1, local origin aligned to
+                 arm-path-2's start point (1250,150) -->
+            <g class="farmer-body" id="farmer-body-2" transform="translate(1250,150)">
+              <circle cx="0" cy="-70" r="22" />
+              <path d="M-16,-96 Q0,-128 16,-96" />
+              <path d="M-30,-90 Q0,-98 30,-90" />
+              <line x1="0" y1="-48" x2="0" y2="70" />
+              <path d="M0,0 L-20,22 L-14,46" />
+              <line x1="0" y1="70" x2="-22" y2="130" />
+              <line x1="0" y1="70" x2="22" y2="130" />
+              <line x1="-22" y1="130" x2="-36" y2="136" />
+              <line x1="22" y1="130" x2="36" y2="136" />
+            </g>
+
+            <!-- second arm: a steep downward plunge toward a grip point close
+                 to the body, NOT the throw's outward-and-sideways swoop --
+                 the first point of contrast between the two poses -->
+            <path id="arm-path-2" pathLength="1" d="M1250,150 Q1280,230 1300,300" />
+
+            <!-- hands + spade: two grip points along a long straight handle
+                 ending in a flat blade -- a real tool silhouette, appearing
+                 together with the group's own pop-in (no separate entrance
+                 tween of its own); the whole group later gets a jab-down-
+                 and-back translate that drives the blade into the ground -->
+            <g id="fist-group-2" transform="translate(1300,300)">
+              <circle id="fist-ring-2" cx="0" cy="0" r="18" />
+              <circle id="fist-ring-2b" cx="8" cy="54" r="14" />
+              <path id="spade-shaft" d="M12,64 L20,260" />
+              <path id="spade-blade" d="M2,256 L38,256 L38,284 Q38,294 28,294 L12,294 Q2,294 2,284 Z" />
+            </g>
+
+            <!-- smooth, unbroken, gently curved good-soil line -- deliberate
+                 contrast to the jagged crack line above -->
+            <path id="ground-line-2" pathLength="1" d="M1120,660 Q1440,580 1760,650" />
+
+            <!-- 3 small dirt flecks kicked up at the dig spot, now aligned
+                 under the spade blade -->
+            <g transform="translate(1300,618)"><circle id="fleck-1" class="dirt-fleck" r="5" cx="0" cy="0" /></g>
+            <g transform="translate(1320,612)"><circle id="fleck-2" class="dirt-fleck" r="6" cx="0" cy="0" /></g>
+            <g transform="translate(1340,620)"><circle id="fleck-3" class="dirt-fleck" r="5" cx="0" cy="0" /></g>
+
+            <!-- single seed dropped into the dug spot, directly beneath the spade blade -->
+            <g transform="translate(1320,626)"><circle id="seed-5" class="seed-good" r="15" cx="0" cy="0" /></g>
+
+            <!-- sprout: stem grows up from the landing point, two small leaf
+                 strokes branch off it -- draw-on only (dashoffset), no fill
+                 shapes, matching the piece's line-art language -->
+            <path id="sprout-stem" pathLength="1" d="M1320,626 Q1330,578 1322,536" />
+            <path id="sprout-leaf-1" class="sprout-leaf" pathLength="1" d="M1320,593 Q1280,583 1278,548" />
+            <path id="sprout-leaf-2" class="sprout-leaf" pathLength="1" d="M1320,568 Q1360,558 1365,526" />
+          </g>
+        </svg>
+
+        <div class="label-wrap" id="label-wrap">
+          <div class="label-text" id="label-text">
+            SAME EFFORT. DIFFERENT <span class="em">GROUND</span>.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= bg + arm draw-on (0.0 - 0.65s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0);
+
+        // farmer figure stands into place: plain opacity+scale, a different
+        // technique from the arm's dashoffset draw-on that follows it
+        tl.fromTo(
+          "#farmer-body-1",
+          { opacity: 0, scale: 0.85 },
+          { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" },
+          0,
+        );
+
+        // stroke-draw alone carries the reveal -- opacity stays static in CSS,
+        // never animated alongside strokeDashoffset (avoids snap-then-draw)
+        tl.fromTo(
+          "#arm-path",
+          { strokeDashoffset: 1 },
+          { strokeDashoffset: 0, duration: 0.5, ease: "power2.out" },
+          0.15,
+        );
+
+        // fist: a separate technique (scale+opacity), not competing with the draw-on
+        tl.fromTo(
+          "#fist-group",
+          { opacity: 0, scale: 0.5 },
+          { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.0)" },
+          0.5,
+        );
+
+        /* ================= cracked ground draws in (0.7 - 1.3s) ================= */
+        tl.fromTo(
+          "#ground-line",
+          { strokeDashoffset: 1 },
+          { strokeDashoffset: 0, duration: 0.6, ease: "power2.out" },
+          0.7,
+        );
+
+        var cracks = ["#crack-1", "#crack-2", "#crack-3"];
+        cracks.forEach(function (crack, i) {
+          tl.fromTo(
+            crack,
+            { strokeDashoffset: 1 },
+            { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" },
+            1.0 + i * 0.15,
+          );
+        });
+
+        /* ================= seeds scatter + wither (1.6 - 4.15s) =================
+           each seed: a two-step arc (rise leg, then falling leg) approximates a
+           gentle toss without needing a motion-path plugin; on landing it withers
+           in place -- no sprout, no growth, ever. Generous per-seed timing and a
+           0.45s stagger keeps the motion unhurried and readable. */
+        var seeds = [
+          { el: "#seed-1", start: 1.6, fromX: -190, fromY: -350 },
+          { el: "#seed-2", start: 2.05, fromX: -30, fromY: -335 },
+          { el: "#seed-3", start: 2.5, fromX: -240, fromY: -350 },
+          { el: "#seed-4", start: 2.95, fromX: -450, fromY: -335 },
+        ];
+
+        seeds.forEach(function (seed) {
+          var midX = seed.fromX * 0.45;
+          var midY = seed.fromY * 0.7 - 60; // apex: higher than a straight line, for an arc read
+
+          // leg 1: released from the fist, rising through the arc apex
+          tl.fromTo(
+            seed.el,
+            { x: seed.fromX, y: seed.fromY, opacity: 0 },
+            { x: midX, y: midY, opacity: 1, duration: 0.35, ease: "power2.out" },
+            seed.start,
+          );
+          // leg 2: falling from the apex down onto the cracked ground
+          tl.to(
+            seed.el,
+            { x: 0, y: 0, duration: 0.35, ease: "power2.in" },
+            seed.start + 0.35,
+          );
+          // wither on landing: shrink + dim to the muted warning tone -- reads
+          // clearly as "nothing grew" rather than a fade-to-nothing
+          tl.to(
+            seed.el,
+            {
+              scale: 0.45,
+              fill: "#b5675c",
+              opacity: 0.6,
+              duration: 0.5,
+              ease: "power2.out",
+            },
+            seed.start + 0.7,
+          );
+        });
+
+        /* ================= act 1 holds (4.15 - 5.0s) =================
+           the last withered seed settles at 4.15s; the bad-soil tableau sits
+           quietly for a beat before the contrast transition begins -- no
+           label here, so only one text beat is ever on screen at once. */
+
+        /* ================= contrast transition (5.0 - 6.3s) =================
+           the whole bad-soil act dims and slides aside as one unit -- a plain
+           opacity+x fade, not a stroke-draw, so it never fights the
+           dashoffset-only rule on the elements inside it */
+        tl.fromTo(
+          "#bad-soil-group",
+          { opacity: 1, x: 0 },
+          { opacity: 0.25, x: -220, duration: 0.6, ease: "power2.out" },
+          5.0,
+        );
+
+        // second, smooth ground line draws in beside it -- unbroken curve,
+        // deliberate contrast to the jagged crack line
+        tl.fromTo(
+          "#ground-line-2",
+          { strokeDashoffset: 1 },
+          { strokeDashoffset: 0, duration: 0.6, ease: "power2.out" },
+          5.7,
+        );
+
+        // farmer figure re-stands on the good-soil side -- same technique
+        // (opacity+scale), a fresh instance of the same character
+        tl.fromTo(
+          "#farmer-body-2",
+          { opacity: 0, scale: 0.85 },
+          { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" },
+          6.1,
+        );
+
+        /* ================= act 2: same farmer, right ground, now digging (6.5 - 9.45s) ================= */
+        tl.fromTo(
+          "#arm-path-2",
+          { strokeDashoffset: 1 },
+          { strokeDashoffset: 0, duration: 0.5, ease: "power2.out" },
+          6.5,
+        );
+        // hand + spade pop in together -- one technique, no separate
+        // entrance tween on the spade itself
+        tl.fromTo(
+          "#fist-group-2",
+          { opacity: 0, scale: 0.5 },
+          { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.0)" },
+          6.85,
+        );
+
+        /* ---- dig: a quick jab-down-and-back on the hand+spade group ----
+           relative offsets ("+=" / "-=") -- this element's SVG transform
+           attribute (translate(1300,300)) is decomposed into GSAP's
+           internal x/y cache the first time a transform property is
+           touched, so an ABSOLUTE y value here would replace 300 outright
+           and snap the hand to the top of the canvas; a relative nudge
+           keeps it anchored at its actual position */
+        tl.to("#fist-group-2", { y: "+=30", duration: 0.22, ease: "power2.in" }, 7.35);
+        tl.to("#fist-group-2", { y: "-=30", duration: 0.25, ease: "power2.out" }, 7.57);
+
+        // 3 dirt flecks kick up at the moment the spade hits bottom, each a
+        // quick pop-in then fade -- a distinct technique from the seeds'
+        // arc/wither, staggered ~0.06s apart
+        var flecks = ["#fleck-1", "#fleck-2", "#fleck-3"];
+        flecks.forEach(function (fleck, i) {
+          var t0 = 7.5 + i * 0.06;
+          tl.fromTo(fleck, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.12, ease: "power2.out" }, t0);
+          tl.to(fleck, { scale: 0.3, opacity: 0, duration: 0.28, ease: "power2.in" }, t0 + 0.12);
+        });
+
+        // the seed is dropped straight down into the dug spot -- a single
+        // falling leg (not the two-step arc used for the toss in act 1),
+        // visually distinct: a deliberate drop, not a throw
+        tl.fromTo(
+          "#seed-5",
+          { y: -260, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.4, ease: "power2.in" },
+          7.9,
+        );
+
+        // instead of withering, this one grows: sprout stem + leaves draw on
+        // via dashoffset alone (static opacity, no simultaneous fade),
+        // reaching a small-plant height in the bright accent tone
+        tl.fromTo(
+          "#sprout-stem",
+          { strokeDashoffset: 1 },
+          { strokeDashoffset: 0, duration: 0.5, ease: "power2.out" },
+          8.35,
+        );
+        tl.fromTo(
+          "#sprout-leaf-1",
+          { strokeDashoffset: 1 },
+          { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" },
+          8.6,
+        );
+        tl.fromTo(
+          "#sprout-leaf-2",
+          { strokeDashoffset: 1 },
+          { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" },
+          8.75,
+        );
+
+        // gentle glow pulse once the plant has fully grown -- the hopeful payoff
+        tl.fromTo(
+          "#sprout-stem, .sprout-leaf",
+          { filter: "drop-shadow(0 0 12px rgba(201,168,255,0.55))" },
+          {
+            filter: "drop-shadow(0 0 30px rgba(201,168,255,0.9))",
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          9.15,
+        );
+
+        /* ================= closing line (9.9 - 11.1s) ================= */
+        tl.fromTo(
+          "#label-text",
+          { autoAlpha: 0, y: 26 },
+          { autoAlpha: 1, y: 0, duration: 0.55, ease: "power2.out" },
+          9.9,
+        );
+
+        tl.fromTo(
+          "#label-text",
+          { textShadow: "0 0 0px rgba(201,168,255,0)" },
+          {
+            textShadow: "0 0 42px rgba(201,168,255,0.5)",
+            duration: 0.4,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          10.7,
+        );
+
+        // freeze-hold from ~11.5s to the end (13.5s) for a clean cut -- no
+        // further tweens scheduled; the last state persists.
+
+        window.__timelines["story-bad-soil"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

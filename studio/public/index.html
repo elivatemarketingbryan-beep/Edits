@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video Studio</title>
+<link rel="stylesheet" href="/studio.css">
+</head>
+<body>
+<header class="top">
+  <strong>Video Studio</strong>
+  <span class="muted" id="queue"></span>
+</header>
+
+<main class="wrap">
+  <section id="drop" class="drop" tabindex="0">
+    <div class="drop-icon">↑</div>
+    <p class="drop-title">Drop a video here</p>
+    <p class="muted">or <label class="link">choose a file<input id="file" type="file" accept="video/*" hidden></label>, or paste a link</p>
+    <form id="linkForm" class="row">
+      <input id="link" type="url" placeholder="https://www.youtube.com/watch?v=…">
+      <button>Add link</button>
+    </form>
+    <p id="dropMsg" class="msg"></p>
+    <div id="progress" class="bar" hidden><div></div></div>
+  </section>
+
+  <section id="job" hidden></section>
+
+  <section>
+    <h2>Your videos</h2>
+    <div id="jobs" class="jobs"></div>
+  </section>
+</main>
+
+<template id="claudeHint">
+  <div class="hint">
+    <p>Claude does this part. In Claude Code, opened on the Video Studio folder, say:</p>
+    <div class="row"><code>run my studio jobs</code><button class="copy" data-copy="run my studio jobs">Copy</button></div>
+  </div>
+</template>
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+let catalog = [], jobs = [], current = new URLSearchParams(location.search).get('job'), showAll = false;
+
+async function api(url, opts = {}) {
+  const res = await fetch(url, opts);
+  const body = await res.json();
+  if (!res.ok) throw new Error(body.error || 'Something went wrong');
+  return body;
+}
+const post = (url, data) => api(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data || {}) });
+const styleOf = (id) => catalog.find((s) => s.id === id) || { name: id, summary: '' };
+
+// ---------- drop / upload ----------
+const drop = $('#drop');
+['dragenter', 'dragover'].forEach((e) => drop.addEventListener(e, (ev) => { ev.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach((e) => drop.addEventListener(e, () => drop.classList.remove('over')));
+drop.addEventListener('drop', (ev) => { ev.preventDefault(); if (ev.dataTransfer.files[0]) upload(ev.dataTransfer.files[0]); });
+$('#file').addEventListener('change', (ev) => ev.target.files[0] && upload(ev.target.files[0]));
+
+function upload(file) {
+  const msg = $('#dropMsg'), bar = $('#progress');
+  msg.textContent = ''; msg.className = 'msg';
+  if (!/^video\//.test(file.type) && !/\.(mp4|mov|m4v|webm|mkv)$/i.test(file.name)) {
+    msg.textContent = 'That isn\'t a video file. Use mp4, mov, m4v, webm or mkv.'; msg.classList.add('err'); return;
+  }
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/api/upload');
+  xhr.setRequestHeader('x-filename', encodeURIComponent(file.name));
+  bar.hidden = false;
+  xhr.upload.onprogress = (e) => { bar.firstElementChild.style.width = (e.loaded / e.total * 100) + '%'; };
+  xhr.onload = () => {
+    bar.hidden = true;
+    const body = JSON.parse(xhr.responseText);
+    if (xhr.status !== 200) { msg.textContent = body.error; msg.classList.add('err'); return; }
+    msg.textContent = file.name + ' added';
+    open(body.id); refresh();
+  };
+  xhr.onerror = () => { bar.hidden = true; msg.textContent = 'Upload failed. Is the studio still running?'; msg.classList.add('err'); };
+  xhr.send(file);
+}
+
+$('#link').addEventListener('input', () => { $('#dropMsg').textContent = ''; });
+$('#linkForm').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const msg = $('#dropMsg'); msg.className = 'msg';
+  const url = $('#link').value.trim();
+  if (!url) { msg.textContent = 'Paste a link first'; msg.classList.add('err'); return; }
+  try { const job = await post('/api/link', { url }); $('#link').value = ''; open(job.id); refresh(); }
+  catch (e) { msg.textContent = e.message; msg.classList.add('err'); }
+});
+
+// ---------- current job ----------
+function open(id) { current = id; history.replaceState(null, '', '?job=' + id); showAll = false; render(); }
+
+function styleCard(s, opts = {}) {
+  const status = s.status === 'draft' ? '<span class="tag">New style</span>' : '';
+  return `<button class="card ${opts.best ? 'best' : ''}" data-style="${s.id}">
+    ${opts.preview ? `<video src="${opts.preview}" muted loop playsinline autoplay></video>` : ''}
+    ${opts.best ? '<span class="tag accent">Best fit</span>' : ''}${status}
+    <b>${esc(s.name)}</b><span class="muted">${esc(s.aspect !== '-' ? s.aspect + ' · ' : '')}${esc(opts.reason || s.summary)}</span>
+  </button>`;
+}
+
+function allStyles() {
+  const groups = [['short', 'Short form 9:16'], ['long', 'Long form 16:9'], ['tool', 'Tools']];
+  return groups.map(([g, label]) => `<p class="label">${label}</p><div class="grid">${catalog.filter((s) => s.group === g).map((s) => styleCard(s)).join('')}</div>`).join('');
+}
+
+function render() {
+  renderJobs();
+  const box = $('#job');
+  const job = jobs.find((j) => j.id === current);
+  if (!job) { box.hidden = true; return; }
+  box.hidden = false;
+  const head = `<div class="jobhead"><div><h2>${esc(job.title)}</h2><span class="pill ${job.waitingOn}">${esc(job.stageLabel)}</span>
+    ${job.style ? `<span class="muted"> · ${esc(styleOf(job.style).name)}</span>` : ''}</div></div>`;
+  let body = '';
+
+  if (job.stage === 'formats') {
+    body = `<p>Claude is watching the video and picking the best 3 formats for it.</p>${$('#claudeHint').innerHTML}
+      <p class="muted">Already know what you want? Pick it now and skip this step.</p>${allStyles()}`;
+  } else if (job.stage === 'pick') {
+    const top = (job.formats || []).slice(0, 3);
+    body = `<p class="label">Best 3 formats for this video</p>
+      <div class="grid three">${top.map((f, i) => styleCard(styleOf(f.style), { best: i === 0, reason: f.reason, preview: f.preview && `/files/${job.id}/${f.preview}` })).join('')}</div>
+      <p><button id="toggleAll" class="ghost">${showAll ? 'Hide other styles' : 'See all styles'}</button></p>${showAll ? allStyles() : ''}`;
+  } else if (['edit', 'revise', 'final'].includes(job.stage)) {
+    body = `<p>${job.stage === 'edit' ? 'Claude is editing this in ' + esc(styleOf(job.style).name) + '. You\'ll get a preview to review first.'
+      : job.stage === 'revise' ? 'Claude is working through your notes.' : 'Claude is rendering the final version.'}</p>${$('#claudeHint').innerHTML}`;
+  } else if (job.stage === 'review') {
+    body = `<p>The preview is ready. Watch it, leave notes at the exact second, then approve.</p>
+      <p><a class="button primary" href="/review?job=${job.id}">Open review</a></p>`;
+  } else if (job.stage === 'done') {
+    const outs = job.outputs || [];
+    body = `${job.final ? `<video class="final" src="/files/${job.id}/${job.final}" controls></video>` : ''}
+      <p class="label">Files</p><ul class="files">${[job.final, ...outs].filter(Boolean).map((f) => `<li><a href="/files/${job.id}/${f}" target="_blank">${esc(f)}</a></li>`).join('') || '<li class="muted">No files listed</li>'}</ul>
+      <p class="muted">Everything is in the jobs/${esc(job.id)} folder.</p>`;
+  }
+  box.innerHTML = head + body;
+}
+
+function renderJobs() {
+  const waiting = jobs.filter((j) => j.waitingOn === 'claude').length;
+  $('#queue').textContent = waiting ? `${waiting} waiting on Claude` : '';
+  $('#jobs').innerHTML = jobs.length ? jobs.map((j) => `<button class="jobrow ${j.id === current ? 'on' : ''}" data-job="${j.id}">
+      <span>${esc(j.title)}</span><span class="pill ${j.waitingOn}">${esc(j.stageLabel)}</span></button>`).join('')
+    : '<p class="muted">Drop your first video above.</p>';
+}
+
+document.addEventListener('click', async (ev) => {
+  const t = ev.target.closest('button, a');
+  if (!t) return;
+  if (t.dataset.job) open(t.dataset.job);
+  else if (t.id === 'toggleAll') { showAll = !showAll; render(); }
+  else if (t.dataset.copy) { navigator.clipboard?.writeText(t.dataset.copy); t.textContent = 'Copied'; setTimeout(() => (t.textContent = 'Copy'), 1500); }
+  else if (t.dataset.style && current) {
+    try { await post(`/api/jobs/${current}/choose`, { style: t.dataset.style }); await refresh(); }
+    catch (e) { alert(e.message); }
+  }
+});
+
+async function refresh() {
+  jobs = await api('/api/jobs');
+  // Don't rebuild while a preview video is playing in the picker.
+  const playing = [...document.querySelectorAll('#job video')].some((v) => !v.paused && v.controls);
+  if (!playing) render(); else renderJobs();
+}
+
+(async () => {
+  catalog = (await api('/api/catalog')).styles;
+  await refresh();
+  let last = '';
+  setInterval(async () => {
+    const next = await api('/api/jobs').catch(() => null);
+    if (!next) return;
+    const sig = JSON.stringify(next.map((j) => [j.id, j.stage, j.updated]));
+    if (sig !== last) { last = sig; jobs = next; render(); }
+  }, 3000);
+})();
+</script>
+</body>
+</html>

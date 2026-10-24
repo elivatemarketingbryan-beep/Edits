@@ -1,0 +1,808 @@
+{
+  "_readme": "The one list of edit styles and tools. The launcher reads it, and Claude reads it to rank formats and to know how to build each one. status: ready = an engine here already makes this; draft = recipe written, first real edit will shape it. editor = root pipeline (renders with HyperFrames; no Remotion) (.claude/skills rough-cut, graphics-plan, captions, export; HyperFrames), legacy = engines/legacy-editor skills, content-os = engines/content-os. altEngine: the optional Remotion engine for this style (see styles/engines.json); statusWithRemotion: its status when Remotion is on.",
+  "styles": [
+    {
+      "id": "business-reel",
+      "name": "Business reel",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Full screen, split screen and full-screen animation, switching on every cut.",
+      "bestFor": [
+        "business or marketing advice",
+        "several distinct points",
+        "numbers or frameworks worth showing"
+      ],
+      "recipe": [
+        "rough-cut: tight, remove all dead air",
+        "graphics-plan: alternate layout per cut (full face / split with graphic / full-screen animation)",
+        "captions: two-line, brand colours",
+        "export 1080x1920"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#business-reel",
+      "needsMatte": false
+    },
+    {
+      "id": "personal-reel",
+      "name": "Personal reel",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "ready",
+      "summary": "Fast cuts, your own B-roll, one-word captions.",
+      "bestFor": [
+        "story or opinion",
+        "energetic delivery",
+        "little that needs diagramming"
+      ],
+      "recipe": [
+        "rough-cut: fast pacing",
+        "B-roll from the job's broll/ folder or the B-roll library",
+        "captions: one word at a time",
+        "export 1080x1920"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#personal-reel",
+      "needsMatte": false
+    },
+    {
+      "id": "explainer-panel",
+      "name": "Explainer panel",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "You in a panel at the bottom, animated explanations on top.",
+      "bestFor": [
+        "explaining a process or concept",
+        "steps",
+        "cause and effect"
+      ],
+      "recipe": [
+        "HyperFrames composition: plan with presenter in lower panel",
+        "original React/SVG explainer scenes per beat",
+        "captions from real speech",
+        "render via export (1080x1920)",
+        "Remotion route (only if styles/engines.json remotion is true): engines/split-screen has a working template; otherwise its docs and src/custom/ are design reference"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#explainer-panel",
+      "needsMatte": false,
+      "altEngine": "split-screen",
+      "statusWithRemotion": "ready"
+    },
+    {
+      "id": "glass-explainer",
+      "name": "Glass explainer",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "The panel edit with glass cards, counters and drawn graphs.",
+      "bestFor": [
+        "stats and growth numbers",
+        "before/after results",
+        "data-heavy explanations"
+      ],
+      "recipe": [
+        "explainer-panel layout",
+        "glass cards per apple-liquid-glass skill",
+        "count-up counters and line graphs that draw on",
+        "render via export (1080x1920)",
+        "Remotion route (only if styles/engines.json remotion is true): engines/split-screen has a working template; otherwise its docs and src/custom/ are design reference"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#glass-explainer",
+      "needsMatte": false,
+      "altEngine": "split-screen"
+    },
+    {
+      "id": "visual-essay",
+      "name": "Visual essay",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Black and orange, you cut out, the evidence shown above you.",
+      "bestFor": [
+        "argument backed by evidence",
+        "screenshots, headlines or quotes",
+        "commentary"
+      ],
+      "recipe": [
+        "remove background (hyperframes remove-background)",
+        "black canvas, orange accent",
+        "evidence cards (screenshots, headlines) above the cut-out",
+        "captions small"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#visual-essay",
+      "needsMatte": true
+    },
+    {
+      "id": "split-reel",
+      "name": "Split reel",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Your face on top, diagram animations underneath.",
+      "bestFor": [
+        "teaching with diagrams",
+        "systems or flows",
+        "talking-head footage framed for the top half"
+      ],
+      "recipe": [
+        "HyperFrames composition: presenter top half",
+        "bottom half black + glow: italic kicker over huge bold caps text, accent key word",
+        "day tiles / step cards / filling grid under the type",
+        "full-frame presenter on transitional lines",
+        "render via export (1080x1920)",
+        "Remotion route (only if styles/engines.json remotion is true): engines/split-screen has a working template; otherwise its docs and src/custom/ are design reference"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#split-reel",
+      "needsMatte": false,
+      "altEngine": "split-screen",
+      "statusWithRemotion": "ready"
+    },
+    {
+      "id": "broll-stacked-text",
+      "name": "B-roll and stacked text",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Tight cut, B-roll, captions with stacked key phrases.",
+      "bestFor": [
+        "punchy one-liners",
+        "lifestyle or behind-the-scenes footage available",
+        "quotable key phrases"
+      ],
+      "recipe": [
+        "rough-cut tight",
+        "B-roll over non-essential talking",
+        "key phrases stacked large, rest small",
+        "export"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#broll-stacked-text",
+      "needsMatte": false
+    },
+    {
+      "id": "fitted-captions",
+      "name": "Fitted captions",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "ready",
+      "summary": "One big accent word with the rest fitted around it.",
+      "bestFor": [
+        "any talking head",
+        "strong single-word emphasis",
+        "minimal graphics needed"
+      ],
+      "recipe": [
+        "rough-cut",
+        "embedded-captions skill: one accent word per line, rest fitted",
+        "export"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#fitted-captions",
+      "needsMatte": false
+    },
+    {
+      "id": "image-cluster",
+      "name": "Image cluster",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Clusters of images above your head, small quiet captions.",
+      "bestFor": [
+        "naming many examples, brands or places",
+        "references to things people can picture",
+        "headroom above the speaker"
+      ],
+      "recipe": [
+        "rough-cut",
+        "media-use: resolve an image per named thing",
+        "clusters of 3-5 images animate in above head",
+        "small captions"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#image-cluster",
+      "needsMatte": false,
+      "needsHeadroom": true
+    },
+    {
+      "id": "youtube-clips",
+      "name": "YouTube clips",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "legacy",
+      "status": "ready",
+      "summary": "A long video in, ranked vertical clips out.",
+      "bestFor": [
+        "source longer than 5 minutes",
+        "podcasts and long YouTube videos",
+        "several self-contained moments"
+      ],
+      "recipe": [
+        "rtf skill: word-level transcript of the long video",
+        "clipper skill: find and rank standalone 20-60s moments",
+        "each clip gets the business-reel treatment (see STYLE-GUIDE), reframed to 9:16",
+        "export ranked clips"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#youtube-clips",
+      "needsMatte": false
+    },
+    {
+      "id": "cutout-backdrop",
+      "name": "Cut-out backdrop",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "You cut out over full-screen images that change with every idea.",
+      "bestFor": [
+        "idea-per-sentence delivery",
+        "visual topics",
+        "plain background footage"
+      ],
+      "recipe": [
+        "remove background",
+        "media-use: one full-screen image per idea",
+        "speaker composited over, image swaps on each idea",
+        "captions"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#cutout-backdrop",
+      "needsMatte": true
+    },
+    {
+      "id": "cutout-grid",
+      "name": "Cut-out grid",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "You in the centre of four images that change together.",
+      "bestFor": [
+        "comparing 4 things",
+        "lists in groups of four",
+        "visual variety"
+      ],
+      "recipe": [
+        "remove background",
+        "2x2 image grid, speaker centred",
+        "all four swap on each new point",
+        "captions"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#cutout-grid",
+      "needsMatte": true
+    },
+    {
+      "id": "depth-ui",
+      "name": "Depth UI",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "You full frame, real interfaces and screens behind your head.",
+      "bestFor": [
+        "software, apps or websites",
+        "tutorial or tool reviews",
+        "screen recordings available"
+      ],
+      "recipe": [
+        "remove background",
+        "screen recordings / screenshots placed behind speaker with depth",
+        "callouts on UI",
+        "captions"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#depth-ui",
+      "needsMatte": true
+    },
+    {
+      "id": "ranking",
+      "name": "Ranking",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "A tier list that fills up as you rank things, one card at a time.",
+      "bestFor": [
+        "ranking or rating several items",
+        "tier lists",
+        "best to worst"
+      ],
+      "recipe": [
+        "rough-cut",
+        "tier board above speaker",
+        "each item card drops into its tier when said (word timestamps)",
+        "captions"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#ranking",
+      "needsMatte": false
+    },
+    {
+      "id": "educational-youtube",
+      "name": "Educational YouTube",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "editor",
+      "status": "ready",
+      "summary": "Long-form edit with overlays, split screen and explainer animations.",
+      "bestFor": [
+        "horizontal footage",
+        "videos over 5 minutes",
+        "teaching content"
+      ],
+      "recipe": [
+        "rough-cut with presets/longform-16x9",
+        "graphics-plan: overlays, split screen, explainers",
+        "second-pass",
+        "export 16:9"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#educational-youtube",
+      "needsMatte": false
+    },
+    {
+      "id": "split-screen-lesson",
+      "name": "Split-screen lesson",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Your notes document on the left, you on the right.",
+      "bestFor": [
+        "structured lessons",
+        "notes or outline exists",
+        "horizontal footage"
+      ],
+      "recipe": [
+        "build lesson-document from transcript or notes",
+        "16:9: document left scrolls with speech, presenter right",
+        "render via export",
+        "Remotion route (only if styles/engines.json remotion is true): engines/split-screen has a working template; otherwise its docs and src/custom/ are design reference"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#split-screen-lesson",
+      "needsMatte": false,
+      "altEngine": "split-screen"
+    },
+    {
+      "id": "coaching-call-clips",
+      "name": "Coaching call clips",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "legacy",
+      "status": "draft",
+      "summary": "A full call in, ranked clips out, graphics beside you.",
+      "bestFor": [
+        "recorded calls or interviews",
+        "Zoom-style footage",
+        "long source with Q&A moments"
+      ],
+      "recipe": [
+        "rtf transcript",
+        "clipper: rank best moments",
+        "16:9 clip with key-point graphic beside speaker",
+        "export ranked clips"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#coaching-call-clips",
+      "needsMatte": false
+    },
+    {
+      "id": "lesson-document",
+      "name": "Lesson document",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "The on-screen teaching document you scroll through in a split-screen lesson.",
+      "bestFor": [
+        "used with split-screen lesson",
+        "turning a talk into a written lesson"
+      ],
+      "recipe": [
+        "write lesson doc from transcript in brand voice",
+        "render as scrollable panel synced to speech",
+        "Remotion route (only if styles/engines.json remotion is true): engines/split-screen has a working template; otherwise its docs and src/custom/ are design reference"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#lesson-document",
+      "needsMatte": false,
+      "altEngine": "split-screen"
+    },
+    {
+      "id": "tiktok-style",
+      "name": "TikTok style",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "No dead space, small two-line captions, a text-box hook, pictures cut in above you.",
+      "bestFor": [
+        "casual personal story",
+        "product or lifestyle topic",
+        "fast talker"
+      ],
+      "recipe": [
+        "rough-cut: zero dead air",
+        "text-box hook (white box, black text) + tiny subtitle",
+        "small 2-line outlined captions at chest",
+        "image cards with shadow pop in above head or over chest"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#tiktok-style",
+      "needsMatte": false
+    },
+    {
+      "id": "yap-and-show",
+      "name": "Yap and show",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "You stay in one spot while proof rotates above your head.",
+      "bestFor": [
+        "claims with proof: screenshots, results, receipts",
+        "talking to camera in one take"
+      ],
+      "recipe": [
+        "rough-cut",
+        "proof cards (images/video/screen recordings) above head: 3 tall cards, then rows of 5",
+        "hook text box with proof strip",
+        "small chest captions"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#yap-and-show",
+      "needsMatte": false,
+      "needsHeadroom": true
+    },
+    {
+      "id": "clone-versus",
+      "name": "Clone versus",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Two of you, side by side, each making the case for one side.",
+      "bestFor": [
+        "comparing two approaches",
+        "good vs bad habit",
+        "filmed both sides as two takes"
+      ],
+      "recipe": [
+        "needs two takes (one per side)",
+        "place both side by side, labels above each in accent + small subtitle",
+        "speaking side gets white caption label and proof cards"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#clone-versus",
+      "needsMatte": true,
+      "needsTwoTakes": true
+    },
+    {
+      "id": "dual-role-dialogue",
+      "name": "Dual-role dialogue",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "You play a beginner and an expert, cutting between the two.",
+      "bestFor": [
+        "question-and-answer skits",
+        "POV formats",
+        "filmed as two characters"
+      ],
+      "recipe": [
+        "POV pill at top",
+        "role labels; active role in accent, other dimmed",
+        "captions on speaker chest",
+        "cut between roles per line"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#dual-role-dialogue",
+      "needsMatte": false,
+      "needsTwoTakes": true
+    },
+    {
+      "id": "cinematic-type",
+      "name": "Cinematic type",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Big cinematic words popping in over black-and-white B-roll.",
+      "bestFor": [
+        "motivational or reflective lines",
+        "few words, big feeling",
+        "B-roll available"
+      ],
+      "recipe": [
+        "grade footage and B-roll black and white, slight colour fringe",
+        "huge italic serif word centred, small bold sans line under in accent",
+        "alternate presenter and B-roll per phrase"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#cinematic-type",
+      "needsMatte": false
+    },
+    {
+      "id": "top-5-ranking",
+      "name": "Top 5 ranking",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "A numbered 1 to 5 board; each pick drops into its spot as you say it, in any order.",
+      "bestFor": [
+        "top 5 lists",
+        "picks announced out of order"
+      ],
+      "recipe": [
+        "board top half: title, rows 1-5, #1 number box in accent",
+        "each pick drops into its row with an icon tile when said",
+        "chest caption"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#top-5-ranking",
+      "needsMatte": false
+    },
+    {
+      "id": "vlog",
+      "name": "Vlog",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "A folder of trip or day clips cut together with voiceover, timestamps or beat cuts.",
+      "bestFor": [
+        "folder of travel or day-in-life clips",
+        "voiceover or music-led"
+      ],
+      "recipe": [
+        "order clips by time",
+        "small timestamp label top-left (DAY 1 · 07:42)",
+        "small centred captions",
+        "cut on beats or on voiceover phrases"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#vlog",
+      "needsMatte": false
+    },
+    {
+      "id": "if-then-grid",
+      "name": "If/then grid",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "A coloured grid fills in row by row as you walk through each if-then.",
+      "bestFor": [
+        "decision rules",
+        "if X then Y frameworks",
+        "comparing outcomes across options"
+      ],
+      "recipe": [
+        "top half black: 4 coloured column headers",
+        "cells fill row by row, active cell outlined",
+        "caption under grid, presenter bottom half"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#if-then-grid",
+      "needsMatte": false
+    },
+    {
+      "id": "this-vs-that",
+      "name": "This vs that",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "A two-column chart above your head; everything you name drops into one side.",
+      "bestFor": [
+        "do vs don't",
+        "always vs never",
+        "pros and cons"
+      ],
+      "recipe": [
+        "T-chart above head: two italic serif headers (green / red)",
+        "each named item drops into its column as a chip",
+        "quoted examples appear as accent callout",
+        "chest captions"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#this-vs-that",
+      "needsMatte": false
+    },
+    {
+      "id": "rapid-list",
+      "name": "Rapid list",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "You read a long list fast, and each item pops into a numbered list as you say it.",
+      "bestFor": [
+        "long lists (10+ items)",
+        "fast delivery"
+      ],
+      "recipe": [
+        "accent title pill at top",
+        "two numbered columns flanking the head fill in as said",
+        "current item pops as coloured card with big number at chest"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#rapid-list",
+      "needsMatte": false
+    },
+    {
+      "id": "natural-story",
+      "name": "Natural story",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "A calm story in your own room: pictures, quote cards and clips appear behind you.",
+      "bestFor": [
+        "personal story",
+        "calm delivery",
+        "filmed at home"
+      ],
+      "recipe": [
+        "keep room footage, warm grade",
+        "images, quote cards and clips appear around and behind head (person matte)",
+        "small quiet chest captions"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#natural-story",
+      "needsMatte": true
+    },
+    {
+      "id": "ear-to-ear-captions",
+      "name": "Ear to ear captions",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Words either side of your head at eye level, fading up one at a time.",
+      "bestFor": [
+        "horizontal talking head",
+        "centred framing"
+      ],
+      "recipe": [
+        "face-tracked eye line",
+        "words split left and right of head, each fades from grey to white when said",
+        "no other graphics"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#ear-to-ear-captions",
+      "needsMatte": false
+    },
+    {
+      "id": "tips-breakdown",
+      "name": "Tips breakdown",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "A YouTube list video: a chapter marker for every point, glass cards beside you and full-screen diagrams.",
+      "bestFor": [
+        "numbered tips video",
+        "long form list"
+      ],
+      "recipe": [
+        "chapter marker per tip: N TIPS title + card carousel, active number large in accent, accent horizon glow",
+        "presenter with glass card one side, italic serif side text other side",
+        "big bold caps title with italic accent subline",
+        "full-screen diagram beats",
+        "bullet list beside presenter"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#tips-breakdown",
+      "needsMatte": false
+    },
+    {
+      "id": "screen-tutorial",
+      "name": "Screen tutorial",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "A long tutorial: screen demos in a floating window with you in a corner card, a chapter tracker between sections, and constant angle changes.",
+      "bestFor": [
+        "teaching a tool or software step by step",
+        "screen recordings available",
+        "long video split into many short chapters"
+      ],
+      "recipe": [
+        "cold open on the widest angle (or a slow push-in) for 1-2s",
+        "punch-ins (100/115/130%) on sentence boundaries if there is one camera",
+        "screen recordings in a rounded window on a brand gradient, presenter in a portrait card beside it",
+        "chapter-tracker card at every section break and as the closing shot",
+        "icons pop in beside the head when tools are named; side words for named concepts",
+        "level-meter for tiers or progress; counter and article-highlight for proof"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#screen-tutorial",
+      "needsMatte": false,
+      "reference": "styles/REFERENCES.md (Iman Gadzhi, Gemini tutorial)"
+    },
+    {
+      "id": "broll-library",
+      "name": "B-roll library",
+      "aspect": "-",
+      "group": "tool",
+      "kind": "tool",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Index your own footage once, then search it in plain English and match it to a script.",
+      "bestFor": [],
+      "recipe": [
+        "index: for each clip in broll-library/footage, sample frames + transcribe, write broll-library/index.json with descriptions",
+        "search: match plain-English queries or script lines to clips"
+      ],
+      "needsMatte": false
+    },
+    {
+      "id": "video-to-content",
+      "name": "Video to written content",
+      "aspect": "-",
+      "group": "tool",
+      "kind": "tool",
+      "engine": "content-os",
+      "status": "ready",
+      "summary": "A video in, emails and social posts out, written in your voice.",
+      "bestFor": [],
+      "recipe": [
+        "transcribe",
+        "engines/content-os: voice-dna.md + brand-kit.md",
+        "yt-description, carousel-generator, email and post drafts into the job's outputs/"
+      ],
+      "needsMatte": false
+    },
+    {
+      "id": "graphic-moments",
+      "name": "Find graphic moments",
+      "aspect": "-",
+      "group": "tool",
+      "kind": "tool",
+      "engine": "editor",
+      "status": "ready",
+      "summary": "Word-level transcript plus the moments where a graphic earns its place.",
+      "bestFor": [],
+      "recipe": [
+        "rtf skill on the job's video or link",
+        "save RTF and insert points to the job's outputs/"
+      ],
+      "needsMatte": false
+    },
+    {
+      "id": "rough-cut-only",
+      "name": "Rough cut only",
+      "aspect": "-",
+      "group": "tool",
+      "kind": "tool",
+      "engine": "editor",
+      "status": "ready",
+      "summary": "Cut out filler and dead air, then put the cut on your editing app timeline (Premiere, Resolve, Final Cut) or render an MP4 for CapCut.",
+      "bestFor": [],
+      "recipe": [
+        "follow docs/APP-HANDOFF.md (the user set this workflow)"
+      ],
+      "needsMatte": false
+    }
+  ]
+}

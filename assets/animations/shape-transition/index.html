@@ -1,0 +1,71 @@
+<!doctype html>
+<!-- Shape transition: a brand-coloured ball drops in and bounces, morphs into a rounded
+     square while shifting colour, then grows until it fills the frame, and a band wipes
+     it away to reveal the next scene. Transparent everywhere else: place it across a cut
+     (render to WebM) so the frame is fully covered at the cut point (window.__cover).
+     --text "bounce" (default) or "band" for only the band wipe. Quad-out easing on every
+     move, as in the Patrik Key breakdown. Sounds: "pop" per bounce, "whoosh" as it grows,
+     "whoosh-flash" on the wipe. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: transparent; }
+      #shape { position: absolute; left: 50%; top: 50%; background: __ACCENT__; box-shadow: 0 0 80px __ACCENT__88; }
+      #band { position: absolute; top: -20%; height: 140%; background: __ACCENT_DEEP__; transform: rotate(12deg); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <div id="shape"></div><div id="band"></div>
+    </div>
+    <script>
+      const W = __W__, H = __H__, DUR = __DURATION__, MODE = (__TEXT__ || 'bounce').toLowerCase();
+      const s = Math.min(W, H) * 0.14, shape = document.getElementById('shape'), band = document.getElementById('band');
+      const cover = Math.hypot(W, H) * 1.15;                 // size that covers every corner
+      Object.assign(shape.style, { width: s + 'px', height: s + 'px', marginLeft: -s / 2 + 'px', marginTop: -s / 2 + 'px', borderRadius: '50%' });
+      Object.assign(band.style, { width: W * 1.6 + 'px', left: -W * 1.8 + 'px' });
+      const tl = gsap.timeline({ paused: true });
+      const pops = [];
+      let tCover;
+      if (MODE.includes('band')) {
+        // Band only: a diagonal band sweeps across, covering the frame mid-way, then off.
+        tl.to(band, { x: W * 1.4, duration: 0.45, ease: 'quad.out' }, 0.1);
+        tCover = 0.55;
+        tl.to(band, { x: W * 3.6, duration: 0.5, ease: 'quad.in' }, tCover + 0.1);
+        shape.style.display = 'none';
+      } else {
+        // Drop in from above and bounce twice, each bounce lower, landing at the centre.
+        gsap.set(shape, { y: -H * 0.7 });
+        const drops = [[0, 0.42], [-H * 0.16, 0.26], [-H * 0.05, 0.16]];
+        let t = 0.1;
+        drops.forEach(([peak, d], i) => {
+          if (i > 0) { tl.to(shape, { y: peak, duration: d / 2, ease: 'quad.out' }, t); t += d / 2; }
+          tl.to(shape, { y: 0, duration: i === 0 ? d : d / 2, ease: 'quad.in' }, t);
+          t += i === 0 ? d : d / 2; pops.push(+t.toFixed(2));
+          tl.to(shape, { scaleY: 0.82, scaleX: 1.14, duration: 0.05, ease: 'quad.out', yoyo: true, repeat: 1 }, t);
+          t += 0.1;
+        });
+        // Morph: circle to rounded square while the colour shifts to the light tone.
+        tl.to(shape, { borderRadius: '22%', backgroundColor: '__ACCENT_LIGHT__', rotation: 90, duration: 0.45, ease: 'quad.out' }, t + 0.05);
+        t += 0.5;
+        // Grow until the frame is covered, in the deep tone.
+        // Scale (a transform) rather than width/height, so it stays smooth frame to frame.
+        tl.to(shape, { scale: cover / s, borderRadius: '8%', backgroundColor: '__ACCENT_DEEP__', duration: 0.5, ease: 'quad.in' }, t);
+        tCover = t + 0.5;
+        // Wipe it away with the band so the next scene appears behind.
+        tl.set(band, { x: W * 1.4 }, tCover + 0.12);
+        tl.set(shape, { opacity: 0 }, tCover + 0.12);
+        tl.to(band, { x: W * 3.6, duration: 0.5, ease: 'quad.in' }, tCover + 0.12);
+      }
+      tl.set({}, {}, DUR);
+      window.__timelines = window.__timelines || {};
+      window.__timelines['main'] = tl;
+      window.__cover = tCover;                               // put the cut here
+      window.__pops = pops;
+    </script>
+  </body>
+</html>

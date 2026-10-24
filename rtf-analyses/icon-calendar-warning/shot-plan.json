@@ -1,0 +1,64 @@
+{
+  "category": "kinetic-type",
+  "_category_note": "No IR category is a perfect fit for a bespoke icon-hero accent (calendar + warning badge). Closest schema shape is kinetic-type's scenes[]; text is minimal and the icon is the hero, per the brief.",
+  "duration_s": 5.0,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Minimal icon-first accent piece. Clean hand-drawn line-art calendar icon in purple/black brand system, one date cell flags with a warning badge, short bright-accent label beneath. Ties to script line ~00:22 'one slow month away from a real problem.'",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8", "#B5675C"],
+  "font": "League Gothic + Montserrat",
+  "beats": [0.1, 1.0, 1.6, 2.0, 2.5, 4.5],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "Hand-authored per Director brief (bespoke icon concept expected). Reused motion-vocabulary primitives: scale_punch (back.out(2.2)) for badge pop, shake keyframes for urgency, glow (textShadow/boxShadow yoyo) for emphasis, stroke-draw (strokeDashoffset) for icon line-art reveal — same recipes as svg-stroke-trace / badge-pop catalog components, hand-tuned to the custom calendar geometry rather than installed verbatim."
+  },
+
+  "content": {
+    "scenes": [
+      {
+        "id": "beat-1-draw-in",
+        "start": 0.0,
+        "end": 1.0,
+        "text": "",
+        "emphasis_words": [],
+        "emotion": "calm build",
+        "motion": "bg-fill fades in (0.1-0.25s); calendar line-art draws in via stroke-dashoffset on body/rings/header-divider (0.15-0.75s, power2.out), grid cells scale+fade in with a short stagger (0.45-0.85s, back.out)",
+        "beats": [0.1, 0.15]
+      },
+      {
+        "id": "beat-2-warning-pop",
+        "start": 1.0,
+        "end": 2.5,
+        "text": "",
+        "emphasis_words": [],
+        "emotion": "urgent",
+        "motion": "flagged date cell pulses accent-bright (1.0-1.4s, sine.inOut yoyo); warning badge (circle + triangle/exclamation, #B5675C) pops onto that cell (1.6s, back.out(2.2)) with a glow (textShadow/boxShadow yoyo) and a brief shake (1.9-2.0s, keyframes x:-6/6/0)",
+        "beats": [1.0, 1.6, 1.9]
+      },
+      {
+        "id": "beat-3-label",
+        "start": 2.5,
+        "end": 4.5,
+        "text": "ONE SLOW MONTH.",
+        "emphasis_words": ["ONE SLOW MONTH."],
+        "emotion": "resolve / stakes",
+        "motion": "label fades + lifts in beneath the icon (2.6-3.1s, power2.out), full stack holds static to 4.5s",
+        "beats": [2.6]
+      },
+      {
+        "id": "beat-4-hold",
+        "start": 4.5,
+        "end": 5.0,
+        "text": "",
+        "emphasis_words": [],
+        "emotion": "hold",
+        "motion": "freeze-hold, no new tweens, clean cut point for host footage",
+        "beats": []
+      }
+    ]
+  }
+}

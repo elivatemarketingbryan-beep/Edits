@@ -1,0 +1,43 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 3.5,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Clean, confident chapter-marker beat. Purple/black brand family (shared-lead-problem, speed-wins-the-job): League Gothic display headline in bright purple/white over a deep purple-black radial gradient, Montserrat wide-tracked eyebrow label. Motion is a quick punchy slam-in, a clear 2s hold, quick fade-out. Not busy — one dominant motif (the headline itself).",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8"],
+  "font": "League Gothic + Montserrat (Google Fonts, matches sibling purple pieces)",
+  "beats": [0.2, 0.65],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "Reuse search run: `npx hyperframes catalog --query \"section divider chapter marker title card slam\" --json` returned motion-primitive components (headline-slam, titlecard-calm, caption-kinetic-slam) but no pre-built block combining a progress eyebrow + wrapping headline + native-CSS rule the way this template needs across 6 reused variants with differing word counts. Hand-authored per kinetic-type module, using the headline-slam / titlecard-calm / glow vocabulary as reference rather than reinventing physics. Search-miss will be reported via `npx hyperframes feedback --search-miss`."
+  },
+
+  "content": {
+    "scenes": [
+      {
+        "id": "title-card",
+        "start": 0,
+        "end": 3.5,
+        "text": "PROFESSIONAL CONTENT & BRANDING",
+        "eyebrow": "PIECE 04 / 06",
+        "emphasis_words": [],
+        "emotion": "confident, punchy, deliberate pause between chapters",
+        "motion": "bg-fill + eyebrow fade/slide in -> eyebrow rule scaleX in -> whole-headline scale_punch slam-in (single unit, not per-word, so future title swaps never need span/timing edits) -> brief glow pulse landing accent -> ~2.1s clean hold -> single fade-out of the whole card ending exactly at data-duration (no hard cut, no blank frame)",
+        "beats": [0.2, 0.65]
+      }
+    ],
+    "template_notes": {
+      "reusable_for": "6 section-divider cards total; only text content changes per reuse (no CSS/layout/timing edits needed)",
+      "find_replace_targets": {
+        "#eyebrow (text node)": "\"PIECE 04 / 06\" -> \"PIECE 0N / 06\"",
+        "#headline (text node)": "\"PROFESSIONAL CONTENT & BRANDING\" -> next title, any length from ~7 to ~32 chars"
+      },
+      "why_whole_line_not_per_word": "Per-word spans would require adding/removing <span> elements and re-tuning stagger timings for every title with a different word count. A single text node with one whole-line GSAP tween keeps every future swap a pure string replace.",
+      "long_title_handling": "Headline uses a fixed, tuned font-size (validated against the longest expected title) with max-width + text-wrap:balance so a 2-line wrap is centered and even; short titles (e.g. 'Website') simply render on one line at the same size, no per-title tuning."
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "category": "logo-reveal",
+  "duration_s": 5.0,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "icon-first accent animation, purple/black brand system, minimal text, one dominant motif: a continuously-spinning line-art gear symbolizing an always-on system",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8"],
+  "font": "League Gothic + Montserrat",
+  "beats": [0.15, 1.0, 2.0, 4.0],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "No catalog block matched a gear/cog rotation icon or a 24/7 badge pop (searched: 'gear cog rotation icon spin', '24/7 badge clock icon' — see catalog-search-miss log below). Hand-authored per builder-contract: procedural line-art SVG gear (ring + 8 teeth + hub, no external icon font/network dependency), single finite GSAP rotation tween (power1.inOut, no repeat) spanning from just after entrance to the exact end of data-duration, and a hand-built upright badge (sibling element, never nested inside the rotating node) with a quick scale/glow pop mirroring the emphasis-glow pattern already used in shared-lead-problem / demand-reputation-flywheel."
+  },
+
+  "content": {
+    "logo": "inline hand-authored line-art gear/cog SVG (#gear-icon) — not an external asset, built from primitive shapes for deterministic offline render",
+    "tagline": "RUNNING WHILE YOU SLEEP.",
+    "url": null,
+    "scenes": [
+      {
+        "id": "beat-1-gear-in",
+        "start": 0.0,
+        "end": 1.0,
+        "text": null,
+        "motion": "bg-fill fades in once (persists, never exits); gear-stage scale+fade entrance (back.out); gear-icon begins a single continuous finite rotation tween (power1.inOut) immediately, running uninterrupted through the end of the composition",
+        "beats": [0.15, 0.2]
+      },
+      {
+        "id": "beat-2-badge-pop",
+        "start": 1.0,
+        "end": 2.0,
+        "text": "24/7",
+        "emphasis_words": ["24/7"],
+        "emotion": "confident, always-on",
+        "motion": "badge (sibling of the rotating gear-icon, so it stays upright/readable) scale-pops in with back.out, then a quick glow pulse up and back to a resting glow; gear keeps spinning underneath",
+        "beats": [1.0, 1.3]
+      },
+      {
+        "id": "beat-3-label",
+        "start": 2.0,
+        "end": 4.0,
+        "text": "RUNNING WHILE YOU SLEEP.",
+        "emphasis_words": [],
+        "emotion": "steady, reassuring",
+        "motion": "label fades/slides in beneath the gear (power2.out); gear continues spinning, badge stays upright and readable",
+        "beats": [2.0]
+      },
+      {
+        "id": "beat-4-hold",
+        "start": 4.0,
+        "end": 5.0,
+        "text": "RUNNING WHILE YOU SLEEP.",
+        "emphasis_words": [],
+        "emotion": "hold",
+        "motion": "label holds frozen for a clean cut; gear may keep gently spinning into the final frame (rotation tween is scheduled to end exactly at data-duration, so nothing is left running past the render window)",
+        "beats": []
+      }
+    ]
+  },
+
+  "shot_brief": "A ~5s icon-focused accent piece: the background fill fades in once and never drops out, then a clean purple line-art gear/cog scales into frame and immediately begins a slow, continuous, constant-feeling rotation that runs for the rest of the piece — the single dominant motif, standing for a system that runs 24/7. About a second in, a small upright '24/7' badge pops onto the gear's edge with a quick scale + glow, staying fixed and readable even as the gear turns beneath it (it is a sibling element, never a child of the rotating node, so it never inherits the rotation). A short Montserrat label, RUNNING WHILE YOU SLEEP., fades in beneath the gear around 2s and holds through the final second for a clean cut, while the gear keeps turning underneath it right to the last frame."
+}

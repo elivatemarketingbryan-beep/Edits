@@ -1,0 +1,5 @@
+{
+  "_readme": "Which render engines Video Studio may use. HyperFrames (Apache-2.0, free for client work) is always on and renders every style. Remotion (engines/split-screen) is optional: when true, the styles listed under remotionStyles may render with it instead, which is faster for them because that kit already has working templates. Remotion is free for individuals and very small companies; larger companies need a paid licence (check remotion.dev/license). Both engines can be installed at once; each job uses one of them.",
+  "remotion": false,
+  "remotionStyles": ["explainer-panel", "glass-explainer", "split-reel", "split-screen-lesson", "lesson-document"]
+}

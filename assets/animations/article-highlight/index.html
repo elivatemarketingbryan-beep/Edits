@@ -1,0 +1,73 @@
+<!doctype html>
+<!-- Article highlight: an article on a white page blurs in over 1s, then slowly pushes in
+     and turns about 15 degrees in 3D, while a hand-drawn highlighter sweeps left to right
+     BEHIND the marked phrases. --text is "Source || Headline || body", with phrases to
+     highlight in [[double brackets]]. Pair each sweep with the "stretch" sound. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: #fff; }
+      #stage { position: absolute; inset: 0; perspective: 1800px; display: flex; align-items: center; justify-content: center; }
+      #card { position: relative; background: #fff; transform-style: preserve-3d; }
+      /* The marker is the phrase's own background, cloned onto every line it wraps to, so
+         it always sits behind exactly those words whatever font or size loads. */
+      .hl { background-repeat: no-repeat; background-position: left center; background-size: 0% 100%;
+        -webkit-box-decoration-break: clone; box-decoration-break: clone; padding: 0 .12em; margin: 0 -.12em; }
+      #copy { position: relative; color: #111; }
+      .src { font-family: "Inter", sans-serif; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #777; }
+      h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 700; line-height: 1.12; margin: .35em 0 .5em; }
+      p { font-family: Georgia, "Times New Roman", serif; line-height: 1.5; color: #222; }
+      .rule { height: 2px; background: #111; margin-top: .4em; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <div id="stage"><div id="card"><div id="copy"></div></div></div>
+    </div>
+    <script>
+      const W = __W__, H = __H__, TEXT = __TEXT__, DUR = __DURATION__;
+      const portrait = H > W;
+      const parts = TEXT.split('||').map((s) => s.trim());
+      const [src, head, body] = parts.length >= 3 ? parts : ['', parts[0] || '', parts[1] || ''];
+      const esc = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+      const hl = (s) => esc(s).replace(/\[\[(.+?)\]\]/g, '<span class="hl">$1</span>');
+      const card = document.getElementById('card'), copy = document.getElementById('copy');
+      const base = portrait ? W * 0.045 : W * 0.019;
+      card.style.width = (portrait ? W * 0.86 : W * 0.56) + 'px';
+      card.style.padding = base * 2.4 + 'px';
+      copy.innerHTML = `${src ? `<div class="src" style="font-size:${base * 0.7}px">${esc(src)}</div><div class="rule"></div>` : ''}
+        <h1 style="font-size:${base * 2.3}px">${hl(head)}</h1><p style="font-size:${base * 1.15}px">${hl(body)}</p>`;
+
+      // Hand-drawn marker shape: a jittered stroke, stretched to each line of the phrase.
+      let seed = 11; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+      const phrases = [...document.querySelectorAll('.hl')];
+      phrases.forEach((span) => {
+        const top = [], bot = [];
+        for (let i = 0; i <= 20; i++) { top.push(`${i * 5},${8 + rand() * 12}`); bot.push(`${100 - i * 5},${80 + rand() * 12}`); }
+        const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='${top.join(' ')} ${bot.join(' ')}' fill='__ACCENT_LIGHT__' fill-opacity='0.85'/></svg>`;
+        span.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+      });
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      gsap.set('#card', { rotationY: -8, rotationX: 7, scale: 1 });
+      tl.fromTo('#stage', { filter: 'blur(18px)' }, { filter: 'blur(0px)', duration: 1, ease: 'power2.out' }, 0);
+      tl.to('#card', { rotationY: 7, rotationX: -8, scale: 1.09, duration: DUR, ease: 'sine.inOut' }, 0);
+      // Phrases are highlighted one after another, each sweeping left to right.
+      const sweeps = [];
+      let t = 1.15;
+      for (const span of phrases) {
+        sweeps.push(+t.toFixed(2));
+        const d = Math.max(0.45, Math.min(0.9, span.textContent.length * 0.03));
+        tl.fromTo(span, { backgroundSize: '0% 100%' }, { backgroundSize: '100% 100%', duration: d, ease: 'power1.inOut' }, t);
+        t += d + 0.35;
+      }
+      window.__timelines['main'] = tl;
+      window.__sweeps = sweeps;                          // a "stretch" sound at each of these
+    </script>
+  </body>
+</html>

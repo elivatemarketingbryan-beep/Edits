@@ -1,0 +1,51 @@
+<!doctype html>
+<!-- Counter: a big number counts up to its value (e.g. $0 -> $535), eases into place, lands
+     with a small pulse and an accent glow. --text is the final value with any prefix or
+     suffix ("$535", "12,400 views", "87%"); the digits count, the rest stays put.
+     Pair with the "counting" sound for the count and "hit" or "money" on the landing. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: __BG__; }
+      .glow { position: absolute; left: 50%; top: 50%; width: 70%; height: 50%; transform: translate(-50%, -50%);
+        background: radial-gradient(ellipse at center, __ACCENT_DEEP__88 0%, transparent 62%); }
+      #num { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center;
+        font-family: "Montserrat", "Inter", sans-serif; font-weight: 800; color: __TEXT_COLOR__;
+        font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+      #num .fix { color: __ACCENT_LIGHT__; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <div class="glow" id="glow"></div>
+      <div id="num"></div>
+    </div>
+    <script>
+      const W = __W__, H = __H__, TEXT = __TEXT__, DUR = __DURATION__;
+      const m = TEXT.match(/^(\D*?)([\d,]*\.?\d+)(.*)$/) || ['', '', '0', TEXT];
+      const [pre, digits, post] = [m[1], m[2], m[3]];
+      const target = Number(digits.replace(/,/g, '')), decimals = (digits.split('.')[1] || '').length, commas = digits.includes(',');
+      const num = document.getElementById('num');
+      num.style.fontSize = Math.min(H * 0.22, W * 0.8 / Math.max(3, TEXT.length * 0.62)) + 'px';
+      const fmt = (v) => { const s = v.toFixed(decimals); return commas ? Number(s).toLocaleString('en-US', { minimumFractionDigits: decimals }) : s; };
+      const state = { v: 0 };
+      const draw = () => { num.innerHTML = `<span class="fix">${pre}</span>${fmt(state.v)}<span class="fix">${post}</span>`; };
+      const countEnd = Math.min(DUR - 1, 2.6);
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.from('#num', { opacity: 0, y: H * 0.03, duration: 0.4, ease: 'power3.out' }, 0);
+      tl.from('#glow', { opacity: 0, duration: 0.6 }, 0);
+      tl.to(state, { v: target, duration: countEnd - 0.3, ease: 'power2.inOut', onUpdate: draw }, 0.3);
+      tl.to('#num', { scale: 1.06, duration: 0.12, ease: 'power2.out' }, countEnd);
+      tl.to('#num', { scale: 1, duration: 0.35, ease: 'back.out(2)' }, countEnd + 0.12);
+      tl.to('#glow', { scale: 1.25, opacity: 0.75, duration: 0.5, ease: 'power2.out' }, countEnd);
+      window.__timelines['main'] = tl;
+      window.__countEnd = countEnd;                      // the landing sound goes here
+      draw();
+    </script>
+  </body>
+</html>

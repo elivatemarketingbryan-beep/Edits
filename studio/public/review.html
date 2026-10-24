@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edit Review</title>
+<link rel="stylesheet" href="/studio.css">
+</head>
+<body>
+<header class="top">
+  <div class="row"><a href="/" class="muted">← Studio</a><strong id="title">Edit review</strong><span id="meta" class="muted"></span><span id="status" class="pill"></span></div>
+  <div class="row">
+    <button id="copyNotes">Copy notes for Claude</button>
+    <button id="requestChanges">Request changes</button>
+    <button id="approve" class="primary">Approve and render final</button>
+  </div>
+</header>
+
+<div class="rv">
+  <div class="rv-main">
+    <div class="player"><video id="video" playsinline></video></div>
+    <div class="controls">
+      <button id="play">Play</button>
+      <button data-skip="-5">-5s</button>
+      <button data-skip="5">+5s</button>
+      <span id="time" class="muted">0:00 / 0:00</span>
+      <select id="speed"><option>0.5</option><option selected>1</option><option>1.5</option><option>2</option></select>
+      <span class="seg"><button id="edited" class="on">Edited</button><button id="original">Original footage</button></span>
+      <button id="noteHere" class="primary">+ Note here (N)</button>
+    </div>
+    <div id="chips" class="chips"></div>
+    <div class="tl-wrap"><div id="tl" class="tl"></div></div>
+    <div class="legend" id="legend"><span>Timeline</span><button id="zoomOut">-</button><button id="zoomIn">+</button><button id="fit">Fit all</button></div>
+    <p id="msg" class="msg"></p>
+  </div>
+
+  <aside class="rv-side">
+    <div class="tabs"><button data-tab="notes" class="on">Notes <span id="nCount"></span></button><button data-tab="edits">Edits <span id="eCount"></span></button><button data-tab="transcript">Transcript</button></div>
+    <div class="filters" id="filters"><button data-f="open">Open</button><button data-f="done">Done</button><button data-f="all" class="on">All</button></div>
+    <div id="list" class="list"></div>
+    <form id="addNote" class="addnote">
+      <span class="muted">Note at <b id="noteAt">0:00</b><span id="noteOn"></span></span>
+      <textarea id="noteText" placeholder="Cut this pause"></textarea>
+      <p id="noteErr" class="msg err"></p>
+      <button class="primary">Add note</button>
+    </form>
+  </aside>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = (t) => { t = Math.max(0, t || 0); return Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0'); };
+const COLORS = { cut: '#f06b6b', caption: '#f5c542', audio: '#9aa1aa', sfx: '#4fb3d9', graphic: '#a77bf3', headline: '#e8792f', broll: '#22a06b', note: '#3b82f6' };
+const NAMES = { cut: 'Cut', caption: 'Caption', audio: 'Audio', sfx: 'Sound effect', graphic: 'Motion graphic', headline: 'Headline', broll: 'B-roll', note: 'My notes' };
+const id = new URLSearchParams(location.search).get('job');
+const video = $('#video');
+let job, transcript = [], tab = 'notes', filter = 'all', zoom = 1, noteTime = 0, noteEdit = null, useOriginal = false;
+
+async function api(url, data) {
+  const res = await fetch(url, data === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+  const body = await res.json();
+  if (!res.ok) throw new Error(body.error || 'Something went wrong');
+  return body;
+}
+const typeOf = (e) => (NAMES[e.type] ? e.type : 'graphic');
+
+async function load() {
+  job = await api('/api/jobs/' + id);
+  $('#title').textContent = job.title;
+  $('#status').textContent = job.stageLabel;
+  $('#status').className = 'pill ' + job.waitingOn;
+  if (!video.src) setSource();
+  if (job.transcript && !transcript.length) transcript = await fetch(`/files/${id}/${job.transcript}`).then((r) => r.json()).catch(() => []);
+  $('#approve').hidden = job.stage !== 'review';
+  $('#requestChanges').hidden = job.stage !== 'review';
+  renderAll();
+}
+
+function setSource() {
+  const t = video.currentTime || 0;
+  const file = useOriginal ? job.source : (job.preview || job.source);
+  if (!file) { $('#msg').textContent = 'No preview yet. Claude writes it to this job\'s folder when the edit is ready.'; return; }
+  video.src = `/files/${id}/${file}`;
+  video.addEventListener('loadedmetadata', () => { video.currentTime = Math.min(t, video.duration || t); renderAll(); }, { once: true });
+}
+
+function renderAll() {
+  const dur = video.duration || job.duration || 0;
+  $('#meta').textContent = `${fmt(dur)} long · ${job.edits.length} edits`;
+  $('#nCount').textContent = job.notes.length || '';
+  $('#eCount').textContent = job.edits.length || '';
+  renderTimeline(); renderChips(); renderList();
+}
+
+function renderTimeline() {
+  const dur = video.duration || 1;
+  const tl = $('#tl');
+  tl.style.width = (100 * zoom) + '%';
+  const types = [...new Set(job.edits.map(typeOf))];
+  const rows = types.map((ty) => `<div class="track" title="${NAMES[ty]}">${job.edits.filter((e) => typeOf(e) === ty)
+    .map((e) => `<span data-seek="${e.start}" title="${esc(e.what)}" style="left:${e.start / dur * 100}%;width:${Math.max(0.3, (e.end - e.start) / dur * 100)}%;background:${COLORS[ty]}"></span>`).join('')}</div>`);
+  rows.push(`<div class="track" title="My notes">${job.notes.map((n) => `<span data-seek="${n.t}" title="${esc(n.text)}" style="left:${n.t / dur * 100}%;width:0.6%;background:${COLORS.note}"></span>`).join('')}</div>`);
+  tl.innerHTML = rows.join('') + `<div class="head" id="head"></div>`;
+  $('#legend').querySelectorAll('.lg').forEach((el) => el.remove());
+  [...types, 'note'].forEach((ty) => $('#legend').insertAdjacentHTML('beforeend', `<span class="lg"><i style="background:${COLORS[ty]}"></i>${NAMES[ty]}</span>`));
+  moveHead();
+}
+
+function moveHead() {
+  const h = $('#head'); if (h && video.duration) h.style.left = (video.currentTime / video.duration * 100) + '%';
+  $('#time').textContent = `${fmt(video.currentTime)} / ${fmt(video.duration)}`;
+}
+
+function renderChips() {
+  const t = video.currentTime;
+  const now = job.edits.filter((e) => t >= e.start && t <= e.end + 0.05);
+  $('#chips').innerHTML = now.map((e) => `<span class="chip"><i style="background:${COLORS[typeOf(e)]}"></i><b>${NAMES[typeOf(e)]}</b> ${esc(e.what)}${e.why ? ' · <span class="muted">' + esc(e.why) + '</span>' : ''}
+    <button data-noteon="${job.edits.indexOf(e)}">Note on this</button></span>`).join('') || '<span class="muted">No edits at this moment.</span>';
+}
+
+function renderList() {
+  $('#filters').hidden = tab !== 'notes';
+  const list = $('#list');
+  if (tab === 'notes') {
+    const notes = job.notes.filter((n) => filter === 'all' || n.status === filter).sort((a, b) => a.t - b.t);
+    list.innerHTML = notes.map((n) => `<div class="note ${n.status}">
+      <span class="t" data-seek="${n.t}">${fmt(n.t)}</span> <span class="tag">${n.edit != null && job.edits[n.edit] ? NAMES[typeOf(job.edits[n.edit])] : 'Other'}</span>
+      <div>${esc(n.text)}</div>
+      ${n.reply ? `<div class="reply"><b>Claude:</b> ${esc(n.reply)}</div>` : ''}
+      <div class="acts">${n.status === 'done' ? `<button data-reopen="${n.id}">Reopen</button>` : `<button data-done="${n.id}">Mark done</button>`}
+      <button data-edit="${n.id}">Edit</button><button data-del="${n.id}">Delete</button></div></div>`).join('')
+      || '<p class="muted">No notes yet. Pause where something should change and press N.</p>';
+  } else if (tab === 'edits') {
+    list.innerHTML = job.edits.slice().sort((a, b) => a.start - b.start).map((e) => `<div class="edit-row" data-seek="${e.start}">
+      <i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${COLORS[typeOf(e)]}"></i> <b>${fmt(e.start)}</b> ${NAMES[typeOf(e)]}
+      <div>${esc(e.what)}</div>${e.why ? `<div class="muted">${esc(e.why)}</div>` : ''}</div>`).join('')
+      || '<p class="muted">Claude lists every cut, caption and graphic here once the edit is ready.</p>';
+  } else {
+    list.innerHTML = transcript.length ? `<p>${transcript.map((s) => `<span class="word" data-seek="${s.start}" data-s="${s.start}" data-e="${s.end}">${esc(s.text)}</span>`).join(' ')}</p>`
+      : '<p class="muted">The transcript shows here once Claude has made it.</p>';
+  }
+}
+
+// ---------- player ----------
+video.addEventListener('timeupdate', () => {
+  moveHead(); renderChips();
+  document.querySelectorAll('.word').forEach((w) => w.classList.toggle('now', video.currentTime >= +w.dataset.s && video.currentTime < +w.dataset.e));
+  if (document.activeElement !== $('#noteText')) { noteTime = video.currentTime; $('#noteAt').textContent = fmt(noteTime); }
+});
+video.addEventListener('play', () => ($('#play').textContent = 'Pause'));
+video.addEventListener('pause', () => ($('#play').textContent = 'Play'));
+$('#play').onclick = () => (video.paused ? video.play() : video.pause());
+$('#speed').onchange = (e) => (video.playbackRate = +e.target.value);
+$('#edited').onclick = () => { useOriginal = false; $('#edited').classList.add('on'); $('#original').classList.remove('on'); setSource(); };
+$('#original').onclick = () => { useOriginal = true; $('#original').classList.add('on'); $('#edited').classList.remove('on'); setSource(); };
+$('#zoomIn').onclick = () => { zoom = Math.min(16, zoom * 2); renderTimeline(); };
+$('#zoomOut').onclick = () => { zoom = Math.max(1, zoom / 2); renderTimeline(); };
+$('#fit').onclick = () => { zoom = 1; renderTimeline(); };
+$('#tl').addEventListener('click', (e) => {
+  if (e.target.dataset.seek) return;
+  const r = $('#tl').getBoundingClientRect();
+  video.currentTime = (e.clientX - r.left) / r.width * video.duration;
+});
+
+function startNote(editIndex = null) {
+  video.pause(); noteTime = video.currentTime; noteEdit = editIndex;
+  $('#noteAt').textContent = fmt(noteTime);
+  $('#noteOn').textContent = editIndex != null ? ` · on ${NAMES[typeOf(job.edits[editIndex])].toLowerCase()}: ${job.edits[editIndex].what}` : '';
+  $('#noteText').focus();
+}
+$('#noteHere').onclick = () => startNote();
+document.addEventListener('keydown', (e) => {
+  if (['TEXTAREA', 'INPUT', 'SELECT'].includes(document.activeElement.tagName)) return;
+  if (e.key === 'n' || e.key === 'N') { e.preventDefault(); startNote(); }
+  if (e.key === ' ') { e.preventDefault(); video.paused ? video.play() : video.pause(); }
+});
+$('#noteText').addEventListener('input', () => ($('#noteErr').textContent = ''));
+$('#addNote').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = $('#noteText').value.trim();
+  if (!text) { $('#noteErr').textContent = 'Write a note first'; return; }
+  try {
+    job = await api(`/api/jobs/${id}/notes`, { t: noteTime, text, edit: noteEdit });
+    $('#noteText').value = ''; noteEdit = null; $('#noteOn').textContent = '';
+    tab = 'notes'; setTab(); renderAll();
+  } catch (err) { $('#noteErr').textContent = err.message; }
+});
+
+function setTab() { document.querySelectorAll('[data-tab]').forEach((b) => b.classList.toggle('on', b.dataset.tab === tab)); }
+document.addEventListener('click', async (e) => {
+  const t = e.target.closest('[data-seek],[data-tab],[data-f],[data-skip],[data-noteon],[data-done],[data-reopen],[data-edit],[data-del]');
+  if (!t) return;
+  const d = t.dataset;
+  if (d.seek !== undefined) { video.currentTime = +d.seek; }
+  else if (d.tab) { tab = d.tab; setTab(); renderList(); }
+  else if (d.f) { filter = d.f; document.querySelectorAll('[data-f]').forEach((b) => b.classList.toggle('on', b === t)); renderList(); }
+  else if (d.skip) { video.currentTime = Math.max(0, video.currentTime + +d.skip); }
+  else if (d.noteon) { startNote(+d.noteon); }
+  else if (d.done || d.reopen) { job = await api(`/api/jobs/${id}/notes/${d.done || d.reopen}`, { status: d.done ? 'done' : 'open' }); renderAll(); }
+  else if (d.del) { if (confirm('Delete this note?')) { job = await api(`/api/jobs/${id}/notes/${d.del}`, { delete: true }); renderAll(); } }
+  else if (d.edit) {
+    const n = job.notes.find((x) => x.id === d.edit);
+    const text = prompt('Edit note', n.text);
+    if (text && text.trim()) { job = await api(`/api/jobs/${id}/notes/${d.edit}`, { text: text.trim() }); renderAll(); }
+  }
+});
+
+$('#copyNotes').onclick = () => {
+  const open = job.notes.filter((n) => n.status === 'open').sort((a, b) => a.t - b.t);
+  const text = `Notes on job ${id}:\n` + open.map((n) => `- ${fmt(n.t)}: ${n.text}`).join('\n');
+  navigator.clipboard?.writeText(text);
+  $('#msg').textContent = open.length ? `${open.length} open notes copied` : 'No open notes to copy';
+};
+$('#requestChanges').onclick = async () => {
+  if (!job.notes.some((n) => n.status === 'open')) { $('#msg').textContent = 'Add at least one note first, so Claude knows what to change.'; return; }
+  job = await api(`/api/jobs/${id}/request-changes`, {});
+  $('#msg').textContent = 'Sent. In Claude Code, say "run my studio jobs" and it will work through your notes.';
+  load();
+};
+$('#approve').onclick = async () => {
+  if (job.notes.some((n) => n.status === 'open') && !confirm('Some notes are still open. Render the final anyway?')) return;
+  job = await api(`/api/jobs/${id}/approve`, {});
+  $('#msg').textContent = 'Approved. In Claude Code, say "run my studio jobs" to render the final.';
+  load();
+};
+
+if (!id) { $('#msg').textContent = 'Open a video from the studio first.'; } else { load(); setInterval(async () => {
+  const next = await api('/api/jobs/' + id).catch(() => null);
+  if (next && next.stage !== job.stage) $('#msg').textContent = '';
+  if (next && next.updated !== job.updated) { const hadPreview = job.preview; job = next; if (next.preview !== hadPreview) { video.removeAttribute('src'); setSource(); } load(); }
+}, 4000); }
+</script>
+</body>
+</html>

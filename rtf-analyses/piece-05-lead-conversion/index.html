@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Piece Title Card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background: fades in with the card and fades out with it
+         together (single continuous scene) — never a hard cut to invisible,
+         so this full-screen transparent overlay never shows a blank frame */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 46%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      /* ---------------- title-card scene (0.0 - 3.5s, single scene) ---------------- */
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 210px;
+        box-sizing: border-box;
+      }
+
+      /* TEMPLATE: this wrapper + its two text nodes (#eyebrow, #headline) are
+         the only things that change between the 6 reused instances of this
+         card. Swap the text content only — no CSS/timing edits needed. */
+      #card-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 34px;
+        width: 100%;
+      }
+
+      #eyebrow-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+      }
+
+      #eyebrow {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        font-size: 34px;
+        color: var(--muted);
+        opacity: 0;
+        white-space: nowrap;
+      }
+
+      /* decorative rail beneath the eyebrow — a small FIXED-width accent
+         tick, deliberately not sized to any text (per template-safety rule:
+         never hand-build a text-width-matched line). Reads correctly at any
+         eyebrow string length. */
+      #eyebrow-rule {
+        width: 96px;
+        height: 3px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, transparent 0%, var(--accent-bright) 50%, transparent 100%);
+        transform: scaleX(0);
+        transform-origin: 50% 50%;
+      }
+
+      /* Headline — the hero. Fixed, pre-tuned font-size (validated against
+         the longest expected title in this 6-card series) with a max-width
+         and native `text-wrap: balance` so any title from ~7 to ~32
+         characters either sits on one centered line or wraps to two
+         even, intentional-looking lines — no JS measurement, no per-title
+         tuning. A single text node (not per-word spans) so future title
+         swaps are a pure string replace with no timing/markup changes. */
+      #headline {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.015em;
+        font-size: clamp(70px, 6.5vw, 150px);
+        line-height: 1.08;
+        color: var(--accent-bright);
+        text-align: center;
+        max-width: 1500px;
+        text-wrap: balance;
+        opacity: 0;
+        text-shadow: 0 0 0px rgba(201, 168, 255, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="piece-05-lead-conversion" data-start="0" data-duration="3.5" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ single continuous scene · title card (0.0 - 3.5s) ============ -->
+      <div id="scene-title" class="clip scene" data-start="0" data-duration="3.5" data-track-index="0">
+        <div id="card-wrap">
+          <div id="eyebrow-group">
+            <div id="eyebrow">PIECE 05 / 06</div>
+            <div id="eyebrow-rule"></div>
+          </div>
+          <div id="headline">LEAD CONVERSION</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= entrance (0.0 - ~1.25s) ================= */
+        // background — starts fading immediately so frame 0 is never blank
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, 0);
+
+        tl.fromTo(
+          "#eyebrow",
+          { opacity: 0, y: -14 },
+          { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
+          0.05,
+        );
+
+        tl.fromTo(
+          "#eyebrow-rule",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.25, ease: "power2.out" },
+          0.18,
+        );
+
+        // whole-line punch/slam — a single unit, no per-word spans, so a
+        // future title swap never needs a timing edit
+        tl.fromTo(
+          "#headline",
+          { opacity: 0, scale: 0.72, y: 26 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: "back.out(2.1)" },
+          0.2,
+        );
+
+        // brief landing glow pulse for punch, then settle to a plain hold
+        tl.fromTo(
+          "#headline",
+          { textShadow: "0 0 0px rgba(201,168,255,0)" },
+          {
+            textShadow: "0 0 60px rgba(201,168,255,0.85)",
+            duration: 0.28,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          0.65,
+        );
+
+        /* ================= hold (~1.25s - 3.1s) =================
+           no tweens scheduled — the settled entrance state persists,
+           clearly readable for a solid ~1.85s beyond the glow settle. */
+
+        /* ================= exit (3.1 - 3.5s) =================
+           the whole card fades out together with the background as one
+           unit, ending exactly at data-duration — a clean handoff cut,
+           not a mid-piece blank frame. */
+        tl.to(
+          "#card-wrap",
+          { opacity: 0, y: -16, duration: 0.4, ease: "power2.in" },
+          3.1,
+        );
+        tl.to(
+          "#bg-fill",
+          { opacity: 0, duration: 0.4, ease: "power2.in" },
+          3.1,
+        );
+
+        window.__timelines["piece-05-lead-conversion"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

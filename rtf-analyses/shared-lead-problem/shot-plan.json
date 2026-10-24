@@ -1,0 +1,53 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 14,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Same dark-gold brand system as pricing-tiers-reveal / revenue-math-reveal: near-black stage, League Gothic condensed display numerals/headlines, Montserrat supporting labels, gold accent + bright-gold emphasis. A two-beat contrast piece: first a literal 'one lead becomes many' split diagram, then a hard kinetic-type flip from a trust question to a price question, landing on a value line.",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384"],
+  "font": "League Gothic + Montserrat",
+  "beats": [2.2, 6.6, 7.9, 8.05, 10.6],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "Hand-authored, following the exact CSS/GSAP patterns established in pricing-tiers-reveal/index.html and revenue-math-reveal/index.html (bg-fill full-bleed reveal, card-glow radial, tabular numerals, proxy-object count-ups, freeze-hold ending). Catalog searched for 'card duplicate clone stagger fan out', 'text swap strikethrough cross out replace', and 'connecting line draw between nodes' — reused the strikethrough-replace component's technique (scaleX strike-line draw + fade-in replacement) and the SVG pathLength=1 / stroke-dashoffset line-draw technique as hand-authored GSAP recipes rather than importing the components verbatim, since the sibling projects in this series are themselves fully hand-authored single-file compositions (no literal `hyperframes add` blocks) and this shot needs bespoke multi-part staging (homeowner card, 4 contractor slots, traveling clone icons, connector lines) that no single catalog block covers wholesale."
+  },
+
+  "content": {
+    "scenes": [
+      {
+        "id": "scene-hook",
+        "start": 0,
+        "end": 2.2,
+        "text": "SHARED LEAD PLATFORMS / HOMEADVISOR · ANGIE'S · THUMBTACK",
+        "emphasis_words": [],
+        "emotion": "setup, wary, matter-of-fact",
+        "motion": "eyebrow fade_in, three chips stagger in with scale_punch (back.out)",
+        "beats": [0.2, 0.4, 0.55, 0.7]
+      },
+      {
+        "id": "scene-split",
+        "start": 2.2,
+        "end": 6.6,
+        "text": "1 HOMEOWNER LEAD → CONTRACTOR A / B / C / D — THE SAME LEAD. SOLD TO EVERYONE.",
+        "emphasis_words": ["EVERYONE."],
+        "emotion": "the literal reveal of sharing — clinical, slightly unsettling",
+        "motion": "homeowner card scale_punch in; 4 contractor slots stagger in; 4 connector lines draw (SVG stroke-dashoffset) fanning out; 4 clone icons travel along the lines from the homeowner card to each contractor slot, staggered, each landing with a small receive-pulse; caption fades in beneath",
+        "beats": [2.2, 2.8, 3.3, 4.5]
+      },
+      {
+        "id": "scene-flip",
+        "start": 6.6,
+        "end": 14.0,
+        "text": "WHO CAN I TRUST? → WHO'S THE CHEAPEST? / WHEN THEY ONLY SEE A NUMBER, THEY DON'T SEE YOUR VALUE.",
+        "emphasis_words": ["CHEAPEST?", "VALUE."],
+        "emotion": "hero beat — the question flips and hits hard, then lands on the cost of being a commodity",
+        "motion": "old question fade_blur in (muted), strike-through line draws across it, group fades out; new question scale_punch in huge + bright gold (back.out) with a glow pulse — the dominant motif of the whole piece; closing line fade_in beneath; freeze-hold to the end for a clean cut back to host footage",
+        "beats": [6.6, 7.35, 8.05, 8.6, 10.6]
+      }
+    ]
+  }
+}

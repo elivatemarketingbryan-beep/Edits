@@ -1,0 +1,20 @@
+{
+  "env": {
+    "BASH_DEFAULT_TIMEOUT_MS": "600000",
+    "BASH_MAX_TIMEOUT_MS": "900000",
+    "PYTHONUTF8": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(ffmpeg:*)",
+      "Bash(ffprobe:*)",
+      "Bash(yt-dlp:*)",
+      "Bash(uv run:*)",
+      "Bash(node studio/jobs.mjs:*)",
+      "Bash(node studio/sfx.mjs:*)",
+      "Bash(node studio/check.mjs:*)",
+      "Bash(node studio/anim.mjs:*)",
+      "Bash(node studio/lut.mjs:*)"
+    ]
+  }
+}

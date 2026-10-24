@@ -1,0 +1,87 @@
+<!doctype html>
+<!-- Chapter tracker: a dark grid of chapter cards that shows where the viewer is. Cards
+     stagger in, finished chapters dim with a tick, the current one lights up in the accent
+     and lifts. Show it at every section break and as the closing shot. --text is
+     "Title || Chapter one | Chapter two | ... || current" (current is 1-based; 0 = none lit,
+     for the closing overview). Sounds: "whoosh-data" in, "tick" as the current card lights. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: __BG__; font-family: "Inter", sans-serif; color: #fff; }
+      .glow { position: absolute; left: 50%; top: 55%; width: 90%; height: 70%; transform: translate(-50%, -50%);
+        background: radial-gradient(ellipse at center, __ACCENT_DEEP__66 0%, transparent 65%); }
+      #wrap { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+      #title { text-align: center; font-weight: 800; letter-spacing: -.01em; }
+      #title .spark { color: __ACCENT_LIGHT__; margin-right: .3em; }
+      #grid { display: grid; }
+      .card { position: relative; border-radius: 18px; background: rgba(22, 20, 30, .92); border: 1.5px solid rgba(255, 255, 255, .08);
+        display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+      .card .num { font-weight: 700; color: rgba(255, 255, 255, .45); letter-spacing: .08em; }
+      .card .name { font-weight: 700; line-height: 1.15; }
+      .card .bar { position: absolute; left: 0; bottom: 0; height: 4px; width: 100%; background: rgba(255, 255, 255, .06); }
+      .card .bar i { display: block; height: 100%; width: 0; background: __ACCENT__; }
+      .card.done { opacity: .45; }
+      .card.done .bar i { width: 100%; background: rgba(255, 255, 255, .35); }
+      .card .tick { position: absolute; top: 14px; right: 14px; border-radius: 50%; background: rgba(255, 255, 255, .14);
+        display: flex; align-items: center; justify-content: center; font-weight: 800; }
+      .card.now { border-color: __ACCENT__; background: linear-gradient(160deg, __ACCENT_DEEP__ 0%, rgba(22, 20, 30, .95) 70%); }
+      .card.now .num { color: __ACCENT_LIGHT__; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <div class="glow" id="glow"></div>
+      <div id="wrap"><div id="title"></div><div id="grid"></div></div>
+    </div>
+    <script>
+      const W = __W__, H = __H__, TEXT = __TEXT__, DUR = __DURATION__;
+      const portrait = H > W;
+      const [title, list, cur] = TEXT.split('||').map((s) => s.trim());
+      const chapters = (list || '').split('|').map((s) => s.trim()).filter(Boolean);
+      const current = Number(cur || 0);
+      const cols = portrait ? 2 : chapters.length > 8 ? 4 : Math.min(4, Math.ceil(chapters.length / 2));
+      const gridW = W * (portrait ? 0.86 : 0.78), gap = W * (portrait ? 0.028 : 0.012);
+      const cardW = (gridW - gap * (cols - 1)) / cols, cardH = cardW * (portrait ? 0.62 : 0.5);
+      const fs = cardW * (portrait ? 0.085 : 0.075);
+      const grid = document.getElementById('grid');
+      Object.assign(grid.style, { gridTemplateColumns: `repeat(${cols}, ${cardW}px)`, gap: gap + 'px' });
+      const t = document.getElementById('title');
+      t.style.fontSize = (portrait ? W * 0.07 : W * 0.03) + 'px';
+      t.style.marginBottom = gap * 2 + 'px';
+      const spark = document.createElement('span'); spark.className = 'spark'; spark.textContent = '✦';
+      t.append(spark, document.createTextNode(title || 'Chapters'));
+      chapters.forEach((name, i) => {
+        const c = document.createElement('div');
+        c.className = 'card' + (current && i + 1 < current ? ' done' : '');
+        Object.assign(c.style, { width: cardW + 'px', height: cardH + 'px', padding: fs * 1.1 + 'px' });
+        const n = document.createElement('div'); n.className = 'num'; n.style.fontSize = fs * 0.7 + 'px'; n.textContent = 'PART ' + String(i + 1).padStart(2, '0');
+        const nm = document.createElement('div'); nm.className = 'name'; nm.style.fontSize = fs + 'px'; nm.textContent = name;
+        const bar = document.createElement('div'); bar.className = 'bar'; bar.appendChild(document.createElement('i'));
+        c.append(n, nm, bar);
+        if (current && i + 1 < current) { const tk = document.createElement('div'); tk.className = 'tick'; Object.assign(tk.style, { width: fs * 1.4 + 'px', height: fs * 1.4 + 'px', fontSize: fs * 0.75 + 'px' }); tk.textContent = '✓'; c.appendChild(tk); }
+        grid.appendChild(c);
+      });
+      const cards = [...grid.children];
+      const now = current ? cards[current - 1] : null;
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.from('#title', { opacity: 0, y: H * 0.02, duration: 0.5, ease: 'power3.out' }, 0);
+      tl.from(cards, { opacity: 0, y: H * 0.025, scale: 0.96, duration: 0.45, ease: 'power3.out', stagger: 0.05 }, 0.15);
+      const lightAt = 0.4 + cards.length * 0.05 + 0.25;
+      if (now) {
+        tl.to(now, { scale: 1.06, duration: 0.4, ease: 'back.out(2)' }, lightAt);
+        tl.set(now, { attr: { class: 'card now' } }, lightAt);
+        tl.fromTo(now.querySelector('.bar i'), { width: '0%' }, { width: '100%', duration: Math.max(1, DUR - lightAt - 0.6), ease: 'none' }, lightAt + 0.2);
+        tl.fromTo(now, { boxShadow: '0 0 0 rgba(0,0,0,0)' }, { boxShadow: `0 0 ${cardW * 0.18}px __ACCENT__66`, duration: 0.5 }, lightAt);
+      }
+      tl.to('#wrap', { scale: 1.03, duration: DUR, ease: 'sine.inOut' }, 0);
+      window.__timelines['main'] = tl;
+      window.__cues = { in: 0.15, light: now ? lightAt : null };
+    </script>
+  </body>
+</html>

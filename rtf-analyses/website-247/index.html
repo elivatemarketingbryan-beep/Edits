@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Website 24/7</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0a08;
+        --bg2: #17140f;
+        --accent: #d9a94a;
+        --accent-bright: #f4d998;
+        --text: #f5f1e6;
+        --muted: #9c9384;
+        --track-dim: rgba(245, 241, 230, 0.12);
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the open lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      /* single continuous full-duration scene: everything accumulates,
+         nothing exits, so there is never a blank frame between beats */
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        padding: 90px 160px;
+        box-sizing: border-box;
+      }
+
+      .content-wrap {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        gap: 40px;
+      }
+
+      /* ---------------- top kicker ---------------- */
+      #eyebrow {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        font-size: 28px;
+        color: var(--muted);
+        opacity: 0;
+      }
+
+      /* ---------------- dial group ---------------- */
+      #dial-scene {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+      }
+
+      #dial-wrap {
+        position: relative;
+        width: 520px;
+        height: 520px;
+      }
+
+      #dial-svg {
+        position: absolute;
+        inset: 0;
+        width: 520px;
+        height: 520px;
+        opacity: 0;
+        transform: scale(0.85);
+        transform-box: fill-box;
+      }
+
+      #marker-pivot {
+        position: absolute;
+        left: 260px;
+        top: 260px;
+        width: 0;
+        height: 0;
+        transform-origin: 0 0;
+      }
+      #marker-dot {
+        position: absolute;
+        left: -9px;
+        top: -239px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--accent-bright);
+        box-shadow: 0 0 20px rgba(244, 217, 152, 0.75);
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      /* center website icon: a simple browser-chrome chip, no external asset */
+      #icon-pulse-ring {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 200px;
+        height: 148px;
+        border-radius: 20px;
+        transform: translate(-50%, -50%) scale(0.8);
+        border: 2px solid var(--accent-bright);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #site-icon {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 160px;
+        height: 116px;
+        transform: translate(-50%, -50%) scale(0.7);
+        opacity: 0;
+        border-radius: 14px;
+        background: var(--bg2);
+        border: 2px solid var(--track-dim);
+        box-shadow: 0 0 34px rgba(217, 169, 74, 0.28);
+        overflow: hidden;
+      }
+      #site-icon .icon-topbar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        height: 24px;
+        padding: 0 12px;
+        background: rgba(245, 241, 230, 0.06);
+      }
+      #site-icon .icon-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--muted);
+        opacity: 0.6;
+      }
+      #site-icon .icon-body {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 18px 16px;
+      }
+      #site-icon .icon-bar {
+        height: 10px;
+        border-radius: 5px;
+        background: linear-gradient(90deg, var(--accent) 0%, var(--accent-bright) 100%);
+        opacity: 0.85;
+      }
+      #site-icon .icon-bar.short {
+        width: 55%;
+      }
+
+      /* lead-notification badge — beat 3 only */
+      #lead-badge {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(46px, -96px) scale(0.5);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px 8px 10px;
+        border-radius: 999px;
+        background: var(--bg);
+        border: 2px solid var(--accent-bright);
+        box-shadow: 0 0 24px rgba(244, 217, 152, 0.55);
+        opacity: 0;
+      }
+      #lead-badge .lead-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--accent-bright);
+        box-shadow: 0 0 10px rgba(244, 217, 152, 0.9);
+      }
+      #lead-badge .lead-text {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        font-size: 22px;
+        letter-spacing: 0.02em;
+        color: var(--text);
+        white-space: nowrap;
+      }
+
+      /* ---------------- beat caption slot — 3 groups crossfade in place ---------------- */
+      #caption-wrap {
+        position: relative;
+        width: 1000px;
+        height: 130px;
+      }
+      .beat-group {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        opacity: 0;
+      }
+      .beat-kicker {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        font-size: 26px;
+        color: var(--muted);
+      }
+      .beat-kicker svg {
+        width: 24px;
+        height: 24px;
+        flex: none;
+        stroke: var(--accent-bright);
+      }
+      .beat-action {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 58px;
+        line-height: 1;
+        color: var(--accent-bright);
+        text-shadow: 0 0 26px rgba(244, 217, 152, 0.35);
+      }
+
+      /* ---------------- closing beat ---------------- */
+      #closing-scene {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 90px 160px;
+      }
+      #closing-caption {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        font-size: 68px;
+        color: var(--text);
+        text-align: center;
+        max-width: 1400px;
+        opacity: 0;
+      }
+      #closing-caption .em {
+        color: var(--accent-bright);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="website-247" data-start="0" data-duration="9.5" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ single continuous scene (0.0 - 9.5s) ============ -->
+      <div id="scene-main" class="clip scene" data-start="0" data-duration="9.5" data-track-index="0">
+        <div class="content-wrap" id="content-wrap">
+          <div id="eyebrow">YOUR WEBSITE, WORKING</div>
+
+          <div id="dial-scene">
+            <div id="dial-wrap">
+              <svg id="dial-svg" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="260" cy="260" r="230" fill="none" stroke="rgba(245,241,230,0.14)" stroke-width="3"></circle>
+                <circle cx="260" cy="260" r="215" fill="none" stroke="rgba(245,241,230,0.16)" stroke-width="6" stroke-dasharray="3 53.29" transform="rotate(-90 260 260)"></circle>
+                <circle id="mark-jobsite" cx="459" cy="145" r="6" fill="var(--muted)"></circle>
+                <circle id="mark-asleep" cx="260" cy="490" r="6" fill="var(--muted)"></circle>
+                <circle id="mark-family" cx="61" cy="145" r="6" fill="var(--muted)"></circle>
+              </svg>
+
+              <div id="marker-pivot">
+                <div id="marker-dot"></div>
+              </div>
+
+              <div id="icon-pulse-ring"></div>
+              <div id="site-icon">
+                <div class="icon-topbar">
+                  <div class="icon-dot"></div>
+                  <div class="icon-dot"></div>
+                  <div class="icon-dot"></div>
+                </div>
+                <div class="icon-body">
+                  <div class="icon-bar"></div>
+                  <div class="icon-bar short"></div>
+                </div>
+              </div>
+              <div id="lead-badge">
+                <div class="lead-dot"></div>
+                <div class="lead-text">+1 LEAD</div>
+              </div>
+            </div>
+
+            <div id="caption-wrap">
+              <div class="beat-group" id="beat-1">
+                <div class="beat-kicker">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16h16"></path><path d="M6 16a6 6 0 0 1 12 0"></path><path d="M12 7v3"></path></svg>
+                  ON THE JOB SITE
+                </div>
+                <div class="beat-action">EXPLAINING SERVICES</div>
+              </div>
+              <div class="beat-group" id="beat-2">
+                <div class="beat-kicker">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg>
+                  ASLEEP
+                </div>
+                <div class="beat-action">ANSWERING QUESTIONS</div>
+              </div>
+              <div class="beat-group" id="beat-3">
+                <div class="beat-kicker">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 5l8 6.5"></path><path d="M6 10v9h12v-9"></path><path d="M10 19v-5h4v5"></path></svg>
+                  WITH FAMILY
+                </div>
+                <div class="beat-action">CAPTURING A LEAD</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="closing-scene">
+        <div id="closing-caption">IT NEVER STOPS <span class="em">SELLING.</span></div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= open (0.0 - 1.0s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, 0.05);
+
+        tl.fromTo(
+          "#eyebrow",
+          { opacity: 0, y: -16 },
+          { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+          0.15,
+        );
+
+        tl.fromTo(
+          "#dial-svg",
+          { opacity: 0, scale: 0.85 },
+          { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" },
+          0.25,
+        );
+
+        tl.fromTo(
+          "#site-icon",
+          { opacity: 0, scale: 0.7 },
+          { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" },
+          0.55,
+        );
+        gsap.set("#site-icon", { transformOrigin: "50% 50%" });
+
+        tl.fromTo(
+          "#marker-dot",
+          { opacity: 0, scale: 0.5 },
+          { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2)" },
+          0.75,
+        );
+
+        /* ================= continuous 24h sweep (0.9 - 7.9s) ================= */
+        tl.fromTo(
+          "#marker-pivot",
+          { rotation: 0 },
+          { rotation: 360, duration: 7, ease: "none" },
+          0.9,
+        );
+
+        /* helper beat landing: pulse the center icon + glow ring + brighten a dial tick */
+        function landBeat(markSelector, t) {
+          tl.fromTo(
+            "#site-icon",
+            { scale: 1 },
+            { scale: 1.1, duration: 0.18, ease: "power1.out", yoyo: true, repeat: 1, immediateRender: false },
+            t,
+          );
+          tl.fromTo(
+            "#icon-pulse-ring",
+            { scale: 0.8, opacity: 0 },
+            { scale: 1.3, opacity: 0.5, duration: 0.35, ease: "power1.out", immediateRender: false },
+            t,
+          );
+          tl.to("#icon-pulse-ring", { opacity: 0, duration: 0.3, immediateRender: false }, t + 0.35);
+          tl.to(
+            markSelector,
+            { attr: { r: 9, fill: "#f4d998" }, duration: 0.25, immediateRender: false },
+            t,
+          );
+        }
+
+        /* ================= beat 1 — job site (1.0 - 3.3s) ================= */
+        tl.fromTo(
+          "#beat-1",
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", immediateRender: false },
+          1.75,
+        );
+        landBeat("#mark-jobsite", 2.07);
+        tl.to("#beat-1", { opacity: 0, y: -10, duration: 0.3, immediateRender: false }, 3.85);
+
+        /* ================= beat 2 — asleep (3.3 - 5.6s) ================= */
+        tl.fromTo(
+          "#beat-2",
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", immediateRender: false },
+          4.1,
+        );
+        landBeat("#mark-asleep", 4.4);
+        tl.to("#beat-2", { opacity: 0, y: -10, duration: 0.3, immediateRender: false }, 6.15);
+
+        /* ================= beat 3 — with family (5.6 - 7.9s) ================= */
+        tl.fromTo(
+          "#beat-3",
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", immediateRender: false },
+          6.45,
+        );
+        landBeat("#mark-family", 6.73);
+        tl.fromTo(
+          "#lead-badge",
+          { opacity: 0, scale: 0.5, y: 6 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.3, ease: "back.out(2.5)", immediateRender: false },
+          6.85,
+        );
+
+        /* ================= close (7.9 - 9.5s) ================= */
+        tl.to(
+          "#dial-scene",
+          { opacity: 0.15, duration: 0.45, ease: "power1.inOut", immediateRender: false },
+          7.9,
+        );
+        tl.fromTo(
+          "#closing-caption",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.45, ease: "power2.out", immediateRender: false },
+          8.05,
+        );
+        gsap.set("#closing-caption", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#closing-caption",
+          { textShadow: "0 0 0px rgba(244,217,152,0)" },
+          {
+            textShadow: "0 0 40px rgba(244,217,152,0.6)",
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          8.5,
+        );
+
+        // freeze-hold to 9.5s — no further tweens scheduled.
+
+        window.__timelines["website-247"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

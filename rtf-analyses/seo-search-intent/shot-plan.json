@@ -1,0 +1,60 @@
+{
+  "category": "webpage",
+  "duration_s": 9.6,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Dark-gold editorial brand system (matches piece-02-seo / google-3-pack-stat in this same video). Abstracted, stylized search-UI chassis — a rounded search bar + generic map-pack result rows, NOT a real captured page and NOT a Google logo/wordmark/brand-color reproduction — building to the moment genuine buying intent resolves into a trust choice: the homeowner skims past an ad row and lands on the best-reviewed organic result.",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384"],
+  "font": "League Gothic (display) + Montserrat (labels/body)",
+  "beats": [0.65, 2.6, 3.45, 4.14, 6.35, 6.9],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "Category set to 'webpage' per the brief's own framing (Google-search / UI-animation moment), but this is a hand-authored stylized mockup, NOT a live `hyperframes capture` of a real URL — asset_needs is empty and Step 2 (source) is skipped, matching the sibling google-3-pack-stat's established convention of an abstracted, non-Google chassis (generic magnifier glyph, generic map-pin, generic star-rating dots, placeholder name-bars) rather than a literal trademark reproduction. Searched the catalog for 'search engine results page UI mockup', 'typewriter search bar typing text', 'cursor click selection highlight card', 'map pin business listing card stagger reveal' — nothing in the hosted registry matches this exact composite UI chassis, so it is hand-authored, directly reusing the visual grammar (search-bar chassis, result-row chassis, pin/star iconography, color tokens, type scale) already established by google-3-pack-stat in this same project for visual continuity across the video."
+  },
+
+  "content": {
+    "url": null,
+    "capture": "stylized-mockup",
+    "query": "roof repair near me",
+    "ad_row": { "badge": "AD", "note": "generic placeholder ad result, no pin, dimmer weight — recedes after appearing to read as 'skimmed past, not the thing that earns trust'" },
+    "results": [
+      { "row": 0, "stars": 4 },
+      { "row": 1, "stars": 5, "selected": true, "note": "the trust-signal moment lands here — best-rated organic result gets the highlight + click" },
+      { "row": 2, "stars": 4 }
+    ],
+    "selected_result_index": 1,
+    "label": "THEY'RE NOT INTERRUPTED. THEY'RE CHOOSING.",
+    "highlights": [
+      { "region": "search-bar", "label": "typed query — 'roof repair near me'" },
+      { "region": "ad-row", "label": "ad result appears, then visibly recedes/dims — skimmed past" },
+      { "region": "result-rows", "label": "organic map-pack rows stagger in with star ratings" },
+      { "region": "row-1", "label": "cursor lands + click-ripple + glow highlight on the best-reviewed row — the trust choice" },
+      { "region": "trust-label", "label": "message lands: not an ad interruption, a deliberate choice" }
+    ]
+  },
+
+  "scenes": [
+    {
+      "id": "scene-search",
+      "start": 0,
+      "end": 2.6,
+      "beat": "Search bar sets the scene — real intent, typed by hand",
+      "description": "Abstract rounded-rect search-bar chassis (dark card, gold hairline border, generic magnifier glyph — no Google wordmark/logo/colors) centered upper-frame. Query types in via typewriter caret: 'roof repair near me'.",
+      "motion": "scale_grow entrance (back.out) on the bar chassis 0.15-0.65s, caret blink loop (finite repeat) from 0.55s, typewriter reveal of the query text 0.65-1.95s.",
+      "beats": [0.15, 0.65]
+    },
+    {
+      "id": "scene-results",
+      "start": 2.6,
+      "end": 9.6,
+      "beat": "Results resolve into a trust choice — not an ad, a decision",
+      "description": "Search bar settles smaller at top (query now static, no caret). A dim, small 'AD' result appears first then visibly recedes/dims — skimmed past. Three generic map-pack rows (pin + placeholder name-bar + star-dot rating) stagger in below. The best-rated row (row-1, 5 stars) gets a cursor landing + click-ripple + gold glow highlight — the trust-signal moment. A short label lands beneath: \"THEY'RE NOT INTERRUPTED. THEY'RE CHOOSING.\" Final state holds to the end for a clean cut back to host footage.",
+      "motion": "search-bar settle (crossfade to smaller static state) at 2.6s; ad-row slide/fade in at 2.75s then recede (opacity down) at 3.45s; 3 result rows slide_bottom stagger (0.22s apart) from 3.7s, star-dots pop back.out per row; cursor-badge scale_punch + click-ripple + row-1 border/glow intensify at 6.2-6.8s; trust-label fade_up at 6.9s; hold from ~7.35s to 9.6s.",
+      "beats": [2.6, 2.75, 3.45, 3.7, 6.2, 6.9]
+    }
+  ]
+}

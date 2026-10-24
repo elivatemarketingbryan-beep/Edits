@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Scattered Leads One System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the hook lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export;
+         plays as a full replacement of the talking-head shot). It never
+         drops back out, so the frame is never blank. */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      /* single full-duration scene: content only ever adds/converges, no
+         hard scene cuts and no moment of zero visible content */
+      #scene-main {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* ---------------- eyebrow (0.0 - ~5.4s) ---------------- */
+      #eyebrow {
+        position: absolute;
+        top: 118px;
+        left: 50%;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        font-size: 34px;
+        color: var(--muted);
+        opacity: 0;
+        white-space: nowrap;
+      }
+
+      /* ---------------- scattered lead chips (chaos motif) ---------------- */
+      .lead-chip {
+        position: absolute;
+        z-index: 4;
+        display: inline-flex;
+        align-items: center;
+        gap: 20px;
+        padding: 22px 38px;
+        border-radius: 999px;
+        border: 2px solid rgba(155, 92, 255, 0.32);
+        background: rgba(27, 17, 48, 0.72);
+        opacity: 0;
+        white-space: nowrap;
+      }
+      .chip-icon-badge {
+        flex: none;
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(155, 92, 255, 0.18);
+        color: var(--accent-bright);
+      }
+      .chip-icon-badge svg {
+        width: 58%;
+        height: 58%;
+      }
+      .chip-icon-badge.is-question {
+        font-family: "League Gothic", sans-serif;
+        font-size: 40px;
+        color: var(--muted);
+      }
+      .chip-label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 30px;
+        color: var(--text);
+      }
+      /* the forgotten chip reads muted/dimmer from the start */
+      #chip-4 {
+        border-color: rgba(144, 136, 168, 0.4);
+        background: rgba(27, 17, 48, 0.55);
+      }
+      #chip-4 .chip-label {
+        color: var(--muted);
+      }
+
+      /* ---------------- dashboard card (convergence / resolve) ---------------- */
+      .dashboard-glow {
+        position: absolute;
+        left: 960px;
+        top: 540px;
+        width: 1500px;
+        height: 1000px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(closest-side, var(--accent) 0%, transparent 70%);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .dashboard-card {
+        position: absolute;
+        left: 960px;
+        top: 540px;
+        z-index: 3;
+        width: 920px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        padding: 58px 76px;
+        border-radius: 28px;
+        border: 2px solid rgba(155, 92, 255, 0.5);
+        background: linear-gradient(165deg, rgba(27, 17, 48, 0.97), rgba(13, 8, 23, 0.98));
+        box-shadow: 0 40px 120px rgba(0, 0, 0, 0.55), 0 0 90px rgba(155, 92, 255, 0.16);
+        opacity: 0;
+      }
+      .dashboard-header {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        text-align: center;
+      }
+      .dashboard-title {
+        position: relative;
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        font-size: 100px;
+        line-height: 1;
+        color: var(--accent-bright);
+      }
+      .dashboard-underline {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0px;
+        height: 8px;
+        border-radius: 6px;
+        background: var(--accent);
+        transform-origin: left center;
+        transform: scaleX(0);
+      }
+      .dashboard-subtitle {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-size: 26px;
+        color: var(--muted);
+      }
+      .dashboard-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        width: 100%;
+        margin-top: 8px;
+      }
+      .dashboard-row {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        opacity: 0;
+      }
+      .row-check {
+        flex: none;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--accent);
+        color: var(--bg);
+        font-size: 26px;
+        font-weight: 800;
+      }
+      .row-label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        font-size: 36px;
+        color: var(--text);
+      }
+
+      /* ---------------- closing caption ---------------- */
+      #closer-caption {
+        position: absolute;
+        left: 50%;
+        bottom: 92px;
+        text-align: center;
+        max-width: 1500px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        font-size: 48px;
+        line-height: 1.3;
+        color: var(--text);
+        opacity: 0;
+        z-index: 4;
+      }
+      #closer-caption .em {
+        color: var(--accent-bright);
+        font-weight: 800;
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="icon-chat" viewBox="0 0 24 24">
+          <path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H10l-4 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          <circle cx="8.4" cy="10.2" r="1.05" fill="currentColor"/>
+          <circle cx="12" cy="10.2" r="1.05" fill="currentColor"/>
+          <circle cx="15.6" cy="10.2" r="1.05" fill="currentColor"/>
+        </symbol>
+        <symbol id="icon-mail" viewBox="0 0 24 24">
+          <path d="M3 6h18v12H3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          <path d="M3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+        <symbol id="icon-note" viewBox="0 0 24 24">
+          <path d="M5 4h11l3 3v13H5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          <path d="M16 4v3h3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          <path d="M8 11h8M8 14h8M8 17h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="icon-phone" viewBox="0 0 24 24">
+          <path
+            d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"
+            fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"
+          />
+        </symbol>
+      </defs>
+    </svg>
+
+    <div id="stage" data-composition-id="scattered-leads-one-system" data-start="0" data-duration="13" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ single continuous scene (0 - 13s) — content only ever
+           adds or converges; there is never a hard cut / blank frame ============ -->
+      <div id="scene-main" class="clip" data-start="0" data-duration="13" data-track-index="0">
+        <div id="eyebrow">WITHOUT A SYSTEM...</div>
+
+        <!-- scattered chips (chaos) -->
+        <div class="lead-chip" id="chip-0" style="left: 420px; top: 320px; rotate: -8deg;">
+          <div class="chip-icon-badge"><svg viewBox="0 0 24 24"><use href="#icon-chat"></use></svg></div>
+          <div class="chip-label">Text Messages</div>
+        </div>
+        <div class="lead-chip" id="chip-1" style="left: 1500px; top: 280px; rotate: 6deg;">
+          <div class="chip-icon-badge"><svg viewBox="0 0 24 24"><use href="#icon-mail"></use></svg></div>
+          <div class="chip-label">Social Media DMs</div>
+        </div>
+        <div class="lead-chip" id="chip-2" style="left: 360px; top: 760px; rotate: 5deg;">
+          <div class="chip-icon-badge"><svg viewBox="0 0 24 24"><use href="#icon-note"></use></svg></div>
+          <div class="chip-label">Website</div>
+        </div>
+        <div class="lead-chip" id="chip-3" style="left: 1540px; top: 780px; rotate: -6deg;">
+          <div class="chip-icon-badge"><svg viewBox="0 0 24 24"><use href="#icon-phone"></use></svg></div>
+          <div class="chip-label">Missed Call &#8594; Text Back</div>
+        </div>
+        <div class="lead-chip" id="chip-4" style="left: 960px; top: 906px; rotate: 10deg;">
+          <div class="chip-icon-badge is-question">?</div>
+          <div class="chip-label">Forgotten</div>
+        </div>
+
+        <!-- convergence: one clean dashboard -->
+        <div class="dashboard-glow" id="dashboard-glow" data-layout-allow-overflow="true"></div>
+        <div class="dashboard-card" id="dashboard-card">
+          <div class="dashboard-header">
+            <div class="dashboard-title" id="dash-title">
+              One System
+              <div class="dashboard-underline" id="dash-underline"></div>
+            </div>
+            <div class="dashboard-subtitle">Every Lead In One Place</div>
+          </div>
+          <div class="dashboard-rows" id="dashboard-rows">
+            <div class="dashboard-row" id="row-0"><span class="row-check">&#10003;</span><span class="row-label">Text Messages</span></div>
+            <div class="dashboard-row" id="row-1"><span class="row-check">&#10003;</span><span class="row-label">Social Media DMs</span></div>
+            <div class="dashboard-row" id="row-2"><span class="row-check">&#10003;</span><span class="row-label">Website</span></div>
+            <div class="dashboard-row" id="row-3"><span class="row-check">&#10003;</span><span class="row-label">Missed Call &#8594; Text Back</span></div>
+          </div>
+        </div>
+
+        <!-- closing line -->
+        <div id="closer-caption"><span class="em">Nothing</span> slips through the <span class="em">cracks.</span></div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        // ---- centering anchors: every scattered chip and the dashboard
+        // card are authored at their CSS left/top center point, then GSAP
+        // animates x/y deltas on top of that fixed xPercent/yPercent anchor
+        // (same pattern as shared-lead-problem's lead-clone travel and
+        // qualified-leads-funnel's raw-chip -> good-chip convergence). The
+        // standalone CSS `rotate` property on each chip is independent of
+        // the `transform` GSAP drives, so the scattered tilt survives the
+        // travel/shrink tween untouched. ----
+        var chipIds = ["#chip-0", "#chip-1", "#chip-2", "#chip-3", "#chip-4"];
+        gsap.set(chipIds, { xPercent: -50, yPercent: -50 });
+        gsap.set(["#dashboard-card", "#dashboard-glow"], { xPercent: -50, yPercent: -50 });
+        gsap.set(["#eyebrow", "#closer-caption"], { xPercent: -50 });
+
+        // measure the "One System" heading so the underline sweep matches
+        // its box exactly. Read once immediately, then re-read once
+        // webfonts finish loading: an inline <script> runs before
+        // "League Gothic" has necessarily swapped in, so the very first
+        // read can capture the wider fallback font's layout width and
+        // freeze the underline at a stale value. document.fonts.ready is a
+        // one-time deterministic gate (not wall-clock/random), and both
+        // reads land well before the underline's scaleX tween (first
+        // evaluated at 6.0s) is ever rendered.
+        var dashTitle = document.getElementById("dash-title");
+        var dashUnderline = document.getElementById("dash-underline");
+        function measureDashUnderline() {
+          dashUnderline.style.width = dashTitle.offsetWidth + "px";
+          dashUnderline.style.top = dashTitle.offsetHeight + 10 + "px";
+        }
+        measureDashUnderline();
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(measureDashUnderline);
+        }
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= beat 1 · hook eyebrow (0.0 - ~5.4s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, 0.1);
+
+        tl.fromTo(
+          "#eyebrow",
+          { opacity: 0, y: -16 },
+          { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
+          0.2,
+        );
+
+        /* ================= beat 2 · scattered chaos (1.5 - 6.0s) ================= */
+        var chipEntranceStarts = [1.55, 1.72, 1.89, 2.06, 2.28];
+        chipIds.forEach(function (sel, i) {
+          tl.fromTo(
+            sel,
+            { scale: 0.6, opacity: 0, y: 22 },
+            { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.9)" },
+            chipEntranceStarts[i],
+          );
+        });
+
+        // the forgotten chip dims and dissolves before the convergence ever
+        // starts — it never makes it into the system, dramatizing the line
+        // "opportunities start slipping through the cracks."
+        tl.to(
+          "#chip-4",
+          { opacity: 0, y: 14, filter: "grayscale(1) blur(2px)", duration: 0.7, ease: "power2.in" },
+          4.6,
+        );
+
+        // the eyebrow steps aside once the chaos has fully landed, making
+        // room for the dashboard to form beneath it — a small element, not
+        // a full-frame cut, so this never reads as a blank moment.
+        tl.to("#eyebrow", { opacity: 0, y: -10, duration: 0.35, ease: "power2.in" }, 5.05);
+
+        /* ================= beat 3 · convergence into one dashboard (6.0 - 10.0s) ================= */
+        tl.fromTo(
+          "#dashboard-glow",
+          { opacity: 0, scale: 0.7 },
+          { opacity: 0.32, scale: 1, duration: 0.7, ease: "power2.out" },
+          5.6,
+        );
+        tl.fromTo(
+          "#dashboard-card",
+          { scale: 0.62, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(2.0)" },
+          5.6,
+        );
+        tl.fromTo(
+          "#dash-underline",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.35, ease: "power2.out" },
+          6.05,
+        );
+
+        // each surviving chip travels from its scattered position to the
+        // dashboard's center, shrinking and fading exactly as its matching
+        // row fades in inside the card — a direct cross-fade handoff, never
+        // a blank instant between "chip" and "organized row."
+        var CENTER_X = 960, CENTER_Y = 540;
+        var chipPositions = [
+          { x: 420, y: 320 },
+          { x: 1500, y: 280 },
+          { x: 360, y: 760 },
+          { x: 1540, y: 780 },
+        ];
+        var arrivals = [6.6, 7.0, 7.4, 7.8];
+        var travelDur = 0.6;
+        for (var i = 0; i < 4; i++) {
+          var dx = CENTER_X - chipPositions[i].x;
+          var dy = CENTER_Y - chipPositions[i].y;
+          var travelStart = arrivals[i] - travelDur;
+          // NOTE: deliberately excludes `opacity` from this tween's from/to —
+          // a fromTo() defaults immediateRender:true, so an opacity value
+          // here would stomp the chip's opacity:0 hidden state the instant
+          // this tween is built (before tl.seek(0) ever runs), independent
+          // of its scheduled start time. Opacity stays owned solely by the
+          // dedicated entrance fromTo() above and the exit to() below (same
+          // pattern as qualified-leads-funnel's raw-chip fall tween).
+          tl.fromTo(
+            "#chip-" + i,
+            { x: 0, y: 0, scale: 1 },
+            { x: dx, y: dy, scale: 0.32, duration: travelDur, ease: "power3.in" },
+            travelStart,
+          );
+          tl.to("#chip-" + i, { opacity: 0, duration: 0.16, ease: "power2.in" }, arrivals[i] - 0.16);
+
+          tl.fromTo(
+            "#row-" + i,
+            { opacity: 0, x: -18 },
+            { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" },
+            arrivals[i],
+          );
+        }
+
+        // gentle settle-glow once the full dashboard has resolved
+        tl.fromTo(
+          "#dashboard-card",
+          { boxShadow: "0 40px 120px rgba(0,0,0,0.55), 0 0 90px rgba(155,92,255,0.16)" },
+          {
+            boxShadow: "0 40px 120px rgba(0,0,0,0.55), 0 0 130px rgba(155,92,255,0.32)",
+            duration: 0.5,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          8.1,
+        );
+
+        /* ================= beat 4 · closing line (10.0 - 13.0s) ================= */
+        tl.fromTo(
+          "#closer-caption",
+          { opacity: 0, y: 26 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+          10.0,
+        );
+
+        var emphSpans = document.querySelectorAll("#closer-caption .em");
+        emphSpans.forEach(function (el, i) {
+          gsap.set(el, { transformOrigin: "50% 50%" });
+          tl.fromTo(
+            el,
+            { textShadow: "0 0 0px rgba(201,168,255,0)" },
+            {
+              textShadow: "0 0 34px rgba(201,168,255,0.8)",
+              duration: 0.3,
+              yoyo: true,
+              repeat: 1,
+              ease: "sine.inOut",
+              immediateRender: false,
+            },
+            10.7 + i * 0.15,
+          );
+        });
+
+        // freeze-hold from ~11.2s to the end (13.0s) for a clean cut back to
+        // host footage — no further tweens scheduled; the resolved
+        // dashboard + closing line simply persist.
+
+        window.__timelines["scattered-leads-one-system"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

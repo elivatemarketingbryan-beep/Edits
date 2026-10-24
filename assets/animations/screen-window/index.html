@@ -1,0 +1,54 @@
+<!doctype html>
+<!-- Screen window: a screen recording in a rounded app window floating on a brand
+     gradient, with the presenter in a portrait card beside it, so demos never lose the
+     face. 16:9: window left, face card right. 9:16: window on top, face below.
+     --screen is the recording (video or image), --face the presenter (video or image;
+     a video's sound is kept). Sounds: "whoosh-data" as the window flies in, "open" for
+     the face card. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; font-family: "Inter", sans-serif;
+        background: radial-gradient(ellipse at 15% 20%, __ACCENT__ 0%, transparent 55%), radial-gradient(ellipse at 85% 90%, #1D4ED8 0%, transparent 55%), __ACCENT_DEEP__; }
+      .frame { position: absolute; overflow: hidden; background: #fff; box-shadow: 0 40px 120px rgba(0, 0, 0, .45); }
+      .frame img, .frame video { position: absolute; left: 0; width: 100%; object-fit: cover; }
+      #win .bar { position: absolute; left: 0; right: 0; top: 0; background: #f3f2f7; display: flex; align-items: center; border-bottom: 1px solid #e3e1ea; }
+      #win .bar i { display: inline-block; border-radius: 50%; }
+      #face { background: #222; }
+      #face img, #face video { top: 0; height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <div class="frame" id="win"><div class="bar"><i></i><i></i><i></i></div>__SCREEN__</div>
+      <div class="frame" id="face">__FACE__</div>
+    </div>
+    <script>
+      const W = __W__, H = __H__, DUR = __DURATION__;
+      const portrait = H > W, m = Math.min(W, H) * 0.05;
+      const win = document.getElementById('win'), face = document.getElementById('face');
+      // Window and face card sizes for each format.
+      const box = portrait
+        ? { win: [m, m * 2.2, W - 2 * m, (W - 2 * m) * 0.68], face: [m * 2, m * 3.2 + (W - 2 * m) * 0.68, W - 4 * m, H - (m * 5.2 + (W - 2 * m) * 0.68)] }
+        : { win: [m, m * 1.4, W * 0.7, H - m * 2.8], face: [m * 2 + W * 0.7, m * 1.4 + (H - m * 2.8) * 0.14, W - W * 0.7 - m * 3, (H - m * 2.8) * 0.72] };
+      const place = (el, [x, y, w, h], r) => Object.assign(el.style, { left: x + 'px', top: y + 'px', width: w + 'px', height: h + 'px', borderRadius: r + 'px' });
+      place(win, box.win, m * 0.45); place(face, box.face, m * 0.6);
+      const barH = m * 0.75, bar = win.querySelector('.bar');
+      Object.assign(bar.style, { height: barH + 'px', paddingLeft: barH * 0.5 + 'px', gap: barH * 0.3 + 'px' });
+      ['#ff5f57', '#febc2e', '#28c840'].forEach((c, i) => Object.assign(bar.children[i].style, { width: barH * 0.32 + 'px', height: barH * 0.32 + 'px', background: c }));
+      const media = win.querySelector('img, video');
+      if (media) Object.assign(media.style, { top: barH + 'px', height: `calc(100% - ${barH}px)`, objectPosition: 'top center' });
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.from(win, { opacity: 0, y: H * 0.06, scale: 0.94, duration: 0.7, ease: 'power3.out' }, 0);
+      tl.from(face, { opacity: 0, x: portrait ? 0 : W * 0.04, y: portrait ? H * 0.04 : 0, duration: 0.6, ease: 'power3.out' }, 0.25);
+      tl.to(win, { scale: 1.015, duration: DUR, ease: 'sine.inOut' }, 0.7);
+      window.__timelines['main'] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 13.5,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Editorial gold-on-charcoal brand system shared with pricing-tiers-reveal / revenue-math-reveal / shared-lead-problem: League Gothic display numerals + uppercase headlines, Montserrat labels, radial near-black vignette background, glow-pulse emphasis, back.out/power4.out punches, freeze-hold endings for clean cuts back to host footage.",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384"],
+  "font": "League Gothic + Montserrat (Google Fonts, matches sibling projects)",
+  "beats": [0, 1.5, 3.0, 9.0, 13.5],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "No catalog block matched a literal funnel/filter visualization (searched 'funnel filter visualization particles narrowing', 'sales funnel chart diagram narrowing triangle', 'chip tag stagger fade in out labels' via npx hyperframes catalog --json — closest hits were generic particle/flowchart blocks, none doing a converge-and-filter funnel). Logged via `hyperframes feedback --search-miss`. Hand-authored the funnel scene reusing the exact chip/connector/travel choreography pattern already established in shared-lead-problem (hook-chip pills, connector-svg stroke-draw, clone-travels-along-path-then-fades-with-landing-pulse) rather than inventing a new visual language."
+  },
+
+  "content": {
+    "scenes": [
+      {
+        "id": "scene-neg",
+        "start": 0,
+        "end": 1.5,
+        "text": "MORE LEADS ISN'T THE GOAL.",
+        "emphasis_words": [],
+        "emotion": "flat / dismissive setup, muted",
+        "motion": "word_reveal (quick stagger slide_top) -> hold -> strike_through sweep across the line -> fade_out with slight blur just before the cut",
+        "beats": [0.9]
+      },
+      {
+        "id": "scene-pos",
+        "start": 1.5,
+        "end": 3.0,
+        "text": "MORE QUALIFIED OPPORTUNITIES IS.",
+        "emphasis_words": ["QUALIFIED", "IS."],
+        "emotion": "bold correction, confident",
+        "motion": "scale_punch (back.out) single-beat entrance in bright gold, glow pulse on hold; not the hero — sets up the funnel visual",
+        "beats": [1.55]
+      },
+      {
+        "id": "scene-funnel",
+        "start": 3.0,
+        "end": 9.0,
+        "text": "RAW LEADS -> QUALIFIED OPPORTUNITIES (visual funnel, no headline copy)",
+        "emphasis_words": ["NO BUDGET", "JUST BROWSING", "WRONG AREA", "CHEAPEST ONLY", "REAL BUDGET", "REAL TIMELINE", "READY TO HIRE"],
+        "emotion": "the dominant motif — mechanical, satisfying filtration",
+        "motion": "gold funnel/trapezoid outline draws on (stroke-dash reveal). 10 messy chips/dots stagger in along the top edge with varied entrance eases, then fall on individually-varied durations/eases converging on the funnel neck (organic, non-uniform timing = 'messy'). 7 dissolve (scale+fade out) exactly at the neck = filtered away. 3 survivors dissolve at the neck at the same instant a pre-staged bright-gold good-chip pops (back.out) and travels neck -> a clean landing row, already recolored and relabeled REAL BUDGET / REAL TIMELINE / READY TO HIRE. A neck glow pulses only on survivor passes. Underline sweep + bottom eyebrow land after the row completes.",
+        "beats": [3.0, 4.97, 5.57, 6.12, 7.0]
+      },
+      {
+        "id": "scene-close",
+        "start": 9.0,
+        "end": 13.5,
+        "text": "SPEED + QUALIFICATION TURNS INTEREST INTO BOOKED ESTIMATES.",
+        "emphasis_words": ["SPEED + QUALIFICATION", "BOOKED ESTIMATES"],
+        "emotion": "resolved, confident close",
+        "motion": "fade_in + slide_bottom (power2.out), brief glow pulse on emphasis phrases, then freeze-hold to end for a clean cut back to host footage",
+        "beats": [9.2]
+      }
+    ]
+  }
+}

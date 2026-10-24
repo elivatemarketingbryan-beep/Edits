@@ -1,0 +1,137 @@
+<!doctype html>
+<!-- Map route: starts close on the first city, smoothly zooms out while staying on it,
+     then draws a glowing route to the second city with the camera following the line's
+     head, and settles on the destination. Eased keyframes throughout, no jumps.
+     --text is "Los Angeles > New York" (cities from the table below, or "lon,lat:Name").
+     Real outlines: world countries, plus US states when both cities are in the US.
+     Pair with "whoosh-low" on the zoom-out, "stretch" as the line starts, "pop" on arrival. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: __BG__; }
+      svg { position: absolute; inset: 0; }
+      .land { fill: #221e2c; stroke: #3d3850; stroke-width: .6; vector-effect: non-scaling-stroke; }
+      .states { fill: none; stroke: #352f43; stroke-width: .5; vector-effect: non-scaling-stroke; }
+      .route-glow { fill: none; stroke: __ACCENT__; stroke-opacity: .45; stroke-linecap: round; filter: blur(6px); vector-effect: non-scaling-stroke; }
+      .route { fill: none; stroke: __ACCENT_LIGHT__; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+      .dot { fill: __ACCENT_LIGHT__; stroke: __BG__; vector-effect: non-scaling-stroke; }
+      .ring { fill: none; stroke: __ACCENT__; vector-effect: non-scaling-stroke; }
+      .label { position: absolute; font-family: "Inter", sans-serif; font-weight: 700; color: #fff; white-space: nowrap;
+        transform: translate(-50%, -150%); text-shadow: 0 2px 12px rgba(0, 0, 0, .8); }
+      .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 50%, __BG__ 100%); pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <svg id="map" viewBox="0 0 __W__ __H__"><g id="cam"><g id="land"></g><g id="routeG"></g></g></svg>
+      <div class="vignette"></div>
+      <div class="label" id="l1"></div><div class="label" id="l2"></div>
+    </div>
+    <script>
+      const W = __W__, H = __H__, TEXT = __TEXT__, DUR = __DURATION__;
+      const CITIES = {
+        'Los Angeles': [-118.2437, 34.0522], 'New York': [-74.006, 40.7128], 'San Francisco': [-122.4194, 37.7749],
+        'Chicago': [-87.6298, 41.8781], 'Miami': [-80.1918, 25.7617], 'Seattle': [-122.3321, 47.6062],
+        'Austin': [-97.7431, 30.2672], 'Dallas': [-96.797, 32.7767], 'Houston': [-95.3698, 29.7604],
+        'Denver': [-104.9903, 39.7392], 'Atlanta': [-84.388, 33.749], 'Boston': [-71.0589, 42.3601],
+        'Las Vegas': [-115.1398, 36.1699], 'Phoenix': [-112.074, 33.4484], 'San Diego': [-117.1611, 32.7157],
+        'Nashville': [-86.7816, 36.1627], 'Washington': [-77.0369, 38.9072], 'Philadelphia': [-75.1652, 39.9526],
+        'Toronto': [-79.3832, 43.6532], 'Mexico City': [-99.1332, 19.4326], 'London': [-0.1276, 51.5072],
+        'Paris': [2.3522, 48.8566], 'Dubai': [55.2708, 25.2048], 'Tokyo': [139.6503, 35.6762], 'Sydney': [151.2093, -33.8688],
+        'Lagos': [3.3792, 6.5244], 'Sao Paulo': [-46.6333, -23.5505], 'Berlin': [13.405, 52.52], 'Madrid': [-3.7038, 40.4168],
+      };
+      const US = new Set(Object.keys(CITIES).slice(0, 18));
+      const parse = (s) => {
+        s = s.trim();
+        const m = s.match(/^(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*:\s*(.+)$/);
+        return m ? { name: m[3], ll: [Number(m[1]), Number(m[2])] } : { name: s, ll: CITIES[s] };
+      };
+      const [A, B] = TEXT.split(/>|->|→/).map(parse);
+      const portrait = H > W, s = Math.min(W, H);
+      const bothUS = US.has(A.name) && US.has(B.name);
+
+      // Projection fitted so the two cities sit comfortably inside the frame at zoom 1.
+      const route = { type: 'LineString', coordinates: [A.ll, B.ll] };
+      const projection = d3.geoMercator().fitExtent([[W * 0.16, H * (portrait ? 0.32 : 0.2)], [W * 0.84, H * (portrait ? 0.68 : 0.8)]], route);
+      const pathGen = d3.geoPath(projection);
+      const [ax, ay] = projection(A.ll), [bx, by] = projection(B.ll);
+
+      const NS = 'http://www.w3.org/2000/svg';
+      const el = (tag, cls, parent, attrs = {}) => { const e = document.createElementNS(NS, tag); if (cls) e.setAttribute('class', cls); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+      const cam = document.getElementById('cam'), routeG = document.getElementById('routeG');
+
+      // Route: a gentle great-circle-ish arc, bowed away from the equator.
+      const mx = (ax + bx) / 2, my = (ay + by) / 2, len = Math.hypot(bx - ax, by - ay);
+      const d = `M${ax},${ay} Q${mx},${my - len * 0.18} ${bx},${by}`;
+      const lw = s * 0.006;
+      const glow = el('path', 'route-glow', routeG, { d, 'stroke-width': lw * 3 });
+      const line = el('path', 'route', routeG, { d, 'stroke-width': lw });
+      const L = line.getTotalLength();
+      for (const p of [glow, line]) { p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
+      const ringA = el('circle', 'ring', routeG, { cx: ax, cy: ay, r: s * 0.02, 'stroke-width': lw * 0.6 });
+      const dotA = el('circle', 'dot', routeG, { cx: ax, cy: ay, r: s * 0.009, 'stroke-width': lw * 0.5 });
+      const dotB = el('circle', 'dot', routeG, { cx: bx, cy: by, r: s * 0.009, 'stroke-width': lw * 0.5 });
+      const ringB = el('circle', 'ring', routeG, { cx: bx, cy: by, r: s * 0.02, 'stroke-width': lw * 0.6 });
+      const l1 = document.getElementById('l1'), l2 = document.getElementById('l2');
+      l1.textContent = A.name; l2.textContent = B.name;
+      for (const l of [l1, l2]) l.style.fontSize = s * 0.034 + 'px';
+
+      // Camera: one state object drives zoom and focus point every frame.
+      // Dots and pulse rings keep the same on-screen size at any zoom.
+      const camState = { z: 5, fx: ax, fy: ay, draw: 0, clock: 0 };
+      function render() {
+        const z = camState.z;
+        for (const dot of [dotA, dotB]) dot.setAttribute('r', s * 0.009 / z);
+        const phase = (camState.clock % 1.2) / 1.2;
+        [[ringA, phase], [ringB, (phase + 0.5) % 1]].forEach(([ring, ph]) => { ring.setAttribute('r', s * (0.012 + 0.02 * ph) / z); ring.style.opacity = 1 - ph; });
+        cam.setAttribute('transform', `translate(${W / 2 - camState.fx * z},${H / 2 - camState.fy * z}) scale(${z})`);
+        const off = L * (1 - camState.draw);
+        line.style.strokeDashoffset = off; glow.style.strokeDashoffset = off;
+        const place = (lab, x, y) => { lab.style.left = W / 2 + (x - camState.fx) * z + 'px'; lab.style.top = H / 2 + (y - camState.fy) * z + 'px'; };
+        place(l1, ax, ay); place(l2, bx, by);
+      }
+
+      const tl = gsap.timeline({ paused: true });
+      const tZoom = 0.3, zoomDur = DUR * 0.28, tLine = tZoom + zoomDur + 0.2, lineDur = DUR * 0.42, tEnd = tLine + lineDur;
+      // 1) Zoom out from the first city, staying centred on it.
+      tl.to(camState, { z: 1.9, duration: zoomDur, ease: 'power3.inOut', onUpdate: render }, tZoom);
+      tl.from(l1, { opacity: 0, duration: 0.5 }, 0.2);
+      // 2) Draw the route while the camera follows its head, then settle on the destination.
+      const head = { p: 0 };
+      tl.to(head, { p: 1, duration: lineDur, ease: 'sine.inOut', onUpdate: () => {
+        camState.draw = head.p;
+        const pt = line.getPointAtLength(L * head.p);
+        const follow = 0.75;                              // trail the head slightly so the line leads
+        camState.fx = ax + (pt.x - ax) * follow; camState.fy = ay + (pt.y - ay) * follow;
+        render();
+      } }, tLine);
+      tl.to(camState, { z: 1.45, duration: lineDur, ease: 'sine.inOut', onUpdate: render }, tLine);
+      tl.to(camState, { fx: bx, fy: by, z: 2.2, duration: Math.max(0.8, DUR - tEnd - 0.2), ease: 'power2.inOut', onUpdate: render }, tEnd);
+      tl.fromTo([dotB, l2], { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' }, tEnd - 0.1);
+      tl.fromTo('#routeG .ring:last-of-type', { visibility: 'hidden' }, { visibility: 'visible', duration: 0.01 }, tEnd - 0.1);
+      tl.to(camState, { clock: DUR, duration: DUR, ease: 'none', onUpdate: render }, 0);
+      window.__cues = { zoom: tZoom, lineStart: tLine, arrive: tEnd };   // for sound placement
+      render();
+
+      // Load the real outlines first, and only then hand the timeline to the renderer, so
+      // no frame is ever captured with the map missing.
+      const land = document.getElementById('land');
+      fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json').then((r) => r.json()).then((world) => {
+        for (const f of topojson.feature(world, world.objects.countries).features) el('path', 'land', land, { d: pathGen(f) });
+        if (!bothUS) return;
+        return fetch('https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json').then((r) => r.json()).then((us) => {
+          el('path', 'states', land, { d: pathGen(topojson.mesh(us, us.objects.states, (a, b) => a !== b)) });
+        });
+      }).then(() => {
+        window.__timelines = window.__timelines || {};
+        window.__timelines['main'] = tl;
+      });
+    </script>
+  </body>
+</html>

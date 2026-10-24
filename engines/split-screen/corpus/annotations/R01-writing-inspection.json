@@ -1,0 +1,33 @@
+{
+  "id": "R01",
+  "status": "observed",
+  "source": {
+    "url": "https://www.instagram.com/reel/DeNA3LtjDzc/",
+    "creator": "jackroberts___",
+    "topic": "Writing cleanup / Slop Monster",
+    "publishedDate": null,
+    "durationSeconds": 36.18,
+    "dimensions": {"width": 1080, "height": 1920},
+    "mediaBundled": false
+  },
+  "inspection": {
+    "date": "2026-10-07",
+    "method": "Direct visible playback in Chrome; selected muted frames and player metadata.",
+    "continuousReview": false,
+    "audioReviewed": false,
+    "coverageNote": "Approximate observation points, not edit boundaries. No continuous review or spoken transcript."
+  },
+  "observations": [
+    {"atSeconds": 10.18, "timingMeaning": "approximate_observation_point", "layout": "upper graphic / lower presenter, approximately equal halves", "visibleEvidence": "Pale yellow stage with paper/email card, colored text highlights, oversized blue magnifier, and small character. Close presenter with microphone below. Short caption straddles seam.", "relationships": ["inspection", "highlighting"]},
+    {"atSeconds": 19.85, "timingMeaning": "approximate_observation_point", "layout": "upper graphic / lower presenter", "visibleEvidence": "Paper card with highlighted writing and small red flags in upper half. Presenter remains below.", "relationships": ["highlighting", "error identification"]},
+    {"atSeconds": 30.44, "timingMeaning": "approximate_observation_point", "layout": "full-height illustration", "visibleEvidence": "Character, message card, advert card, and rising-chart sign. Short caption below central artwork, around two-thirds frame height.", "relationships": ["transformation", "application"]},
+    {"atSeconds": null, "timingMeaning": "untimed", "layout": "full-height illustration", "visibleEvidence": "Fan of overlapping webpage/email cards over pastel stage; caption below artwork.", "relationships": ["grouping", "hierarchy"]}
+  ],
+  "principles": [
+    "An inspection tool and visible highlights make an abstract cleanup action concrete.",
+    "Supporting graphics can take over the frame when the explanation needs space.",
+    "Caption position follows the active layout and avoids the principal artwork."
+  ],
+  "unknowns": ["Exact scene boundaries", "Complete speech", "Audio treatment", "Font family", "Animation timing and library", "Source-asset provenance", "Engagement performance"],
+  "notes": ["Principles are our interpretations of visible evidence. They are not claims about the creator's editing process."]
+}

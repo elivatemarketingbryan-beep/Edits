@@ -1,0 +1,118 @@
+{
+  "category": "icon-sequence",
+  "category_note": "Not a clean fit for the standard category table (icons are the hero, not text/stat/chart/logo/lower-third/map/webpage/news/tweet/asset-fusion). Closest structural precedent: demand-reputation-flywheel's hand-authored sequential-state-reveal pattern (icon badge + label + glow pulse, single continuous clip).",
+  "duration_s": 7.0,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Purple/black brand system — minimal line-art icon badges in a horizontal row, connected by thin drawn lines, each landing with a scale+glow activate beat, capped by one left-to-right unifying glow sweep. Icon-first, near-textless (one word per icon only).",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8"],
+  "font": "League Gothic + Montserrat",
+  "beats": [1.0, 2.1, 3.2, 4.3, 5.5, 6.5],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": null,
+
+  "content": {
+    "scenes": [
+      {
+        "id": "bg-fill",
+        "start": 0,
+        "end": 0.4,
+        "text": null,
+        "motion": "persistent bg-fill fades in once, never out (defect-avoidance: no blank-frame gap)"
+      },
+      {
+        "id": "icon-0-attract",
+        "start": 1.0,
+        "end": 1.5,
+        "text": "ATTRACT",
+        "emphasis_words": ["ATTRACT"],
+        "emotion": "confident, energizing",
+        "motion": "badge scale_punch (back.out) + glow_pulse (yoyo) then label fade_in below",
+        "beats": [1.0, 1.05, 1.15]
+      },
+      {
+        "id": "line-0",
+        "start": 1.5,
+        "end": 2.0,
+        "text": null,
+        "motion": "connector line draws left-to-right (stroke-dashoffset) between icon 0 and icon 1, arrives just before icon 1 lands"
+      },
+      {
+        "id": "icon-1-capture",
+        "start": 2.1,
+        "end": 2.6,
+        "text": "CAPTURE",
+        "emphasis_words": ["CAPTURE"],
+        "emotion": "confident, energizing",
+        "motion": "badge scale_punch + glow_pulse then label fade_in",
+        "beats": [2.1, 2.15, 2.25]
+      },
+      {
+        "id": "line-1",
+        "start": 2.6,
+        "end": 3.1,
+        "text": null,
+        "motion": "connector line draws between icon 1 and icon 2"
+      },
+      {
+        "id": "icon-2-nurture",
+        "start": 3.2,
+        "end": 3.7,
+        "text": "NURTURE",
+        "emphasis_words": ["NURTURE"],
+        "emotion": "confident, energizing",
+        "motion": "badge scale_punch + glow_pulse then label fade_in",
+        "beats": [3.2, 3.25, 3.35]
+      },
+      {
+        "id": "line-2",
+        "start": 3.7,
+        "end": 4.2,
+        "text": null,
+        "motion": "connector line draws between icon 2 and icon 3"
+      },
+      {
+        "id": "icon-3-close",
+        "start": 4.3,
+        "end": 4.8,
+        "text": "CLOSE",
+        "emphasis_words": ["CLOSE"],
+        "emotion": "confident, resolving",
+        "motion": "badge scale_punch + glow_pulse then label fade_in",
+        "beats": [4.3, 4.35, 4.45]
+      },
+      {
+        "id": "system-sweep",
+        "start": 5.5,
+        "end": 6.3,
+        "text": null,
+        "motion": "one left-to-right glow sweep across the row; each badge + connector re-pulses as the sweep passes it, showing one connected system",
+        "beats": [5.5, 5.55, 5.65, 5.75, 5.85, 5.95, 6.05, 6.15]
+      },
+      {
+        "id": "freeze-hold",
+        "start": 6.5,
+        "end": 7.0,
+        "text": null,
+        "motion": "hold — no further tweens, clean cut point"
+      }
+    ],
+    "icons": [
+      { "id": 0, "label": "ATTRACT", "glyph": "megaphone", "center_x": 330 },
+      { "id": 1, "label": "CAPTURE", "glyph": "funnel", "center_x": 750 },
+      { "id": 2, "label": "NURTURE", "glyph": "heart", "center_x": 1170 },
+      { "id": 3, "label": "CLOSE", "glyph": "checkmark", "center_x": 1590 }
+    ],
+    "layout": {
+      "icon_center_y": 460,
+      "badge_diameter": 150,
+      "label_top_y": 575
+    }
+  },
+
+  "shot_brief": "A 7-second icon-first accent piece on the purple/black brand system. Four clean line-art icon badges (megaphone / funnel / heart / checkmark) land left-to-right across a single horizontal row, each with a quick scale+glow activate beat and a one-word label (ATTRACT / CAPTURE / NURTURE / CLOSE) fading in beneath it. A thin line draws between each pair right behind the landing, so by ~4.8s all 4 icons, labels, and 3 connectors are visible as one row. At 5.5s a single glow sweeps left to right across the whole row, re-pulsing each icon and connector in turn to read as one connected system, then holds for a clean cut. The dominant motif is sequential activation — motion carries the 'system' message with almost no text."
+}

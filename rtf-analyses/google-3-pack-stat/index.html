@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Google 3-Pack Stat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0a08;
+        --bg2: #17140f;
+        --accent: #d9a94a;
+        --accent-bright: #f4d998;
+        --text: #f5f1e6;
+        --muted: #9c9384;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the hook lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 40%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 220px;
+        box-sizing: border-box;
+      }
+
+      /* ================= scene 1+2 shared chassis: search bar + result rows ================= */
+      .search-scene-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        gap: 46px;
+      }
+
+      /* -- search bar (abstract, non-Google chassis) -- */
+      .search-bar {
+        position: relative;
+        width: 1240px;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        padding: 34px 46px;
+        border-radius: 60px;
+        background: var(--bg2);
+        border: 2px solid rgba(217, 169, 74, 0.4);
+        box-shadow: 0 0 60px rgba(217, 169, 74, 0.12);
+        opacity: 0;
+        transform-origin: 50% 50%;
+      }
+      .search-glyph {
+        flex: none;
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .search-glyph svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .search-text-wrap {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+      .search-text {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        font-size: 44px;
+        color: var(--text);
+        white-space: nowrap;
+      }
+      .search-caret {
+        display: inline-block;
+        width: 4px;
+        height: 40px;
+        margin-left: 4px;
+        background: var(--accent-bright);
+        vertical-align: middle;
+      }
+
+      /* -- result rows (generic map-pack visual language, no Google branding) -- */
+      .result-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        width: 1240px;
+      }
+      .result-row {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        padding: 26px 40px;
+        border-radius: 24px;
+        background: var(--bg2);
+        border: 1px solid rgba(245, 241, 230, 0.08);
+        opacity: 0;
+      }
+      .row-pin {
+        flex: none;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, var(--accent-bright), var(--accent) 75%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 26px rgba(217, 169, 74, 0.35);
+      }
+      .row-pin svg {
+        width: 30px;
+        height: 30px;
+      }
+      .row-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .row-name-bar {
+        width: 340px;
+        max-width: 60%;
+        height: 26px;
+        border-radius: 8px;
+        background: rgba(245, 241, 230, 0.7);
+      }
+      .row-stars {
+        display: flex;
+        gap: 10px;
+      }
+      .row-star {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--accent);
+        opacity: 0;
+        transform: scale(0.4);
+      }
+
+      /* ================= scene 3: hero stat ================= */
+      .hero-scene {
+        gap: 0;
+      }
+      .stat-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1500px;
+        height: 950px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(closest-side, var(--accent) 0%, transparent 70%);
+        opacity: 0;
+        pointer-events: none;
+        z-index: -1;
+      }
+      .hero-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 44px;
+        text-align: center;
+      }
+      .hero-numeral {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        line-height: 1;
+        font-size: 460px;
+        color: var(--accent-bright);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.01em;
+        opacity: 0;
+      }
+      .hero-label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-size: 46px;
+        line-height: 1.3;
+        color: var(--text);
+        max-width: 1180px;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-g3p1" id="stage" data-composition-id="google-3-pack-stat" data-start="0" data-duration="10.5" data-fps="30" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-g3p2" id="bg-fill"></div>
+
+      <!-- ============ scene 1 · search bar + typewriter (0.0 - 2.2s) ============ -->
+      <div data-hf-id="hf-g3p3" id="scene-search" class="clip scene" data-start="0" data-duration="2.2" data-track-index="0">
+        <div data-hf-id="hf-g3p4" class="search-scene-col" id="search-col">
+          <div data-hf-id="hf-g3p5" class="search-bar" id="search-bar">
+            <div data-hf-id="hf-g3p6" class="search-glyph">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10.5" cy="10.5" r="7" stroke="#D9A94A" stroke-width="2.4"></circle>
+                <line x1="20.5" y1="20.5" x2="15.5" y2="15.5" stroke="#D9A94A" stroke-width="2.4" stroke-linecap="round"></line>
+              </svg>
+            </div>
+            <div data-hf-id="hf-g3p7" class="search-text-wrap">
+              <span data-hf-id="hf-g3p8" class="search-text" id="search-text"></span><span data-hf-id="hf-g3p9" class="search-caret" id="search-caret"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ scene 2 · stylized 3-pack rows (2.2 - 5.2s) ============ -->
+      <div data-hf-id="hf-g3pa" id="scene-3pack" class="clip scene" data-start="2.2" data-duration="3.0" data-track-index="0">
+        <div data-hf-id="hf-g3pb" class="search-scene-col" id="pack-col">
+          <div data-hf-id="hf-g3pc" class="search-bar" id="search-bar-2" style="transform: scale(0.86); opacity: 1;">
+            <div data-hf-id="hf-g3pd" class="search-glyph">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10.5" cy="10.5" r="7" stroke="#D9A94A" stroke-width="2.4"></circle>
+                <line x1="20.5" y1="20.5" x2="15.5" y2="15.5" stroke="#D9A94A" stroke-width="2.4" stroke-linecap="round"></line>
+              </svg>
+            </div>
+            <div data-hf-id="hf-g3pe" class="search-text-wrap">
+              <span data-hf-id="hf-g3pf" class="search-text">concrete contractor near me</span>
+            </div>
+          </div>
+          <div data-hf-id="hf-g3pg" class="result-rows" id="result-rows">
+            <div data-hf-id="hf-g3ph" class="result-row" id="row-0">
+              <div data-hf-id="hf-g3pi" class="row-pin">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#0B0A08"></path>
+                  <circle cx="12" cy="9" r="2.4" fill="#0B0A08"></circle>
+                </svg>
+              </div>
+              <div data-hf-id="hf-g3pj" class="row-body">
+                <div data-hf-id="hf-g3pk" class="row-name-bar"></div>
+                <div data-hf-id="hf-g3pl" class="row-stars">
+                  <div data-hf-id="hf-g3pm" class="row-star" id="star-0-0"></div>
+                  <div data-hf-id="hf-g3pn" class="row-star" id="star-0-1"></div>
+                  <div data-hf-id="hf-g3po" class="row-star" id="star-0-2"></div>
+                  <div data-hf-id="hf-g3pp" class="row-star" id="star-0-3"></div>
+                  <div data-hf-id="hf-g3pq" class="row-star" id="star-0-4"></div>
+                </div>
+              </div>
+            </div>
+            <div data-hf-id="hf-g3pr" class="result-row" id="row-1">
+              <div data-hf-id="hf-g3ps" class="row-pin">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#0B0A08"></path>
+                  <circle cx="12" cy="9" r="2.4" fill="#0B0A08"></circle>
+                </svg>
+              </div>
+              <div data-hf-id="hf-g3pt" class="row-body">
+                <div data-hf-id="hf-g3pu" class="row-name-bar"></div>
+                <div data-hf-id="hf-g3pv" class="row-stars">
+                  <div data-hf-id="hf-g3pw" class="row-star" id="star-1-0"></div>
+                  <div data-hf-id="hf-g3px" class="row-star" id="star-1-1"></div>
+                  <div data-hf-id="hf-g3py" class="row-star" id="star-1-2"></div>
+                  <div data-hf-id="hf-g3pz" class="row-star" id="star-1-3"></div>
+                  <div data-hf-id="hf-g3q0" class="row-star" id="star-1-4"></div>
+                </div>
+              </div>
+            </div>
+            <div data-hf-id="hf-g3q1" class="result-row" id="row-2">
+              <div data-hf-id="hf-g3q2" class="row-pin">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#0B0A08"></path>
+                  <circle cx="12" cy="9" r="2.4" fill="#0B0A08"></circle>
+                </svg>
+              </div>
+              <div data-hf-id="hf-g3q3" class="row-body">
+                <div data-hf-id="hf-g3q4" class="row-name-bar"></div>
+                <div data-hf-id="hf-g3q5" class="row-stars">
+                  <div data-hf-id="hf-g3q6" class="row-star" id="star-2-0"></div>
+                  <div data-hf-id="hf-g3q7" class="row-star" id="star-2-1"></div>
+                  <div data-hf-id="hf-g3q8" class="row-star" id="star-2-2"></div>
+                  <div data-hf-id="hf-g3q9" class="row-star" id="star-2-3"></div>
+                  <div data-hf-id="hf-g3qa" class="row-star" id="star-2-4"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ scene 3 · hero stat (5.2 - 10.5s) ============ -->
+      <div data-hf-id="hf-g3qb" id="scene-hero" class="clip scene hero-scene" data-start="5.2" data-duration="5.3" data-track-index="0">
+        <div data-hf-id="hf-g3qc" class="stat-glow" id="glow-hero" data-layout-allow-overflow="true"></div>
+        <div data-hf-id="hf-g3qd" class="hero-card" id="hero-card">
+          <div data-hf-id="hf-g3qe" class="hero-numeral" id="val-hero">0%</div>
+          <div data-hf-id="hf-g3qf" class="hero-label" id="label-hero">OF SEARCH TRAFFIC GOES TO THE GOOGLE 3-PACK</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var QUERY = "concrete contractor near me";
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= scene 1 · search bar + typewriter (0.0 - 2.2s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, 0.08);
+
+        tl.fromTo(
+          "#search-bar",
+          { scale: 0.7, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.0)" },
+          0.15,
+        );
+
+        // caret blink loop (finite repeat, deterministic)
+        tl.to("#search-caret", { opacity: 0, duration: 0.22, repeat: 7, yoyo: true, ease: "none" }, 0.55);
+
+        // typewriter: reveal one character of QUERY at a time via a proxy + onUpdate (seek-safe)
+        var typeProxy = { n: 0 };
+        var searchTextEl = document.getElementById("search-text");
+        tl.to(
+          typeProxy,
+          {
+            n: QUERY.length,
+            duration: 1.35,
+            ease: "none",
+            immediateRender: false,
+            onUpdate: function () {
+              searchTextEl.textContent = QUERY.slice(0, Math.round(typeProxy.n));
+            },
+          },
+          0.65,
+        );
+
+        /* ================= scene 2 · stylized 3-pack rows (2.2 - 5.2s) ================= */
+        // search bar 2 mirrors bar 1's landed state, then eases up slightly to make room
+        tl.fromTo(
+          "#search-bar-2",
+          { y: 40, scale: 0.86, opacity: 1 },
+          { y: 0, scale: 0.86, opacity: 1, duration: 0.35, ease: "power2.out" },
+          2.2,
+        );
+
+        var rowStarts = [2.4, 2.62, 2.84];
+        for (var r = 0; r < 3; r++) {
+          tl.fromTo(
+            "#row-" + r,
+            { y: 60, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" },
+            rowStarts[r],
+          );
+          for (var s = 0; s < 5; s++) {
+            tl.fromTo(
+              "#star-" + r + "-" + s,
+              { scale: 0.4, opacity: 0 },
+              { scale: 1, opacity: 1, duration: 0.2, ease: "back.out(2.4)" },
+              rowStarts[r] + 0.32 + s * 0.05,
+            );
+          }
+        }
+
+        /* ================= scene 3 · hero stat (5.2 - 10.5s) ================= */
+        tl.fromTo("#glow-hero", { opacity: 0 }, { opacity: 0.55, duration: 0.55, ease: "power2.out" }, 5.2);
+        tl.fromTo(
+          "#val-hero",
+          { scale: 0.6, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.4)" },
+          5.2,
+        );
+
+        var stHero = { v: 0 };
+        var valHeroEl = document.getElementById("val-hero");
+        tl.fromTo(
+          stHero,
+          { v: 0 },
+          {
+            v: 70,
+            duration: 1.0,
+            ease: "power2.out",
+            immediateRender: false,
+            onUpdate: function () {
+              valHeroEl.textContent = Math.round(stHero.v) + "%";
+            },
+          },
+          5.4,
+        );
+
+        // glow pulse on landing — marks the dominant hit of the piece
+        gsap.set("#val-hero", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#val-hero",
+          { textShadow: "0 0 0px rgba(244,217,152,0)" },
+          {
+            textShadow: "0 0 80px rgba(244,217,152,0.9)",
+            duration: 0.35,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          6.4,
+        );
+
+        tl.fromTo(
+          "#label-hero",
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+          6.9,
+        );
+
+        // freeze-hold from ~7.3s to the end (10.5s) for a clean cut back to host footage —
+        // no further tweens scheduled; the last state simply persists.
+
+        window.__timelines["google-3-pack-stat"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,109 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 24,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Premium home-services / marketing-agency data-viz sting. Near-black warm background with a single gold/amber accent family — no other hues. Heavy condensed display numerals (League Gothic) for every price, Montserrat for labels/body/bullets. Each tier is a full-bleed card that fills the ENTIRE 1920x1080 frame (this replaces a talking-head cut outright, not a lower-third bug) — visual weight escalates card-over-card (tighter framing, brighter glow, faster count-up, bigger type) from the $1,000 entry tier up through the $3,000 tier, a cadence pattern-interrupt at the $1,400/mo recurring tier, and a hero full-bleed close on the 90-Day Program with the $30,000-in-90-days guarantee as the final stamped punch. Rendered as a transparent alpha-overlay so the editor can hard-cut to it full-screen over existing footage with voiceover continuing underneath; no audio in this render.",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384"],
+  "font": "League Gothic",
+  "beats": [0.2, 2.0, 6.0, 10.4, 15.0, 19.2, 22.0],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": "mk-progress-stat",
+  "customize": {
+    "note": "No search/sourcing needed — all content is user-supplied script copy (form category content, asset-free). Catalog searched live via `npx hyperframes catalog --query ...` before naming blocks below; see picks + rationale per scene.",
+    "primary_block": {
+      "id": "mk-progress-stat",
+      "role": "Reused 5x (once per tier) as the card chassis: big-numeral count-up + label + thin progress track + caption, dark scheme.",
+      "customize_per_instance": "target value, prefix ($), suffix (/Month where relevant), label (tier name), caption (bullet detail line), progress-track fill = tier's position in its own group (33/66/100% across the 3 website tiers; reset track framing for the ongoing-growth tier and the hero program), palette recolored to --bg:#0B0A08 --accent:#D9A94A --accent-bright:#F4D998 --text:#F5F1E6 --muted:#9C9384, scale/glow intensity increasing per instance per the escalation note in `style`."
+    },
+    "secondary_blocks": [
+      {
+        "id": "caption-kinetic-slam",
+        "role": "Opening hook line (scene 1) and optionally the hero headline words in scene 6 ('90-DAY GROWTH FOUNDATION') — full-screen single-line slam entrance."
+      },
+      {
+        "id": "badge-pop",
+        "role": "Guarantee seal on the closing beat: elastic scale-in badge stamped over the $30,000/90-days line at beat 22.0s."
+      },
+      {
+        "id": "yt-camera-move",
+        "role": "Slow continuous push-in (camera punch-in helper) across scene 6 to build the hero card's climactic weight without cutting."
+      }
+    ],
+    "escalation_map": [
+      { "scene": 2, "tier": "$1,000", "weight": "baseline: modest scale_grow entrance, calm glow, progress 33%" },
+      { "scene": 3, "tier": "$2,000", "weight": "stronger: scale_punch entrance, brighter glow pulse on AI voice assistant bullet, progress 66%" },
+      { "scene": 4, "tier": "$3,000", "weight": "strongest of the build tier: scale_punch + glow flare + slight overshoot settle on count-up, progress 100%, bracket wipe closes the WEBSITE BUILDS group" },
+      { "scene": 5, "tier": "$1,400/Month", "weight": "pattern-interrupt: enters from the right (prior cards entered from bottom/left), horizontal ticker-style layout swap, /Month suffix pulses to read as recurring vs one-time" },
+      { "scene": 6, "tier": "90-Day Program", "weight": "hero/final: full-bleed takeover, largest type + strongest glow in the piece, slow camera push-in for the whole scene, badge-pop guarantee stamp as the terminal beat, freeze-hold on last frame (no exit) for the cut back to host footage" }
+    ]
+  },
+
+  "content": {
+    "scenes": [
+      {
+        "id": "hook",
+        "start": 0.0,
+        "end": 1.4,
+        "text": "YOUR GROWTH, MAPPED OUT.",
+        "emphasis_words": ["GROWTH"],
+        "emotion": "confident, inviting, sets the premium-agency register in under a second",
+        "motion": "caption-kinetic-slam single-line full-screen slam-in on black; frame flashes up to --bg (#0B0A08) as the words land; gold underline_sweep draws under GROWTH on landing; near-instant hook per the ~0.5s rule",
+        "beats": [0.2]
+      },
+      {
+        "id": "tier-website-basic",
+        "start": 1.4,
+        "end": 5.4,
+        "text": "$1,000 — Basic 5-Page Website: AI chat, lead capture, clean conversion-focused structure.",
+        "emphasis_words": ["$1,000"],
+        "emotion": "clean, professional, entry-level confidence — the foundation offer",
+        "motion": "mk-progress-stat card slide_bottom entrance (calm, power4.out); count_up proxy tween $0 to $1,000 over ~0.9s with tabular-nums and decelerating ease, then hold; thin gold progress track fills to 33%; label + bullet caption fade in after the number lands (value before meaning)",
+        "beats": [2.0]
+      },
+      {
+        "id": "tier-website-plus-voice",
+        "start": 5.4,
+        "end": 9.4,
+        "text": "$2,000 — 8-Page Website: AI chat + AI voice assistant, lead capture, nurturing.",
+        "emphasis_words": ["$2,000", "AI voice assistant"],
+        "emotion": "building momentum — more capability, same clean system",
+        "motion": "mk-progress-stat card scale_punch entrance (back.out, noticeably snappier than tier 1); count_up $0 to $2,000; glow pulse fires on the 'AI voice assistant' bullet as its own micro-beat; progress track fills to 66%",
+        "beats": [6.0]
+      },
+      {
+        "id": "tier-website-seo",
+        "start": 9.4,
+        "end": 13.9,
+        "text": "$3,000 — 10+ Page SEO-Optimized Website: stronger authority foundation, more service pages, more ranking opportunities.",
+        "emphasis_words": ["$3,000", "SEO-Optimized"],
+        "emotion": "authoritative — the top of the one-time build ladder",
+        "motion": "mk-progress-stat card enters with the strongest scale_punch + glow flare of the build group; count_up $0 to $3,000 with a slight overshoot-and-settle; progress track fills to 100%; a gold bar_wipe divider closes out the WEBSITE BUILDS group on exit",
+        "beats": [10.4]
+      },
+      {
+        "id": "tier-ongoing-ads",
+        "start": 13.9,
+        "end": 17.9,
+        "text": "$1,400/Month — Entry Meta Ads Plan: Meta ads + landing page.",
+        "emphasis_words": ["$1,400/Month"],
+        "emotion": "cadence shift — recurring growth engine begins (pattern-interrupt beat of the piece)",
+        "motion": "pattern-interrupt: card enters from the right (slide_right) instead of bottom, layout swaps to a horizontal ticker card; count_up $0 to $1,400 with the /Month suffix on a slow scale_pulse to read as ongoing rather than one-time; gold accent brightens a step versus the build tiers",
+        "beats": [15.0]
+      },
+      {
+        "id": "hero-90-day-program",
+        "start": 17.9,
+        "end": 24.0,
+        "text": "The 90-Day Contractor Growth Foundation Program: SEO, Meta Ads, CRM & App, Professional Content & Film Crew, Full 12-Page Site. GUARANTEED — close at least $30,000 in sold jobs within 90 days, or your money back.",
+        "emphasis_words": ["90-Day", "$30,000", "GUARANTEED"],
+        "emotion": "climactic, high-conviction close — the offer the whole sequence builds toward",
+        "motion": "full-bleed hero takeover (largest scale + brightest glow in the piece); caption-kinetic-slam sets '90-DAY GROWTH FOUNDATION' as the headline while the 5 included systems stagger in beneath as a vertical gold-checkmark list (word_reveal, stagger 0.1s each); yt-camera-move drives a slow continuous push-in across the whole scene; badge-pop stamps a gold guarantee seal over the $30,000-in-90-days line with an elastic scale-in + landing shake at beat 22.0; final frame freezes (no exit) so the editor can hard-cut back to host footage",
+        "beats": [19.2, 22.0]
+      }
+    ]
+  }
+}

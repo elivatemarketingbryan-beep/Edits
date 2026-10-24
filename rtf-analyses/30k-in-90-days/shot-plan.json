@@ -1,0 +1,48 @@
+{
+  "category": "stat",
+  "duration_s": 15.0,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Same dark-gold editorial brand as pricing-tiers-reveal / revenue-math-reveal: near-black card surface, League Gothic display numerals with gold halo glow, Montserrat labels, restrained back/power eases. Two-part piece: case-study proof number cross-fades into a guarantee stamp beat.",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384"],
+  "font": "League Gothic + Montserrat",
+  "beats": [0, 2.0, 3.6, 8.3, 9.3, 11.4, 15.0],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "Hand-authored directly from the sibling projects' proven CSS/GSAP patterns (numeral+halo count-up, badge-pop seal, tier-card chassis) for exact brand match rather than a generic catalog block."
+  },
+
+  "content": {
+    "value": 30000,
+    "prefix": "$",
+    "suffix": "+",
+    "label": "IN CLOSED PROJECTS FROM THEIR WEBSITE ALONE.",
+    "ring": false,
+    "scenes": [
+      {
+        "id": "scene-case",
+        "start": 0,
+        "end": 9.5,
+        "text": "REAL RESULTS / SAN FRANCISCO & SAN JOSE, CA / CONCRETE CONTRACTOR · FIRST 3 MONTHS / $30,000+ / IN CLOSED PROJECTS FROM THEIR WEBSITE ALONE. / AND WE STAND BEHIND IT.",
+        "emphasis_words": ["$30,000+", "AND WE STAND BEHIND IT."],
+        "emotion": "proof, credible, building excitement",
+        "motion": "eyebrow fade+slide, pin scale-pop + location slide, sub-label fade, hero numeral count-up (back.out entrance + power2.out count + landing glow pulse), label fade after value lands, hold, declutter fade of top group, pivot line fade-in, then whole-scene cross-fade out (never touches the .clip element itself — only the inner .scene-content wrapper)",
+        "beats": [0.15, 0.45, 2.0, 3.5, 5.4, 5.9, 7.5, 7.9, 8.3]
+      },
+      {
+        "id": "scene-guarantee",
+        "start": 8.3,
+        "end": 15.0,
+        "text": "OUR GUARANTEE / $30,000 / IN SOLD JOBS WITHIN 90 DAYS / GUARANTEED — OR YOUR MONEY BACK",
+        "emphasis_words": ["$30,000", "GUARANTEED — OR YOUR MONEY BACK"],
+        "emotion": "confident, reassuring, stamped-and-sealed",
+        "motion": "whole-scene cross-fade in (overlaps scene-case's fade-out 8.3-9.3s so no instant is fully blank), eyebrow fade, hero numeral count-up + landing glow, label fade, elastic badge-pop seal stamp with landing shake, freeze-hold to end",
+        "beats": [8.5, 8.6, 9.0, 10.6, 10.8, 11.4, 11.85, 12.1]
+      }
+    ]
+  }
+}

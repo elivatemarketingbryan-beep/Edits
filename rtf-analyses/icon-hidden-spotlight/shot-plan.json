@@ -1,0 +1,53 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 5.0,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "purple/black icon-first accent piece; a small hand-drawn line-art storefront icon sits dim and easy to miss in the dark, then a spotlight beam sweeps in from one side and lands on it, brightening it dramatically with a glow bloom; a short punchy label resolves beneath. Single continuous accumulating scene (nothing exits) so the alpha-overlay export is never blank. League Gothic for the label, Montserrat stack for weight consistency with sibling pieces.",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8"],
+  "font": "League Gothic + Montserrat",
+  "beats": [0.1, 0.2, 1.5, 2.3, 2.6, 3.0],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "Searched npx hyperframes catalog for 'spotlight beam sweep illuminate icon' and 'icon reveal glow illuminate dim to bright'. Nearest hits: yt-feather-highlight ('Feathered Spotlight' — dims the frame except a feathered ellipse, CSS-var driven, built for gliding a highlight between UI targets/cursor-tracking) and tracing-beam (a glowing dash following an SVG path across UI elements). Neither covers a directional cone beam rotating in from off-frame to land on a small hand-drawn icon with a dim-to-bright color/glow transform on the icon itself — hand-authored per builder-contract, reusing the established purple-brand CSS custom properties, persistent #bg-fill, back.out/power-eased vocabulary, and single continuous-scene technique already proven in sibling icon pieces (restaurant-no-sign, demand-reputation-flywheel)."
+  },
+
+  "content": {
+    "scenes": [
+      {
+        "id": "dim-icon",
+        "start": 0,
+        "end": 1.5,
+        "text": "(no text — icon only)",
+        "emphasis_words": [],
+        "emotion": "quiet, overlooked, easy to miss",
+        "motion": "bg-fill fades in (0-0.15s); a small line-art storefront icon (roofline + body + door + two windows, stroke-only) fades in muted/dim (var(--muted)), low opacity (~0.55), slightly undersized scale (~0.82) — reads as small and easy to overlook",
+        "beats": [0.1, 0.2]
+      },
+      {
+        "id": "spotlight-sweep",
+        "start": 1.5,
+        "end": 3.0,
+        "text": "(no text — beam + icon only)",
+        "emphasis_words": [],
+        "emotion": "sudden discovery, dramatic reveal",
+        "motion": "a translucent cone beam (CSS clip-path triangle, apex fixed above the icon's x-position, gradient fill in accent-bright) fades in and rotates from -32deg to 0deg (1.5-2.6s, power2.inOut) so it visibly sweeps in from the left and lands directly on the icon; as the beam lands (~2.3s) the icon transforms in place: color muted->accent-bright, opacity 0.55->1, scale 0.82->1.06->1.0 (back.out punch), a radial glow blob blooms behind it (opacity 0->0.65); beam settles from full brightness to a lower ambient hold once landed (2.6-3.0s) rather than exiting, so the icon stays lit for the remainder",
+        "beats": [1.5, 2.3, 2.6]
+      },
+      {
+        "id": "label-resolve",
+        "start": 3.0,
+        "end": 5.0,
+        "text": "SEEN AT LAST.",
+        "emphasis_words": ["SEEN"],
+        "emotion": "resolute, satisfied payoff",
+        "motion": "label fades/slides up into place beneath the now-lit icon at 3.0s (power2.out), brief text-shadow glow pulse for punch, then freeze-holds unchanged to the end of the timeline (5.0s) for a clean cut",
+        "beats": [3.0]
+      }
+    ]
+  }
+}

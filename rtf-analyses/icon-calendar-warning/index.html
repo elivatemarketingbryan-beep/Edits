@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Icon Calendar Warning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+        --warn: #b5675c;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the icon lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      /* single continuous full-duration scene: everything accumulates,
+         nothing exits, so there is never a blank frame between beats */
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 160px;
+        box-sizing: border-box;
+      }
+
+      .content-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 56px;
+      }
+
+      /* ---------------- calendar icon ---------------- */
+      .icon-wrap {
+        position: relative;
+        width: 480px;
+        height: 504px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .icon-wrap svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      #calendar-lines rect,
+      #calendar-lines line {
+        fill: none;
+        stroke: var(--accent-bright);
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+
+      .grid-cell {
+        fill: rgba(155, 92, 255, 0.08);
+        stroke: var(--accent);
+        stroke-width: 4;
+        opacity: 0;
+        transform-box: fill-box;
+        transform-origin: 50% 50%;
+      }
+
+      #warning-badge {
+        opacity: 0;
+        transform-box: fill-box;
+        transform-origin: 50% 50%;
+      }
+      #badge-glow-ring {
+        fill: none;
+        stroke: var(--warn);
+        stroke-width: 3;
+        opacity: 0.55;
+      }
+
+      /* ---------------- label ---------------- */
+      .label {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        font-size: 96px;
+        line-height: 1;
+        color: var(--accent-bright);
+        text-align: center;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="icon-calendar-warning" data-start="0" data-duration="5" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ single continuous scene (0 - 5.0s) ============ -->
+      <div id="scene-main" class="clip scene" data-start="0" data-duration="5" data-track-index="0">
+        <div class="content-col">
+          <div class="icon-wrap" id="icon-wrap">
+            <svg viewBox="0 0 400 420" aria-hidden="true">
+              <!-- calendar line-art: rings + body outline + header divider -->
+              <g id="calendar-lines">
+                <rect id="ring-left" x="118" y="18" width="16" height="48" rx="8" pathLength="1"></rect>
+                <rect id="ring-right" x="266" y="18" width="16" height="48" rx="8" pathLength="1"></rect>
+                <rect id="cal-body" x="40" y="50" width="320" height="340" rx="28" pathLength="1"></rect>
+                <line id="header-divider" x1="40" y1="128" x2="360" y2="128" pathLength="1"></line>
+              </g>
+
+              <!-- date grid: 4 cols x 3 rows -->
+              <g id="grid-cells">
+                <rect class="grid-cell" id="grid-0" x="62" y="158" width="58" height="52" rx="10"></rect>
+                <rect class="grid-cell" id="grid-1" x="134" y="158" width="58" height="52" rx="10"></rect>
+                <rect class="grid-cell" id="grid-2" x="206" y="158" width="58" height="52" rx="10"></rect>
+                <rect class="grid-cell" id="grid-3" x="278" y="158" width="58" height="52" rx="10"></rect>
+
+                <rect class="grid-cell" id="grid-4" x="62" y="224" width="58" height="52" rx="10"></rect>
+                <rect class="grid-cell" id="grid-5" x="134" y="224" width="58" height="52" rx="10"></rect>
+                <rect class="grid-cell" id="grid-6" x="206" y="224" width="58" height="52" rx="10"></rect>
+                <rect class="grid-cell" id="grid-7" x="278" y="224" width="58" height="52" rx="10"></rect>
+
+                <rect class="grid-cell" id="grid-8" x="62" y="290" width="58" height="52" rx="10"></rect>
+                <rect class="grid-cell" id="grid-9" x="134" y="290" width="58" height="52" rx="10"></rect>
+                <rect class="grid-cell" id="grid-10" x="206" y="290" width="58" height="52" rx="10"></rect>
+                <rect class="grid-cell" id="grid-11" x="278" y="290" width="58" height="52" rx="10"></rect>
+              </g>
+
+              <!-- warning badge, centered on the flagged cell (grid-6: row2/col3).
+                   Position lives on the OUTER group's static SVG transform attribute;
+                   GSAP only ever touches the INNER group's CSS transform (scale + shake),
+                   because a GSAP-written CSS transform fully overrides (not composes
+                   with) a pre-existing SVG transform attribute on the same element. -->
+              <g id="warning-badge-pos" transform="translate(235,250)">
+                <g id="warning-badge">
+                  <circle id="badge-glow-ring" cx="0" cy="0" r="40"></circle>
+                  <circle cx="0" cy="0" r="30" fill="#b5675c"></circle>
+                  <rect x="-4" y="-14" width="8" height="16" rx="4" fill="#f3effa"></rect>
+                  <circle cx="0" cy="10" r="4.5" fill="#f3effa"></circle>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <div class="label" id="label">ONE SLOW MONTH.</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        // the inner badge group scales/shakes in its own local space (children are
+        // authored symmetric around 0,0); its outer wrapper's static SVG translate
+        // attribute (never touched by GSAP) is what actually places it on the cell.
+        gsap.set("#warning-badge", { transformOrigin: "50% 50%" });
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= beat 0 · scene fill (0 - 0.25s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, 0.1);
+
+        /* ================= beat 1 · calendar draws in (0.15 - 1.0s) =================
+           the body outline reads first so the shape resolves as "a calendar" right
+           away; rings + header divider follow on top, then the grid fills in. Drawing
+           the small ring tabs before the body was legible read as two floating "0"s
+           rather than a calendar taking shape — sequencing fixes that. */
+        tl.fromTo("#cal-body", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5, ease: "power2.out" }, 0.15);
+        tl.fromTo("#header-divider", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.25, ease: "power2.out" }, 0.45);
+        tl.fromTo("#ring-left", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.25, ease: "power2.out" }, 0.55);
+        tl.fromTo("#ring-right", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.25, ease: "power2.out" }, 0.58);
+
+        // date grid: quick scale+fade stagger, riding in once the body is legible
+        var gridStarts = [0.45, 0.48, 0.51, 0.54, 0.57, 0.6, 0.63, 0.66, 0.69, 0.72, 0.75, 0.78];
+        gridStarts.forEach(function (t, i) {
+          tl.fromTo(
+            "#grid-" + i,
+            { scale: 0.5, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.25, ease: "back.out(2.2)" },
+            t,
+          );
+        });
+
+        /* ================= beat 2 · warning pop (1.0 - 2.1s) ================= */
+        // the flagged date cell pulses first, drawing the eye before the badge lands
+        tl.to("#grid-6", { fill: "rgba(201,168,255,0.35)", scale: 1.08, duration: 0.2, yoyo: true, repeat: 1, ease: "sine.inOut" }, 1.0);
+
+        tl.fromTo(
+          "#warning-badge",
+          { opacity: 0, scale: 0 },
+          { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.4)" },
+          1.6,
+        );
+
+        tl.fromTo(
+          "#warning-badge",
+          { filter: "drop-shadow(0 0 0px rgba(181,103,92,0))" },
+          {
+            filter: "drop-shadow(0 0 26px rgba(181,103,92,0.9))",
+            duration: 0.35,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          1.85,
+        );
+
+        // brief urgency shake once the badge has landed and glowed
+        tl.to(
+          "#warning-badge",
+          { keyframes: [{ x: -6 }, { x: 6 }, { x: -3 }, { x: 3 }, { x: 0 }], duration: 0.28, ease: "none" },
+          1.9,
+        );
+
+        /* ================= beat 3 · label (2.6 - 3.45s) ================= */
+        tl.fromTo("#label", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 2.6);
+
+        tl.fromTo(
+          "#label",
+          { textShadow: "0 0 0px rgba(201,168,255,0)" },
+          {
+            textShadow: "0 0 40px rgba(201,168,255,0.65)",
+            duration: 0.35,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          3.1,
+        );
+
+        // freeze-hold from ~3.45s to the end (5.0s) for a clean cut back to host
+        // footage — no further tweens scheduled; the last state simply persists.
+
+        window.__timelines["icon-calendar-warning"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

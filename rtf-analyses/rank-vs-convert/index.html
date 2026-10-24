@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Rank vs Convert</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0a08;
+        --bg2: #17140f;
+        --accent: #d9a94a;
+        --accent-bright: #f4d998;
+        --text: #f5f1e6;
+        --muted: #9c9384;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the hook lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: 100%;
+        padding: 140px 160px 100px;
+        gap: 70px;
+        box-sizing: border-box;
+      }
+
+      /* ================= shared browser/page chassis (abstract, non-literal) ================= */
+      .browser-frame {
+        position: relative;
+        width: 1200px;
+        height: 640px;
+        border-radius: 28px;
+        background: var(--bg2);
+        border: 2px solid rgba(217, 169, 74, 0.35);
+        box-shadow: 0 0 70px rgba(217, 169, 74, 0.12);
+        opacity: 0;
+        transform-origin: 50% 50%;
+        flex: none;
+      }
+
+      .browser-topbar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        height: 64px;
+        padding: 0 28px;
+        border-bottom: 1px solid rgba(245, 241, 230, 0.08);
+      }
+      .chrome-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--muted);
+        opacity: 0.4;
+        flex: none;
+      }
+      .address-pill {
+        flex: 1;
+        max-width: 420px;
+        height: 28px;
+        border-radius: 14px;
+        background: rgba(245, 241, 230, 0.06);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 16px;
+      }
+      .address-pill svg {
+        width: 13px;
+        height: 13px;
+        flex: none;
+      }
+      .address-bar-fill {
+        flex: 1;
+        height: 8px;
+        border-radius: 4px;
+        background: rgba(245, 241, 230, 0.16);
+      }
+
+      .content-stack {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 56px 80px 0;
+        gap: 22px;
+      }
+
+      .bar {
+        border-radius: 8px;
+      }
+      .bar-headline {
+        width: 620px;
+        height: 34px;
+        background: var(--text);
+        opacity: 0;
+      }
+      .bar-sub {
+        width: 400px;
+        height: 18px;
+        border-radius: 6px;
+        background: var(--muted);
+        opacity: 0;
+      }
+
+      /* -- scene 1: the empty slot where a CTA should be -- */
+      .empty-cta-slot {
+        width: 260px;
+        height: 64px;
+        border-radius: 14px;
+        background: transparent;
+        border: 2px dashed rgba(156, 147, 132, 0.4);
+        opacity: 0;
+      }
+
+      /* -- rank badge, floating top-right corner (scene 1) -- */
+      .rank-badge {
+        position: absolute;
+        top: -22px;
+        right: 48px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 10px 22px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+        box-shadow: 0 0 34px rgba(217, 169, 74, 0.45);
+        opacity: 0;
+        transform: scale(0.6);
+      }
+      .rank-number {
+        font-family: "League Gothic", sans-serif;
+        font-size: 34px;
+        line-height: 1;
+        color: #0b0a08;
+      }
+      .rank-caption {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        color: rgba(11, 10, 8, 0.75);
+      }
+
+      /* -- wandering cursor (scene 1) -- */
+      .cursor-wander {
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        opacity: 0;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+      }
+      .cursor-wander svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .dead-end-label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: 28px;
+        color: var(--muted);
+        text-align: center;
+        opacity: 0;
+      }
+
+      /* ================= scene 2: CTAs ================= */
+      .cta-hero {
+        position: relative;
+        width: 280px;
+        height: 64px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        color: #0b0a08;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        font-size: 22px;
+        letter-spacing: 0.02em;
+        box-shadow: 0 0 0px rgba(217, 169, 74, 0);
+        opacity: 0;
+        transform: scale(0.7);
+      }
+
+      .cta-top {
+        position: absolute;
+        top: 78px;
+        right: 56px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 22px;
+        border-radius: 24px;
+        background: rgba(217, 169, 74, 0.14);
+        border: 1.5px solid var(--accent);
+        color: var(--accent-bright);
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 17px;
+        opacity: 0;
+        transform: scale(0.6);
+      }
+      .cta-top svg {
+        width: 16px;
+        height: 16px;
+        flex: none;
+      }
+
+      .cta-chat {
+        position: absolute;
+        bottom: -14px;
+        right: 56px;
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 30px rgba(217, 169, 74, 0.4);
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      .cta-chat svg {
+        width: 28px;
+        height: 28px;
+      }
+
+      .cta-footer {
+        position: absolute;
+        bottom: 48px;
+        left: 50%;
+        transform: translateX(-50%) scale(0.85);
+        width: 440px;
+        height: 52px;
+        border-radius: 12px;
+        border: 2px solid var(--accent);
+        background: rgba(217, 169, 74, 0.08);
+        color: var(--accent-bright);
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+        opacity: 0;
+      }
+
+      /* -- decisive cursor + click ripple, anchored to cta-hero -- */
+      .cursor-convert {
+        position: absolute;
+        top: -14px;
+        right: -14px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--accent-bright);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 24px rgba(244, 217, 152, 0.6);
+        opacity: 0;
+        transform: scale(0);
+        z-index: 2;
+      }
+      .cursor-convert svg {
+        width: 22px;
+        height: 22px;
+      }
+      .click-ripple {
+        position: absolute;
+        top: -14px;
+        right: -14px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 3px solid var(--accent-bright);
+        opacity: 0;
+        transform: scale(0.6);
+        pointer-events: none;
+      }
+
+      .closing-line {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        max-width: 1500px;
+        text-align: center;
+      }
+      #closing-line-1 {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        font-size: 34px;
+        color: var(--text);
+        opacity: 0;
+      }
+      #closing-line-2 {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        letter-spacing: 0.015em;
+        text-transform: uppercase;
+        font-size: 64px;
+        color: var(--accent-bright);
+        opacity: 0;
+        text-shadow: 0 0 0px rgba(244, 217, 152, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="rank-vs-convert" data-start="0" data-duration="7.2" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ scene 1 · ranks, but loses them (0.0 - 3.6s) ============ -->
+      <div id="scene-rank" class="clip scene" data-start="0" data-duration="3.6" data-track-index="0">
+        <div class="browser-frame" id="browser-frame">
+          <div class="browser-topbar">
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="address-pill">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="10" width="14" height="10" rx="2" stroke="#9C9384" stroke-width="1.8" />
+                <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#9C9384" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+              <div class="address-bar-fill"></div>
+            </div>
+          </div>
+
+          <div class="content-stack">
+            <div class="bar bar-headline" id="headline-bar"></div>
+            <div class="bar bar-sub" id="subhead-bar"></div>
+            <div class="empty-cta-slot" id="empty-cta-slot"></div>
+
+            <div class="cursor-wander" id="cursor-wander">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 3L19 12L12 13.5L9 20L5 3Z" fill="#9C9384" stroke="#F5F1E6" stroke-width="1" stroke-linejoin="round" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="rank-badge" id="rank-badge">
+            <div class="rank-number">#1</div>
+            <div class="rank-caption">RANKING</div>
+          </div>
+        </div>
+
+        <div class="dead-end-label" id="dead-end-label">RANKS. BUT LOSES THEM.</div>
+      </div>
+
+      <!-- ============ scene 2 · same site, flipped — they convert (3.6 - 7.2s) ============ -->
+      <div id="scene-convert" class="clip scene" data-start="3.6" data-duration="3.6" data-track-index="0">
+        <div class="browser-frame" id="browser-frame-2">
+          <div class="browser-topbar">
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="address-pill">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="10" width="14" height="10" rx="2" stroke="#9C9384" stroke-width="1.8" />
+                <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#9C9384" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+              <div class="address-bar-fill"></div>
+            </div>
+          </div>
+
+          <div class="content-stack">
+            <div class="bar bar-headline" id="headline-bar-2" style="opacity: 0.72;"></div>
+            <div class="bar bar-sub" id="subhead-bar-2" style="opacity: 0.5;"></div>
+
+            <div class="cta-hero" id="cta-hero">
+              GET A QUOTE
+              <div class="cursor-convert" id="cursor-convert">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 12.5L10 17.5L19 7" stroke="#0B0A08" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </div>
+              <div class="click-ripple" id="click-ripple"></div>
+            </div>
+          </div>
+
+          <div class="cta-top" id="cta-top">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 5 5L15 12l5 2v3a2 2 0 0 1-2 2C9.5 19 5 14.5 5 5a2 2 0 0 1 1-2Z" fill="#F4D998" />
+            </svg>
+            CALL
+          </div>
+
+          <div class="cta-chat" id="cta-chat">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 5h16v11H9l-5 4V5Z" fill="#0B0A08" />
+              <circle cx="9" cy="10.5" r="1.1" fill="#F4D998" />
+              <circle cx="12.5" cy="10.5" r="1.1" fill="#F4D998" />
+              <circle cx="16" cy="10.5" r="1.1" fill="#F4D998" />
+            </svg>
+          </div>
+
+          <div class="cta-footer" id="cta-footer">BOOK NOW</div>
+        </div>
+
+        <div class="closing-line">
+          <div id="closing-line-1">RANKING GETS THEM THERE.</div>
+          <div id="closing-line-2">CTAs GET THEM TO CALL.</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= scene 1 · ranks, but loses them (0.0 - 3.6s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, 0.08);
+
+        tl.fromTo(
+          "#browser-frame",
+          { scale: 0.85, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.9)" },
+          0.15,
+        );
+
+        tl.fromTo(
+          "#rank-badge",
+          { scale: 0.5, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.32, ease: "back.out(2.4)" },
+          0.65,
+        );
+        // landing glow flash on the rank badge
+        tl.fromTo(
+          "#rank-badge",
+          { boxShadow: "0 0 34px rgba(217,169,74,0.45)" },
+          {
+            boxShadow: "0 0 58px rgba(217,169,74,0.85)",
+            duration: 0.24,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          0.97,
+        );
+
+        tl.fromTo("#headline-bar", { opacity: 0, y: 10 }, { opacity: 0.72, y: 0, duration: 0.3, ease: "power2.out" }, 0.85);
+        tl.fromTo("#subhead-bar", { opacity: 0, y: 10 }, { opacity: 0.5, y: 0, duration: 0.3, ease: "power2.out" }, 1.0);
+
+        // the empty CTA slot — appears, then breathes faintly (never fills)
+        tl.fromTo("#empty-cta-slot", { opacity: 0 }, { opacity: 0.7, duration: 0.3, ease: "power2.out" }, 1.3);
+        tl.to(
+          "#empty-cta-slot",
+          { opacity: 0.35, duration: 0.55, yoyo: true, repeat: 3, ease: "sine.inOut", immediateRender: false },
+          1.6,
+        );
+
+        // wandering cursor — no destination, drifts, hovers near the empty slot without landing, exits
+        tl.fromTo(
+          "#cursor-wander",
+          { opacity: 0, scale: 0.6, x: 520, y: 40 },
+          { opacity: 1, scale: 1, x: 520, y: 40, duration: 0.25, ease: "power1.out" },
+          1.6,
+        );
+        tl.to("#cursor-wander", { x: 210, y: 128, duration: 0.4, ease: "sine.inOut" }, 1.9);
+        tl.to("#cursor-wander", { x: 380, y: 210, duration: 0.4, ease: "sine.inOut" }, 2.35);
+        tl.to("#cursor-wander", { x: 560, y: 70, duration: 0.35, ease: "sine.inOut" }, 2.8);
+        tl.to("#cursor-wander", { x: 760, y: 20, opacity: 0, duration: 0.45, ease: "power2.in" }, 3.15);
+        // hard kill at the clip boundary so non-linear seeks never land on a stale mid-fade state
+        tl.set("#cursor-wander", { opacity: 0 }, 3.6);
+
+        tl.fromTo(
+          "#dead-end-label",
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+          1.7,
+        );
+
+        /* ================= scene 2 · same site, flipped — they convert (3.6 - 7.2s) ================= */
+        // the flip: same chassis, snaps back in — reads as a transformation, not a new site
+        tl.fromTo(
+          "#browser-frame-2",
+          { scale: 0.92, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.32, ease: "back.out(2.0)" },
+          3.6,
+        );
+        tl.fromTo("#headline-bar-2", { opacity: 0 }, { opacity: 0.72, duration: 0.28, ease: "power1.out" }, 3.62);
+        tl.fromTo("#subhead-bar-2", { opacity: 0 }, { opacity: 0.5, duration: 0.28, ease: "power1.out" }, 3.68);
+
+        // the slot that was empty is now the lit primary CTA — lands with the flip
+        tl.fromTo(
+          "#cta-hero",
+          { scale: 0.7, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.34, ease: "back.out(2.2)" },
+          3.72,
+        );
+        tl.fromTo(
+          "#cta-hero",
+          { boxShadow: "0 0 0px rgba(217,169,74,0)" },
+          {
+            boxShadow: "0 0 44px rgba(217,169,74,0.5)",
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          3.9,
+        );
+
+        // the other CTAs stagger onto the page, each own spot
+        tl.fromTo("#cta-top", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.24, ease: "back.out(2.4)" }, 4.0);
+        tl.fromTo("#cta-chat", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.24, ease: "back.out(2.4)" }, 4.22);
+        tl.fromTo(
+          "#cta-footer",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.24, ease: "power2.out" },
+          4.44,
+        );
+        gsap.set("#cta-footer", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#cta-footer",
+          { scale: 0.85 },
+          { scale: 1, duration: 0.24, ease: "back.out(2.2)", immediateRender: false },
+          4.44,
+        );
+
+        // decisive landing on Get a Quote — pops in, click-ripple, confirm
+        tl.fromTo(
+          "#cursor-convert",
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.28, ease: "back.out(2.6)" },
+          4.9,
+        );
+        tl.to("#cta-hero", { scale: 1.06, duration: 0.16, ease: "sine.inOut", yoyo: true, repeat: 1 }, 5.6);
+        tl.fromTo(
+          "#click-ripple",
+          { scale: 0.6, opacity: 0.8 },
+          { scale: 2.4, opacity: 0, duration: 0.6, ease: "power2.out", immediateRender: false },
+          5.6,
+        );
+        tl.fromTo(
+          "#cta-hero",
+          { boxShadow: "0 0 44px rgba(217,169,74,0.5)" },
+          {
+            boxShadow: "0 0 70px rgba(217,169,74,0.9)",
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          5.6,
+        );
+
+        // closing line
+        tl.fromTo(
+          "#closing-line-1",
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+          6.6,
+        );
+        tl.fromTo(
+          "#closing-line-2",
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.42, ease: "power2.out" },
+          6.75,
+        );
+        tl.fromTo(
+          "#closing-line-2",
+          { textShadow: "0 0 0px rgba(244,217,152,0)" },
+          {
+            textShadow: "0 0 50px rgba(244,217,152,0.75)",
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          7.0,
+        );
+
+        // freeze-hold to 7.2s — no further tweens scheduled, last state persists for a clean cut
+
+        window.__timelines["rank-vs-convert"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Panic Spiral</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+        --negative: #b5675c;
+        --warn-mix: #c4708a;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background: fades in with the hook and persists for the
+         whole piece so no scene boundary ever exposes a fully transparent
+         frame (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 160px;
+        box-sizing: border-box;
+      }
+
+      /* ---------------- scene 1 · intro hook + panic (0.0 - 2.9s) ---------------- */
+      #intro-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+      .intro-line {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 118px;
+        line-height: 1.05;
+        white-space: nowrap;
+        text-align: center;
+        opacity: 0;
+      }
+      #hook-line {
+        color: var(--muted);
+      }
+      #panic-line {
+        color: var(--accent-bright);
+      }
+
+      /* ---------------- scene 2 · descending spiral (2.5 - 11.5s) ---------------- */
+      #spiral-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 14px;
+        width: 1360px;
+      }
+      .spiral-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      .spiral-line {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 52px;
+        line-height: 1.15;
+        letter-spacing: 0.005em;
+        opacity: 0;
+        white-space: nowrap;
+      }
+      .spiral-dot {
+        flex: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      #spiral-line-0 {
+        color: var(--muted);
+        align-self: flex-start;
+      }
+      #spiral-line-1 {
+        color: var(--accent);
+        align-self: center;
+        margin-left: 90px;
+      }
+      #spiral-line-2 {
+        color: var(--warn-mix);
+        align-self: center;
+        margin-left: 180px;
+      }
+      #spiral-line-3 {
+        color: var(--negative);
+        align-self: center;
+        margin-left: 270px;
+      }
+      /* ---------------- scene 3 · payoff (8.5 - 11.5s) ---------------- */
+      #payoff-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1800px;
+        height: 900px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(closest-side, var(--accent) 0%, transparent 70%);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+      }
+      #payoff-wrap {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+      /* the spiral cascade fully disappears (opacity -> 0) before the payoff
+         line lands, so the payoff line can sit dead-center with nothing
+         behind it — no spatial collision since nothing else is visible */
+      #payoff-line {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 92px;
+        line-height: 1.1;
+        color: var(--accent-bright);
+        text-align: center;
+        max-width: 1700px;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="panic-spiral" data-start="0" data-duration="11.5" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ scene 1 · hook + panic (0.0 - 2.9s) ============ -->
+      <div id="scene-intro" class="clip scene" data-start="0" data-duration="2.9" data-track-index="0">
+        <div id="intro-wrap">
+          <div class="intro-line" id="hook-line" data-layout-allow-overlap="true">THE PHONE GOES QUIET.</div>
+          <div class="intro-line" id="panic-line" data-layout-allow-overlap="true">THEN THEY PANIC.</div>
+        </div>
+      </div>
+
+      <!-- ============ scene 2 · descending spiral (2.5 - 11.5s) ============ -->
+      <div id="scene-spiral" class="clip scene" data-start="2.5" data-duration="9.0" data-track-index="0">
+        <div id="spiral-stack">
+          <div class="spiral-row">
+            <div class="spiral-line" id="spiral-line-0"><span class="spiral-dot"></span>Money into ads with no system</div>
+          </div>
+          <div class="spiral-row">
+            <div class="spiral-line" id="spiral-line-1"><span class="spiral-dot"></span>Prices get discounted</div>
+          </div>
+          <div class="spiral-row">
+            <div class="spiral-line" id="spiral-line-2"><span class="spiral-dot"></span>Bad-fit jobs get taken anyway</div>
+          </div>
+          <div class="spiral-row">
+            <div class="spiral-line" id="spiral-line-3"><span class="spiral-dot"></span>Panic creates more chaos</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ scene 3 · payoff (8.5 - 11.5s) ============ -->
+      <div id="scene-payoff" class="clip scene" data-start="8.5" data-duration="3.0" data-track-index="0">
+        <div id="payoff-glow" data-layout-allow-overflow="true"></div>
+        <div id="payoff-wrap">
+          <div id="payoff-line">PANIC IS NOT A STRATEGY.</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        // static centering for the intro stack (hook + panic occupy the same
+        // spot) — GSAP-tracked so later transforms compose instead of
+        // overwriting the baked CSS translate
+        gsap.set("#hook-line", { xPercent: -50, yPercent: -50 });
+        gsap.set("#panic-line", { xPercent: -50, yPercent: -50 });
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= persistent background ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, 0.05);
+
+        /* ================= scene 1 · hook (0.0 - 1.5s) ================= */
+        tl.fromTo(
+          "#hook-line",
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" },
+          0.15,
+        );
+
+        // hook holds, then lifts + fades as PANIC punches into the same spot —
+        // overlapping so the frame is never without visible text
+        tl.to(
+          "#hook-line",
+          { opacity: 0, y: -24, duration: 0.3, ease: "power2.in", immediateRender: false },
+          1.5,
+        );
+
+        /* ================= scene 1 · panic punch-in (1.5 - 2.9s) ================= */
+        tl.fromTo(
+          "#panic-line",
+          { opacity: 0, scale: 0.55 },
+          { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.6)" },
+          1.55,
+        );
+
+        // urgency shake + glow landing beat
+        gsap.set("#panic-line", { transformOrigin: "50% 50%" });
+        tl.fromTo("#panic-line", { x: 0 }, { x: -8, duration: 0.045, ease: "none", immediateRender: false }, 1.95)
+          .fromTo("#panic-line", { x: -8 }, { x: 8, duration: 0.05, ease: "none", immediateRender: false }, 1.995)
+          .fromTo("#panic-line", { x: 8 }, { x: 0, duration: 0.05, ease: "none", immediateRender: false }, 2.045);
+        tl.fromTo(
+          "#panic-line",
+          { textShadow: "0 0 0px rgba(201,168,255,0)" },
+          {
+            textShadow: "0 0 60px rgba(201,168,255,0.85)",
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          2.1,
+        );
+
+        // panic line lifts + fades out as the spiral scene crossfades in
+        // beneath it (overlap 2.5 - 2.9s — never a blank moment)
+        tl.to(
+          "#panic-line",
+          { opacity: 0, y: -24, duration: 0.35, ease: "power2.in", immediateRender: false },
+          2.55,
+        );
+
+        /* ================= scene 2 · descending spiral (2.5 - 11.5s) ================= */
+        var spiralStarts = [2.6, 4.1, 5.6, 7.1];
+
+        spiralStarts.forEach(function (t, i) {
+          tl.fromTo(
+            "#spiral-line-" + i,
+            { opacity: 0, y: 44, scale: 1.05 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power2.out" },
+            t,
+          );
+        });
+
+        /* ================= scene 3 · payoff (8.5 - 11.5s) ================= */
+        // the whole cascade (all 4 lines) fully fades out to opacity 0 — by
+        // the time the payoff line lands, nothing else is visible, so it can
+        // sit dead-center with no spatial overlap at all
+        tl.to(
+          "#spiral-stack",
+          {
+            opacity: 0,
+            scale: 0.96,
+            duration: 0.55,
+            ease: "power2.out",
+            immediateRender: false,
+          },
+          8.3,
+        );
+
+        tl.fromTo("#payoff-glow", { opacity: 0 }, { opacity: 0.4, duration: 0.5, ease: "power2.out" }, 8.6);
+
+        tl.fromTo(
+          "#payoff-line",
+          { opacity: 0, scale: 0.92 },
+          { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(1.8)" },
+          8.75,
+        );
+
+        gsap.set("#payoff-line", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#payoff-line",
+          { textShadow: "0 0 0px rgba(201,168,255,0)" },
+          {
+            textShadow: "0 0 70px rgba(201,168,255,0.9)",
+            duration: 0.4,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          9.1,
+        );
+
+        // freeze-hold from ~9.9s to the end (11.5s) for a clean cut back to
+        // host footage — no further tweens scheduled; the last state persists.
+
+        window.__timelines["panic-spiral"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

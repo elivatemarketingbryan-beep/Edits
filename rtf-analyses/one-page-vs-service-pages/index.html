@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>One Page vs Service Pages</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b0a08;
+        --bg2: #17140f;
+        --accent: #d9a94a;
+        --accent-bright: #f4d998;
+        --text: #f5f1e6;
+        --muted: #9c9384;
+        --ink: #0b0a08;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the hook lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: 100%;
+        padding: 130px 160px 100px;
+        gap: 56px;
+        box-sizing: border-box;
+      }
+
+      /* ================= shared browser/page chassis (abstract, non-literal) ================= */
+      .browser-frame {
+        position: relative;
+        width: 1200px;
+        height: 640px;
+        border-radius: 28px;
+        background: var(--bg2);
+        border: 2px solid rgba(217, 169, 74, 0.35);
+        box-shadow: 0 0 70px rgba(217, 169, 74, 0.12);
+        opacity: 0;
+        transform-origin: 50% 50%;
+        flex: none;
+      }
+      .browser-topbar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        height: 64px;
+        padding: 0 28px;
+        border-bottom: 1px solid rgba(245, 241, 230, 0.08);
+      }
+      .chrome-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--muted);
+        opacity: 0.4;
+        flex: none;
+      }
+      .address-pill {
+        flex: 1;
+        max-width: 420px;
+        height: 28px;
+        border-radius: 14px;
+        background: rgba(245, 241, 230, 0.06);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 16px;
+      }
+      .address-pill svg {
+        width: 13px;
+        height: 13px;
+        flex: none;
+      }
+      .address-bar-fill {
+        flex: 1;
+        height: 8px;
+        border-radius: 4px;
+        background: rgba(245, 241, 230, 0.16);
+      }
+      .content-stack {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 48px 72px 0;
+        gap: 20px;
+      }
+      .bar {
+        border-radius: 8px;
+      }
+      .bar-headline {
+        width: 560px;
+        height: 32px;
+        background: var(--text);
+        opacity: 0;
+      }
+      .bar-sub {
+        width: 380px;
+        height: 16px;
+        border-radius: 6px;
+        background: var(--muted);
+        opacity: 0;
+      }
+
+      /* ================= scene 1 · one crammed page (0 - 4.0s) ================= */
+      .service-tags {
+        position: relative;
+        width: 640px;
+        height: 108px;
+        margin-top: 6px;
+      }
+      .service-tag {
+        position: absolute;
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 18px;
+        border-radius: 20px;
+        background: rgba(156, 147, 132, 0.14);
+        border: 1.5px solid rgba(217, 169, 74, 0.4);
+        color: var(--text);
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: 0.03em;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      #tag-roofing {
+        top: 0px;
+        left: 0px;
+        transform: rotate(-4deg) scale(0.7);
+      }
+      #tag-remodel {
+        top: 20px;
+        left: 168px;
+        transform: rotate(3deg) scale(0.7);
+      }
+      #tag-concrete {
+        top: 54px;
+        left: 30px;
+        transform: rotate(-2deg) scale(0.7);
+      }
+      #tag-painting {
+        top: 12px;
+        left: 388px;
+        transform: rotate(5deg) scale(0.7);
+      }
+
+      /* -- confusion badge, floating top-right corner of the crammed chassis -- */
+      .confusion-badge {
+        position: absolute;
+        top: -22px;
+        right: 48px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 10px 20px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+        box-shadow: 0 0 34px rgba(217, 169, 74, 0.45);
+        opacity: 0;
+        transform: scale(0.6);
+      }
+      .badge-cycle {
+        position: relative;
+        width: 168px;
+        height: 24px;
+        overflow: visible;
+      }
+      .badge-word {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 0.06em;
+        color: var(--ink);
+        opacity: 0;
+        white-space: nowrap;
+      }
+      .badge-mark {
+        font-family: "League Gothic", sans-serif;
+        font-size: 30px;
+        line-height: 1;
+      }
+      .badge-caption {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        color: rgba(11, 10, 8, 0.75);
+      }
+
+      .scene1-caption {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: 28px;
+        color: var(--muted);
+        text-align: center;
+        opacity: 0;
+      }
+
+      /* ================= scene 2 · three clean pages (4.0 - 8.2s) ================= */
+      .page-cards-row {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 50px;
+        flex: none;
+      }
+      .page-card {
+        position: relative;
+        width: 500px;
+        height: 560px;
+        border-radius: 24px;
+        background: var(--bg2);
+        border: 2px solid rgba(217, 169, 74, 0.35);
+        box-shadow: 0 0 54px rgba(217, 169, 74, 0.1);
+        opacity: 0;
+        transform-origin: 50% 50%;
+        flex: none;
+      }
+      .card-topbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        height: 50px;
+        padding: 0 22px;
+        border-bottom: 1px solid rgba(245, 241, 230, 0.08);
+      }
+      .card-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--muted);
+        opacity: 0.4;
+        flex: none;
+      }
+      .card-address-pill {
+        flex: 1;
+        max-width: 220px;
+        height: 22px;
+        border-radius: 11px;
+        background: rgba(245, 241, 230, 0.06);
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+      }
+      .card-address-fill {
+        flex: 1;
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(245, 241, 230, 0.16);
+      }
+      .card-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 40px 34px 0;
+        gap: 14px;
+      }
+      .page-title {
+        font-family: "League Gothic", sans-serif;
+        font-size: 42px;
+        line-height: 1;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        color: var(--accent-bright);
+        opacity: 0;
+      }
+      .card-bar {
+        border-radius: 6px;
+        background: var(--muted);
+        opacity: 0;
+      }
+      .card-bar-1 {
+        width: 340px;
+        height: 14px;
+        opacity: 0;
+      }
+      .card-bar-2 {
+        width: 240px;
+        height: 14px;
+      }
+
+      /* -- each card's own lock-in badge, same corner/shape language as the confusion badge -- */
+      .card-badge {
+        position: absolute;
+        top: -16px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+        box-shadow: 0 0 0px rgba(217, 169, 74, 0);
+        opacity: 0;
+        transform: scale(0.6);
+      }
+      .card-badge svg {
+        width: 16px;
+        height: 16px;
+        flex: none;
+      }
+      .card-badge-caption {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        color: var(--ink);
+      }
+
+      .closing-line {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        max-width: 1500px;
+        text-align: center;
+        margin-top: 8px;
+      }
+      #closing-line-1 {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        font-size: 32px;
+        color: var(--text);
+        opacity: 0;
+      }
+      #closing-line-2 {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        letter-spacing: 0.015em;
+        text-transform: uppercase;
+        font-size: 60px;
+        color: var(--accent-bright);
+        opacity: 0;
+        text-shadow: 0 0 0px rgba(244, 217, 152, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="one-page-vs-service-pages" data-start="0" data-duration="8.2" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ scene 1 · one page tries to say everything (0.0 - 4.0s) ============ -->
+      <div id="scene-cluttered" class="clip scene" data-start="0" data-duration="4.0" data-track-index="0">
+        <div class="browser-frame" id="browser-frame-1">
+          <div class="browser-topbar">
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="chrome-dot"></div>
+            <div class="address-pill">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="10" width="14" height="10" rx="2" stroke="#9C9384" stroke-width="1.8" />
+                <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#9C9384" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+              <div class="address-bar-fill"></div>
+            </div>
+          </div>
+
+          <div class="content-stack">
+            <div class="bar bar-headline" id="headline-bar-1"></div>
+            <div class="bar bar-sub" id="subhead-bar-1"></div>
+
+            <div class="service-tags" id="service-tags">
+              <div class="service-tag" id="tag-roofing">ROOFING</div>
+              <div class="service-tag" id="tag-remodel">REMODELING</div>
+              <div class="service-tag" id="tag-concrete">CONCRETE</div>
+              <div class="service-tag" id="tag-painting">PAINTING</div>
+            </div>
+          </div>
+
+          <div class="confusion-badge" id="confusion-badge">
+            <div class="badge-cycle" id="badge-cycle">
+              <span class="badge-word" id="badge-word-1">ROOFING</span>
+              <span class="badge-word" id="badge-word-2">REMODELING</span>
+              <span class="badge-word" id="badge-word-3">CONCRETE</span>
+              <span class="badge-word" id="badge-word-4">PAINTING</span>
+              <span class="badge-word badge-mark" id="badge-mark">?</span>
+            </div>
+            <div class="badge-caption">RANKING?</div>
+          </div>
+        </div>
+
+        <div class="scene1-caption" id="scene1-caption">ONE PAGE TRIES TO SAY EVERYTHING.</div>
+      </div>
+
+      <!-- ============ scene 2 · three clear pages, each ranks for its own thing (4.0 - 8.2s) ============ -->
+      <div id="scene-clear" class="clip scene" data-start="4.0" data-duration="4.2" data-track-index="0">
+        <div class="page-cards-row">
+          <div class="page-card" id="page-card-1">
+            <div class="card-topbar">
+              <div class="card-dot"></div>
+              <div class="card-dot"></div>
+              <div class="card-dot"></div>
+              <div class="card-address-pill"><div class="card-address-fill"></div></div>
+            </div>
+            <div class="card-content">
+              <div class="page-title" id="card-title-1">ROOFING</div>
+              <div class="card-bar card-bar-1" id="card-bar-1a"></div>
+              <div class="card-bar card-bar-2" id="card-bar-1b"></div>
+            </div>
+            <div class="card-badge" id="card-badge-1">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12.5L10 17.5L19 7" stroke="#0B0A08" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <div class="card-badge-caption">RANKS</div>
+            </div>
+          </div>
+
+          <div class="page-card" id="page-card-2">
+            <div class="card-topbar">
+              <div class="card-dot"></div>
+              <div class="card-dot"></div>
+              <div class="card-dot"></div>
+              <div class="card-address-pill"><div class="card-address-fill"></div></div>
+            </div>
+            <div class="card-content">
+              <div class="page-title" id="card-title-2">REMODELING</div>
+              <div class="card-bar card-bar-1" id="card-bar-2a"></div>
+              <div class="card-bar card-bar-2" id="card-bar-2b"></div>
+            </div>
+            <div class="card-badge" id="card-badge-2">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12.5L10 17.5L19 7" stroke="#0B0A08" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <div class="card-badge-caption">RANKS</div>
+            </div>
+          </div>
+
+          <div class="page-card" id="page-card-3">
+            <div class="card-topbar">
+              <div class="card-dot"></div>
+              <div class="card-dot"></div>
+              <div class="card-dot"></div>
+              <div class="card-address-pill"><div class="card-address-fill"></div></div>
+            </div>
+            <div class="card-content">
+              <div class="page-title" id="card-title-3">CONCRETE</div>
+              <div class="card-bar card-bar-1" id="card-bar-3a"></div>
+              <div class="card-bar card-bar-2" id="card-bar-3b"></div>
+            </div>
+            <div class="card-badge" id="card-badge-3">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12.5L10 17.5L19 7" stroke="#0B0A08" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <div class="card-badge-caption">RANKS</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="closing-line">
+          <div id="closing-line-1">ONE PAGE CONFUSES GOOGLE.</div>
+          <div id="closing-line-2">SEPARATE PAGES GET FOUND.</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= scene 1 · one crammed page (0.0 - 4.0s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, 0.08);
+
+        tl.fromTo(
+          "#browser-frame-1",
+          { scale: 0.85, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.9)" },
+          0.15,
+        );
+
+        tl.fromTo("#headline-bar-1", { opacity: 0, y: 10 }, { opacity: 0.72, y: 0, duration: 0.3, ease: "power2.out" }, 0.6);
+        tl.fromTo("#subhead-bar-1", { opacity: 0, y: 10 }, { opacity: 0.5, y: 0, duration: 0.3, ease: "power2.out" }, 0.75);
+
+        // four service tags cram in, tight stagger, slight overshoot — reads noisy/unfocused
+        tl.fromTo("#tag-roofing", { opacity: 0, scale: 0.4 }, { opacity: 0.9, scale: 0.7, duration: 0.3, ease: "back.out(2.2)" }, 0.75);
+        tl.fromTo("#tag-remodel", { opacity: 0, scale: 0.4 }, { opacity: 0.9, scale: 0.7, duration: 0.3, ease: "back.out(2.2)" }, 0.83);
+        tl.fromTo("#tag-concrete", { opacity: 0, scale: 0.4 }, { opacity: 0.9, scale: 0.7, duration: 0.3, ease: "back.out(2.2)" }, 0.91);
+        tl.fromTo("#tag-painting", { opacity: 0, scale: 0.4 }, { opacity: 0.9, scale: 0.7, duration: 0.3, ease: "back.out(2.2)" }, 0.99);
+
+        // confusion badge pops onto the corner
+        tl.fromTo(
+          "#confusion-badge",
+          { scale: 0.5, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.32, ease: "back.out(2.4)" },
+          1.3,
+        );
+
+        // badge cycles through each crammed service word, never settling — Google can't lock a signal
+        tl.fromTo("#badge-word-1", { opacity: 0 }, { opacity: 0.85, duration: 0.14, ease: "power1.out" }, 1.5);
+        tl.to("#badge-word-1", { opacity: 0, duration: 0.14, ease: "power1.in" }, 1.76);
+        tl.fromTo("#badge-word-2", { opacity: 0 }, { opacity: 0.85, duration: 0.14, ease: "power1.out" }, 1.9);
+        tl.to("#badge-word-2", { opacity: 0, duration: 0.14, ease: "power1.in" }, 2.16);
+        tl.fromTo("#badge-word-3", { opacity: 0 }, { opacity: 0.85, duration: 0.14, ease: "power1.out" }, 2.3);
+        tl.to("#badge-word-3", { opacity: 0, duration: 0.14, ease: "power1.in" }, 2.56);
+        tl.fromTo("#badge-word-4", { opacity: 0 }, { opacity: 0.85, duration: 0.14, ease: "power1.out" }, 2.7);
+        tl.to("#badge-word-4", { opacity: 0, duration: 0.14, ease: "power1.in" }, 2.96);
+
+        // glitch jitter — the signal fails to resolve — then settles on a flickering "?"
+        tl.to(
+          "#confusion-badge",
+          { keyframes: [{ x: -4 }, { x: 4 }, { x: -2 }, { x: 2 }, { x: 0 }], duration: 0.3, ease: "none" },
+          3.1,
+        );
+        tl.fromTo("#badge-mark", { opacity: 0 }, { opacity: 1, duration: 0.16, ease: "power1.out" }, 3.4);
+        tl.to("#badge-mark", { opacity: 0.35, duration: 0.18, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false }, 3.62);
+
+        tl.fromTo(
+          "#scene1-caption",
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+          3.5,
+        );
+
+        // hard kill so a non-linear seek never lands on a stale mid-cycle badge-word state
+        tl.set(["#badge-word-1", "#badge-word-2", "#badge-word-3", "#badge-word-4"], { opacity: 0 }, 4.0);
+
+        /* ================= scene 2 · three clean pages, each ranks for its own thing (4.0 - 8.2s) ================= */
+        tl.fromTo("#page-card-1", { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "back.out(1.9)" }, 4.0);
+        tl.fromTo("#page-card-2", { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "back.out(1.9)" }, 4.1);
+        tl.fromTo("#page-card-3", { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "back.out(1.9)" }, 4.2);
+
+        tl.fromTo("#card-title-1", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.28, ease: "power2.out" }, 4.4);
+        tl.fromTo("#card-bar-1a", { opacity: 0, y: 10 }, { opacity: 0.55, y: 0, duration: 0.28, ease: "power2.out" }, 4.48);
+        tl.fromTo("#card-bar-1b", { opacity: 0, y: 10 }, { opacity: 0.35, y: 0, duration: 0.28, ease: "power2.out" }, 4.56);
+
+        tl.fromTo("#card-title-2", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.28, ease: "power2.out" }, 4.55);
+        tl.fromTo("#card-bar-2a", { opacity: 0, y: 10 }, { opacity: 0.55, y: 0, duration: 0.28, ease: "power2.out" }, 4.63);
+        tl.fromTo("#card-bar-2b", { opacity: 0, y: 10 }, { opacity: 0.35, y: 0, duration: 0.28, ease: "power2.out" }, 4.71);
+
+        tl.fromTo("#card-title-3", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.28, ease: "power2.out" }, 4.7);
+        tl.fromTo("#card-bar-3a", { opacity: 0, y: 10 }, { opacity: 0.55, y: 0, duration: 0.28, ease: "power2.out" }, 4.78);
+        tl.fromTo("#card-bar-3b", { opacity: 0, y: 10 }, { opacity: 0.35, y: 0, duration: 0.28, ease: "power2.out" }, 4.86);
+
+        // each card's own badge locks solid with a checkmark + glow-flash, staggered left to right
+        tl.fromTo("#card-badge-1", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.26, ease: "back.out(2.4)" }, 5.0);
+        tl.fromTo(
+          "#card-badge-1",
+          { boxShadow: "0 0 0px rgba(217,169,74,0)" },
+          { boxShadow: "0 0 40px rgba(217,169,74,0.75)", duration: 0.26, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false },
+          5.16,
+        );
+
+        tl.fromTo("#card-badge-2", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.26, ease: "back.out(2.4)" }, 5.25);
+        tl.fromTo(
+          "#card-badge-2",
+          { boxShadow: "0 0 0px rgba(217,169,74,0)" },
+          { boxShadow: "0 0 40px rgba(217,169,74,0.75)", duration: 0.26, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false },
+          5.41,
+        );
+
+        tl.fromTo("#card-badge-3", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.26, ease: "back.out(2.4)" }, 5.5);
+        tl.fromTo(
+          "#card-badge-3",
+          { boxShadow: "0 0 0px rgba(217,169,74,0)" },
+          { boxShadow: "0 0 40px rgba(217,169,74,0.75)", duration: 0.26, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false },
+          5.66,
+        );
+
+        // closing line
+        tl.fromTo("#closing-line-1", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 6.2);
+        tl.fromTo("#closing-line-2", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.42, ease: "power2.out" }, 6.75);
+        tl.fromTo(
+          "#closing-line-2",
+          { textShadow: "0 0 0px rgba(244,217,152,0)" },
+          { textShadow: "0 0 50px rgba(244,217,152,0.75)", duration: 0.3, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false },
+          7.0,
+        );
+
+        // freeze-hold to 8.2s — no further tweens scheduled, last state persists for a clean cut
+
+        window.__timelines["one-page-vs-service-pages"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

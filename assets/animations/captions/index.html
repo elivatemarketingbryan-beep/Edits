@@ -1,0 +1,236 @@
+<!doctype html>
+<!-- Captions: a transparent caption overlay built from word timings, one mode per line:
+     build, karaoke, blur, accent, emphasis, statement, strike-swap, scattered, command
+     (see styles/CAPTIONS.md). --file is a captions.json { "lines": [ { "mode", "words":
+     [ { "w", "s", "e" } ], "accent": [...], "swap": "..." } ] } with output-timeline
+     seconds. Renders to WebM with alpha to sit over the edit. Seek-safe: every change is
+     placed on the timeline at its word's time. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: transparent; }
+      .line { position: absolute; left: 0; right: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; opacity: 0; }
+      .w { display: inline-block; white-space: pre; }
+      .sans { font-family: "__FONT_SANS__", "Inter", sans-serif; font-weight: 800; color: #fff; text-shadow: 0 3px 14px rgba(0, 0, 0, .75), 0 1px 2px rgba(0, 0, 0, .6); }
+      .serif { font-family: "__FONT_SERIF__", Georgia, serif; font-style: italic; font-weight: 400; }
+      .grad { background: linear-gradient(180deg, __ACCENT_LIGHT__ 0%, __ACCENT__ 55%, __ACCENT_DEEP__ 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+        filter: drop-shadow(0 4px 18px rgba(0, 0, 0, .55)); padding: 0 .08em; }
+      .ul { position: absolute; height: .09em; background: __ACCENT__; border-radius: .05em; transform-origin: left center; transform: scaleX(0); }
+      .strike { position: absolute; left: 4%; right: 4%; overflow: visible; }
+      .command { color: #E5484D; text-transform: uppercase; text-shadow: 0 6px 24px rgba(0, 0, 0, .7); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__"></div>
+    <script>
+      const W = __W__, H = __H__, DUR = __DURATION__, DATA = __CAPTIONS__;
+      const portrait = H > W, root = document.getElementById('root');
+      const u = portrait ? W / 1080 : H / 1080;               // one design unit = 1px at 1080 short side
+      const LOUD = new Set(['emphasis', 'statement', 'strike-swap', 'scattered', 'command', 'brush', 'pointer']);
+      const lines = DATA.lines.filter((l) => l.words && l.words.length).map((l) => ({ ...l, start: l.words[0].s, last: l.words[l.words.length - 1].e }));
+      // A line ends at its hold time or when the next line of the same kind (running vs loud) starts.
+      lines.forEach((l, i) => {
+        const loud = LOUD.has(l.mode), hold = loud ? 1.3 : 0.6;
+        const next = lines.slice(i + 1).find((n) => LOUD.has(n.mode) === loud);
+        l.end = Math.min(DUR, l.last + hold, next ? next.start : Infinity);
+      });
+      let seed = 3; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+      const tl = gsap.timeline({ paused: true });
+      const sfx = [];
+
+      function mk(cls, parent, text) { const e = document.createElement('div'); e.className = cls; if (text != null) e.textContent = text; parent.appendChild(e); return e; }
+      function lineBox(top, fontPx, maxW, cls) {
+        const el = mk('line ' + cls, root);
+        Object.assign(el.style, { top: top + 'px', fontSize: fontPx + 'px', padding: `0 ${(W - maxW) / 2}px`, columnGap: fontPx * 0.26 + 'px', rowGap: fontPx * 0.05 + 'px', lineHeight: 1.15 });
+        return el;
+      }
+      function showHide(el, l) {
+        tl.set(el, { opacity: 1 }, l.start - 0.001);
+        tl.to(el, { opacity: 0, duration: 0.18, ease: 'power1.in' }, l.end - 0.18);
+      }
+      // Portrait keeps loud captions above the face (top band) and below it (lower band), clear of the safe zones.
+      const lowY = portrait ? H * 0.66 : H * 0.8, highY = portrait ? H * 0.115 : H * 0.1;
+
+      for (const l of lines) {
+        const words = l.words;
+        if (['build', 'karaoke', 'blur', 'accent'].includes(l.mode)) {
+          const fs = (l.mode === 'blur' ? 46 : 58) * u * (portrait ? 1.1 : 1);
+          const el = lineBox(lowY, fs, W * (portrait ? 0.84 : 0.7), 'sans');
+          const spans = words.map((w) => mk('w', el, w.w));
+          showHide(el, l);
+          spans.forEach((sp, i) => {
+            const t = words[i].s;
+            if (l.mode === 'build' || l.mode === 'accent') { gsap.set(sp, { opacity: 0, y: fs * 0.18 }); tl.to(sp, { opacity: 1, y: 0, duration: 0.12, ease: 'power2.out' }, t); }
+            if (l.mode === 'karaoke') { gsap.set(sp, { opacity: 0.38 }); tl.to(sp, { opacity: 1, duration: 0.08 }, t); }
+            if (l.mode === 'blur') { gsap.set(sp, { opacity: 0.15, filter: 'blur(14px)' }); tl.to(sp, { opacity: 1, filter: 'blur(0px)', duration: 0.28, ease: 'power2.out' }, t); }
+            if (l.mode === 'accent' && (l.accent || []).some((a) => a.toLowerCase() === words[i].w.toLowerCase().replace(/[^\w']/g, ''))) {
+              tl.to(sp, { color: '__ACCENT_LIGHT__', duration: 0.1 }, t);
+              const ul = mk('ul', el); sp.style.position = 'relative';
+              sp.appendChild(ul); Object.assign(ul.style, { left: '0', right: '0', bottom: -fs * 0.08 + 'px' });
+              tl.to(ul, { scaleX: 1, duration: 0.35, ease: 'power2.inOut' }, t + 0.05);
+              sfx.push({ cue: 'stretch', at: +(t + 0.05).toFixed(2), note: 'accent underline' });
+            }
+          });
+        } else if (l.mode === 'emphasis' || l.mode === 'scattered') {
+          const big = l.mode === 'emphasis';
+          const fs = (big ? 150 : 84) * u * (portrait ? 0.95 : 1);
+          const el = lineBox(big ? highY : (portrait ? H * 0.5 : H * 0.3), fs, W * 0.9, 'serif' + (big ? '' : ' sans'));
+          if (!big) { el.style.fontWeight = 400; el.style.fontFamily = '"__FONT_SERIF__", Georgia, serif'; el.style.fontStyle = 'italic'; el.style.rowGap = fs * 0.4 + 'px'; }
+          const spans = words.map((w) => mk('w' + (big ? ' grad' : ''), el, w.w));
+          showHide(el, l);
+          spans.forEach((sp, i) => {
+            if (big) { gsap.set(sp, { clipPath: 'inset(0 100% 0 0)' }); tl.to(sp, { clipPath: 'inset(0 0% 0 0)', duration: 0.35, ease: 'power2.out' }, words[i].s); }
+            else { // scattered: each word on its own height and size
+              gsap.set(sp, { opacity: 0, y: (rand() - 0.5) * fs * 1.6, scale: 0.75 + rand() * 0.55 });
+              tl.to(sp, { opacity: 1, duration: 0.4, ease: 'power1.out' }, words[i].s);
+            }
+          });
+          if (big) sfx.push({ cue: 'whoosh-simple', at: +l.start.toFixed(2), note: 'emphasis caption' });
+        } else if (l.mode === 'statement' || l.mode === 'strike-swap') {
+          const word = words.map((w) => w.w).join(' ').toUpperCase();
+          const fs = Math.min(190 * u, (W * 0.86) / (word.length * 0.78));
+          const el = lineBox(highY, fs, W * 0.96, 'sans');
+          Object.assign(el.style, { letterSpacing: '0.02em', flexWrap: 'nowrap', columnGap: '0px' });
+          const letters = [...word].map((c) => mk('w', el, c));
+          // A swap holds the struck word on screen until its replacement has landed.
+          if (l.mode === 'strike-swap' && l.swap) l.end = Math.max(l.end, Math.min(DUR, l.last + 0.15 + 1.6));
+          showHide(el, l);
+          const span = Math.max(0.3, l.last - l.start);
+          letters.forEach((c, i) => { gsap.set(c, { opacity: 0 }); tl.to(c, { opacity: 1, duration: 0.15 }, l.start + (span * i) / letters.length); });
+          sfx.push({ cue: 'hit', at: +l.start.toFixed(2), note: 'statement word' });
+          if (l.mode === 'strike-swap') {
+            const svgNS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('class', 'strike'); svg.setAttribute('viewBox', '0 0 100 10'); svg.setAttribute('preserveAspectRatio', 'none');
+            Object.assign(svg.style, { top: fs * 0.45 + 'px', height: fs * 0.18 + 'px', width: '92%' });
+            const p = document.createElementNS(svgNS, 'path');
+            p.setAttribute('d', 'M1,6 C20,4.5 35,6.5 50,5 S80,4 99,5.5'); p.setAttribute('fill', 'none'); p.setAttribute('stroke', '#E5484D');
+            p.setAttribute('stroke-width', '2.4'); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('pathLength', '100');
+            
+            svg.appendChild(p); el.appendChild(svg);
+            const strikeAt = l.last + 0.15, len = 100;
+            p.style.strokeDasharray = len; p.style.strokeDashoffset = len;
+            tl.to(p, { strokeDashoffset: 0, duration: 0.3, ease: 'power2.inOut' }, strikeAt);
+            sfx.push({ cue: 'glitch', at: +strikeAt.toFixed(2), note: 'strike-through' });
+            if (l.swap) {
+              const sw = lineBox(highY + fs * 1.15, fs * 0.95, W * 0.9, 'serif');
+              const s = mk('w grad', sw, l.swap);
+              tl.set(sw, { opacity: 1 }, strikeAt + 0.35);
+              gsap.set(s, { clipPath: 'inset(0 100% 0 0)' });
+              tl.to(s, { clipPath: 'inset(0 0% 0 0)', duration: 0.45, ease: 'power2.out' }, strikeAt + 0.35);
+              tl.to(sw, { opacity: 0, duration: 0.18 }, l.end - 0.18);
+              sfx.push({ cue: 'stretch', at: +(strikeAt + 0.35).toFixed(2), note: 'replacement word' });
+            }
+          }
+        } else if (l.mode === 'command') {
+          const word = words.map((w) => w.w).join(' ');
+          const fs = Math.min(150 * u, (W * 0.86) / (word.length * 0.6));
+          const el = lineBox(lowY - fs * 1.45, fs, W * 0.92, 'serif command');
+          const s = mk('w', el, word.toUpperCase());
+          showHide(el, l);
+          gsap.set(s, { scale: 1.25, opacity: 0 });
+          tl.to(s, { scale: 1, opacity: 1, duration: 0.25, ease: 'power3.out' }, l.start);
+          sfx.push({ cue: 'hit', at: +l.start.toFixed(2), note: 'command caption' });
+        }
+      }
+      // slide: the whole line arrives at once, each word sliding up (or down, dir:"down")
+      // into place 2 frames after the previous one; on exit the words blur out.
+      for (const l of lines.filter((x) => x.mode === 'slide')) {
+        const down = l.dir === 'down', fs = 60 * u * (portrait ? 1.1 : 1);
+        const el = lineBox(down ? (portrait ? H * 0.16 : H * 0.12) : lowY, fs, W * (portrait ? 0.84 : 0.72), 'sans');
+        el.style.overflow = 'hidden';                        // words rise out of the line's own edge
+        el.style.paddingTop = el.style.paddingBottom = fs * 0.15 + 'px';
+        const spans = l.words.map((w) => mk('w', el, w.w));
+        tl.set(el, { opacity: 1 }, l.start - 0.001);
+        spans.forEach((sp, i) => {
+          gsap.set(sp, { yPercent: down ? -120 : 120 });
+          tl.to(sp, { yPercent: 0, duration: 0.6, ease: 'power3.out' }, l.start + i * 2 / 30);
+          tl.to(sp, { filter: 'blur(12px)', opacity: 0, duration: 0.25, ease: 'power1.in' }, l.end - 0.25 + i * 1 / 30 - spans.length / 30);
+        });
+        tl.set(el, { opacity: 0 }, l.end);
+      }
+
+      // stack: one big word with the small words tucked above and below it in a tight block.
+      // brush: a huge white word, then a red paint stroke slashes across it.
+      // pointer: a small stacked note beside the head with a hand-drawn arrow at the speaker.
+      for (const l of lines) {
+        const words = l.words;
+        const clean = (w) => w.toLowerCase().replace(/[^\w']/g, '');
+        if (l.mode === 'stack') {
+          const bigIdx = l.big ? words.findIndex((w) => clean(w.w) === clean(l.big)) : words.reduce((b, w, i) => (w.w.length > words[b].w.length ? i : b), 0);
+          const small = 46 * u * (portrait ? 1.1 : 1), big = small * 2.6;
+          const el = mk('line sans', root);
+          Object.assign(el.style, { top: (portrait ? H * 0.6 : H * 0.66) + 'px', flexDirection: 'column', alignItems: 'center', lineHeight: 0.92, letterSpacing: '-0.02em' });
+          const before = words.slice(0, bigIdx), after = words.slice(bigIdx + 1);
+          const row = (ws, size) => { const r = mk('', el); Object.assign(r.style, { display: 'flex', gap: size * 0.22 + 'px', fontSize: size + 'px' }); return ws.map((w) => mk('w', r, w.w)); };
+          const spans = [...row(before, small), ...row([words[bigIdx]], big), ...row(after, small)];
+          spans[before.length].style.fontWeight = 900;
+          showHide(el, l);
+          spans.forEach((sp, i) => {
+            const isBig = i === before.length;
+            if ((l.accent || []).some((a) => clean(a) === clean(words[i].w))) sp.style.color = '__ACCENT_LIGHT__';
+            gsap.set(sp, { opacity: 0, scale: isBig ? 1.35 : 0.6 });
+            tl.to(sp, { opacity: 1, scale: 1, duration: isBig ? 0.22 : 0.18, ease: isBig ? 'power3.out' : 'back.out(2.5)' }, words[i].s);
+          });
+        } else if (l.mode === 'brush') {
+          const word = words.map((w) => w.w).join(' ').toUpperCase();
+          const fs = Math.min(200 * u, (W * 0.84) / (word.length * 0.74));
+          const el = lineBox(portrait ? highY : H * 0.36, fs, W * 0.96, 'sans');
+          Object.assign(el.style, { flexWrap: 'nowrap', columnGap: '0px', letterSpacing: '-0.01em' });
+          const s = mk('w', el, word);
+          s.style.position = 'relative'; s.style.fontWeight = 900;
+          showHide(el, l);
+          gsap.set(s, { opacity: 0, scale: 1.15 });
+          tl.to(s, { opacity: 1, scale: 1, duration: 0.2, ease: 'power3.out' }, l.start);
+          // The stroke: a thick rough-edged red swipe drawn bottom-left to top-right across the word.
+          const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
+          svg.setAttribute('viewBox', '0 0 100 40'); svg.setAttribute('preserveAspectRatio', 'none');
+          Object.assign(svg.style, { position: 'absolute', left: '-6%', top: '-10%', width: '112%', height: '120%', overflow: 'visible' });
+          svg.innerHTML = `<defs><filter id="rough${Math.round(l.start * 100)}" x="-10%" y="-30%" width="120%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter></defs>`;
+          const p = document.createElementNS(NS, 'path');
+          p.setAttribute('d', 'M4,34 C25,28 45,20 62,15 S88,8 97,5');
+          Object.assign(p.style, { fill: 'none', stroke: '#D7263D', strokeWidth: '9', strokeLinecap: 'round', opacity: 0.92, filter: `url(#rough${Math.round(l.start * 100)})` });
+          p.setAttribute('pathLength', '100'); p.style.strokeDasharray = 100; p.style.strokeDashoffset = 100;
+          svg.appendChild(p); s.appendChild(svg);
+          const at = l.last + 0.05;
+          tl.to(p, { strokeDashoffset: 0, duration: 0.22, ease: 'power3.out' }, at);
+          sfx.push({ cue: 'hit', at: +l.start.toFixed(2), note: 'brush word' }, { cue: 'whoosh-high', at: +at.toFixed(2), note: 'brush stroke' });
+        } else if (l.mode === 'pointer') {
+          const side = l.side === 'right' ? 'right' : 'left';
+          const fs = 44 * u * (portrait ? 1.05 : 1);
+          const el = mk('line sans', root);
+          const x = side === 'left' ? W * 0.06 : W * 0.6;
+          Object.assign(el.style, { top: (portrait ? H * 0.3 : H * 0.18) + 'px', left: x + 'px', right: 'auto', width: W * 0.34 + 'px',
+            flexDirection: 'column', alignItems: side === 'left' ? 'flex-start' : 'flex-end', lineHeight: 0.95, fontSize: fs + 'px' });
+          const spans = words.map((w, i) => { const s = mk('w', el, w.w); if (i === words.length - 1) { s.style.fontSize = fs * 1.9 + 'px'; s.style.fontWeight = 900; } return s; });
+          showHide(el, l);
+          spans.forEach((sp, i) => { gsap.set(sp, { opacity: 0, y: fs * 0.3 }); tl.to(sp, { opacity: 1, y: 0, duration: 0.16, ease: 'back.out(2)' }, words[i].s); });
+          // Curved hand-drawn arrow from under the note toward the frame centre (the speaker).
+          const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
+          const aw = W * 0.16, ah = H * (portrait ? 0.07 : 0.13);
+          svg.setAttribute('viewBox', '0 0 100 60');
+          Object.assign(svg.style, { position: 'absolute', width: aw + 'px', height: ah + 'px', overflow: 'visible', transform: side === 'left' ? 'none' : 'scaleX(-1)',
+            [side === 'left' ? 'left' : 'right']: W * 0.17 + 'px', top: (portrait ? H * 0.3 : H * 0.18) + fs * 3.4 + 'px' });
+          svg.innerHTML = `<path d="M6,6 C18,44 52,58 90,40" pathLength="100" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="100" stroke-dashoffset="100"/>` +
+            `<path d="M76,32 L91,40 L78,52" pathLength="100" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100" stroke-dashoffset="100"/>`;
+          svg.style.filter = 'drop-shadow(0 2px 6px rgba(0,0,0,.6))';
+          root.appendChild(svg);
+          const [shaft, head] = svg.querySelectorAll('path');
+          gsap.set(svg, { opacity: 0 });
+          tl.set(svg, { opacity: 1 }, l.start);
+          tl.to(shaft, { strokeDashoffset: 0, duration: 0.35, ease: 'power2.out' }, l.start + 0.1);
+          tl.to(head, { strokeDashoffset: 0, duration: 0.15, ease: 'power2.out' }, l.start + 0.42);
+          tl.to(svg, { opacity: 0, duration: 0.18 }, l.end - 0.18);
+          sfx.push({ cue: 'pop', at: +l.start.toFixed(2), note: 'pointer note' });
+        }
+      }
+      tl.set({}, {}, DUR);                                   // timeline spans the whole overlay
+      window.__timelines = window.__timelines || {};
+      window.__timelines['main'] = tl;
+      window.__sfx = sfx;                                    // ready-made sfx.json cues for these captions
+    </script>
+  </body>
+</html>

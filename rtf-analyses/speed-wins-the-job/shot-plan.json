@@ -1,0 +1,55 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 13.5,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "dark-gold contractor-brand kinetic comparison, matching pricing-tiers-reveal / revenue-math-reveal / secretary-no-salary siblings exactly: near-black bg (#0B0A08) with a subtle radial vignette to card surface (#17140F), gold accent (#D9A94A) / bright gold (#F4D998) for the winning path, muted (#9C9384) for the losing path, League Gothic display numerals + Montserrat labels. Energy: a tense parallel race that resolves into a clear, confident winner.",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384", "#B5675C"],
+  "font": "League Gothic + Montserrat",
+  "beats": [1.6, 2.4, 3.6, 4.8, 7.2, 8.6],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "No catalog block matched a two-lane parallel race/comparison exactly (checked: 'two lane race comparison timeline', 'checkmark stagger reveal', 'clock ticking timer badge'). Hand-authored in the house style established by secretary-no-salary (compare-card chassis, clock-badge SVG, glow-pulse winner, closing-line hold) and pricing-tiers-reveal (staggered checklist reveal, badge-pop stamp, count-style ticking) per builder-contract reuse-first + gap escalation."
+  },
+
+  "content": {
+    "scenes": [
+      {
+        "id": "scene-hook",
+        "start": 0,
+        "end": 1.6,
+        "text": "A $20,000 LEAD COMES IN.",
+        "emphasis_words": ["$20,000"],
+        "emotion": "anticipation, stakes-setting",
+        "motion": "per-word stagger entrance (mixed slide/scale/expo like sibling headlines) + a small lead/phone SVG icon scale-pop beside the eyebrow line; holds then lifts+fades to crossfade under scene-race",
+        "beats": [0.15, 0.55]
+      },
+      {
+        "id": "scene-race",
+        "start": 1.6,
+        "end": 8.6,
+        "text": "CONTRACTOR A: clock ticks slow → NEXT DAY → LOST THE JOB  //  CONTRACTOR B: clock ticks fast → 9 MINUTES → ANSWERED QUESTIONS → SENT PROOF → CLEAR NEXT STEPS → BOOKED THE JOB",
+        "emphasis_words": ["NEXT DAY", "9 MINUTES", "LOST THE JOB", "BOOKED THE JOB"],
+        "emotion": "parallel tension resolving into contrast; muted dread on the left, rising confidence on the right",
+        "motion": "two compare-card lanes slide in from left/right simultaneously (power4.out, crossfading in as scene-hook lifts out); each lane's clock/timestamp ticks via discrete text swaps (Lane A: slow, wide-spaced swaps ending muted-gray 'NEXT DAY'; Lane B: fast, tight-spaced swaps ending bright-gold '9 MINUTES' with a glow pulse); Lane B gains three staggered checkmark rows (word_reveal/slide_bottom) while Lane A stays static and cold; both lanes land a badge-pop stamp together on the same beat — muted '✕ LOST THE JOB' (desaturated brick-red #B5675C accent) vs bright-gold glowing '✓ BOOKED THE JOB' — then hold fully visible together",
+        "beats": [1.7, 2.4, 3.6, 4.8, 7.2]
+      },
+      {
+        "id": "scene-close",
+        "start": 8.6,
+        "end": 13.5,
+        "text": "SPEED MAKES THEM FEEL SAFE.",
+        "emphasis_words": ["SAFE."],
+        "emotion": "confident resolve, quiet certainty",
+        "motion": "fade_in + slide_bottom caption beneath the held two-lane comparison (both stamps still fully visible, nothing clears — accumulating scene); freeze-hold to end for a clean cut back to host footage",
+        "beats": [8.6]
+      }
+    ]
+  },
+
+  "shot_brief": "A ~13.5s two-path race dramatizing the same $20,000 lead going to two contractors. It opens on a single eyebrow line ('A $20,000 LEAD COMES IN.') with a small lead icon, then splits into two simultaneous compare-card lanes (Contractor A left/muted, Contractor B right/gold) whose clocks tick in parallel at very different speeds — Lane A crawls to 'NEXT DAY' while Lane B races to '9 MINUTES' and stacks three checkmarks for answering, proof, and next steps. Both lanes land their verdict stamp on the same beat (muted '✕ LOST THE JOB' vs glowing gold '✓ BOOKED THE JOB'), hold together, then a closing line fades in beneath: 'SPEED MAKES THEM FEEL SAFE.' The piece never clears to blank — a persistent full-bleed bg-fill (matching sibling projects) covers the whole duration, scene-hook crossfades under scene-race's entrance (1.6–2.0s overlap) instead of hard-cutting, and scene-race never empties before scene-close's caption fades in beneath it (accumulating, not replacing). The dominant motif is the parallel race itself — both lanes animate in lockstep so the contrast lands as a single moment, not two sequential beats."
+}

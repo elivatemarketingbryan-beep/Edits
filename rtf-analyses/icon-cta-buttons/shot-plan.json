@@ -1,0 +1,68 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 6.0,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Icon-first accent animation, NOT text-heavy. 3 clean line-art button icons (phone / quote-document / chat) are the hero visual, arranged in a horizontal row on rounded-rect 'button chassis' cards. Each pops in staggered left-to-right with a glow-pulse 'activation' moment as it lands, like a button being pressed live. A short punchy label appears beneath after all three have landed, then a clean freeze-hold. Purple/black brand system, matches shared-lead-problem and demand-reputation-flywheel sibling pieces.",
+  "palette": ["#0D0817", "#1B1130", "#9B5CFF", "#C9A8FF", "#F3EFFA", "#9088A8"],
+  "font": "League Gothic + Montserrat",
+  "beats": [0.1, 1.0, 1.55, 2.1, 3.6],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "No exact catalog block for a staggered icon-button light-up row + landing glow was found (searched 'icon button row reveal pop in staggered' and 'icon light up glow pulse activate button' — closest hits were icon-swap, icon-morph-beat, badge-pop, beat-pulse-background, none matching the 3-up staggered activation sequence). Hand-authored per builder-contract.md, following the box-shadow yoyo glow-pulse pattern from demand-reputation-flywheel (#ring-glow-pulse) and the inline-SVG symbol + badge pattern from shared-lead-problem (#icon-phone / .lead-icon-badge)."
+  },
+
+  "content": {
+    "scenes": [
+      {
+        "id": "scene-fill",
+        "start": 0,
+        "end": 1.0,
+        "text": "",
+        "emphasis_words": [],
+        "emotion": "calm build",
+        "motion": "bg-fill fades in once (0.1-0.4s), persists for the whole piece — never fades out",
+        "beats": [0.1]
+      },
+      {
+        "id": "scene-icon-activate",
+        "start": 1.0,
+        "end": 3.6,
+        "text": "",
+        "emphasis_words": [],
+        "emotion": "purposeful, snappy, energetic",
+        "motion": "3 button-chassis icons pop in left-to-right staggered ~0.55s apart (scale_punch, back.out ease): phone at 1.0s, quote/document at 1.55s, chat bubble at 2.1s. Each landing triggers a glow-pulse box-shadow burst (yoyo, repeat 1) on the chassis, like the button being activated/pressed.",
+        "beats": [1.0, 1.55, 2.1]
+      },
+      {
+        "id": "scene-label",
+        "start": 3.6,
+        "end": 5.0,
+        "text": "MULTIPLE WAYS TO SAY YES.",
+        "emphasis_words": ["YES."],
+        "emotion": "confident, resolved",
+        "motion": "label fades up beneath the icon row (fade_in + slight y rise), no overlap with icons, plain legible hold",
+        "beats": [3.6]
+      },
+      {
+        "id": "scene-hold",
+        "start": 5.0,
+        "end": 6.0,
+        "text": "MULTIPLE WAYS TO SAY YES.",
+        "emphasis_words": [],
+        "emotion": "settled",
+        "motion": "freeze-hold — no new tweens scheduled, last state persists for a clean cut",
+        "beats": []
+      }
+    ],
+    "icons": [
+      { "id": "icon-phone", "label": "CALL", "glyph": "phone handset line-art", "order": 0, "pop_at": 1.0 },
+      { "id": "icon-quote", "label": "QUOTE", "glyph": "document with lines / quote sheet line-art", "order": 1, "pop_at": 1.55 },
+      { "id": "icon-chat", "label": "CHAT", "glyph": "chat bubble with dots line-art", "order": 2, "pop_at": 2.1 }
+    ]
+  }
+}

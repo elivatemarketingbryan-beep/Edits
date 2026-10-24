@@ -1,0 +1,31 @@
+{
+  "id": "R03",
+  "status": "observed",
+  "source": {
+    "url": "https://www.instagram.com/reel/DeMk_4_E7Mo/",
+    "creator": "jackroberts___",
+    "topic": "Animos / design animation",
+    "publishedDate": null,
+    "durationSeconds": 36.3,
+    "dimensions": {"width": 1080, "height": 1920},
+    "mediaBundled": false
+  },
+  "inspection": {
+    "date": "2026-10-07",
+    "method": "Direct visible playback in Chrome plus grid preview; selected muted frames and player metadata.",
+    "continuousReview": false,
+    "audioReviewed": false,
+    "coverageNote": "Grid preview shows design montage above presenter; three playback observations are full-height. Reported duration varied slightly between stream states."
+  },
+  "observations": [
+    {"atSeconds": 12.13, "timingMeaning": "approximate_observation_point", "layout": "full-height footage with graphics", "visibleEvidence": "Close-up hand holding a pen with colored vector-path handles and geometric accents overlaid. Caption below center.", "relationships": ["demonstration", "annotation"]},
+    {"atSeconds": 20.96, "timingMeaning": "approximate_observation_point", "layout": "full-height graphic", "visibleEvidence": "Deliberately pixelated graphic inside framed display, with GIF, frame-rate, and color-count labels. Layered paper-like colored waves behind.", "relationships": ["quality explanation", "comparison"]},
+    {"atSeconds": 32.73, "timingMeaning": "approximate_observation_point", "layout": "full-height gallery", "visibleEvidence": "Many background thumbnails with one large featured card. Spotlights and camera-recording motifs form a studio metaphor. Caption clears main card.", "relationships": ["gallery hierarchy", "selection"]}
+  ],
+  "principles": [
+    "Visual medium can change with the explanation: source footage, overlays, explanatory display, or gallery.",
+    "A single large featured object can organize a collection without making every thumbnail equally prominent.",
+    "An abstract quality claim can be made visible through a relevant example, provided its facts are supported."
+  ],
+  "unknowns": ["Complete speech", "Exact on-screen numerical values", "Complete split-layout intervals", "Audio treatment", "Exact animation timing", "Source-asset provenance", "Performance"]
+}

@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Doubts Before They Call</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background: fades in with the hook and persists for the
+         whole piece so no scene boundary ever exposes a fully transparent
+         frame (alpha-overlay export plays as a full-screen overlay). */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 46%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      /* subtle ambient tension glow behind the doubt cluster — static (no
+         infinite pulse per HF finite-repeat rule), just a soft presence */
+      #ambient-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1900px;
+        height: 1100px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(closest-side, var(--accent) 0%, transparent 70%);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* ---------------- scene 1 · hook (0.0 - 2.4s) ---------------- */
+      #scene-hook {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 120px 160px;
+      }
+      .hook-eyebrow {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        font-size: 36px;
+        color: var(--muted);
+        text-align: center;
+        opacity: 0;
+      }
+
+      /* ---------------- scene 2 · doubt cluster (1.9 - 9.0s) ---------------- */
+      .doubt-q {
+        position: absolute;
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.005em;
+        line-height: 1.08;
+        color: var(--text);
+        opacity: 0;
+        will-change: transform, opacity;
+      }
+      .doubt-q .em {
+        color: var(--accent-bright);
+      }
+      #q1 {
+        top: 190px;
+        left: 210px;
+        width: 700px;
+        font-size: 92px;
+        text-align: left;
+      }
+      #q2 {
+        top: 250px;
+        right: 190px;
+        width: 640px;
+        font-size: 78px;
+        text-align: right;
+      }
+      #q3 {
+        bottom: 230px;
+        left: 240px;
+        width: 820px;
+        font-size: 62px;
+        text-align: left;
+      }
+      #q4 {
+        bottom: 200px;
+        right: 210px;
+        width: 900px;
+        font-size: 62px;
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      /* ---------------- scene 3 · resolve (7.8 - 11.5s) ---------------- */
+      #scene-close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 120px 200px;
+      }
+      .close-line {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: 108px;
+        line-height: 1.15;
+        color: var(--accent-bright);
+        text-align: center;
+        max-width: 1560px;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="doubts-before-they-call"
+      data-start="0"
+      data-duration="11.5"
+      data-fps="30"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="bg-fill"></div>
+      <div id="ambient-glow" data-layout-allow-overflow="true"></div>
+
+      <!-- ============ scene 1 · hook (0.0 - 2.4s) ============ -->
+      <div id="scene-hook" class="clip scene" data-start="0" data-duration="2.4" data-track-index="0">
+        <div class="hook-eyebrow" id="hook-eyebrow">WHAT'S GOING THROUGH THEIR MIND</div>
+      </div>
+
+      <!-- ============ scene 2 · doubt cluster (1.9 - 9.0s) ============ -->
+      <div id="scene-cluster" class="clip scene" data-start="1.9" data-duration="7.1" data-track-index="0">
+        <div class="doubt-q" id="q1">CAN I <span class="em">TRUST</span> THEM?</div>
+        <div class="doubt-q" id="q2">WILL THEY <span class="em">SHOW UP</span>?</div>
+        <div class="doubt-q" id="q3">WILL THEY DISAPPEAR WITH MY <span class="em">DEPOSIT</span>?</div>
+        <div class="doubt-q" id="q4">AM I MAKING THE <span class="em">RIGHT CALL</span>?</div>
+      </div>
+
+      <!-- ============ scene 3 · resolve (7.8 - 11.5s) ============ -->
+      <div id="scene-close" class="clip scene" data-start="7.8" data-duration="3.7" data-track-index="0">
+        <div class="close-line" id="close-line">TRUST IS WON BEFORE THE FIRST CALL.</div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= persistent background ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0.05);
+        tl.fromTo("#ambient-glow", { opacity: 0 }, { opacity: 0.22, duration: 1.2, ease: "sine.out" }, 2.0);
+        tl.to("#ambient-glow", { opacity: 0.1, duration: 0.6, ease: "power1.out" }, 7.6);
+
+        /* ================= scene 1 · hook (0.0 - 2.4s) ================= */
+        tl.fromTo(
+          "#hook-eyebrow",
+          { opacity: 0, y: -16 },
+          { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" },
+          0.25,
+        );
+        // crossfades out under scene-cluster (which starts entering at 1.9s) so
+        // the frame is never without visible foreground content
+        tl.fromTo(
+          "#hook-eyebrow",
+          { opacity: 1, y: 0 },
+          { opacity: 0, y: -16, duration: 0.45, ease: "power2.in", immediateRender: false },
+          1.9,
+        );
+
+        /* ================= scene 2 · doubt cluster (1.9 - 9.0s) =================
+           each question pops in with a quick scale + rotation-wobble overshoot,
+           holds bright as the "active" thought, then recedes to a low (never
+           zero) opacity as the next one pops in — clutter accumulates instead
+           of hard-cutting, so no beat is ever empty of visible content. */
+        var doubts = [
+          { sel: "#q1", enter: 2.05, recede: 3.3, fromRot: -11, landRot: -4 },
+          { sel: "#q2", enter: 3.35, recede: 4.6, fromRot: 10, landRot: 3 },
+          { sel: "#q3", enter: 4.65, recede: 6.0, fromRot: -8, landRot: -2, enterDur: 0.45 },
+          { sel: "#q4", enter: 6.05, recede: 7.6, fromRot: 9, landRot: 2.5 },
+        ];
+
+        doubts.forEach(function (d) {
+          gsap.set(d.sel, { rotation: d.landRot, transformOrigin: "50% 50%" });
+          tl.fromTo(
+            d.sel,
+            { opacity: 0, scale: 0.86, rotation: d.fromRot },
+            {
+              opacity: 1,
+              scale: 1,
+              rotation: d.landRot,
+              duration: d.enterDur || 0.4,
+              ease: "back.out(1.7)",
+            },
+            d.enter,
+          );
+          tl.to(
+            d.sel,
+            { opacity: 0.32, duration: 0.4, ease: "power1.out", immediateRender: false },
+            d.recede,
+          );
+        });
+
+        // all four dim further together as the resolve line begins to land
+        // (crossfade zone with scene-close, which starts at 7.8s)
+        doubts.forEach(function (d) {
+          tl.to(
+            d.sel,
+            { opacity: 0.12, duration: 0.5, ease: "power1.out", immediateRender: false },
+            7.6,
+          );
+        });
+
+        /* ================= scene 3 · resolve (7.8 - 11.5s) =================
+           starts entering at 8.3s, tight on the doubts' 7.6-8.1s dim-out, so
+           there is no flat/empty stretch between the cluster settling and the
+           resolve line landing. */
+        tl.fromTo(
+          "#close-line",
+          { opacity: 0, y: 22 },
+          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+          8.3,
+        );
+        // one-shot calm settle-glow — no yoyo/pulse, stays lit (grounded
+        // contrast to the jittery doubts above)
+        tl.fromTo(
+          "#close-line",
+          { textShadow: "0 0 0px rgba(201,168,255,0)" },
+          {
+            textShadow: "0 0 46px rgba(201,168,255,0.55)",
+            duration: 0.6,
+            ease: "sine.out",
+            immediateRender: false,
+          },
+          8.9,
+        );
+
+        // freeze-hold from ~9.8s to the end (11.5s) for a clean cut back to
+        // host footage — no further tweens scheduled; the last state persists.
+
+        window.__timelines["doubts-before-they-call"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

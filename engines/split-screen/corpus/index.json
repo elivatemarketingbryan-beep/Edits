@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-07",
+  "scope": "Five-reel sample of selected directly observed muted playback frames, including a focused revisit of visual variety. Not continuous audiovisual review or exhaustive corpus analysis.",
+  "researchNotes": "research/REFERENCE_RESEARCH.md",
+  "annotations": [
+    {
+      "id": "R01",
+      "path": "corpus/annotations/R01-writing-inspection.json",
+      "status": "observed",
+      "relationships": [
+        "inspection",
+        "highlighting",
+        "transformation"
+      ],
+      "format": "recent split and graphic takeover"
+    },
+    {
+      "id": "R02",
+      "path": "corpus/annotations/R02-website-brand.json",
+      "status": "observed",
+      "relationships": [
+        "demonstration",
+        "brand identification",
+        "hierarchy"
+      ],
+      "format": "recent split and graphic takeover"
+    },
+    {
+      "id": "R03",
+      "path": "corpus/annotations/R03-animation-gallery.json",
+      "status": "observed",
+      "relationships": [
+        "demonstration",
+        "quality explanation",
+        "gallery hierarchy"
+      ],
+      "format": "recent mixed media and graphic takeover"
+    },
+    {
+      "id": "R04",
+      "path": "corpus/annotations/R04-older-screen-demo.json",
+      "status": "observed",
+      "relationships": [
+        "demonstration"
+      ],
+      "format": "older pinned screen demonstration"
+    },
+    {
+      "id": "R05",
+      "path": "corpus/annotations/R05-product-lighting.json",
+      "status": "observed",
+      "relationships": [
+        "hierarchy",
+        "product presentation",
+        "focused interaction",
+        "material emphasis"
+      ],
+      "format": "recent split-screen product and luminous interaction"
+    }
+  ],
+  "illustrativeExamples": [
+    "corpus/examples/illustrative-cooking.json"
+  ],
+  "varietyReview": "research/VARIETY_REVIEW.md"
+}

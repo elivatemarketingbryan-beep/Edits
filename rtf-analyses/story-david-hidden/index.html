@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Story David Hidden</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background: fades in once at the very start and never
+         fades out again, so no frame of the alpha-overlay export is ever
+         fully transparent (a persistent replacement of host footage) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      /* single continuous full-duration scene: shepherd+sheep -> PURPOSE
+         word -> crown+gems all accumulate/crossfade in one clip; every
+         transition overlaps its neighbor so the frame is never empty */
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 160px;
+        gap: 48px;
+        box-sizing: border-box;
+      }
+
+      /* ---------------- field (horizon + shepherd + sheep + crown) ---------------- */
+      #field {
+        position: relative;
+        width: 900px;
+        height: 460px;
+        flex: none;
+      }
+
+      /* wraps only the beat-1 hill elements (horizon + sheep + shepherd) so
+         they can fade/scale down as one unit for the beat-2 transition
+         WITHOUT hiding #crown-wrap, which is a sibling, not a child, of this
+         wrapper — #crown-wrap must stay independently visible/opaque so its
+         own later reveal (beat 3) still renders. */
+      #hill-scene {
+        position: absolute;
+        inset: 0;
+        transform-origin: 50% 50%;
+      }
+
+      #horizon-svg {
+        position: absolute;
+        left: 0;
+        top: 300px;
+        width: 900px;
+        height: 8px;
+        overflow: visible;
+      }
+      #horizon-line {
+        fill: none;
+        stroke: var(--muted);
+        stroke-width: 4;
+        stroke-linecap: round;
+        opacity: 0.55;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+
+      #sheep-wrap {
+        position: absolute;
+        left: 50%;
+        top: 168px;
+        width: 240px;
+        height: 180px;
+        transform: translateX(-50%);
+        opacity: 0;
+        color: var(--muted);
+      }
+      #sheep-wrap svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      #sheep-wrap ellipse,
+      #sheep-wrap circle,
+      #sheep-wrap line {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* abstract shepherd figure: circle head, line body, two grounded legs,
+         one arm extended to a long staff — deliberately vertical/upright so
+         it never reads as a second sheep. Same stroke-only + currentColor +
+         static-opacity technique as the sheep icon. */
+      #shepherd-wrap {
+        position: absolute;
+        left: 120px;
+        top: 104px;
+        width: 150px;
+        height: 200px;
+        opacity: 0;
+        color: var(--muted);
+      }
+      #shepherd-wrap svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      #shepherd-wrap circle,
+      #shepherd-wrap line {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* ---------------- PURPOSE word (beat 2 payoff) ---------------- */
+      #purpose-word {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 220px;
+        line-height: 1;
+        color: var(--accent-bright);
+        text-align: center;
+        transform-origin: 50% 50%;
+        opacity: 0;
+        text-shadow: 0 0 0px rgba(201, 168, 255, 0);
+      }
+
+      /* ---------------- crown (beat 3 payoff) ---------------- */
+      #crown-wrap {
+        position: absolute;
+        left: 50%;
+        top: 90px;
+        width: 260px;
+        height: 195px;
+        transform: translateX(-50%) scale(0.4);
+        transform-origin: 50% 50%;
+        opacity: 0;
+        color: var(--accent);
+        filter: drop-shadow(0 0 0px rgba(201, 168, 255, 0));
+      }
+      #crown-wrap svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      #crown-band {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      /* gems start hidden and are individually popped + glowed in by the
+         timeline, independent of the crown wrapper's own opacity */
+      .crown-jewel {
+        fill: var(--accent-bright);
+        opacity: 0;
+        filter: drop-shadow(0 0 0px rgba(201, 168, 255, 0));
+      }
+
+      /* ---------------- caption ---------------- */
+      .label-wrap {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 100px;
+      }
+      .story-label {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        font-size: 84px;
+        line-height: 1;
+        color: var(--text);
+        text-align: center;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      .story-label .em {
+        color: var(--accent-bright);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="story-david-hidden" data-start="0" data-duration="13.0" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ single continuous scene (0 - 13.0s) ============ -->
+      <div id="scene-main" class="clip scene" data-start="0" data-duration="13.0" data-track-index="0">
+        <div id="field">
+          <div id="hill-scene">
+            <!-- horizon line: static opacity, stroke-dashoffset carries the reveal alone -->
+            <svg id="horizon-svg" viewBox="0 0 900 8" xmlns="http://www.w3.org/2000/svg">
+              <line id="horizon-line" x1="30" y1="4" x2="870" y2="4" pathLength="1"></line>
+            </svg>
+
+            <!-- abstract sheep silhouette: rounded body + small head + simple leg marks -->
+            <div id="sheep-wrap">
+              <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <ellipse cx="112" cy="72" rx="58" ry="34"></ellipse>
+                <circle cx="52" cy="86" r="18"></circle>
+                <line x1="76" y1="102" x2="76" y2="126"></line>
+                <line x1="100" y1="105" x2="100" y2="129"></line>
+                <line x1="128" y1="105" x2="128" y2="129"></line>
+                <line x1="152" y1="100" x2="152" y2="124"></line>
+              </svg>
+            </div>
+
+            <!-- abstract shepherd: circle head, vertical body line, two legs,
+                 one arm extended out to a long staff -->
+            <div id="shepherd-wrap">
+              <svg viewBox="0 0 150 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="78" cy="26" r="20"></circle>
+                <line x1="78" y1="46" x2="78" y2="132"></line>
+                <line x1="78" y1="132" x2="58" y2="188"></line>
+                <line x1="78" y1="132" x2="96" y2="188"></line>
+                <line x1="78" y1="68" x2="118" y2="98"></line>
+                <line x1="118" y1="98" x2="132" y2="190"></line>
+              </svg>
+            </div>
+          </div>
+
+          <!-- crown payoff: simple 3-point line-art crown, gem jewels at each
+               peak individually pop in and glow (beat 3). Sibling of
+               #hill-scene, NOT nested inside it, so fading #hill-scene out
+               for the beat-2 transition never hides the crown's own later
+               reveal. -->
+          <div id="crown-wrap">
+            <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path id="crown-band" d="M20 130 L20 110 L45 50 L70 90 L100 40 L130 90 L155 50 L180 110 L180 130 Z"></path>
+              <circle id="gem-1" class="crown-jewel" cx="45" cy="50" r="8"></circle>
+              <circle id="gem-2" class="crown-jewel" cx="100" cy="40" r="10"></circle>
+              <circle id="gem-3" class="crown-jewel" cx="155" cy="50" r="8"></circle>
+            </svg>
+          </div>
+        </div>
+
+        <!-- large centered kinetic-type word, independent of #field's layout -->
+        <div id="purpose-word">PURPOSE</div>
+
+        <div class="label-wrap">
+          <div id="label-final" class="story-label"><span class="label-text">CHOSEN BY <span class="em">GOD</span>.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= persistent background (0 - 0.25s) ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, 0.1);
+
+        /* ================= beat 1 · shepherd + sheep on the hills (0.15 - 3.0s) =================
+           horizon draws on alone via stroke-dashoffset (static opacity, no
+           concurrent opacity tween, per the draw-on/opacity-conflict lesson);
+           the sheep icon fades + scales in first, the shepherd figure follows
+           ~0.45s later so both read as distinct figures — small, muted,
+           unnoticed, an ordinary day tending sheep on the hills. */
+        tl.fromTo("#horizon-line", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.6, ease: "power2.out" }, 0.15);
+
+        tl.fromTo(
+          "#sheep-wrap",
+          { opacity: 0, scale: 0.7 },
+          { opacity: 0.6, scale: 0.85, duration: 0.6, ease: "power2.out" },
+          0.6,
+        );
+
+        tl.fromTo(
+          "#shepherd-wrap",
+          { opacity: 0, scale: 0.7 },
+          { opacity: 0.65, scale: 0.9, duration: 0.6, ease: "power2.out" },
+          1.05,
+        );
+
+        // hold on the establishing beat from ~1.65s to 3.0s — no tween
+        // scheduled, giving both figures time to clearly read before the
+        // transition into the next beat.
+
+        /* ================= beat 2 · transition to "PURPOSE" (3.0 - 6.3s) =================
+           the shepherd+sheep+horizon group (#hill-scene) fades/scales down as
+           one unit — #crown-wrap is a sibling, not a child, so it is
+           untouched and free to reveal itself later — while the big centered
+           word fades/scales up to take its place; the two overlap by 0.3s so
+           the frame is never empty. */
+        tl.to("#hill-scene", { opacity: 0, scale: 0.85, duration: 0.6, ease: "power2.in" }, 3.0);
+
+        tl.fromTo(
+          "#purpose-word",
+          { opacity: 0, scale: 0.82 },
+          { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" },
+          3.3,
+        );
+
+        // hold fully legible from ~3.9s to 5.0s, then one clear glow-pulse
+        // bloom — the "this matters" beat.
+        tl.fromTo(
+          "#purpose-word",
+          { textShadow: "0 0 0px rgba(201,168,255,0)" },
+          {
+            textShadow: "0 0 46px rgba(201,168,255,0.85)",
+            duration: 0.35,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          5.0,
+        );
+
+        // hold again to 6.3s before the next transition.
+
+        /* ================= beat 3 · transition to crown + gems + caption (6.3 - 13.0s) =================
+           "PURPOSE" hands off to the crown: the word fades/scales out while
+           the crown grows in dim/small (0.2s crossfade overlap), then pops to
+           full bright size/color with a glow bloom — the biggest, brightest
+           motion in the piece. Individual gem jewels then pop in and glow,
+           one after another, before the closing caption resolves beneath. */
+        tl.to("#purpose-word", { opacity: 0, scale: 1.08, duration: 0.5, ease: "power2.in" }, 6.3);
+
+        // stage A: crown arrives small and dim.
+        tl.fromTo(
+          "#crown-wrap",
+          { opacity: 0, scale: 0.4 },
+          { opacity: 0.5, scale: 0.65, duration: 0.6, ease: "power2.out" },
+          6.6,
+        );
+
+        // stage B: the payoff — crown pops to full bright size/color with a
+        // glow bloom.
+        tl.fromTo(
+          "#crown-wrap",
+          { opacity: 0.5, scale: 0.65, color: "#9b5cff" },
+          { opacity: 1, scale: 1.0, color: "#c9a8ff", duration: 0.7, ease: "back.out(1.6)", immediateRender: false },
+          7.2,
+        );
+        tl.fromTo(
+          "#crown-wrap",
+          { filter: "drop-shadow(0 0 0px rgba(201,168,255,0))" },
+          { filter: "drop-shadow(0 0 36px rgba(201,168,255,0.75))", duration: 0.7, ease: "power2.out", immediateRender: false },
+          7.2,
+        );
+        tl.to(
+          "#crown-wrap",
+          { filter: "drop-shadow(0 0 50px rgba(201,168,255,0.9))", duration: 0.3, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false },
+          7.9,
+        );
+
+        // gems: each pops in (opacity + glow bloom together) then settles
+        // into a small one-shot twinkle pulse, staggered ~0.4s apart so they
+        // read as catching light one after another.
+        tl.fromTo(
+          "#gem-1",
+          { opacity: 0, filter: "drop-shadow(0 0 0px rgba(201,168,255,0))" },
+          { opacity: 1, filter: "drop-shadow(0 0 16px rgba(201,168,255,0.8))", duration: 0.45, ease: "power2.out" },
+          8.0,
+        );
+        tl.to(
+          "#gem-1",
+          { filter: "drop-shadow(0 0 24px rgba(201,168,255,0.95))", duration: 0.3, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false },
+          8.45,
+        );
+
+        tl.fromTo(
+          "#gem-2",
+          { opacity: 0, filter: "drop-shadow(0 0 0px rgba(201,168,255,0))" },
+          { opacity: 1, filter: "drop-shadow(0 0 16px rgba(201,168,255,0.8))", duration: 0.45, ease: "power2.out" },
+          8.4,
+        );
+        tl.to(
+          "#gem-2",
+          { filter: "drop-shadow(0 0 24px rgba(201,168,255,0.95))", duration: 0.3, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false },
+          8.85,
+        );
+
+        tl.fromTo(
+          "#gem-3",
+          { opacity: 0, filter: "drop-shadow(0 0 0px rgba(201,168,255,0))" },
+          { opacity: 1, filter: "drop-shadow(0 0 16px rgba(201,168,255,0.8))", duration: 0.45, ease: "power2.out" },
+          8.8,
+        );
+        tl.to(
+          "#gem-3",
+          { filter: "drop-shadow(0 0 24px rgba(201,168,255,0.95))", duration: 0.3, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false },
+          9.25,
+        );
+
+        /* ================= closing caption (9.4 - 13.0s, freeze-hold to end) ================= */
+        tl.fromTo(
+          "#label-final",
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+          9.4,
+        );
+        tl.fromTo(
+          "#label-final",
+          { textShadow: "0 0 0px rgba(201,168,255,0)" },
+          {
+            textShadow: "0 0 34px rgba(201,168,255,0.6)",
+            duration: 0.35,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          10.0,
+        );
+
+        // freeze-hold from ~10.7s to the end (13.0s) for a clean cut — no
+        // further tweens scheduled; the crown, its lit gems and the caption
+        // remain visible throughout.
+
+        window.__timelines["story-david-hidden"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

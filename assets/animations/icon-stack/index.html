@@ -1,0 +1,56 @@
+<!doctype html>
+<!-- Icon stack: glossy app icons pop in one by one in a column beside the presenter's
+     head as each tool is named, then hold. Transparent background, made to sit over
+     footage. --text is "Claude, ChatGPT, Gemini" (names; set the moments with --times
+     "0.5,1.8,3.1" from the transcript). --images gives real logos in the same order;
+     without them each icon is a glossy tile with the name's first letter. --side left|right.
+     Sounds: "pop" on each icon. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; }
+      #col { position: absolute; display: flex; flex-direction: column; }
+      .icon { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
+        background: linear-gradient(160deg, #ffffff 0%, #eceaf3 100%);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, .35), inset 0 2px 0 rgba(255, 255, 255, .9), inset 0 -3px 8px rgba(0, 0, 0, .08); }
+      .icon img { width: 70%; height: 70%; object-fit: contain; }
+      .icon b { font-weight: 800; background: linear-gradient(160deg, __ACCENT__, __ACCENT_DEEP__); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .icon::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 45%; background: linear-gradient(180deg, rgba(255, 255, 255, .55), transparent); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__">
+      <div id="col"></div>
+    </div>
+    <script>
+      const W = __W__, H = __H__, TEXT = __TEXT__, DUR = __DURATION__, IMAGES = __IMAGES__, SIDE = __SIDE__, TIMES = __TIMES__;
+      const portrait = H > W;
+      const names = TEXT.split(',').map((s) => s.trim()).filter(Boolean);
+      const size = Math.min(W, H) * (portrait ? 0.16 : 0.12), gap = size * 0.28;
+      const col = document.getElementById('col');
+      col.style.gap = gap + 'px';
+      // Beside the head: in 16:9 a third of the way in from the chosen edge; in 9:16 near the edge, upper half.
+      const x = portrait ? (SIDE === 'left' ? W * 0.06 : W * 0.94 - size) : (SIDE === 'left' ? W * 0.2 - size / 2 : W * 0.8 - size / 2);
+      const total = names.length * size + (names.length - 1) * gap;
+      Object.assign(col.style, { left: x + 'px', top: (portrait ? H * 0.32 : H * 0.42) - total / 2 + 'px' });
+      const icons = names.map((n, i) => {
+        const d = document.createElement('div'); d.className = 'icon';
+        Object.assign(d.style, { width: size + 'px', height: size + 'px', borderRadius: size * 0.24 + 'px' });
+        if (IMAGES[i]) { const im = document.createElement('img'); im.src = IMAGES[i]; d.appendChild(im); }
+        else { const b = document.createElement('b'); b.style.fontSize = size * 0.48 + 'px'; b.textContent = n[0].toUpperCase(); d.appendChild(b); }
+        col.appendChild(d); return d;
+      });
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const at = names.map((_, i) => TIMES[i] ?? 0.4 + i * 0.7);
+      icons.forEach((el, i) => tl.from(el, { opacity: 0, scale: 0.4, x: SIDE === 'left' ? -size * 0.4 : size * 0.4, rotation: SIDE === 'left' ? -12 : 12, duration: 0.45, ease: 'back.out(2.4)' }, at[i]));
+      tl.to(icons, { y: -size * 0.04, duration: DUR, ease: 'sine.inOut' }, 0);
+      window.__timelines['main'] = tl;
+      window.__pops = at;                                // a "pop" sound at each of these
+    </script>
+  </body>
+</html>

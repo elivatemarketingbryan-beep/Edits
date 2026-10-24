@@ -1,0 +1,67 @@
+{
+  "category": "stat",
+  "duration_s": 10.5,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Dark-gold editorial brand system (matches pricing-tiers-reveal / revenue-math-reveal). Abstracted 'search results concept' — a stylized rounded search bar + generic map-pack result rows, NOT a Google screenshot/logo — building to one dominant hero stat: 70% in giant glowing gold numerals.",
+  "palette": ["#0B0A08", "#17140F", "#D9A94A", "#F4D998", "#F5F1E6", "#9C9384"],
+  "font": "League Gothic (display/numerals) + Montserrat (labels)",
+  "beats": [0, 2.2, 5.2, 9.7, 10.5],
+  "export": "alpha-overlay",
+
+  "asset_needs": [],
+
+  "block": null,
+  "customize": {
+    "note": "No exact catalog block for a stylized search-bar + map-pack-rows scene (searched: 'stat count-up big number with glow halo', 'typewriter search bar typing text', 'search engine results page UI mockup browser bar', 'map pin location marker icon business listing', 'stacked list card reveal staggered rows'). Reused patterns instead: hand-authored search-bar + result-row chassis in the sibling projects' tier-card/glow/track visual language; hero stat reuses the proven count-up-via-tweened-proxy pattern from revenue-math-reveal (#val-hero) rather than the finance-flavored apple-money-count block (no $ / burst / SFX fits this beat)."
+  },
+
+  "content": {
+    "value": 70,
+    "prefix": "",
+    "suffix": "%",
+    "label": "OF SEARCH TRAFFIC GOES TO THE GOOGLE 3-PACK",
+    "ring": false
+  },
+
+  "scenes": [
+    {
+      "id": "scene-search",
+      "start": 0,
+      "end": 2.2,
+      "beat": "Search bar sets the scene",
+      "description": "Abstract rounded-rect search-bar graphic (dark card, gold hairline border, generic magnifier glyph — no Google wordmark/logo/colors) centered upper-frame. Query text types in via typewriter caret: 'concrete contractor near me'.",
+      "motion": "scale_grow entrance on the bar chassis, then typewriter reveal of the query text with a blinking caret.",
+      "beats": [0.15, 0.5]
+    },
+    {
+      "id": "scene-3pack",
+      "start": 2.2,
+      "end": 5.2,
+      "beat": "Stylized 3-pack rows stagger in",
+      "description": "Search bar settles/shrinks slightly upward; below it 3 generic result rows stagger-reveal top-to-bottom, each: map-pin glyph (gold circle + pin icon, generic) + a generic business-name bar (blurred/placeholder rectangle standing in for text — no real names/logos) + a 5-dot star-rating row (filled gold dots). Reads unmistakably as 'search results / map pack' without any Google trademark elements.",
+      "motion": "slide_bottom + stagger (0.12s per row) into each row's chassis, star-dots pop in back.out after each row lands.",
+      "beats": [2.35, 2.6, 2.85]
+    },
+    {
+      "id": "scene-hero-stat",
+      "start": 5.2,
+      "end": 9.7,
+      "beat": "Hero stat — dominant hit of the piece",
+      "description": "Hard cut / pattern-interrupt: search bar and rows exit, giant '70%' count-up (0→70) lands center-frame in League Gothic, bright gold with a soft radial glow halo pulsing once on landing — the single biggest type in the piece. Label fades in below after the number lands: 'OF SEARCH TRAFFIC GOES TO THE GOOGLE 3-PACK'.",
+      "motion": "count_up (proxy-tweened, onUpdate, power2.out, ~1.0s) + scale_punch entrance on the numeral, glow pulse (textShadow yoyo) on landing, label_stagger fade-up after value settles.",
+      "beats": [5.4, 6.4, 6.9]
+    },
+    {
+      "id": "scene-hold",
+      "start": 9.7,
+      "end": 10.5,
+      "beat": "Freeze-hold for clean cut back to host footage",
+      "description": "No new tweens; final hero-stat frame simply persists to the end for a clean cut back to host footage.",
+      "motion": "hold",
+      "beats": []
+    }
+  ],
+
+  "research_note": "Script's '70%' figure is kept as the headline per the narrator's own claim. Real-world studies most commonly cite ~40-44% of local-search clicks going to the Google Local/Map 3-pack (e.g. 44% local-pack vs 29% organic vs ~19-21% paid — reported across SeoProfy, Wrise, Monday Digital, and others), with some industry estimates ranging 40-60%; none trace to a single authoritative primary source. Because that commonly-cited figure (~44%) is meaningfully lower than and would directly conflict with the script's stated 70% if shown together on screen, no competing numeric sub-caption was added — pairing a 44% citation next to a 70% headline would read as contradicting the narrator rather than supporting them. The piece proceeds with the script's 70% number alone, undecorated by an external citation, per the fallback guidance for when research doesn't cleanly support the on-screen number as a sub-stat."
+}

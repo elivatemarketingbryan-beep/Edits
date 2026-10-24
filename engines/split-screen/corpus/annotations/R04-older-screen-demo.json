@@ -1,0 +1,27 @@
+{
+  "id": "R04",
+  "status": "observed",
+  "source": {
+    "url": "https://www.instagram.com/jackroberts___/reel/DJkIzmfoQQl/",
+    "creator": "jackroberts___",
+    "topic": "Older pinned Canva + Make example",
+    "publishedDate": "2025-05-12",
+    "durationSeconds": 105.5,
+    "dimensions": {"width": 1080, "height": 1920},
+    "mediaBundled": false
+  },
+  "inspection": {
+    "date": "2026-10-07",
+    "method": "Direct visible playback in Chrome, displayed publication date, grid thumbnail, and player metadata.",
+    "continuousReview": false,
+    "audioReviewed": false,
+    "coverageNote": "One approximate playback frame plus thumbnail; remainder of the longer reel was not reviewed."
+  },
+  "observations": [
+    {"atSeconds": 6.14, "timingMeaning": "approximate_observation_point", "layout": "full-height screen footage", "visibleEvidence": "Handheld footage of computer screen. Large static title label and smaller colored tool label toward the top.", "relationships": ["demonstration"]},
+    {"atSeconds": null, "timingMeaning": "untimed", "layout": "full-height presenter in thumbnail", "visibleEvidence": "Grid thumbnail shows full-height presenter.", "relationships": ["presenter introduction"]}
+  ],
+  "principles": ["Track format and publication period: a creator's older work can differ from recent examples."],
+  "unknowns": ["All remaining playback", "Complete speech", "Audio treatment", "Whether split layout occurs elsewhere", "Animation timing", "Performance"],
+  "notes": ["Do not combine this single older observation with recent samples to invent a universal average style."]
+}

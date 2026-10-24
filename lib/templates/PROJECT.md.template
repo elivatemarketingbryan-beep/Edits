@@ -1,0 +1,39 @@
+# {{JOB}} — graphics build
+
+Created {{DATE}}. This is the resume doc for this job's graphics work —
+read it before touching hf-graphics/ so you pick up mid-build instead of
+re-deriving the plan.
+
+## Format
+- [ ] 9:16 short-form  /  [ ] 16:9 long-form  *(pick one, delete the other)*
+- Canvas: _fill in once chosen, e.g. 1080x1920_
+
+## Beat sheet
+*(Plan beat-by-beat BEFORE building anything — see .claude/skills/graphics-plan.
+One row per beat: timestamp range, what's on screen, what graphic/caption
+event fires.)*
+
+| beat | time range | on screen | graphic event |
+|------|-----------|-----------|----------------|
+|      |           |           |                |
+
+## HyperFrames build
+- Composition entry: `hf-graphics/index.html`
+- HyperFrames pin: see root `skills-lock.json` / render script `--version` flag — never floats
+- Parts rendered so far: _list part numbers + what each covers, so a tweak re-renders one part, not the whole video_
+
+## Second-pass notes
+*(Append here each review round: what was called, what changed, which
+part number it landed in. Never delete old rounds — this is the log.)*
+
+## Safe zones (short-form only)
+No key visuals in the top 200px or bottom 300px of 1080x1920. Face,
+captions, and graphics stay inside y 200–1620.
+
+## Status
+- [ ] Beat sheet reviewed
+- [ ] Graphics built
+- [ ] Second pass complete
+- [ ] Captions in
+- [ ] Music bed in (optional)
+- [ ] Exported

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Icon Map Pin Target</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0817;
+        --bg2: #1b1130;
+        --accent: #9b5cff;
+        --accent-bright: #c9a8ff;
+        --text: #f3effa;
+        --muted: #9088a8;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+      #stage {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+        font-family: "Montserrat", ui-sans-serif, sans-serif;
+      }
+
+      /* full-bleed background fill: transparent until the hook lands, then
+         opaque near-black for the rest of the piece (alpha-overlay export;
+         fades in once, never out, so the frame is never blank mid-piece) */
+      #bg-fill {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(120% 120% at 50% 42%, var(--bg2) 0%, var(--bg) 62%);
+        opacity: 0;
+      }
+
+      /* single continuous full-duration scene: everything accumulates,
+         nothing exits before the final hold */
+      .scene {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+      }
+
+      .scene-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 160px;
+        gap: 64px;
+        box-sizing: border-box;
+      }
+
+      /* ---------------- zone grid (3x3 stylized cells) ---------------- */
+      .grid-wrap {
+        position: relative;
+        width: 592px;
+        height: 592px;
+        flex-shrink: 0;
+      }
+      .zone-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 180px);
+        grid-template-rows: repeat(3, 180px);
+        gap: 26px;
+        width: 100%;
+        height: 100%;
+      }
+      .cell {
+        position: relative;
+        border-radius: 28px;
+        border: 3px solid rgba(155, 92, 255, 0.28);
+        background: rgba(27, 17, 48, 0.55);
+        opacity: 0;
+        transform: scale(0.7);
+      }
+      .cell-inner-glow {
+        position: absolute;
+        inset: 0;
+        border-radius: 24px;
+        background: var(--accent);
+        opacity: 0;
+      }
+
+      /* ---------------- map pin (line-art icon) ---------------- */
+      .pin-wrap {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 0;
+        height: 0;
+        z-index: 5;
+        opacity: 0;
+      }
+      .pin-icon {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 132px;
+        height: 156px;
+        transform: translate(-50%, -92%);
+        color: var(--accent-bright);
+        filter: drop-shadow(0 0 0px rgba(201, 168, 255, 0));
+      }
+      .pin-icon svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .pin-icon svg path {
+        fill: none;
+        stroke: var(--accent-bright);
+        stroke-width: 1.6;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+      }
+      .pin-icon svg circle {
+        fill: var(--bg);
+        stroke: var(--accent-bright);
+        stroke-width: 1.6;
+      }
+      .landing-glow {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(201, 168, 255, 0.55) 0%, rgba(201, 168, 255, 0) 72%);
+        transform: translate(-50%, -50%) scale(0.3);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 4;
+      }
+      .landing-ring {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 110px;
+        height: 110px;
+        margin-left: -55px;
+        margin-top: -55px;
+        border-radius: 50%;
+        border: 3px solid var(--accent-bright);
+        opacity: 0;
+        transform: scale(0.4);
+        pointer-events: none;
+        z-index: 4;
+      }
+
+      /* ---------------- caption ---------------- */
+      .zone-label {
+        font-family: "League Gothic", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 76px;
+        line-height: 1;
+        color: var(--text);
+        text-align: center;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="icon-map-pin-target" data-start="0" data-duration="6.0" data-fps="30" data-width="1920" data-height="1080">
+      <div id="bg-fill"></div>
+
+      <!-- ============ single continuous scene (0 - 6.0s) ============ -->
+      <div id="scene-main" class="clip scene" data-start="0" data-duration="6.0" data-track-index="0">
+        <div class="scene-content">
+          <div class="grid-wrap" id="grid-wrap">
+            <div class="zone-grid">
+              <div class="cell" id="cell-0"><div class="cell-inner-glow" id="glow-0"></div></div>
+              <div class="cell" id="cell-1"><div class="cell-inner-glow" id="glow-1"></div></div>
+              <div class="cell" id="cell-2"><div class="cell-inner-glow" id="glow-2"></div></div>
+              <div class="cell" id="cell-3"><div class="cell-inner-glow" id="glow-3"></div></div>
+              <div class="cell" id="cell-4"><div class="cell-inner-glow" id="glow-4"></div></div>
+              <div class="cell" id="cell-5"><div class="cell-inner-glow" id="glow-5"></div></div>
+              <div class="cell" id="cell-6"><div class="cell-inner-glow" id="glow-6"></div></div>
+              <div class="cell" id="cell-7"><div class="cell-inner-glow" id="glow-7"></div></div>
+              <div class="cell" id="cell-8"><div class="cell-inner-glow" id="glow-8"></div></div>
+            </div>
+
+            <!-- landing effects sit centered over cell-4 (dead center of the 3x3 grid) -->
+            <div class="landing-glow" id="landing-glow"></div>
+            <div class="landing-ring" id="landing-ring"></div>
+
+            <!-- pin-wrap is a zero-size anchor centered on cell-4; the pin icon
+                 inside it is offset by CSS transform so its tip touches the
+                 cell center, and only translateY is tweened for the drop so
+                 the centering transform is never overwritten -->
+            <div class="pin-wrap" id="pin-wrap">
+              <div class="pin-icon" id="pin-icon">
+                <svg viewBox="0 0 24 28" aria-hidden="true">
+                  <path d="M12 1.5c-5 0-9 3.9-9 8.7C3 16.8 12 26.5 12 26.5S21 16.8 21 10.2C21 5.4 17 1.5 12 1.5z" />
+                  <circle cx="12" cy="10.2" r="3.4" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="zone-label" id="zone-label">TARGETED, NOT SCATTERED.</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+
+        // pin-wrap is a zero-size element centered via xPercent/yPercent
+        // (GSAP-tracked, not a baked CSS transform) so the later y-drop tween
+        // composes with the centering instead of overwriting it
+        gsap.set("#pin-wrap", { xPercent: -50, yPercent: -50 });
+
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= beat 0 · scene fill ================= */
+        tl.fromTo("#bg-fill", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out" }, 0.1);
+
+        /* ================= beat 1 · grid fades/scales in, all dim (0 - 1.5s) ================= */
+        var cellOrder = [4, 1, 3, 5, 7, 0, 2, 6, 8];
+        cellOrder.forEach(function (idx, i) {
+          var t = 0.35 + i * 0.09;
+          tl.fromTo(
+            "#cell-" + idx,
+            { opacity: 0, scale: 0.7 },
+            { opacity: 0.5, scale: 1, duration: 0.45, ease: "power2.out" },
+            t,
+          );
+        });
+
+        /* ================= beat 2 · two cells brighten, rest recede (1.5 - 3.5s) ================= */
+        // the rest of the grid dims further so the two "good" zones read as
+        // an unambiguous contrast beat, not just an addition
+        var restCells = [0, 2, 3, 5, 6, 7, 8];
+        restCells.forEach(function (idx) {
+          tl.to("#cell-" + idx, { opacity: 0.22, duration: 0.5, ease: "sine.inOut" }, 1.6);
+        });
+
+        // primary (cell-4, pin target) and secondary (cell-1) brighten into
+        // the accent color with a soft glow
+        [4, 1].forEach(function (idx, i) {
+          var t = 1.7 + i * 0.15;
+          tl.to(
+            "#cell-" + idx,
+            {
+              opacity: 1,
+              borderColor: "var(--accent-bright)",
+              boxShadow: "0 0 46px rgba(155,92,255,0.55)",
+              duration: 0.5,
+              ease: "power2.out",
+            },
+            t,
+          );
+          tl.fromTo(
+            "#glow-" + idx,
+            { opacity: 0 },
+            { opacity: 0.85, duration: 0.5, ease: "power2.out" },
+            t,
+          );
+        });
+
+        /* ================= beat 3 · pin drops and lands on cell-4 (3.5 - 4.5s) ================= */
+        tl.set("#pin-wrap", { opacity: 1 }, 3.55);
+        tl.fromTo(
+          "#pin-wrap",
+          { y: -420 },
+          { y: 0, duration: 0.5, ease: "bounce.out" },
+          3.55,
+        );
+
+        // landing beat: glow bloom + expanding ring right as the pin settles
+        tl.fromTo(
+          "#landing-glow",
+          { opacity: 0, scale: 0.3 },
+          { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" },
+          4.05,
+        ).to(
+          "#landing-glow",
+          { opacity: 0, duration: 0.45, ease: "power1.in" },
+          4.35,
+        );
+        // opacity-gated: the "from" state must be hidden (opacity:0), not the
+        // visible ring value — a fromTo's from-state becomes its permanent
+        // pre-entrance state once the timeline is seeked, so starting at 0.8
+        // would show the ring the instant the timeline loads (t=0)
+        tl.fromTo(
+          "#landing-ring",
+          { opacity: 0, scale: 0.4 },
+          { opacity: 0.8, scale: 0.55, duration: 0.12, ease: "power1.out" },
+          4.05,
+        ).to(
+          "#landing-ring",
+          { opacity: 0, scale: 1.9, duration: 0.45, ease: "power2.out" },
+          4.17,
+        );
+        tl.fromTo(
+          "#pin-icon",
+          { filter: "drop-shadow(0 0 0px rgba(201,168,255,0))" },
+          {
+            filter: "drop-shadow(0 0 28px rgba(201,168,255,0.9))",
+            duration: 0.3,
+            yoyo: true,
+            repeat: 1,
+            ease: "sine.inOut",
+            immediateRender: false,
+          },
+          4.05,
+        );
+
+        /* ================= beat 4 · label (4.5 - 5.5s) ================= */
+        tl.fromTo(
+          "#zone-label",
+          { opacity: 0, y: 22 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+          4.6,
+        );
+
+        // freeze-hold from ~5.1s to the end (6.0s) for a clean cut — no
+        // further tweens scheduled; the last state simply persists.
+
+        window.__timelines["icon-map-pin-target"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

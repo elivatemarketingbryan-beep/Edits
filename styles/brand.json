@@ -1,0 +1,15 @@
+{
+  "_readme": "Your look. Every style reads these instead of the reference orange. accent replaces the reference orange everywhere (italic serif key words, glows, active rows, filled grid cells); accentLight is for text or fills on black that need to read brighter; accentDeep for glows and card tints. success/loss stay green/red because they carry meaning. Fonts are defaults until you pick your own.",
+  "set": true,
+  "accent": "#8B5CF6",
+  "accentLight": "#C4B5FD",
+  "accentDeep": "#4C1D95",
+  "background": "#000000",
+  "text": "#FFFFFF",
+  "success": "#22A06B",
+  "loss": "#E5484D",
+  "fontSans": "Inter",
+  "fontAccentSerif": "Playfair Display",
+  "handle": "",
+  "logo": ""
+}
