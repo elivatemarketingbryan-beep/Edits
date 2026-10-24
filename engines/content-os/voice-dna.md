@@ -145,3 +145,11 @@ below are drawn from the 15 with real transcripts.
 ---
 
 *Generated from voice-corpus/ (19 entries, ranked by views). Last updated: 2026-09-15.*
+
+---
+
+## Edits log
+
+When Bryan rewrites a draft or script, the difference goes here, newest first, one line each
+(`YYYY-MM-DD: wrote X → he changed it to Y. Rule: ...`). These override anything above.
+

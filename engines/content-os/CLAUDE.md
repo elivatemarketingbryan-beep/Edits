@@ -146,6 +146,14 @@ Every video we work on is a page in the Notion content DB (`notion-pipeline.md` 
    - any other state the user reports → the matching status
    (Video Studio does the `Editing` / `Review` / `Ready` flips and writes `Studio job` + `Edited Video`.)
 
+Repurposing lane (runs alongside the pipeline, after a long-form is finished):
+- `repurposing` turns one long asset (a finished Video Studio long-form, a URL, a transcript) into a
+  week of distinct pieces: clips (handed to Video Studio `clipper`), reel ideas (handed to
+  `scriptwriter`), carousel briefs, captions and community posts (written to `drafts/`). Mining long
+  assets goes to the `asset-miner` subagent (`.claude/agents/asset-miner.md`).
+- `platform-formats` holds the per-platform text rules, with `platforms.md` (Bryan's platforms and cadence) on top.
+- `content-calendar` shows and plans the week in `calendar.md`, reading each video's stage live from Notion.
+
 Helper: `transcribe-url` pulls a transcript from any video URL (not part of the main pipeline).
 Helper: `knowledge-compile` refreshes the compiled `knowledge/` layer after high-signal research or a positioning change.
 Helper: `carousel-generator` is a standalone IG content lane: turns trends/news/posts into polished carousel PNGs + a caption package (AI cover + token-locked HTML body).
@@ -164,7 +172,11 @@ captions, small.en for research). Nothing else to install.
 
 | Folder | What's In It |
 |--------|--------------|
-| `.claude/skills/` | The 13 skills: research ×4, hook-generator, scriptwriter, yt-description, auto-poster, transcribe-url, knowledge-compile, carousel-generator, voice-corpus-builder, dm-revival. |
+| `.claude/skills/` | The 16 skills: research ×4, hook-generator, scriptwriter, yt-description, auto-poster, transcribe-url, knowledge-compile, carousel-generator, voice-corpus-builder, dm-revival, repurposing, platform-formats, content-calendar. |
+| `.claude/agents/` | `asset-miner`: read-only subagent that mines a long transcript into ranked ideas with quotes and timestamps. |
+| `platforms.md` | Where Bryan posts, cadence per platform, what's worked, what he's quit. Overrides `platform-formats` defaults. |
+| `calendar.md` | The week plan: day, platform, piece, status, link (Notion page or draft file). Kept by `content-calendar`. |
+| `drafts/` | Text pieces by week, `drafts/YYYY-MM-DD/<platform>-<slug>.md` + `00-mined.md`. Never posted until Bryan says so. |
 | `brand-kit.md` | The one file you fill in. "apply my brand kit" pushes it everywhere below (Part B = the exact map). |
 | `backbone/` | Your business, the single source of truth: `vision.md`, `icp.md`, `offer.md`, `messaging.md` (dated "Current as of" headers). Every price/proof number comes from here. |
 | `voice-corpus/` | Your own top-performing videos as verbatim tagged transcripts with view counts. The few-shot voice source for `scriptwriter`. Built by `voice-corpus-builder`; query via `find_voice.py`, don't read wholesale. |
@@ -200,6 +212,20 @@ to paste or export an API token in chat.
   or a direct mention). Nothing in `backbone/offer.md`'s "not sold" list, ever. The skills handle this;
   just don't drop CTAs by accident.
 - **Document, don't manufacture.** Authenticity outperforms. Real numbers only, from the backbone.
+- **Never invent; mark the gap.** No statistic, client result, quote, date or story that isn't in a
+  transcript, `backbone/` or `voice-corpus/`. If a piece needs a number you don't have, write
+  `[NEED: close rate from the Smith job]` in the draft and keep going; list every `[NEED:]` at the end.
+- **Cite the source.** Every repurposed piece ends with a `Source:` line: file and timestamp of the
+  line it came from.
+- **Draft, don't publish.** Drafts land in `drafts/` or Notion. Posting happens only through
+  `auto-poster`, only when Bryan asks; "you approved this format last week" isn't approval for today.
+  Only Bryan marks anything `approved` or `published` in `calendar.md`.
+- **Never destroy drafts.** Revising keeps the old text under `## Previous version — <date>`.
+- **Learn from his edits.** When Bryan rewrites a draft or script, compare the two and add the
+  difference to the "Edits log" at the end of `voice-dna.md` ("wrote 'utilize', he changed it to
+  'use'"). Say "Noted in voice-dna.md" in a few words. Never ask the same question twice.
+- **Stop and ask** when a draft would repeat an income, legal or tax claim from the source, or when
+  the source contradicts `backbone/` (a changed offer or positioning).
 - **One hardened path per step.** No fallback chains, no env-token fallbacks. If a step fails twice, stop
   and tell the user what failed.
 - **Surgical changes only** when editing skills or context files. Touch what's asked.

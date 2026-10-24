@@ -36,7 +36,8 @@ lib/ presets/ scripts/ workflows/   root editing pipeline (was "Claude Editor")
 styles/engines.json       render engines switch: HyperFrames always, Remotion optional (off by default)
 engines/split-screen/     Remotion kit (was "Split-Screen-Editor"): runs only if styles/engines.json says so; otherwise reference for editorial rules and graphics ideas
 engines/content-os/       Content OS (the one copy; open this folder to work in it directly):
-                          research, scripts (written per format, with cue tags), voice, brand, carousels, descriptions, Notion
+                          research, scripts (written per format, with cue tags), voice, brand, carousels, descriptions, Notion,
+                          repurposing (one long-form into a week of clips, reel ideas and captions), content calendar
 engines/legacy-editor/    older editor; only its clipper, CapCut, Premiere, Resolve, thumbnail and music skills are used
 docs/editor-pipeline.md   the root pipeline's full instructions and lab notes (was Claude Editor's CLAUDE.md)
 docs/APP-HANDOFF.md       the user's set workflow for cutting onto Premiere / Resolve / Final Cut / CapCut (the rough-cut-only tool)
