@@ -21,6 +21,7 @@ for (const rel of ['CLAUDE.md', 'START_HERE.md', 'Start Studio.cmd', 'studio/ser
   'docs/editor-pipeline.md', 'lib', 'presets', 'workflows', 'assets/sfx', 'assets/sound-effects', '.claude/skills', '.claude/settings.json',
   'engines/split-screen/AGENTS.md', 'engines/split-screen/scripts/editor.mjs', 'engines/split-screen/src/custom/registry.tsx',
   'engines/split-screen/inputs', 'engines/split-screen/docs',
+  'engines/content-os/CLAUDE.md', 'engines/content-os/notion-pipeline.md', 'engines/content-os/.claude/skills/scriptwriter/SKILL.md',
   'engines/legacy-editor/.claude/skills/clipper/scripts/make-clips.py']) {
   exists(rel) ? ok(rel) : bad(`missing ${rel}`);
 }

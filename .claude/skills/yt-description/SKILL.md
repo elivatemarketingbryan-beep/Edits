@@ -3,7 +3,7 @@ name: yt-description
 description: "Writes the full YouTube description for a finished long-form video, in the creator's exact channel format. Pulls the latest published description off the channel with yt-dlp and uses it as the live skeleton, reads the word-for-word script from the video-editor job (or the Notion beat sheet if the job isn't there), builds real chapter timestamps by indexing the final exported file, decides which links belong based on what the creator actually said, and hands back copy-paste-ready copy. Triggers: write a youtube description, youtube description, yt description, description for this video, write the description, description copy, youtube desc, video description, write my description, description for the new video."
 ---
 
-> **Video Studio:** this skill lives in Content OS, the one copy at `C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os` (Git Bash: `/c/Users/Dennis/OneDrive/Desktop/Claude FIles/Claude content-os`). Before running anything from it, `cd` there and use that folder's copy (`.claude/skills/yt-description/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
+> **Video Studio:** this skill lives in `engines/content-os` (Content OS, inside this repo). Before running anything from it, `cd engines/content-os` and use that folder's copy (`.claude/skills/yt-description/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
 
 
 # YouTube Description Writer

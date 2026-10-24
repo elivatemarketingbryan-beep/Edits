@@ -3,7 +3,7 @@ name: voice-corpus-builder
 description: "Builds (or refreshes) voice-corpus/ from the creator's OWN top-performing videos so scriptwriter can write by imitation instead of description. Ranks the creator's YouTube uploads by views (yt-dlp) and Instagram reels by plays/likes (Apify MCP, same actor as ig-competitor-research), transcribes each winner (YouTube captions or local faster-whisper), writes one tagged markdown entry per video, rebuilds voice-corpus/index.md, then drafts voice-dna.md (the explicit voice rulebook) from the corpus. Triggers: build my voice corpus, voice corpus, refresh the corpus, rebuild voice-dna, update my voice, add my videos to the corpus, voice-corpus-builder, my top videos as examples."
 ---
 
-> **Video Studio:** this skill lives in Content OS, the one copy at `C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os` (Git Bash: `/c/Users/Dennis/OneDrive/Desktop/Claude FIles/Claude content-os`). Before running anything from it, `cd` there and use that folder's copy (`.claude/skills/voice-corpus-builder/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
+> **Video Studio:** this skill lives in `engines/content-os` (Content OS, inside this repo). Before running anything from it, `cd engines/content-os` and use that folder's copy (`.claude/skills/voice-corpus-builder/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
 
 
 # Voice Corpus Builder — the few-shot source of truth for scriptwriter

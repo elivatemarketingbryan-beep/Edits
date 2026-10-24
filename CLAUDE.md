@@ -35,7 +35,7 @@ assets/sfx/               the named sound files; assets/sound-effects/ is the fu
 lib/ presets/ scripts/ workflows/   root editing pipeline (was "Claude Editor")
 styles/engines.json       render engines switch: HyperFrames always, Remotion optional (off by default)
 engines/split-screen/     Remotion kit (was "Split-Screen-Editor"): runs only if styles/engines.json says so; otherwise reference for editorial rules and graphics ideas
-Content OS                NOT in this folder (one copy only): C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os
+engines/content-os/       Content OS (the one copy; open this folder to work in it directly):
                           research, scripts (written per format, with cue tags), voice, brand, carousels, descriptions, Notion
 engines/legacy-editor/    older editor; only its clipper, CapCut, Premiere, Resolve, thumbnail and music skills are used
 docs/editor-pipeline.md   the root pipeline's full instructions and lab notes (was Claude Editor's CLAUDE.md)
@@ -87,7 +87,7 @@ Score every `kind: "style"` entry in `styles/catalog.json` against the video, us
 
 ### Matching the clip to its Content OS script
 
-Content OS (the one copy, at `C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os`)
+Content OS (`engines/content-os/`)
 writes each script for its format, in that format's shape, with cue tags (styles/SCRIPT-SHAPES.md),
 and stores it on a Notion page (schema: that folder's `notion-pipeline.md`; data source
 `collection://b25789bb-ffea-8346-8ef9-87d238345cb6`). In the `formats` stage, after transcribing:

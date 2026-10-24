@@ -3,7 +3,7 @@ name: carousel-generator
 description: "Designs fire 4:5 (1080x1350) Instagram carousels with a HYBRID engine: an AI-generated cover (Higgsfield/Nano Banana Pro) for the thumb-stopping slide 1, then a token-locked HTML/CSS design system for the body slides. Claude writes the cover concept + slide copy in the creator's voice + a JSON manifest, you generate the cover, preview the real deck, then Playwright screenshots crisp 2x PNGs — plus a caption package with the offer CTA (from backbone/offer.md). Saveable template library for repeatable decks. No Canva. Triggers: make a carousel, instagram carousel, ig carousel, carousel generator, turn this into a carousel, slide deck for instagram, 4:5 slides, design a carousel, trend carousel, news carousel, post carousel."
 ---
 
-> **Video Studio:** this skill lives in Content OS, the one copy at `C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os` (Git Bash: `/c/Users/Dennis/OneDrive/Desktop/Claude FIles/Claude content-os`). Before running anything from it, `cd` there and use that folder's copy (`.claude/skills/carousel-generator/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
+> **Video Studio:** this skill lives in `engines/content-os` (Content OS, inside this repo). Before running anything from it, `cd engines/content-os` and use that folder's copy (`.claude/skills/carousel-generator/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
 
 
 # Carousel Generator — hybrid AI-cover + HTML body, 4:5 IG carousels
