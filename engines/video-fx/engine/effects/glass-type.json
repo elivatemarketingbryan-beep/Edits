@@ -1,0 +1,61 @@
+{
+  "number": 17,
+  "id": "glass-type",
+  "compositionId": "GlassType",
+  "title": "Glass Type",
+  "summary": "Giant 3D glass letters stand on the wall behind the speaker, refracting the room.",
+  "description": "One big word made of thick clear glass stands on the wall behind the speaker at head height, turned in perspective so it recedes to one side. The letters are condensed and tall, with an extruded body of bright edges. Their front face bends and magnifies the room behind them like a lens (strongest at the rims), with a glossy highlight band, dark inner edges, bright specular rims, a soft shadow on the wall and a light sweep after they fade in. The word sways slightly while it holds. The speaker is cut out and stays in front, covering the lower-middle letters.",
+  "needs": {
+    "matte": true
+  },
+  "options": {
+    "word": "the word made of glass (one word, 4-8 letters reads best)",
+    "font": "letter style: \"black\" (heavy grotesk, reference look), \"sans\" (Inter Black), \"serif\" (Playfair) or \"didone\" (Bodoni)",
+    "at": "when the letters fade in (seconds or \"@word\")",
+    "fadeDuration": "seconds the fade/blur-in takes",
+    "sweepDuration": "seconds the light sweep takes to cross the word",
+    "outAt": "optional: when the letters fade away (null = hold to the end; they also leave automatically when an effect window ends early)",
+    "widthFraction": "how much of the frame width the word spans after the perspective turn (0.95 = edge to edge)",
+    "size": "extra size multiplier on top of the automatic fit (1 = fit to widthFraction)",
+    "condense": "horizontal squeeze of the letters (0.66 = tall condensed glass letters like the reference, 1 = the font's normal width)",
+    "y": "\"auto\" (placed from the head) or a 0-1 fraction for the top of the letters",
+    "x": "horizontal nudge as a fraction of the frame (-0.1 = left)",
+    "overlap": "how much of the letter height the head covers, 0-1 (0.5 = lower half of the middle letters hidden; keep ≤ 0.55 so the word stays readable)",
+    "rotateY": "perspective turn in degrees (positive = word recedes to the right, negative = to the left)",
+    "rotateX": "tilt in degrees (positive = top leans back)",
+    "sway": "degrees of slow turn while it holds (0 = static)",
+    "depth": "thickness of the glass in px",
+    "refraction": "how strongly the glass bends and magnifies the room (0.1 = subtle, 0.22 = thick glass, 0.35 = heavy lens)",
+    "brightness": "brightness of the room seen through the glass (1.0-1.4)",
+    "tint": "glass tint colour (white = clear glass)",
+    "letterSpacing": "letter spacing in em",
+    "shadow": "strength of the soft shadow the letters cast on the wall (0-0.8)"
+  },
+  "defaults": {
+    "word": "DESIGN",
+    "font": "black",
+    "at": 0.15,
+    "fadeDuration": 0.6,
+    "sweepDuration": 1.1,
+    "outAt": null,
+    "widthFraction": 0.95,
+    "size": 1,
+    "condense": 0.66,
+    "y": "auto",
+    "x": 0,
+    "overlap": 0.5,
+    "rotateY": 30,
+    "rotateX": 5,
+    "sway": 3,
+    "depth": 44,
+    "refraction": 0.22,
+    "brightness": 1.1,
+    "tint": "#FFFFFF",
+    "letterSpacing": 0.03,
+    "shadow": 0.5
+  },
+  "captions": {
+    "style": "pop",
+    "y": 0.72
+  }
+}

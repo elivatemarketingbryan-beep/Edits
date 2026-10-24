@@ -58,3 +58,10 @@ engines/faceless/sprite/preview.png
 # Brand Motion engine: its Python env and the ElevenLabs key it saves
 engines/brand-motion/.venv/
 engines/brand-motion/.elevenlabs_key
+
+# Video FX engine: installs, matting model (GPL-3.0 weights, downloaded), caches, renders
+engines/video-fx/engine/.venv/
+engines/video-fx/engine/models/
+engines/video-fx/engine/.cache/
+engines/video-fx/engine/jobs/
+engines/video-fx/engine/out/

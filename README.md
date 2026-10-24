@@ -45,6 +45,7 @@ tools**, all in [styles/catalog.json](styles/catalog.json) with their look in
 | HyperFrames (default) | `studio/`, `assets/animations/`, `assets/formats/` | most styles: talking-head reels, explainers, rankings, long-form, captions, graphics |
 | Faceless sprite | `engines/faceless/` | voiceover in, a pixel-art presenter with motion-graphic browser cards out |
 | Brand motion | `engines/brand-motion/` | logo animation, kinetic type and an original score synced to every hit (Python + Skia) |
+| Video FX | `engines/video-fx/` | 17 talking-head effects with a person cut-out, spliced into any edit (Remotion) |
 | Motion promo | skill `motion-promo` | voiceover in, 60 fps motion-graphic ad with real site captures (Remotion) |
 | Split-screen | `engines/split-screen/` | Remotion kit; off by default, reference for panel layouts |
 | Legacy editor | `engines/legacy-editor/` | clipper (long-form to shorts), CapCut, Premiere and Resolve handoffs |
@@ -58,6 +59,10 @@ tools**, all in [styles/catalog.json](styles/catalog.json) with their look in
   `glow-intro-caption` (two-line hook title with a pull-back camera move), `headline-highlight`
   (an article screenshot with a marker drawn over the key words), `github-callout` (a repo's README
   cut in when it's mentioned).
+- Video FX (hub skill `video-fx`), 17 effects that cut the speaker out so graphics sit behind
+  them: orbit, couch wall, UI world, frame break, digital zoom, phone mockup, checklist, headline
+  wall, zoom-through cut, chart grow, pull-back reveal, green screen, paper cut, doodle boil,
+  vertigo, cover story and glass type. Previews in `engines/video-fx/examples/`.
 
 **Sound:** 74 Motionix sounds with placement rules ([styles/SOUND-RULES.md](styles/SOUND-RULES.md)),
 peak-aligned to cuts and graphics by `studio/sfx.mjs`.
@@ -81,8 +86,9 @@ peak-aligned to cuts and graphics by `studio/sfx.mjs`.
 
 Windows 11 with Git Bash, Node 22+, FFmpeg, `uv` (Python), an NVIDIA GPU for WhisperX (CPU works,
 slower), and Claude Code (desktop app or CLI). One-time installs per engine: `npm --prefix
-engines/faceless/engine run setup`, the brand-motion Python environment (see its skill), and
-Tesseract for headline-highlight. `node studio/check.mjs` checks the whole folder and lists
+engines/faceless/engine run setup`, the brand-motion Python environment (see its skill), the
+Video FX engine (steps in any `fx-*` skill's Video Studio block; `node
+engines/video-fx/engine/fx.mjs doctor` checks it), and Tesseract for headline-highlight. `node studio/check.mjs` checks the whole folder and lists
 anything missing.
 
 ## Credits and licences
@@ -90,5 +96,6 @@ anything missing.
 Kits merged in here come from other creators: HyperFrames (HeyGen, Apache-2.0), Remotion (free for
 individuals and companies of up to 3 people), the Emil Kowalski and Apple design skills, the
 Content Manager plugin (Kyle Herbel), the AI Faceless Content engine, Brand Motion Studio and the
-caption, intro, headline, GitHub-callout and motion-promo skills, the Motionix sound pack, and
-fonts under the SIL Open Font License. Check each kit's terms before making this repo public.
+caption, intro, headline, GitHub-callout and motion-promo skills, Claude Video FX (its person
+cut-out uses Robust Video Matting, GPL-3.0, downloaded at setup and never committed), the
+Motionix sound pack, and fonts under the SIL Open Font License. Check each kit's terms before making this repo public.

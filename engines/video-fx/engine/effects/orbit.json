@@ -1,0 +1,49 @@
+{
+  "number": 1,
+  "id": "orbit",
+  "compositionId": "Orbit",
+  "title": "Orbit",
+  "summary": "Floating cards orbit around the speaker in 3D, passing behind and in front of them.",
+  "description": "Small social-post cards (Reel thumbnails with a title chip and view count, and text posts) circle the speaker's torso on a tilted ellipse. The speaker is cut out, so cards on the far side disappear behind them and cards on the near side pass in front. Far cards are smaller, darker and slightly blurred. By default the cards show still frames of the clip itself with titles taken from the transcript; give it your own screenshots, thumbnails or clips for real social proof.",
+  "needs": { "matte": true },
+  "options": {
+    "cards": "\"auto\", or a list of cards: {\"src\": \"path/to/image-or-video\", \"title\": \"chip text\", \"views\": \"1.2M\", \"style\": \"reel\" | \"post\"}. Every field is optional; a card without src shows a still of the clip",
+    "count": "number of auto cards (3-9)",
+    "titles": "\"auto\" (phrases from the transcript), \"none\", or a list of title strings for the auto cards",
+    "views": "true to show view counts on auto cards, false to hide them",
+    "at": "when the cards fly in (seconds or \"@word\")",
+    "outAt": "optional: when the cards fly away (null = stay; they leave automatically if the effect window ends before the clip)",
+    "speed": "orbit speed in turns per second (0.16 = one lap every ~6s)",
+    "direction": "1 = counter-clockwise seen from above (front cards move right), -1 = the other way",
+    "phase": "starting angle in radians (rotate the ring so a favourite card starts in front)",
+    "radius": "horizontal radius of the orbit as a fraction of the frame width",
+    "tilt": "vertical radius (how tilted the ring looks) as a fraction of the frame height",
+    "height": "where the ring sits on the body: 0 = face, 1 = bottom of the person (0.42 ≈ chest)",
+    "center": "\"auto\" or [x, y] fractions to place the ring centre yourself",
+    "cardSize": "card width as a fraction of the frame width (front cards)",
+    "depthBlur": "blur in px on the farthest cards",
+    "captionPlacement": "\"auto\" (above the head if there is room, else below the ring) or \"keep\" (use captions.y)"
+  },
+  "defaults": {
+    "cards": "auto",
+    "count": 6,
+    "titles": "auto",
+    "views": true,
+    "at": 0,
+    "outAt": null,
+    "speed": 0.16,
+    "direction": 1,
+    "phase": 0,
+    "radius": 0.4,
+    "tilt": 0.065,
+    "height": 0.42,
+    "center": "auto",
+    "cardSize": 0.17,
+    "depthBlur": 1.6,
+    "captionPlacement": "auto"
+  },
+  "captions": {
+    "style": "serif",
+    "size": 64
+  }
+}

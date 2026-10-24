@@ -1,0 +1,481 @@
+[
+  {
+    "effect": "digital-zoom",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-21 11-01-39 vertical.mp4",
+    "start": 7.4,
+    "end": 11.6,
+    "poster": 1.9,
+    "config": {
+      "punches": [
+        {
+          "at": "@thousands",
+          "scale": 1.28
+        },
+        {
+          "at": "@editing",
+          "scale": 1.0
+        }
+      ],
+      "captions": {
+        "emphasis": [
+          "thousands",
+          "editing"
+        ]
+      }
+    },
+    "showreelFrom": 0.8
+  },
+  {
+    "effect": "cover-story",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-21 14-06-22 vertical.mp4",
+    "start": 7.3,
+    "end": 13,
+    "poster": 2.5,
+    "config": {
+      "title": "OPUS",
+      "issue": "THE MODEL ISSUE · NO. 01",
+      "coverlines": [
+        {
+          "title": "3x",
+          "sub": "mind-blowing upgrades"
+        },
+        {
+          "title": "Swarms",
+          "sub": "hundreds of agents"
+        }
+      ]
+    },
+    "showreelFrom": 0.2
+  },
+  {
+    "effect": "couch-wall",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-16 13-27-50 vertical.mp4",
+    "start": 21,
+    "end": 27,
+    "poster": 2.2,
+    "showreelFrom": 1.4,
+    "config": {
+      "at": "@build",
+      "labels": [
+        "How I sell my course",
+        "Can you tell??",
+        "My $0 tech stack"
+      ],
+      "views": [
+        "1.07M",
+        "534K",
+        "133K",
+        "5,488",
+        "15.3K",
+        "2.2M",
+        "847K",
+        "61K"
+      ],
+      "captions": {
+        "style": "twoTier",
+        "emphasis": [
+          "course",
+          "platform",
+          "GitHub"
+        ]
+      }
+    }
+  },
+  {
+    "effect": "ui-world",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-16 13-27-50 vertical.mp4",
+    "start": 21,
+    "end": 27,
+    "poster": 2.5,
+    "showreelFrom": 1.0,
+    "config": {
+      "command": "/clone-repo gumroad",
+      "label": "COURSE PLATFORM",
+      "clips": 4,
+      "dropAt": "@build",
+      "typeAt": "@download",
+      "window": [
+        0.4,
+        5.6
+      ]
+    }
+  },
+  {
+    "effect": "phone-mockup",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-16 13-27-50 vertical.mp4",
+    "start": 21,
+    "end": 27,
+    "poster": 3.5,
+    "showreelFrom": 1.5,
+    "config": {
+      "side": "left",
+      "app": {
+        "name": "Repo Scout",
+        "status": "Watching GitHub",
+        "avatarColor": "#8AB4FF"
+      },
+      "message": "Found an open-source course platform.",
+      "card": {
+        "label": "NEW REPO",
+        "title": "Gumroad is now fully open source",
+        "tiles": [
+          {
+            "label": "Stars",
+            "value": 0.95,
+            "color": "#8AB4FF"
+          },
+          {
+            "label": "Forks",
+            "value": 0.6,
+            "color": "#8AB4FF"
+          },
+          {
+            "label": "Issues",
+            "value": 0.25,
+            "color": "#E5706B"
+          }
+        ]
+      },
+      "button": "Download",
+      "secondary": "Later",
+      "approvedLabel": "Cloned",
+      "reply": "Cloned to ~/course-platform",
+      "cardAt": "@course-0.3",
+      "tapAt": "@download"
+    }
+  },
+  {
+    "effect": "checklist",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-21 14-06-22 vertical.mp4",
+    "start": 7.3,
+    "end": 13,
+    "poster": 4.5,
+    "showreelFrom": 2.6,
+    "config": {
+      "title": "WHAT OPUS CAN DO",
+      "items": [
+        {
+          "text": "Run an agent swarm",
+          "at": "@three"
+        },
+        {
+          "text": "Rebuild any website",
+          "at": "@absolutely"
+        },
+        {
+          "text": "Generate images",
+          "at": "@mind"
+        }
+      ],
+      "outAt": -0.4
+    }
+  },
+  {
+    "effect": "headline-wall",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-21 11-01-39 vertical.mp4",
+    "start": 0,
+    "end": 7.5,
+    "poster": 3.0,
+    "showreelFrom": 1.3,
+    "config": {
+      "at": "@watching",
+      "cards": [
+        {
+          "type": "note",
+          "kicker": "Creator briefing",
+          "text": "Claude edits everyone's videos now"
+        },
+        {
+          "type": "search",
+          "text": "can claude edit videos"
+        },
+        {
+          "type": "tweet",
+          "name": "Agency owner",
+          "handle": "@agencyowner",
+          "text": "Dropped my clips in. Claude did the edit."
+        },
+        {
+          "type": "pov",
+          "text": "Claude edits your reel"
+        },
+        {
+          "type": "quote",
+          "text": "Claude cut my whole reel.",
+          "name": "@founder"
+        },
+        {
+          "type": "bubble",
+          "text": "wait, Claude edits videos??"
+        },
+        {
+          "type": "note",
+          "kicker": "Weekly digest",
+          "text": "Editors are worried about Claude"
+        },
+        {
+          "type": "notify",
+          "name": "Claude",
+          "text": "Your video is ready to post"
+        },
+        {
+          "type": "pov",
+          "text": "you never hire an editor again"
+        },
+        {
+          "type": "quote",
+          "text": "Your next video editor is Claude.",
+          "name": "@makesreels"
+        },
+        {
+          "type": "note",
+          "kicker": "Tech newsletter",
+          "text": "Claude can edit your videos now",
+          "highlight": "Claude",
+          "hero": true
+        }
+      ],
+      "captions": {
+        "emphasis": [
+          "Claude",
+          "editor"
+        ]
+      }
+    }
+  },
+  {
+    "effect": "chart-grow",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-21 14-06-22 vertical.mp4",
+    "start": 7.3,
+    "end": 13,
+    "poster": 3.0,
+    "showreelFrom": 1.2,
+    "config": {
+      "at": "@model",
+      "labels": [
+        "JAN",
+        "FEB",
+        "MAR",
+        "APR",
+        "MAY",
+        "JUN"
+      ],
+      "values": [
+        0.12,
+        0.15,
+        0.2,
+        0.28,
+        0.55,
+        1
+      ],
+      "highlightFrom": 3,
+      "pill": "10x",
+      "captions": {
+        "emphasis": [
+          "Opus",
+          "capable",
+          "mind-blowing"
+        ]
+      }
+    }
+  },
+  {
+    "effect": "pull-back-reveal",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-21 11-01-39 vertical.mp4",
+    "start": 0,
+    "end": 7.5,
+    "poster": 4.0,
+    "showreelFrom": 1.0,
+    "config": {
+      "pullAt": 0.3,
+      "filename": "daily-update.mp4",
+      "skill": "video-editor",
+      "steps": [
+        "Transcribed the take",
+        "Cut the pauses",
+        "Added captions",
+        "Graded the colour",
+        "Rendered {frames} frames"
+      ],
+      "returnAt": -0.5
+    }
+  },
+  {
+    "effect": "paper-cut",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-16 13-27-50 vertical.mp4",
+    "start": 21,
+    "end": 27,
+    "poster": 3.5,
+    "showreelFrom": 0.8,
+    "config": {
+      "headline": "100%",
+      "subline": "FREE",
+      "headlineAt": "@course",
+      "captions": {
+        "enabled": false
+      }
+    }
+  },
+  {
+    "effect": "doodle-boil",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-21 14-06-22 vertical.mp4",
+    "start": 7.3,
+    "end": 13,
+    "poster": 4.5,
+    "showreelFrom": 2.4,
+    "config": {
+      "doodles": [
+        {
+          "type": "star",
+          "slot": "right",
+          "at": "@three",
+          "fill": "#FFE45C"
+        },
+        {
+          "type": "crown",
+          "slot": "aboveHead",
+          "at": "@absolutely",
+          "fill": "#FFE45C"
+        },
+        {
+          "type": "arrow",
+          "slot": "left",
+          "at": "@mind"
+        }
+      ]
+    }
+  },
+  {
+    "effect": "glass-type",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-22 11-14-10 vertical.mp4",
+    "start": 20,
+    "end": 26,
+    "poster": 3.0,
+    "showreelFrom": 0.8,
+    "config": {
+      "word": "CLAUDE",
+      "at": "@truth",
+      "captions": {
+        "emphasis": [
+          "truth",
+          "anymore",
+          "Claude"
+        ]
+      }
+    }
+  },
+  {
+    "effect": "zoom-through-cut",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-21 11-01-39 vertical.mp4",
+    "start": 0,
+    "end": 5.6,
+    "second": {
+      "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-16 13-27-50 vertical.mp4",
+      "start": 21,
+      "end": 27
+    },
+    "poster": 5.3,
+    "showreelFrom": 4.2,
+    "config": {
+      "captionsA": {
+        "emphasis": [
+          "Claude"
+        ]
+      }
+    }
+  },
+  {
+    "effect": "orbit",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-21 11-01-39 vertical.mp4",
+    "start": 0,
+    "end": 7.5,
+    "poster": 2.5,
+    "showreelFrom": 1.4,
+    "config": {
+      "count": 6,
+      "titles": [
+        "Edited with Claude Code",
+        "No editor needed",
+        "Raw clip to finished reel",
+        "Auto captions",
+        "Motion graphics",
+        "Ready to post"
+      ],
+      "speed": 0.14,
+      "captions": {
+        "emphasis": [
+          "watching",
+          "Claude"
+        ]
+      }
+    }
+  },
+  {
+    "effect": "frame-break",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-22 11-14-10 vertical.mp4",
+    "start": 20,
+    "end": 26,
+    "poster": 3.0,
+    "showreelFrom": 0.9,
+    "config": {
+      "username": "alexbuilds",
+      "caption": "Claude edited this whole reel",
+      "likes": "12.8K",
+      "comments": "342",
+      "likeAt": "@anymore",
+      "captions": {
+        "emphasis": [
+          "truth",
+          "anymore",
+          "Claude"
+        ]
+      }
+    }
+  },
+  {
+    "effect": "vertigo",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-16 13-27-50 vertical.mp4",
+    "start": 21,
+    "end": 27,
+    "poster": 4.0,
+    "showreelFrom": 1.4,
+    "config": {
+      "direction": "push",
+      "intensity": 0.28,
+      "at": "@course-0.3",
+      "duration": 1.8,
+      "captions": {
+        "emphasis": [
+          "course",
+          "download"
+        ]
+      }
+    }
+  },
+  {
+    "effect": "green-screen",
+    "video": "/Users/kyleherbel/Movies/Daily Updates/2026-10-21 11-01-39 vertical.mp4",
+    "start": 0,
+    "end": 7.5,
+    "poster": 3.5,
+    "showreelFrom": 1.2,
+    "config": {
+      "headline": "Editing handles itself.",
+      "timer": "24:59",
+      "task": "Edit today's reel",
+      "tasks": [
+        "Edit today's reel",
+        "Write the caption",
+        "Schedule the post"
+      ],
+      "input": "Cut the pauses and add captions",
+      "cursorAt": "@edited",
+      "captions": {
+        "emphasis": [
+          "currently",
+          "Claude"
+        ]
+      }
+    }
+  }
+]

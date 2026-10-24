@@ -41,6 +41,10 @@
 - **Effects for any style**: premium word-by-word captions, a glowing two-line intro
   title, article headlines with a marker highlight, GitHub README callouts, plus the
   HyperFrames templates (typing search bar, counters, map routes, glow pill).
+- **17 Video FX effects** that cut you out of the background so graphics go behind you:
+  magazine cover title, 3D glass word, checklist that ticks as you talk, growth chart,
+  headline wall, cards orbiting you, phone mockup, popping out of a Reels frame, dolly zoom
+  and more. Ask "which effects would work on this video?" and Claude suggests 2-4.
 - **Content OS** (`engines/content-os`): research, hooks, scripts written for the format
   with cue tags, Notion, repurposing one long video into a week of posts, a content
   calendar, carousels and posting.

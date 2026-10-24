@@ -1,0 +1,40 @@
+{
+  "number": 15,
+  "id": "vertigo",
+  "compositionId": "Vertigo",
+  "title": "Vertigo",
+  "summary": "Dolly-zoom: the background zooms while the speaker stays locked in place.",
+  "description": "The Hitchcock dolly zoom. The speaker is cut out and held at exactly the same size and position while the room behind them zooms in (push) or falls away (pull). The room comes from a clean background plate the engine builds from the clip (the person is removed), so there is never a second copy of the speaker. The speaker is shown slightly punched in (1 + intensity) for the whole effect; the background moves between the original framing and that size.",
+  "needs": {
+    "matte": true,
+    "plate": true
+  },
+  "options": {
+    "direction": "\"push\" = the room grows toward the camera (like the reference); \"pull\" = the room falls away behind the speaker",
+    "intensity": "how far the room zooms, 0.1-0.35 (0.22 = 22%). The speaker is held at 1 + intensity the whole time",
+    "at": "when the zoom starts (seconds or \"@word\")",
+    "duration": "seconds the zoom takes; null = until the end of the clip/window. 1-2.5s feels like a dramatic beat",
+    "easing": "\"inOut\" (smooth start and stop), \"out\" (fast start, soft landing) or \"linear\" (constant, most Hitchcock)",
+    "anchor": "\"face\" to zoom around the speaker's face, or [x, y] as 0-1 fractions of the frame",
+    "entry": "\"auto\" (quick punch-in when the effect starts mid-clip, and an ease back out if it ends before the clip does), \"punch\" (always punch in) or \"cut\" (never; hard cut in and out)",
+    "background": "\"plate\" (clean room, no ghost; static) or \"video\" (live footage; tiny ghost slivers possible on big gestures)",
+    "vignette": "0-0.6, darkens the frame edges as the zoom runs (0 = off)"
+  },
+  "defaults": {
+    "direction": "push",
+    "intensity": 0.26,
+    "at": 0.1,
+    "duration": 2.2,
+    "easing": "inOut",
+    "anchor": "face",
+    "entry": "auto",
+    "background": "plate",
+    "vignette": 0
+  },
+  "captions": {
+    "style": "caps",
+    "y": 0.62,
+    "size": 66,
+    "maxChars": 16
+  }
+}

@@ -8,6 +8,9 @@
 //       {segments:[{words:[{text, start, duration}]}]} (seconds): high-quality-captions' other input.
 //   node studio/words-convert.mjs brand-motion <words.json> <out.json> [from] [to]
 //       {text, words:[{word, start, end}]} (seconds): engines/brand-motion (voice.py's format).
+//   node studio/words-convert.mjs video-fx     <words.json> <out.json> <from> <to>
+//       {language, text, words:[{text, start, end}]} (seconds, relative to from): the Video FX
+//       engine's --words file. Use the same from/to as the render's --start/--end.
 //
 // [from] [to] (seconds) cut a slice and shift it to start at 0, for when the kit's project uses a
 // trimmed copy of the footage.
@@ -15,7 +18,7 @@ import fs from 'node:fs';
 
 const [fmt, src, out, fromArg, toArg] = process.argv.slice(2);
 if (!fmt || !src || !out) {
-  console.log('usage: node studio/words-convert.mjs captions|segments|brand-motion <words.json> <out.json> [from] [to]');
+  console.log('usage: node studio/words-convert.mjs captions|segments|brand-motion|video-fx <words.json> <out.json> [from] [to]');
   process.exit(1);
 }
 const from = Number(fromArg) || 0, to = toArg != null ? Number(toArg) : Infinity;
@@ -37,6 +40,8 @@ if (fmt === 'captions') {
   data = { segments: segs.filter((s) => s.length).map((ws) => ({ words: ws })) };
 } else if (fmt === 'brand-motion') {
   data = { text: words.map((w) => w.text).join(' '), words: words.map((w) => ({ word: w.text, start: w.s, end: w.e })) };
+} else if (fmt === 'video-fx') {
+  data = { language: 'en', text: words.map((w) => w.text).join(' '), words: words.map((w) => ({ text: w.text, start: w.s, end: w.e })) };
 } else {
   console.error(`unknown format "${fmt}"`); process.exit(1);
 }

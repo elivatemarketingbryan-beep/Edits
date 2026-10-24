@@ -1,0 +1,28 @@
+{
+  "at": "@model",
+  "labels": [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN"
+  ],
+  "values": [
+    0.12,
+    0.15,
+    0.2,
+    0.28,
+    0.55,
+    1
+  ],
+  "highlightFrom": 3,
+  "pill": "10x",
+  "captions": {
+    "emphasis": [
+      "Opus",
+      "capable",
+      "mind-blowing"
+    ]
+  }
+}

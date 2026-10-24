@@ -1,0 +1,39 @@
+{
+  "number": 8,
+  "id": "headline-wall",
+  "compositionId": "HeadlineWall",
+  "title": "Headline Wall",
+  "summary": "Headlines, tweets and search cards pin themselves to the wall behind the speaker.",
+  "description": "A collage of press-style cards slaps onto the wall behind the speaker one after another with a quick overshoot: paper headlines in bold serif, italic quotes, tweets, Google-style search pills, black POV cards, chat bubbles and notifications. A bigger hero card lands last and a yellow highlighter swipes across its key word. The speaker is cut out and stays in front. With no cards given, the content is written from the clip's transcript.",
+  "needs": { "matte": true },
+  "options": {
+    "cards": "\"auto\" (written from the transcript) or a list of cards. Each card: {\"type\": \"note\" | \"quote\" | \"tweet\" | \"search\" | \"pov\" | \"bubble\" | \"notify\", \"text\": \"...\"} plus optional \"kicker\" (small caps line on notes), \"name\" / \"handle\" (tweet author, quote byline, notification app), \"highlight\" (word to mark yellow), \"hero\": true (the big card that lands last). Order = order they appear; the first cards get the most visible spots",
+    "count": "how many cards auto mode writes (8-12 fills the wall)",
+    "at": "when the first card lands (seconds or \"@word\")",
+    "stagger": "frames between cards (2-4 = rapid-fire, 6+ = one by one)",
+    "heroDelay": "extra frames before the hero card lands",
+    "outAt": "optional: when the cards pop off (null = hold to the end; they also leave automatically when an effect window ends early)",
+    "columns": "card columns across the wall (3 = reference look, 4 = smaller, denser cards)",
+    "cardScale": "card size multiplier (0.85-1.15)",
+    "wallBottom": "\"auto\" (from the speaker's head) or a 0-1 fraction: how far down the cards reach",
+    "accent": "highlighter colour",
+    "dim": "darken the room behind the cards a little so they pop (0 = off, 0.25 = subtle)"
+  },
+  "defaults": {
+    "cards": "auto",
+    "count": 11,
+    "at": 0.1,
+    "stagger": 3,
+    "heroDelay": 6,
+    "outAt": null,
+    "columns": 3,
+    "cardScale": 1,
+    "wallBottom": "auto",
+    "accent": "#FFE14D",
+    "dim": 0.12
+  },
+  "captions": {
+    "style": "pop",
+    "y": 0.72
+  }
+}

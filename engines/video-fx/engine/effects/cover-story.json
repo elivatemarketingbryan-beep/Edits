@@ -1,0 +1,45 @@
+{
+  "number": 16,
+  "id": "cover-story",
+  "compositionId": "CoverStory",
+  "title": "Cover Story",
+  "summary": "Magazine cover: a giant serif masthead rises in behind the speaker's head.",
+  "description": "A Didone (Vogue-style) masthead fills the top of the frame and rises in letter by letter. The speaker is cut out and layered on top, so their head covers the bottom of the letters like a real magazine cover. Optional issue line under the masthead and coverlines down the sides.",
+  "needs": { "matte": true },
+  "options": {
+    "title": "masthead word, 1 short word reads best (EDIT, FOCUS, SCALE)",
+    "at": "when the letters start rising (seconds or \"@word\")",
+    "outAt": "optional: when the cover text fades away (null = stays to the end)",
+    "overlap": "how much of the letter height the head covers, 0-1 (0.45 = classic cover)",
+    "y": "\"auto\" (place from the head position) or a 0-1 fraction for the top of the letters",
+    "widthFraction": "masthead width as a fraction of the frame",
+    "weight": "Bodoni Moda weight: 400, 500 or 700",
+    "letterSpacing": "letter spacing in em (negative = tighter)",
+    "stagger": "frames between letters",
+    "letterFrames": "frames each letter takes to rise",
+    "color": "text colour",
+    "issue": "small line under the masthead, e.g. \"THE AI ISSUE · NO. 01\" (empty = none)",
+    "coverlines": "list of {\"title\": \"10x\", \"sub\": \"your output\"} shown on the sides",
+    "coverlinesY": "where the coverlines start, 0-1 of frame height"
+  },
+  "defaults": {
+    "title": "EDIT",
+    "at": 0.15,
+    "outAt": null,
+    "overlap": 0.45,
+    "y": "auto",
+    "widthFraction": 0.9,
+    "weight": 500,
+    "letterSpacing": -0.01,
+    "stagger": 3,
+    "letterFrames": 16,
+    "color": "#FFFFFF",
+    "issue": "",
+    "coverlines": [],
+    "coverlinesY": 0.5
+  },
+  "captions": {
+    "style": "pop",
+    "y": 0.74
+  }
+}

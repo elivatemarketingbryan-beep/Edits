@@ -1,0 +1,51 @@
+{
+  "number": 11,
+  "id": "pull-back-reveal",
+  "compositionId": "PullBackReveal",
+  "title": "Pull-back Reveal",
+  "summary": "The shot pulls back to reveal it is inside an editor app that is rendering it, with a % counter.",
+  "description": "The full-frame footage smoothly shrinks into an editor window on a cream desk (title bar with the file name, the video keeps playing inside with its captions). An agent panel slides in and ticks through its steps with spinners, a render bar with a waveform and frame counter fills under the video, a big serif percentage rolls up to 100%, and on completion the window, bar and badge turn green. Optionally zooms back to full frame at the end.",
+  "needs": {},
+  "options": {
+    "pullAt": "when the pull-back starts (seconds or \"@word\")",
+    "pullDuration": "seconds the pull-back takes",
+    "doneAt": "\"auto\" (about 0.7s before the end) or when the render completes and turns green",
+    "counterAt": "\"auto\" (about 0.9s before done) or when the % counter starts rolling",
+    "returnAt": "optional: when to zoom back to full frame (null = stay in the window; it returns automatically if the effect window ends before the clip)",
+    "filename": "file name in the window's title bar",
+    "tab": "label on the right of the title bar",
+    "workingLabel": "panel header text",
+    "skill": "pill next to the panel header (the skill / command name)",
+    "steps": "list of step labels that tick off in order; {frames} is replaced by the frame count",
+    "frames": "\"auto\" (the clip's frame count) or a number for the render counter",
+    "accent": "colour of the progress fill, skill pill and dots",
+    "background": "desk colour around the window",
+    "windowX": "left edge of the window, 0-1 of the width",
+    "windowWidth": "window width, 0-1 of the width",
+    "videoAspect": "width/height of the video area inside the window (0.5625 shows the full 9:16 frame)",
+    "panelX": "left edge of the agent panel, 0-1 of the width"
+  },
+  "defaults": {
+    "pullAt": 0.1,
+    "pullDuration": 0.75,
+    "doneAt": "auto",
+    "counterAt": "auto",
+    "returnAt": null,
+    "filename": "final-cut.mp4",
+    "tab": "Assistant",
+    "workingLabel": "Working on",
+    "skill": "edit",
+    "steps": ["Transcribed 1 clip", "Picked the take", "Cut 3 shots", "Captions added", "Rendered {frames} frames"],
+    "frames": "auto",
+    "accent": "#3E6AE1",
+    "background": "#F1EEE6",
+    "windowX": 0.29,
+    "windowWidth": 0.6,
+    "videoAspect": 0.64,
+    "panelX": 0.045
+  },
+  "captions": {
+    "style": "pop",
+    "y": 0.72
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "doodles": [
+    {
+      "type": "star",
+      "slot": "right",
+      "at": "@three",
+      "fill": "#FFE45C"
+    },
+    {
+      "type": "crown",
+      "slot": "aboveHead",
+      "at": "@absolutely",
+      "fill": "#FFE45C"
+    },
+    {
+      "type": "arrow",
+      "slot": "left",
+      "at": "@mind"
+    }
+  ]
+}

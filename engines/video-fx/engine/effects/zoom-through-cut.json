@@ -1,0 +1,41 @@
+{
+  "number": 9,
+  "id": "zoom-through-cut",
+  "compositionId": "ZoomThroughCut",
+  "title": "Zoom-Through Cut",
+  "summary": "Transition: rush into the first shot with zoom blur and burst out of the second.",
+  "description": "A whip-zoom transition between two shots. Shot A accelerates toward the speaker with a growing radial zoom blur and a slight spin, hard-cuts at the peak, and shot B bursts out from extremely close, blurred, and decelerates back to normal framing. Use two clips (render with --second) or one clip split at `cutAt`. Shot A's captions blur away with the push; shot B gets its own caption style (tracked small caps by default).",
+  "needs": { "secondClip": "optional" },
+  "options": {
+    "cutAt": "single-clip mode: where the cut happens (seconds or \"@word\"; \"auto\" = a word boundary near the middle). Ignored with --second (the cut is where clip A ends)",
+    "pushFrames": "frames shot A spends rushing in before the cut (8-10 feels like the reference)",
+    "pullFrames": "frames shot B takes to settle after the cut (10-14)",
+    "pushScale": "how far shot A zooms in by the cut (4 = 4x)",
+    "pullScale": "how zoomed-in shot B starts (3.5 = 3.5x)",
+    "blur": "strength of the radial zoom blur (0 = none, 0.6 = strong)",
+    "samples": "blur quality: copies used for the blur (6-9)",
+    "rotate": "degrees of spin across the transition (0 = straight zoom)",
+    "focus": "where shot A zooms: \"chest\" (default), \"face\", or [x, y] as 0-1 fractions",
+    "focusB": "where shot B zooms out from (defaults to focus)",
+    "captionsA": "caption overrides for shot A, e.g. {\"style\": \"serif\"}",
+    "captionsB": "caption overrides for shot B, e.g. {\"style\": \"tracked\"}"
+  },
+  "defaults": {
+    "cutAt": "auto",
+    "pushFrames": 9,
+    "pullFrames": 12,
+    "pushScale": 4,
+    "pullScale": 3.4,
+    "blur": 0.55,
+    "samples": 12,
+    "rotate": 7,
+    "focus": "chest",
+    "focusB": null,
+    "captionsA": {},
+    "captionsB": { "style": "tracked" }
+  },
+  "captions": {
+    "style": "serif",
+    "y": 0.6
+  }
+}

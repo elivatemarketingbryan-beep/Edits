@@ -21,6 +21,7 @@ for (const rel of ['CLAUDE.md', 'START_HERE.md', 'Start Studio.cmd', 'studio/ser
   'docs/editor-pipeline.md', 'lib', 'presets', 'workflows', 'assets/sfx', 'assets/sound-effects', '.claude/skills', '.claude/settings.json',
   'engines/split-screen/AGENTS.md', 'engines/split-screen/scripts/editor.mjs', 'engines/split-screen/src/custom/registry.tsx',
   'engines/split-screen/inputs', 'engines/split-screen/docs',
+  'engines/video-fx/engine/fx.mjs', '.claude/skills/video-fx/SKILL.md', '.claude/skills/fx-checklist/SKILL.md',
   'engines/brand-motion/SKILL.md', 'engines/brand-motion/engine/make.py', 'studio/words-convert.mjs',
   '.claude/skills/motion-promo/SKILL.md', '.claude/skills/high-quality-captions/SKILL.md', '.claude/skills/glow-intro-caption/SKILL.md',
   '.claude/skills/headline-highlight/SKILL.md', '.claude/skills/github-callout/SKILL.md',

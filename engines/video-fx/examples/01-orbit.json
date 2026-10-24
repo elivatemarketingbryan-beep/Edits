@@ -1,0 +1,18 @@
+{
+  "count": 6,
+  "titles": [
+    "Edited with Claude Code",
+    "No editor needed",
+    "Raw clip to finished reel",
+    "Auto captions",
+    "Motion graphics",
+    "Ready to post"
+  ],
+  "speed": 0.14,
+  "captions": {
+    "emphasis": [
+      "watching",
+      "Claude"
+    ]
+  }
+}

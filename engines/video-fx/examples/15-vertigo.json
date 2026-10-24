@@ -1,0 +1,12 @@
+{
+  "direction": "push",
+  "intensity": 0.28,
+  "at": "@course-0.3",
+  "duration": 1.8,
+  "captions": {
+    "emphasis": [
+      "course",
+      "download"
+    ]
+  }
+}

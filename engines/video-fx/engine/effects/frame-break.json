@@ -1,0 +1,52 @@
+{
+  "number": 4,
+  "id": "frame-break",
+  "compositionId": "FrameBreak",
+  "title": "Frame Break",
+  "summary": "The video shrinks into a Reels/TikTok phone frame and the speaker pops out over its edge.",
+  "description": "The full-frame shot springs down into a phone-shaped Reels (or TikTok) window floating on a dark, blurred copy of the footage. The window crops the shot just above the speaker's eyes, but the cut-out speaker is drawn on top, so their head breaks out over the top edge and their hands reach past the sides — a 3D pop-out. The feed chrome (like / comment / share rail, avatar, username, Follow pill, caption, progress bar) fades in once the window settles.",
+  "needs": { "matte": true },
+  "options": {
+    "at": "when the shot starts shrinking into the window (seconds or \"@word\")",
+    "outAt": "optional: when it springs back to full screen (null = stays; it springs back automatically if the effect window ends before the clip)",
+    "platform": "\"reels\" (Instagram) or \"tiktok\" — which feed chrome to draw",
+    "username": "handle shown under the video (no @ needed)",
+    "caption": "\"auto\" (first words of the transcript) or your own one-line caption",
+    "likes": "like count under the heart (\"\" to hide)",
+    "comments": "comment count under the bubble (\"\" to hide)",
+    "likeAt": "optional: when the heart turns red (seconds or \"@word\"), null = never",
+    "ui": "true to draw the feed chrome, false for a clean window",
+    "frameWidth": "window width as a fraction of the frame width (0.5-0.75)",
+    "frameY": "vertical centre of the window, 0-1 of the frame height",
+    "breakDepth": "where the window's top edge cuts the head: 0 = top of the head (little pops out), 1 = middle of the face (more pops out)",
+    "sideBreak": "how much wider than the window the footage is (1.0 = no side break, 1.12 = hands reach past the sides)",
+    "cornerRadius": "window corner radius in px at 1080 wide",
+    "backdrop": "\"blur\" (dark blurred copy of the footage), \"dark\" (charcoal gradient) or any CSS colour/gradient",
+    "shadow": "soft drop shadow under the popped-out speaker (true/false)",
+    "sideFade": "0-0.15: fades the cut-out near the footage's left/right edges so a speaker who fills the frame doesn't end in a hard vertical line outside the window (0 = off)"
+  },
+  "defaults": {
+    "at": 0.1,
+    "outAt": null,
+    "platform": "reels",
+    "username": "yourhandle",
+    "caption": "auto",
+    "likes": "48.2K",
+    "comments": "1,204",
+    "likeAt": null,
+    "ui": true,
+    "frameWidth": 0.6,
+    "frameY": 0.46,
+    "breakDepth": 0.5,
+    "sideBreak": 1.1,
+    "cornerRadius": 40,
+    "backdrop": "blur",
+    "shadow": true,
+    "sideFade": 0.08
+  },
+  "captions": {
+    "style": "pop",
+    "y": 0.885,
+    "size": 64
+  }
+}

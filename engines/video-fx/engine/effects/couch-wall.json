@@ -1,0 +1,41 @@
+{
+  "number": 2,
+  "id": "couch-wall",
+  "compositionId": "CouchWall",
+  "title": "Couch Wall",
+  "summary": "A wall of video thumbnails with view counts fills in behind the speaker.",
+  "description": "A masonry wall of short-form video thumbnails pops in tile by tile behind the speaker (outward from their head) and covers the room, like a creator's grid of past reels. Each tile carries a play-count badge; a few carry white headline stickers. The speaker is cut out and stays in front. With no media given, tiles are stills of the clip itself at different moments, crops and colour grades.",
+  "needs": { "matte": true },
+  "options": {
+    "at": "when the tiles start popping in (seconds or \"@word\")",
+    "fillDuration": "seconds from first to last tile (0.4-0.8 feels snappy)",
+    "outAt": "optional: when the wall pops away (null = holds to the end; it also leaves automatically when an effect window ends early)",
+    "media": "optional list of image/video file paths for the tiles (your real thumbnails/clips); they repeat if there are fewer than tiles. Empty = stills of this clip",
+    "labels": "white headline stickers placed on a few tiles, e.g. [\"6 ways to make money with AI\", \"Can you tell??\"]. Empty list = none",
+    "views": "optional list of view-count strings (\"1.07M\", \"534K\"); null = plausible random counts",
+    "showViews": "show the ▷ view-count badge on most tiles",
+    "columns": "number of tile columns (3 = reference look, 4 = denser)",
+    "gap": "gap between tiles in px (at 1080 wide)",
+    "radius": "tile corner radius in px",
+    "wallBottom": "\"auto\" (from the speaker's head) or a 0-1 fraction: how far down the frame the wall reaches",
+    "drift": "slow push-in of the wall while it holds (0 = static, 0.04 = subtle)"
+  },
+  "defaults": {
+    "at": 0.15,
+    "fillDuration": 0.55,
+    "outAt": null,
+    "media": [],
+    "labels": ["6 ways to make money with AI this week", "Can you tell??"],
+    "views": null,
+    "showViews": true,
+    "columns": 3,
+    "gap": 8,
+    "radius": 10,
+    "wallBottom": "auto",
+    "drift": 0.035
+  },
+  "captions": {
+    "style": "twoTier",
+    "y": 0.62
+  }
+}

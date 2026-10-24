@@ -1,0 +1,11 @@
+{
+  "command": "/clone-repo gumroad",
+  "label": "COURSE PLATFORM",
+  "clips": 4,
+  "dropAt": "@build",
+  "typeAt": "@download",
+  "window": [
+    0.4,
+    5.6
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "number": 10,
+  "id": "chart-grow",
+  "compositionId": "ChartGrow",
+  "title": "Chart Grow",
+  "summary": "A line chart draws itself across the frame behind the speaker and spikes up with a glowing label.",
+  "description": "A minimal chart appears on the wall behind the speaker: faint grid lines, day labels along the top, and a white line that draws itself left to right with a glowing tip. At the take-off point it turns into a glowing accent-coloured spike with a gradient fill, a dashed guide and a label pill (SCALE ↗) that pops in. The speaker is cut out and stays in front, so the line passes behind their head.",
+  "needs": { "matte": true },
+  "options": {
+    "labels": "x-axis labels across the top, e.g. [\"M\",\"T\",\"W\",\"T\",\"F\",\"S\",\"S\"] or [\"JAN\",\"FEB\",\"MAR\",\"APR\"]",
+    "values": "one height per label, 0 = bottom of the chart, 1 = top (resampled if the count differs)",
+    "highlightFrom": "index of the label where the line turns into the glowing spike (0 = first label)",
+    "pill": "label text in the pill at the take-off point (\"SCALE\", \"+312%\"); empty string = no pill",
+    "arrow": "draw the ↗ arrow inside the pill",
+    "pillInFront": "keep the pill in front of the speaker (true) or behind them like the line (false)",
+    "at": "when the chart starts appearing (seconds or \"@word\")",
+    "drawDuration": "seconds the line takes to draw from first to last point",
+    "outAt": "optional: when the chart fades away (null = hold to the end; it also leaves automatically when an effect window ends early)",
+    "accent": "spike / pill colour",
+    "lineColor": "colour of the line before the spike",
+    "lineWidth": "line thickness in px (at 1080 wide)",
+    "dim": "how much to darken the wall behind the chart so it reads (0-0.5)",
+    "region": "\"auto\" (fitted around the speaker's head) or [x0, y0, x1, y1] as 0-1 fractions: y0 = label row, y1 = chart bottom"
+  },
+  "defaults": {
+    "labels": ["M", "T", "W", "T", "F", "S", "S"],
+    "values": [0.14, 0.17, 0.21, 0.25, 0.33, 0.64, 1],
+    "highlightFrom": 4,
+    "pill": "SCALE",
+    "arrow": true,
+    "pillInFront": true,
+    "at": 0.2,
+    "drawDuration": 1.1,
+    "outAt": null,
+    "accent": "#FFE14D",
+    "lineColor": "#FFFFFF",
+    "lineWidth": 6,
+    "dim": 0.22,
+    "region": "auto"
+  },
+  "captions": {
+    "style": "pop",
+    "y": 0.72
+  }
+}

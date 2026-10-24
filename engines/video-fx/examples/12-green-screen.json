@@ -1,0 +1,18 @@
+{
+  "headline": "Editing handles itself.",
+  "timer": "24:59",
+  "task": "Edit today's reel",
+  "tasks": [
+    "Edit today's reel",
+    "Write the caption",
+    "Schedule the post"
+  ],
+  "input": "Cut the pauses and add captions",
+  "cursorAt": "@edited",
+  "captions": {
+    "emphasis": [
+      "currently",
+      "Claude"
+    ]
+  }
+}

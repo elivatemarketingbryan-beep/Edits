@@ -1,0 +1,18 @@
+{
+  "title": "WHAT OPUS CAN DO",
+  "items": [
+    {
+      "text": "Run an agent swarm",
+      "at": "@three"
+    },
+    {
+      "text": "Rebuild any website",
+      "at": "@absolutely"
+    },
+    {
+      "text": "Generate images",
+      "at": "@mind"
+    }
+  ],
+  "outAt": -0.4
+}

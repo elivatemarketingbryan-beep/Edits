@@ -40,6 +40,7 @@ engines/content-os/       Content OS (the one copy; open this folder to work in 
                           repurposing (one long-form into a week of clips, reel ideas and captions), content calendar
 engines/faceless/         faceless-sprite style: voiceover in, pixel-art Bryan + motion-graphic browser cards out (its own HyperFrames engine;
                           its CLAUDE.md is the flow, engine/docs/pages.md the 14 B-roll page kinds). Sprite in sprite/, renders in videos/
+engines/video-fx/         Claude Video FX: 17 Remotion effects for talking heads with a person cut-out (skills video-fx, fx-*)
 engines/brand-motion/     brand-motion style: logo animation + kinetic type + original score (Python + Skia; skill brand-motion-studio)
 studio/words-convert.mjs  a job's WhisperX words in the shape each add-on kit reads (Remotion captions, segments, brand-motion)
 engines/legacy-editor/    older editor; only its clipper, CapCut, Premiere, Resolve, thumbnail and music skills are used
@@ -178,6 +179,25 @@ says what changes here:
 
 They're Remotion, so the HyperFrames-first rule bends here: the skill is the tested look, and
 rebuilding it in HyperFrames is only worth it if one becomes an everyday effect.
+
+**Video FX** (`engines/video-fx`, hub skill `video-fx` + 17 `fx-<name>` skills): 17 tested
+effects for 9:16 talking heads on one installed Remotion engine, with a person cut-out so
+graphics sit behind the speaker. Pick by what's being said:
+
+| The speaker is... | Effects |
+|---|---|
+| naming one big idea | `fx-cover-story` (magazine masthead behind the head), `fx-glass-type` (3D glass word on the wall), `fx-digital-zoom` (punch-ins) |
+| listing steps | `fx-checklist` (glass card that types and ticks, `[STEP]` cues), `fx-ui-world` (chat app with a typed command) |
+| on growth, numbers, results | `fx-chart-grow` (line spikes behind them, `[NUMBER]` cues), `fx-pull-back-reveal`, `fx-paper-cut` |
+| on news, buzz, "everyone says" | `fx-headline-wall`, `fx-couch-wall` (wall of reel thumbnails) |
+| showing an app or result | `fx-phone-mockup`, `fx-frame-break` (pops out of a Reels frame), `fx-green-screen` |
+| at a hook, punchline or turn | `fx-vertigo` (dolly zoom), `fx-zoom-through-cut`, `fx-orbit`, `fx-doodle-boil` |
+
+2-4 effects per 30-60 s reel; each renders on its own range and `splice`s back into the
+full video. Words come from the job's transcript (`studio/words-convert.mjs video-fx`, passed
+with `--words`), captions get the brand purple (`"captions": {"accent": "#C4B5FD"}`); every
+skill's "Video Studio" block has the details. Sounds go on after, with `studio/sfx.mjs`.
+Works best on raw footage: an already-edited clip keeps its old captions and graphics underneath.
 
 ### Motion and design skills (every style)
 

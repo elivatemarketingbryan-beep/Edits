@@ -1,0 +1,65 @@
+{
+  "number": 6,
+  "id": "phone-mockup",
+  "compositionId": "PhoneMockup",
+  "title": "Phone Mockup",
+  "summary": "A floating iPhone beside the speaker shows an app conversation that types itself out.",
+  "description": "An iPhone (titanium frame, dynamic island, status bar) springs in beside the speaker's head with a slight 3D tilt and soft shadow, and the footage pans a little the other way so the face stays clear. Inside, a dark chat-assistant app plays out: a message, a typing indicator, a recommendation card with stat tiles, then a finger tap on the main button that turns it green and triggers a reply. Swap the chat for your own screenshot or screen recording with \"screen\".",
+  "needs": { "matte": true },
+  "options": {
+    "side": "\"auto\" (the side with more room), \"left\" or \"right\"",
+    "size": "phone width as a fraction of the frame width (0.3-0.4)",
+    "y": "\"auto\" (level with the head) or a 0-1 fraction for the phone's top edge",
+    "tilt": "3D tilt in degrees (0 = flat facing camera)",
+    "nudge": "\"auto\" pans the footage away from the phone so the face isn't covered, or a 0-0.12 fraction of the frame width (0 = no pan)",
+    "app.name": "app name in the header",
+    "app.status": "line under the app name (e.g. Online)",
+    "app.avatarColor": "avatar / accent colour",
+    "message": "the assistant's first message",
+    "card.label": "small tracked label on the card",
+    "card.title": "the card's headline (1-2 short lines)",
+    "card.tiles": "up to 3 stat tiles: [{\"label\": \"Ad 1\", \"value\": 0.9, \"color\": \"#6FD38A\"}] (value 0-1 = bar fill); [] hides them",
+    "button": "primary button label that gets tapped",
+    "secondary": "secondary text next to the button (\"\" hides it)",
+    "approvedLabel": "button label after the tap",
+    "reply": "reply bubble that appears after the tap (\"\" for none)",
+    "screen": "optional image or video file shown on the screen instead of the chat UI",
+    "inAt": "when the phone flies in (seconds or \"@word\")",
+    "messageAt": "\"auto\" or when the first message appears",
+    "cardAt": "\"auto\" (about 30% in) or when the card appears",
+    "tapAt": "\"auto\" (on words like approve/click/tap/done, else ~65% in) or when the button is tapped",
+    "outAt": "optional: when the phone flies back out (null = stays)"
+  },
+  "defaults": {
+    "side": "auto",
+    "size": 0.33,
+    "y": "auto",
+    "tilt": 12,
+    "nudge": "auto",
+    "app": { "name": "Ads Assistant", "status": "Online", "avatarColor": "#F5D547" },
+    "message": "Found one fix for you.",
+    "card": {
+      "label": "RECOMMENDATION",
+      "title": "Pause Ad 3, move the budget to Ad 1",
+      "tiles": [
+        { "label": "Ad 1", "value": 0.92 },
+        { "label": "Ad 2", "value": 0.55 },
+        { "label": "Ad 3", "value": 0.18 }
+      ]
+    },
+    "button": "Approve",
+    "secondary": "Not now",
+    "approvedLabel": "Approved",
+    "reply": "Done. Budget moved to Ad 1.",
+    "screen": null,
+    "inAt": 0.05,
+    "messageAt": "auto",
+    "cardAt": "auto",
+    "tapAt": "auto",
+    "outAt": null
+  },
+  "captions": {
+    "style": "pop",
+    "y": 0.72
+  }
+}

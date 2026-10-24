@@ -1,0 +1,65 @@
+{
+  "at": "@watching",
+  "cards": [
+    {
+      "type": "note",
+      "kicker": "Creator briefing",
+      "text": "Claude edits everyone's videos now"
+    },
+    {
+      "type": "search",
+      "text": "can claude edit videos"
+    },
+    {
+      "type": "tweet",
+      "name": "Agency owner",
+      "handle": "@agencyowner",
+      "text": "Dropped my clips in. Claude did the edit."
+    },
+    {
+      "type": "pov",
+      "text": "Claude edits your reel"
+    },
+    {
+      "type": "quote",
+      "text": "Claude cut my whole reel.",
+      "name": "@founder"
+    },
+    {
+      "type": "bubble",
+      "text": "wait, Claude edits videos??"
+    },
+    {
+      "type": "note",
+      "kicker": "Weekly digest",
+      "text": "Editors are worried about Claude"
+    },
+    {
+      "type": "notify",
+      "name": "Claude",
+      "text": "Your video is ready to post"
+    },
+    {
+      "type": "pov",
+      "text": "you never hire an editor again"
+    },
+    {
+      "type": "quote",
+      "text": "Your next video editor is Claude.",
+      "name": "@makesreels"
+    },
+    {
+      "type": "note",
+      "kicker": "Tech newsletter",
+      "text": "Claude can edit your videos now",
+      "highlight": "Claude",
+      "hero": true
+    }
+  ],
+  "captions": {
+    "emphasis": [
+      "Claude",
+      "editor"
+    ]
+  }
+}

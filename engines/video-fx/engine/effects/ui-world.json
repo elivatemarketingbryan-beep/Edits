@@ -1,0 +1,57 @@
+{
+  "number": 3,
+  "id": "ui-world",
+  "compositionId": "UiWorld",
+  "title": "UI World",
+  "summary": "A chat-app UI fills the top of the frame: clips drop in, a command types itself, and the speaker pokes out over it.",
+  "description": "The top of the frame becomes a cream chat app (starburst logo + app name, a dashed 'Drop files here' zone). Video clips fly in on arcs and drop into the zone, which turns into a message composer; a yellow tape label sticks on, then a slash command types itself out and the send button lights up and gets pressed. The footage slides down into the bottom panel and the speaker is cut out so their head breaks out over the app background. Captions sit on the speaker in bold caps.",
+  "needs": {
+    "matte": true
+  },
+  "options": {
+    "appName": "name next to the logo",
+    "accent": "logo / send-button colour",
+    "background": "app background colour",
+    "clips": "how many clip thumbnails fly in (1-6)",
+    "thumbs": "optional list of image/video files for the thumbnails (default: frames from your clip)",
+    "label": "text on the yellow tape label (\"\" to hide)",
+    "placeholder": "composer placeholder before typing",
+    "command": "what gets typed into the composer (e.g. /video-editor)",
+    "typeSpeed": "typing speed in characters per second",
+    "inAt": "when the UI slides in (seconds or \"@word\")",
+    "intro": "\"slide\" (app drops in from the top) or \"cut\" (appears instantly)",
+    "dropAt": "\"auto\" (on drop/upload/clip/file/video) or when the clips start flying in",
+    "labelAt": "\"auto\" (right after the clips land) or when the tape label sticks on",
+    "typeAt": "\"auto\" (on trigger/run/skill/command..., else halfway) or when typing starts",
+    "sendAt": "\"auto\" (just after typing ends) or when the send button is pressed",
+    "outAt": "optional: when the app slides away and the footage returns to full frame (null = stays)",
+    "split": "where the app background ends and the video panel starts, 0-1 of the height",
+    "shift": "\"auto\" (move the footage so the head sits under the composer) or a 0-1 fraction of the height to move it down"
+  },
+  "defaults": {
+    "appName": "Claude",
+    "accent": "#D97757",
+    "background": "#F5F2EA",
+    "clips": 5,
+    "thumbs": [],
+    "label": "RAW CLIPS",
+    "placeholder": "How can I help you today?",
+    "command": "/video-editor",
+    "typeSpeed": 20,
+    "inAt": 0,
+    "intro": "slide",
+    "dropAt": "auto",
+    "labelAt": "auto",
+    "typeAt": "auto",
+    "sendAt": "auto",
+    "outAt": null,
+    "split": 0.62,
+    "shift": "auto"
+  },
+  "captions": {
+    "style": "caps",
+    "size": 70,
+    "y": 0.83,
+    "emphasis": "none"
+  }
+}

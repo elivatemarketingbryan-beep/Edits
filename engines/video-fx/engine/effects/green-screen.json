@@ -1,0 +1,69 @@
+{
+  "number": 12,
+  "id": "green-screen",
+  "compositionId": "GreenScreen",
+  "title": "Green Screen",
+  "summary": "The speaker is cut out and dropped onto a new background (app UI, image or video).",
+  "description": "A virtual green screen with no green screen. The speaker is cut out of their room and set into a new background while the room dissolves away and they settle into place (lower centre, scaled so the bottom of the shot stays on the bottom edge). The default background is an animated productivity app: a purple band, a cream app window with a FOCUS countdown timer, a task list whose first task ticks off with a red NOW pill, a big serif line that sits behind the speaker's head, and a chat input that a cursor clicks and types into, over a blue band. Or use any image, video or gradient.",
+  "needs": {
+    "matte": true
+  },
+  "options": {
+    "background": "{\"type\": \"ui\"} (animated app, default); {\"type\": \"image\", \"src\": \"path.png\", \"fit\": \"cover\" | \"contain\", \"position\": \"50% 50%\", \"blur\": 0, \"brightness\": 1}; {\"type\": \"video\", \"src\": \"path.mp4\", same fit/position}; or {\"type\": \"gradient\", \"css\": \"linear-gradient(...)\"}. \"cover\" fills the frame and crops (a landscape image keeps only its middle third — use \"position\" like \"30% 50%\" to choose which part), \"contain\" shows the whole image over a blurred fill. For ui: optional \"topColor\" and \"bottomColor\" as [from, to] colour pairs",
+    "headline": "big serif line near the speaker's head (\"\" for none). On the app UI it sits behind the head like the reference; keep it to 2-4 short words there. On image/video/gradient backgrounds it sits just above the head, so up to ~24 characters fits",
+    "headlineColor": "headline colour on image/video/gradient backgrounds (the app UI always uses dark ink)",
+    "headlineOffset": "\"auto\" (behind the head on the UI, just above the head elsewhere) or a number: how far above the speaker's face centre the line sits, as a fraction of frame height (re-tune it if you change subject.scale)",
+    "app": "app name in the window's title bar",
+    "timer": "starting time of the FOCUS countdown, \"mm:ss\"",
+    "task": "task shown next to the timer",
+    "tasks": "three task-list rows; the first one is the active task (ticked, NOW pill), the rest are locked",
+    "input": "text the cursor types into the chat input",
+    "cursorAt": "when the cursor appears and heads to the input (seconds or \"@word\"); it clicks ~0.6s later and starts typing",
+    "accent": "accent colour (burst icon, active task, NOW pill, send button)",
+    "subject": "where the speaker lands: {\"y\": 0.57 (face height, 0-1), \"x\": 0.5, \"scale\": \"auto\" or a number}. \"auto\" picks the smallest scale that keeps the bottom of the shot on the bottom edge (about 0.5-0.7). A number is the size relative to the original footage (1 = unchanged) and drops that bottom anchoring. Seated-at-a-desk footage: use about {\"y\": 0.56, \"scale\": 0.8} so the desk edge and arm cut-offs fall below the frame",
+    "at": "when the switch to the new background starts (seconds or \"@word\")",
+    "outAt": "optional: when it switches back to the real room (null = stays; it switches back automatically if the effect window ends before the clip)",
+    "intro": "\"morph\" (the real room dissolves while the speaker glides into place, so the room is visible for the first few frames) or \"cut\" (instant switch; use it when the room must never show)",
+    "sideFade": "0-0.15: fades the cut-out near the footage's left/right edges (hides the straight edge of a speaker who fills the frame)",
+    "bottomFade": "0-0.9: fades the lower body into the background, measured as a share of the face-to-bottom distance (hides the diagonal cut a desk leaves). 0 = off. On light backgrounds keep it at or below ~0.55 or the torso turns to fog",
+    "shadow": "soft shadow behind the speaker (true/false)",
+    "captionPlacement": "\"auto\" (just above the headline) or \"keep\" (use captions.y)",
+    "headlineSize": "headline font size in px at 1080 wide (84 default; 60-70 for longer lines)"
+  },
+  "defaults": {
+    "background": {
+      "type": "ui"
+    },
+    "headline": "Everything else waits.",
+    "headlineColor": "#FFFFFF",
+    "headlineOffset": "auto",
+    "app": "Claude",
+    "timer": "49:57",
+    "task": "Write the sales page",
+    "tasks": [
+      "Write the sales page",
+      "Record 2 reels",
+      "Send the newsletter"
+    ],
+    "input": "What should I work on next?",
+    "cursorAt": 1.1,
+    "accent": "#C9472F",
+    "subject": {
+      "y": 0.57,
+      "x": 0.5,
+      "scale": "auto"
+    },
+    "at": 0,
+    "outAt": null,
+    "intro": "morph",
+    "sideFade": 0.08,
+    "bottomFade": 0.5,
+    "shadow": true,
+    "captionPlacement": "auto",
+    "headlineSize": 84
+  },
+  "captions": {
+    "style": "box",
+    "size": 70
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "side": "left",
+  "app": {
+    "name": "Repo Scout",
+    "status": "Watching GitHub",
+    "avatarColor": "#8AB4FF"
+  },
+  "message": "Found an open-source course platform.",
+  "card": {
+    "label": "NEW REPO",
+    "title": "Gumroad is now fully open source",
+    "tiles": [
+      {
+        "label": "Stars",
+        "value": 0.95,
+        "color": "#8AB4FF"
+      },
+      {
+        "label": "Forks",
+        "value": 0.6,
+        "color": "#8AB4FF"
+      },
+      {
+        "label": "Issues",
+        "value": 0.25,
+        "color": "#E5706B"
+      }
+    ]
+  },
+  "button": "Download",
+  "secondary": "Later",
+  "approvedLabel": "Cloned",
+  "reply": "Cloned to ~/course-platform",
+  "cardAt": "@course-0.3",
+  "tapAt": "@download"
+}

@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "style": "pop",
+  "y": 0.7,
+  "emphasis": "auto",
+  "accent": "#FFE14D",
+  "color": "#FFFFFF",
+  "size": 72,
+  "maxWords": 4,
+  "maxChars": 22,
+  "uppercase": false
+}

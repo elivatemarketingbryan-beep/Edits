@@ -1,0 +1,18 @@
+{
+  "punches": [
+    {
+      "at": "@thousands",
+      "scale": 1.28
+    },
+    {
+      "at": "@editing",
+      "scale": 1
+    }
+  ],
+  "captions": {
+    "emphasis": [
+      "thousands",
+      "editing"
+    ]
+  }
+}

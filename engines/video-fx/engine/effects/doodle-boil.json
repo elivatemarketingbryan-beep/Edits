@@ -1,0 +1,61 @@
+{
+  "number": 14,
+  "id": "doodle-boil",
+  "compositionId": "DoodleBoil",
+  "title": "Doodle Boil",
+  "summary": "A hand-drawn outline boils around the speaker while doodles draw themselves on.",
+  "description": "The footage plays untouched while a white chalk outline traces the speaker's silhouette, redrawn every few frames so it 'boils' like hand-drawn animation. Doodles (heart, clapperboard, frames, stars, arrows...) draw themselves on next to the head, get a pink or yellow scribble fill, and boil too. In auto mode a new doodle lands on each emphasised word, and a newer doodle in the same spot replaces the older one.",
+  "needs": { "matte": true, "contours": true },
+  "options": {
+    "doodles": "\"auto\" (a sequence timed to the emphasised words) or a list of doodles: {\"type\", \"slot\" or \"x\"/\"y\", \"at\", \"until\", \"size\", \"color\", \"fill\", \"accent\", \"rotate\"}",
+    "doodles[].type": "heart, clapper, frame, square, star, arrow, sparkle, crown, swirl or circle",
+    "doodles[].slot": "where it sits relative to the head: left, right, topLeft, topRight, aboveHead (a newer doodle in the same slot replaces the older one)",
+    "doodles[].x / y": "instead of a slot: centre position as 0-1 fractions of the frame",
+    "doodles[].at": "when it starts drawing (seconds or \"@word\")",
+    "doodles[].until": "optional: when it disappears (otherwise it stays, or until replaced in its slot)",
+    "doodles[].size": "width as a fraction of the frame width (default 0.15-0.2)",
+    "doodles[].color": "line colour (default white chalk)",
+    "doodles[].fill": "scribble fill colour, or null for no fill",
+    "doodles[].accent": "colour of the spark lines / clapper stripes",
+    "doodles[].rotate": "tilt in degrees",
+    "minGap": "auto mode: minimum seconds between doodles",
+    "drawFrames": "frames each doodle takes to draw on",
+    "fillDelay": "frames between the outline finishing and the scribble fill starting",
+    "boilEvery": "redraw the wobble every N frames (2 = fast boil, 4 = slow)",
+    "chalk": "chalky, speckled line texture (false = clean lines)",
+    "shadow": "opacity of the soft dark shadow under the lines (helps on bright walls)",
+    "outline.enabled": "draw the outline around the speaker",
+    "outline.color": "outline colour",
+    "outline.width": "outline thickness in px (at 1080 wide)",
+    "outline.offset": "gap between the body and the line in px",
+    "outline.wobble": "how much the line wanders in px",
+    "outline.double": "add a thinner second pass for a sketchy double stroke",
+    "outline.drawOn": "trace the outline on at the start",
+    "outline.at": "when the outline starts tracing",
+    "outline.drawFrames": "frames the trace takes"
+  },
+  "defaults": {
+    "doodles": "auto",
+    "minGap": 0.9,
+    "drawFrames": 10,
+    "fillDelay": 3,
+    "boilEvery": 3,
+    "chalk": true,
+    "shadow": 0.35,
+    "outline": {
+      "enabled": true,
+      "color": "#FFFFFF",
+      "width": 10,
+      "offset": 10,
+      "wobble": 3,
+      "double": true,
+      "drawOn": true,
+      "at": 0,
+      "drawFrames": 14
+    }
+  },
+  "captions": {
+    "style": "pop",
+    "y": 0.76
+  }
+}

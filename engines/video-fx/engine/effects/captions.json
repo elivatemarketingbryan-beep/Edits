@@ -1,0 +1,12 @@
+{
+  "number": 0,
+  "id": "captions",
+  "compositionId": "CaptionsOnly",
+  "title": "Captions only",
+  "summary": "Plain footage with the pack's word-by-word captions (for the stretches between effects).",
+  "description": "No effect: the footage plays untouched with the same caption system the effects use, so a spliced reel has consistent captions from start to finish.",
+  "needs": {},
+  "options": {},
+  "defaults": {},
+  "captions": {}
+}

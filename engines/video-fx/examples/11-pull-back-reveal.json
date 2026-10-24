@@ -1,0 +1,13 @@
+{
+  "pullAt": 0.3,
+  "filename": "daily-update.mp4",
+  "skill": "video-editor",
+  "steps": [
+    "Transcribed the take",
+    "Cut the pauses",
+    "Added captions",
+    "Graded the colour",
+    "Rendered {frames} frames"
+  ],
+  "returnAt": -0.5
+}

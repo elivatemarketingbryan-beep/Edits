@@ -1,0 +1,5 @@
+# Python side of the Claude Video FX engine (transcription + person matting).
+faster-whisper==1.2.1
+onnxruntime>=1.17,<2
+opencv-python-headless>=4.8
+numpy>=1.24

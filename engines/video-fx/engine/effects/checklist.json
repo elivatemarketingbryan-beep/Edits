@@ -1,0 +1,43 @@
+{
+  "number": 7,
+  "id": "checklist",
+  "compositionId": "Checklist",
+  "title": "Checklist",
+  "summary": "A frosted-glass checklist card whose steps type in and tick off as they are said.",
+  "description": "A dark frosted-glass card with a tracked header (ALL YOU NEED TO DO), an 'N of 3' counter and a segmented yellow progress bar. Each step types itself in when it is spoken, then its circle fills yellow with a check and a little burst, the counter ticks up and its bar segment fills. The card places itself above the speaker's head when there is room, otherwise over the chest, and moves the captions out of its way.",
+  "needs": { "matte": true },
+  "options": {
+    "title": "small header text on the card",
+    "items": "\"auto\" (3 short steps pulled from the transcript) or a list. Each item is a string, or {\"text\": \"Drop your clips\", \"at\": \"@drop\", \"doneAt\": \"@trigger\"}. \"at\" = when it types in (default: when its first key word is spoken), \"doneAt\" = when it ticks (default: checkAfter seconds after typing finishes).",
+    "count": "how many items to generate when items is \"auto\"",
+    "inAt": "when the card appears (seconds or \"@word\"); it always appears a moment before the first item",
+    "outAt": "optional: when the card flies away (null = stays to the end)",
+    "checkAfter": "seconds between an item finishing typing and its tick",
+    "typeSpeed": "typing speed in characters per second",
+    "position": "\"auto\" (above the head if there is room, else over the chest), \"top\", \"bottom\", or a 0-1 fraction for the card's top edge",
+    "width": "card width as a fraction of the frame width",
+    "accent": "colour of the ticks, progress bar and glow",
+    "doneTextColor": "text colour of finished items",
+    "tilt": "3D tilt of the card in degrees (0 = flat)",
+    "captionsAvoid": "move the captions above/below the card if they would overlap it"
+  },
+  "defaults": {
+    "title": "ALL YOU NEED TO DO",
+    "items": "auto",
+    "count": 3,
+    "inAt": 0.1,
+    "outAt": null,
+    "checkAfter": 0.3,
+    "typeSpeed": 32,
+    "position": "auto",
+    "width": 0.84,
+    "accent": "#F5E15A",
+    "doneTextColor": "#F1E7A6",
+    "tilt": 6,
+    "captionsAvoid": true
+  },
+  "captions": {
+    "style": "pop",
+    "y": 0.72
+  }
+}
