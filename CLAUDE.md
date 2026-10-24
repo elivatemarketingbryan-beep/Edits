@@ -38,6 +38,8 @@ engines/split-screen/     Remotion kit (was "Split-Screen-Editor"): runs only if
 engines/content-os/       Content OS (the one copy; open this folder to work in it directly):
                           research, scripts (written per format, with cue tags), voice, brand, carousels, descriptions, Notion,
                           repurposing (one long-form into a week of clips, reel ideas and captions), content calendar
+engines/faceless/         faceless-sprite style: voiceover in, pixel-art Bryan + motion-graphic browser cards out (its own HyperFrames engine;
+                          its CLAUDE.md is the flow, engine/docs/pages.md the 14 B-roll page kinds). Sprite in sprite/, renders in videos/
 engines/legacy-editor/    older editor; only its clipper, CapCut, Premiere, Resolve, thumbnail and music skills are used
 docs/editor-pipeline.md   the root pipeline's full instructions and lab notes (was Claude Editor's CLAUDE.md)
 docs/APP-HANDOFF.md       the user's set workflow for cutting onto Premiere / Resolve / Final Cut / CapCut (the rough-cut-only tool)
@@ -77,6 +79,9 @@ Score every `kind: "style"` entry in `styles/catalog.json` against the video, us
   depth-ui; do vs don't → this-vs-that; long list → rapid-list; story → personal-reel,
   natural-story; proof and screenshots → yap-and-show, visual-essay; tips →
   tips-breakdown. Each entry's `bestFor` lists its cues.
+- **Audio only** (the source is mp3/wav/m4a, or a video with no person on screen): it's a
+  voiceover, so faceless-sprite goes first; only styles that need no presenter footage
+  (faceless-sprite, fitted-captions, cinematic-type, visual-essay) can rank.
 - **What the footage allows:** aspect (9:16 vs 16:9; a long 16:9 source also suits
   youtube-clips and coaching-call-clips), length (over 5 min → clip styles), headroom
   above the head (`needsHeadroom`), a clean-enough edge for a person matte
@@ -200,6 +205,22 @@ Read the style's `engine` in the catalog:
   than transcribing again. Each clip is then styled per the guide.
 - **content-os**: video-to-content (and anything about scripts, hooks, research,
   carousels, descriptions, posting). Its skills run from the Content OS folder (path above).
+- **faceless** (`engines/faceless`): the faceless-sprite style. The input is a **voiceover**
+  (audio only), not camera footage: an audio file dropped in the studio ranks this style
+  first, and a Content OS script with Edit style "Faceless sprite" is read as a voiceover by
+  Bryan's ElevenLabs clone. Follow `engines/faceless/CLAUDE.md` "Making a video", running
+  every command from `engines/faceless` (`npm --prefix engine run new -- <voiceover>
+  --name <job id>`, write `videos/<id>/plan.json`, `npm --prefix engine run make -- <id>`).
+  Its `new` step trims pauses before transcribing, so its own transcript is the job's one
+  transcript (the trimmed audio no longer matches a WhisperX one); copy
+  `videos/<id>/words.json` into the job folder. It places its own sounds and music, so skip
+  `studio/sfx.mjs`; review notes are applied by editing `plan.json` and rerunning `make`.
+  Copy `videos/<id>/<id>.mp4` to the job's `preview.mp4` / `final.mp4`. Accent, handle and
+  CTA keyword live in `engines/faceless/brand.json`. Needs the one-time sprite
+  (`engines/faceless/guides/make-your-sprite.md`, then `npm --prefix engine run sprite`).
+  Its page library (stat tiles, charts, chats, posts, docs, tables with highlight, ring,
+  click, counter and zoom beats) is reusable for B-roll cards in other styles: build a
+  card there and render it as an overlay.
 
 `status: "draft"` styles have no template yet: build them from the STYLE-GUIDE section
 with the editor engine, and once the user approves a final, save what worked as that

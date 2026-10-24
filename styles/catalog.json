@@ -715,6 +715,34 @@
       ]
     },
     {
+      "id": "faceless-sprite",
+      "name": "Faceless sprite",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "faceless",
+      "status": "draft",
+      "summary": "No camera: your voiceover, a pixel-art you, and motion-graphic browser cards on every beat.",
+      "bestFor": [
+        "voiceover only, no footage",
+        "explaining a tool, number or process",
+        "days you can't film"
+      ],
+      "recipe": [
+        "voiceover in (ElevenLabs voice clone, or a phone recording); engines/faceless/CLAUDE.md is the full flow",
+        "npm --prefix engines/faceless/engine run new -- <voiceover> --name <slug>",
+        "write plan.json from engines/faceless/engine/docs/planning.md + pages.md",
+        "npm --prefix engines/faceless/engine run make -- <slug>"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#faceless-sprite",
+      "needsMatte": false,
+      "scriptShape": "explainer",
+      "alsoScriptShape": [
+        "list",
+        "proof"
+      ]
+    },
+    {
       "id": "ear-to-ear-captions",
       "name": "Ear to ear captions",
       "aspect": "16:9",

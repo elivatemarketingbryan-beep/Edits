@@ -32,7 +32,7 @@ words you say on camera.
 ## The 8 shapes
 
 ### 1. Explainer
-Formats: business-reel, explainer-panel, glass-explainer, split-reel, depth-ui.
+Formats: business-reel, explainer-panel, glass-explainer, split-reel, depth-ui, faceless-sprite.
 ```
 Hook: the problem in one line                         [HOOK]
 Why it happens (one line)
@@ -42,6 +42,13 @@ What to do next                                       [CTA]
 ```
 Rules: one idea per video; exactly 3 steps (2 or 4 only if the content truly needs it);
 every step names something that can be drawn.
+
+**Faceless sprite** (also takes List and Proof scripts): the script becomes a **voiceover**, not a
+filming script. Write it to be read by Bryan's ElevenLabs voice clone: 30-60 s, short sentences,
+every claim something a browser card can show (a post, a stat, a chart, a doc, a site), names of
+tools and products spelled exactly, and end on "comment KEYWORD" for the CTA lockup. Cue tags work
+the same; `[BROLL: ...]` names the card's page ("stat: 47 leads in 30 days", "chat: the prompt").
+The Notion page skips Filming: once the voiceover file exists it goes straight to Video Studio.
 
 ### 2. List / ranking
 Formats: ranking, top-5-ranking, rapid-list, if-then-grid.

@@ -1,0 +1,72 @@
+{
+  "title": "Claude just killed motion designers",
+  "scenes": [
+    {
+      "at": 0, "layout": "hook",
+      "headline": ["Claude Just Killed", "Motion Designers"],
+      "card": { "url": "prompt-motion.com/showreel", "kind": "hero", "brand": "Prompt Motion", "nav": ["Gallery", "Prompts", "Skills"], "headline": "Motion graphics, [[made|made by Claude]]", "sub": "230 real videos, each with the exact prompt behind it.", "cta": "Browse the library", "theme": "dark" }
+    },
+    {
+      "at": 5, "layout": "proof",
+      "card": { "url": "x.com/promptmotion/status/2107", "kind": "post", "platform": "x", "name": "Prompt Motion", "handle": "@promptmotion", "verified": true,
+        "text": "I built a [[lib|growing library of motion graphics made with Claude]], each shown next to the [[prompt|prompt or skill that made it]].\n\n230 so far, all credited to their creators.",
+        "stats": { "replies": "156", "reposts": "1.3K", "likes": "9.9K", "views": "1.2M" } },
+      "beats": [ { "at": 7, "fx": "highlight", "target": "lib" }, { "at": 12, "fx": "highlight", "target": "prompt" } ]
+    },
+    {
+      "at": 16, "layout": "reveal", "label": "It's Called",
+      "card": { "url": "prompt-motion.com", "kind": "hero", "brand": "Prompt Motion", "headline": "[[name|Prompt Motion]]", "sub": "A collection of motion videos made with Claude, with the prompts that made them.", "cta": "Explore" },
+      "beats": [ { "at": 18, "fx": "highlight", "target": "name" } ]
+    },
+    {
+      "at": 20, "layout": "split",
+      "card": { "url": "prompt-motion.com/blog", "kind": "article", "site": "Prompt Motion", "kicker": "Research", "title": "Prompts: what [[n|230]] real examples show",
+        "body": ["Every one of them was [[made|made with Claude]], and each was copied dozens of times.", "The results ranged from launch videos to animated charts."] },
+      "beats": [ { "at": 21, "fx": "counter", "target": "n", "value": "230", "label": "real examples" }, { "at": 25, "fx": "highlight", "target": "made" } ]
+    },
+    {
+      "at": 28, "layout": "proof",
+      "card": { "url": "prompt-motion.com/p/showreel-df17a2", "kind": "doc", "title": "Claude motion designer showreel",
+        "blocks": [ { "type": "callout", "text": "A stronger version of this prompt" }, { "type": "p", "text": "[[prompt|Make a dynamic 15-second motion graphics video that shows what an incredible motion designer you are. It's your showreel for a résumé. Go all out.]]" }, { "type": "p", "text": "Model: [[model|Opus 5.5]]   Effort: Max" } ] },
+      "beats": [ { "at": 33, "fx": "highlight", "target": "prompt" }, { "at": 37, "fx": "ring", "target": "model" } ]
+    },
+    {
+      "at": 39, "layout": "split",
+      "card": { "url": "prompt-motion.com", "kind": "app", "title": "Prompt Motion", "filters": ["Prompt", "Skill"],
+        "chips": [ { "label": "Launch", "count": 41 }, { "label": "Product UI", "count": 100 }, { "label": "Demos", "count": 22 }, { "label": "Phone", "count": 22 }, { "label": "Charts", "count": 33 }, { "label": "Kinetic type", "count": 97 } ],
+        "grid": [ { "label": "Showreel", "color": "#111" }, { "label": "Launch", "color": "#ff5a1f" }, { "label": "Charts", "color": "#f3f0ea" }, { "label": "Phone", "color": "#1d4ed8" } ] },
+      "beats": [
+        { "at": 39, "fx": "click", "target": "chip1" }, { "at": 41, "fx": "click", "target": "chip2" }, { "at": 43, "fx": "click", "target": "chip3" },
+        { "at": 44, "fx": "click", "target": "chip4" }, { "at": 49, "fx": "click", "target": "chip5" },
+        { "at": 53, "fx": "swipe", "card": { "url": "prompt-motion.com/p/launch-remake", "kind": "chat", "app": "assistant", "title": "Launch video remake",
+          "messages": [ { "role": "user", "text": "Ask me for: [[product|my product name]], a logo, [[brand|my brand colours]] and the one-line pitch." }, { "role": "ai", "text": "Send them over and I'll rebuild the launch video in your brand." } ] } }
+      ]
+    },
+    { "at": 54, "layout": "face" },
+    {
+      "at": 60, "layout": "split",
+      "card": { "url": "prompt-motion.com/p/launch-remake", "kind": "doc", "title": "Prompt",
+        "blocks": [ { "type": "h", "text": "<inputs>" }, { "type": "p", "text": "Ask me for: [[product|my product name]], a logo (or let me pull it), [[brand|my brand colours]], the one-line thing a user types into the box, and two feature names." } ] },
+      "beats": [ { "at": 60, "fx": "zoom", "target": "brand", "scale": 1.45 }, { "at": 64, "fx": "highlight", "target": "brand" }, { "at": 66, "fx": "highlight", "target": "product" } ]
+    },
+    {
+      "at": 67, "layout": "compare",
+      "cards": [
+        { "label": "original", "kind": "hero", "brand": "Taskly", "headline": "Hands on AI", "sub": "Your agent for real work.", "cta": "Try it" },
+        { "label": "Frame by Frame remake", "kind": "hero", "brand": "Frame by Frame", "headline": "Hands on AI", "sub": "Your agent for real work.", "cta": "Try it" }
+      ],
+      "beats": [ { "at": 78, "fx": "swap", "cards": [
+        { "kind": "chat", "app": "assistant", "title": "Original", "messages": [ { "role": "user", "text": "Tell me about the pyramids" } ] },
+        { "kind": "chat", "app": "assistant", "title": "Remake", "messages": [ { "role": "user", "text": "Make a launch video for my app" } ] } ] } ]
+    },
+    { "at": 85, "layout": "cta" }
+  ],
+  "captions": {
+    "accent": [3, 4, 9, 35, 48, 53, 64, 66, 75, 79, 83, 84],
+    "white": [79, 83, 84],
+    "glitch": [0, 27, 68],
+    "verb": [70],
+    "stretch": [39, 43, 60]
+  },
+  "cta": { "at": 85, "verb": "comment", "keyword": "Claude" }
+}

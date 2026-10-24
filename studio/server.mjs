@@ -10,7 +10,7 @@ const PUBLIC = path.join(ROOT, 'studio', 'public');
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json',
   '.mp4': 'video/mp4', '.mov': 'video/quicktime', '.webm': 'video/webm', '.m4v': 'video/mp4', '.jpg': 'image/jpeg', '.png': 'image/png',
   '.md': 'text/markdown; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.srt': 'text/plain; charset=utf-8', '.fcpxml': 'application/xml' };
-const VIDEO_EXT = /\.(mp4|mov|m4v|webm|mkv)$/i;
+const VIDEO_EXT = /\.(mp4|mov|m4v|webm|mkv|mp3|wav|m4a)$/i;   // audio = a voiceover for the faceless-sprite style
 
 const send = (res, code, body, type = 'application/json') => {
   res.writeHead(code, { 'Content-Type': type, 'Cache-Control': 'no-store' });
@@ -63,7 +63,7 @@ const routes = [
   // Drop a video: raw body, filename in a header.
   ['POST', /^\/api\/upload$/, (req, res) => {
     const name = path.basename(decodeURIComponent(req.headers['x-filename'] || 'video.mp4'));
-    if (!VIDEO_EXT.test(name)) return send(res, 400, { error: 'That file type isn\'t a video. Use mp4, mov, m4v, webm or mkv.' });
+    if (!VIDEO_EXT.test(name)) return send(res, 400, { error: 'That file type isn\'t a video or a voiceover. Use mp4, mov, m4v, webm, mkv, mp3, wav or m4a.' });
     const id = newId(name);
     const dir = jobDir(id);
     fs.mkdirSync(dir, { recursive: true });

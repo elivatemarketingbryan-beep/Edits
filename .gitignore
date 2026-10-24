@@ -41,3 +41,16 @@ Thumbs.db
 desktop.ini
 .cache*/
 *.log
+
+# Faceless engine: installs, caches, the user's sprite images, voiceovers and renders
+engines/faceless/engine/.cache/
+engines/faceless/engine/bin/
+engines/faceless/sprite/raw/*
+!engines/faceless/sprite/raw/README.md
+engines/faceless/voiceovers/*
+!engines/faceless/voiceovers/README.md
+engines/faceless/videos/*
+!engines/faceless/videos/README.md
+engines/faceless/sprite/poses/
+engines/faceless/sprite/sprite.json
+engines/faceless/sprite/preview.png

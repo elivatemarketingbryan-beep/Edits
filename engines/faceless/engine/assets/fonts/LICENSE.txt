@@ -1,0 +1,4 @@
+Inter (Rasmus Andersson) and EB Garamond (Georg Duffner, Octavio Pardo) are licensed
+under the SIL Open Font License 1.1: https://openfontlicense.org
+Files downloaded from Google Fonts (latin subset).
+JetBrains Mono (The JetBrains Mono Project Authors) is licensed under the SIL Open Font License 1.1: https://openfontlicense.org. JetBrainsMono-Regular.woff2 is the latin subset (copied from the hyperframes package, originally Google Fonts).

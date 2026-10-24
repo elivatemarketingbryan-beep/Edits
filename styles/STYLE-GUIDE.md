@@ -69,7 +69,7 @@ Style flavours (on top of the rules above):
 - **Dense** (graphics on every beat): business-reel, explainer-panel, glass-explainer,
   split-reel, depth-ui, ranking, top-5-ranking, rapid-list, if-then-grid,
   this-vs-that, tips-breakdown, educational-youtube, screen-tutorial, youtube-clips,
-  coaching-call-clips.
+  coaching-call-clips, faceless-sprite (its engine places them itself).
 - **Light** (cuts and the few things that appear): personal-reel, visual-essay,
   broll-stacked-text, image-cluster, cutout-backdrop, cutout-grid, tiktok-style,
   yap-and-show, clone-versus, dual-role-dialogue, split-screen-lesson,
@@ -294,6 +294,25 @@ and tips-breakdown follow `apple-liquid-glass`.
 - Real room footage, warm and calm. **Pictures, quote cards and clips appear around and
   partly behind the head** (person matte), a few at a time.
 - Small, quiet chest captions.
+
+### faceless-sprite: Faceless sprite
+- **No camera.** The voice is a voiceover (Bryan's ElevenLabs clone, or a phone recording); the
+  on-screen "presenter" is a **pixel-art sprite of Bryan** that lip-syncs and gestures, in a small
+  room panel at the bottom or full screen for direct instructions.
+- Top of frame: a **browser card** whose page literally shows what's being said (post, article,
+  chat, app gallery, list, stat tiles, chart, code/terminal, landing page, search results, pricing
+  table, Notion-style doc, or a real capture). Something moves on it every 0.5-1 s: highlight
+  sweeps, rings, cursor clicks, counters rolling up, zooms, scrolls, swipes to a new card.
+- Scene types alternate light and dark: hook (title + red/accent box) → proof (dark, tall card) →
+  reveal (white, "It's called...") → split (card + captions + sprite) → compare (two cards) → face
+  (full-screen sprite, 1-2 per 30 s) → CTA lockup (*comment* over **KEYWORD**).
+- Captions 1-3 words, lowercased; payoff words in serif italic filled with the accent gradient;
+  brand and tool names glitch in; one promise verb stretches.
+- Jump-cut voice pacing: pauses trimmed to under ~0.14 s, leveled to -14 LUFS.
+- Accent comes from `engines/faceless/brand.json` (purple #8B5CF6); the dot-grid backgrounds and
+  every curve and timing are the engine's (`engines/faceless/style/HOUSE_STYLE.md`, `STYLE_BIBLE.md`).
+- **The engine places its own sounds** (whooshes, risers, swells, ticks and a music bed timed to
+  the plan); don't run `studio/sfx.mjs` on top.
 
 ---
 

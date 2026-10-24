@@ -1,0 +1,38 @@
+{
+  "name": "faceless-engine",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "status": "node scripts/status.mjs",
+    "sprite": "node scripts/prepare-sprite.mjs",
+    "new": "node scripts/new-video.mjs",
+    "build": "node scripts/build.mjs",
+    "render": "node scripts/render.mjs",
+    "make": "node scripts/make.mjs",
+    "package": "node scripts/package.mjs",
+    "capture": "node scripts/capture.mjs"
+  },
+  "dependencies": {
+    "@ffprobe-installer/ffprobe": "2.1.2",
+    "ffmpeg-static": "5.3.0",
+    "gsap": "3.14.2",
+    "hyperframes": "0.8.185",
+    "sharp": "0.34.4",
+    "puppeteer-core": "25.15.0"
+  },
+  "allowScripts": {
+    "ffmpeg-static": true,
+    "esbuild": true,
+    "sharp": true,
+    "@ffprobe-installer/darwin-arm64": true,
+    "@ffprobe-installer/darwin-x64": true,
+    "@ffprobe-installer/win32-x64": true,
+    "@ffprobe-installer/win32-ia32": true,
+    "@ffprobe-installer/linux-x64": true,
+    "@ffprobe-installer/linux-arm64": true
+  }
+}
