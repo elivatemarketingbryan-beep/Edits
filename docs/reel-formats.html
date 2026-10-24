@@ -1,0 +1,191 @@
+<title>Reel Formats</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Playfair+Display:ital,wght@1,400;1,600&display=swap">
+<style>
+  /* Layout: a contact sheet of 9:16 phone mockups, one per reel format, in the brand's purple on black.
+     Single dark look on purpose (it's the brand), so no light theme. */
+  :root {
+    --bg: #07060a; --panel: #121019; --line: #262234; --fg: #f3f1f8; --muted: #9a95ab;
+    --accent: #8b5cf6; --accent-light: #c4b5fd; --accent-deep: #4c1d95; --red: #e5484d; --green: #22a06b;
+    --skin: #cfc9d8; --sans: "Inter", "Segoe UI", system-ui, sans-serif; --serif: "Playfair Display", Georgia, serif;
+    color-scheme: dark;
+  }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); margin: 0; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-block: 40px 64px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  header { display: grid; gap: 10px; margin-bottom: 28px; max-width: 70ch; }
+  h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 900; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+  h1 em { font-family: var(--serif); font-weight: 400; color: var(--accent-light); }
+  header p { color: var(--muted); margin: 0; line-height: 1.55; }
+  .key { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+  .key span { display: inline-flex; gap: 6px; align-items: center; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 26px 20px; }
+  figure { margin: 0; display: grid; gap: 10px; align-content: start; min-width: 0; }
+  figcaption { display: grid; gap: 3px; }
+  figcaption b { font-size: 15px; display: flex; gap: 8px; align-items: center; }
+  figcaption small { color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+  .n { color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 600; font-size: 12px; }
+  .badge { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 99px; }
+  .ready { background: #123326; color: #6fd6a4; }
+  .draft { background: var(--panel); color: var(--muted); border: 1px solid var(--line); }
+
+  /* Phone */
+  .ph { position: relative; aspect-ratio: 9 / 16; max-width: 100%; border-radius: 18px; overflow: hidden; background: #000;
+    border: 1px solid var(--line); box-shadow: 0 20px 40px rgba(0,0,0,.45); container-type: inline-size; isolation: isolate; }
+  .ph * { position: absolute; }
+  .ph .t *, .ph .pill * { position: static; }   /* words inside a caption flow inline, keeping their spaces */
+  .room { inset: 0; background: linear-gradient(180deg, #3b3a44 0%, #2a2931 60%, #1f1e25 100%); }
+  .room.warm { background: linear-gradient(180deg, #e9dccd 0%, #c9a98a 55%, #8a5a3c 100%); }
+  .dots { inset: 0; background-image: radial-gradient(rgba(255,255,255,.10) 1px, transparent 1px); background-size: 9px 9px; }
+  .glow { left: 5%; right: 5%; height: 45%; background: radial-gradient(ellipse, color-mix(in srgb, var(--accent) 45%, transparent), transparent 65%); }
+  /* Presenter silhouette: head + shoulders, sized by --s and placed by left/bottom */
+  .p { --s: 1; width: calc(64% * var(--s)); aspect-ratio: 1 / 1.15; left: 50%; bottom: 0; transform: translateX(-50%); }
+  .p::before { content: ""; position: absolute; left: 50%; top: 0; width: 38%; aspect-ratio: 1 / 1.2; transform: translateX(-50%); border-radius: 50%; background: var(--skin); }
+  .p::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 58%; border-radius: 48% 48% 0 0; background: var(--skin); }
+  .p.dim { opacity: .35; }
+  .p.gray { filter: grayscale(1) brightness(.85); }
+  .t { font-family: var(--sans); font-weight: 800; color: #fff; text-align: center; left: 6%; right: 6%; line-height: 1.1; text-shadow: 0 2px 6px rgba(0,0,0,.6); }
+  .s { font-family: var(--serif); font-style: italic; font-weight: 400; }
+  .acc { color: var(--accent-light); }
+  .box { background: #fff; color: #111; padding: 0 .3em; text-shadow: none; position: static; display: inline; }
+  .card { border-radius: 6px; background: rgba(28,25,38,.92); border: 1px solid rgba(255,255,255,.12); }
+  .wcard { border-radius: 6px; background: #fff; }
+  .img { border-radius: 5px; }
+  .i1 { background: linear-gradient(135deg, #f6d6e8, #c9b8f2); } .i2 { background: linear-gradient(135deg, #bfe3f0, #8fb3e8); }
+  .i3 { background: linear-gradient(135deg, #f3e3c8, #e8a77c); } .i4 { background: linear-gradient(135deg, #b8e0c4, #6fa88a); }
+  .bar { height: 7%; left: 10%; right: 10%; border-radius: 4px; }
+  .cell { width: 7%; aspect-ratio: 1; border-radius: 2px; background: rgba(255,255,255,.1); }
+  .cell.on { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+  .pill { border-radius: 99px; background: #fff; color: #111; font-weight: 800; font-size: 6cqw; padding: .25em .7em; white-space: nowrap; left: 50%; transform: translateX(-50%); }
+  .panel { left: 6%; right: 6%; border-radius: 9px; overflow: hidden; border: 1px solid rgba(255,255,255,.14); }
+  .tag { font: 700 4.6cqw var(--sans); color: var(--muted); letter-spacing: .05em; text-transform: uppercase; }
+  /* Playable previews: each rendered video sits over its drawn mockup (the mockup shows until it loads). */
+  .ph-wrap { position: relative; }
+  .ph-wrap video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 18px; background: transparent; }
+  .reel { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 24px; align-items: center; margin-bottom: 36px;
+    padding: 20px; border-radius: 18px; background: var(--panel); border: 1px solid var(--line); }
+  .reel video { width: 100%; aspect-ratio: 9 / 16; border-radius: 14px; background: #000; }
+  .reel h2 { margin: 0 0 8px; font-size: 22px; font-weight: 800; }
+  .reel p { margin: 0; color: var(--muted); line-height: 1.55; max-width: 52ch; }
+  @media (max-width: 640px) { .reel { grid-template-columns: 1fr; } .reel video { max-width: 300px; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .pop { animation: pop 2.8s ease-out infinite both; }
+    @keyframes pop { 0%, 12% { transform: translateY(6%) scale(.92); opacity: .4; } 24%, 100% { transform: none; opacity: 1; } }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Your 25 <em>reel</em> formats</h1>
+    <p>A mockup of every 9:16 format in Video Studio, drawn in your purple on black. The grey shape is you; everything else is what the edit adds around you. Ready formats can be made today; the rest are fully designed and become a saved template the first time you approve an edit in them.</p>
+    <div class="key"><span><i class="badge ready">Ready</i> renders now</span><span><i class="badge draft">Designed</i> built on your first edit in it</span></div>
+  </header>
+  <section class="reel">
+    <video id="showreel" src="reel-videos/showreel.mp4" controls playsinline preload="metadata"></video>
+    <div><h2>All 25, back to back</h2><p>A 100-second showreel of every format, four seconds each, so you can watch them in order. Each one also plays on its own below. These are animated layout sketches: the grey shape stands in for you, and the real edit uses your footage, graphics and sound effects.</p></div>
+  </section>
+  <section class="grid" id="grid"></section>
+</div>
+
+<script>
+// Each format: name, one-line description, ready flag, and the mockup's inner HTML.
+const P = (s = 1, extra = '', cls = '') => `<div class="p ${cls}" style="--s:${s};${extra}"></div>`;
+const F = [
+  ['Business reel', 'Switches between full screen, split screen and full-screen animation on every cut.', false,
+    `<div class="room" style="top:50%"></div><div style="inset:0 0 50% 0;background:#000"></div><div class="glow" style="top:2%"></div>
+     <div class="card pop" style="left:12%;right:12%;top:10%;height:9%"></div><div class="card pop" style="left:12%;right:12%;top:22%;height:9%;animation-delay:.2s"></div><div class="card pop" style="left:12%;right:12%;top:34%;height:9%;animation-delay:.4s"></div>
+     <div class="t" style="top:45%;font-size:6.5cqw">it's your <span class="s acc">system</span></div>${P(.9)}`],
+  ['Personal reel', 'Fast cuts, your own B-roll, one word on screen at a time.', true,
+    `<div class="room" style="inset:0"></div>${P(1.15)}<div class="t s acc pop" style="top:56%;font-size:13cqw">system</div>
+     <div class="card" style="left:36%;width:28%;top:70%;height:6%;border-radius:99px"></div>`],
+  ['Explainer panel', 'You in a panel at the bottom, animated explanations on top.', false,
+    `<div class="dots"></div><div class="glow" style="top:4%"></div><div class="t" style="top:9%;font-size:7cqw">3 steps to <span class="s acc">fix it</span></div>
+     <div class="card" style="left:12%;right:12%;top:22%;height:7%"></div><div class="card" style="left:12%;right:12%;top:31%;height:7%;box-shadow:inset 3px 0 0 var(--accent)"></div><div class="card" style="left:12%;right:12%;top:40%;height:7%"></div>
+     <div class="t" style="top:57%;font-size:5.5cqw">step <span class="s acc">two</span></div>
+     <div class="panel" style="top:66%;bottom:4%"><div class="room" style="inset:0"></div>${P(.8, 'bottom:-10%')}</div>`],
+  ['Glass explainer', 'The panel layout with glass cards, counters and graphs that draw on.', false,
+    `<div class="dots"></div><div class="glow" style="top:8%"></div><div class="t" style="top:8%;font-size:6.5cqw">Give it <span class="s acc">30 days</span></div>
+     <div class="card" style="left:10%;right:10%;top:20%;height:22%;background:rgba(255,255,255,.06);backdrop-filter:blur(4px)"><svg viewBox="0 0 100 50" style="inset:10% 6%" preserveAspectRatio="none"><path d="M0,45 C30,44 55,38 70,24 S90,8 100,4" fill="none" stroke="#8b5cf6" stroke-width="2.5"/></svg></div>
+     <div class="card" style="left:10%;width:37%;top:45%;height:11%"><b class="t" style="left:0;right:0;top:22%;font-size:9cqw;color:var(--accent-light)">30</b></div>
+     <div class="card" style="right:10%;width:37%;top:45%;height:11%"><b class="t" style="left:0;right:0;top:22%;font-size:9cqw">+12</b></div>
+     <div class="panel" style="top:66%;bottom:4%"><div class="room" style="inset:0"></div>${P(.8, 'bottom:-10%')}</div>`],
+  ['Visual essay', 'You cut out on black, with the evidence shown above you.', false,
+    `<div style="left:0;right:0;bottom:0;height:45%;background:radial-gradient(ellipse at 50% 100%, var(--accent-deep), transparent 70%)"></div>
+     <div class="wcard pop" style="left:14%;width:46%;top:8%;height:24%"></div><b class="t" style="left:62%;right:4%;top:12%;font-size:15cqw;color:var(--accent-light)">0</b><small class="t" style="left:58%;right:2%;top:24%;font-size:4.5cqw;font-weight:600">new clients</small>
+     <div class="t" style="top:37%;font-size:5cqw">get no <span class="s acc">clients</span></div>${P(.85)}`],
+  ['Split reel', 'Your face on top, big type and diagrams underneath.', false,
+    `<div class="room" style="inset:0 0 50% 0"></div>${P(.75, 'bottom:50%')}<div style="inset:50% 0 0 0;background:#000"></div><div class="glow" style="top:70%"></div>
+     <div class="t s acc" style="top:55%;font-size:5cqw">most people</div><div class="t" style="top:61%;font-size:9cqw;letter-spacing:-.02em">POST DAILY, GET <span class="acc">NOTHING</span></div>
+     <div style="left:14%;right:14%;top:82%;display:flex;gap:3%;position:absolute">${'<i class="cell on" style="position:static;width:10%"></i>'.repeat(5)}${'<i class="cell" style="position:static;width:10%"></i>'.repeat(2)}</div>`],
+  ['B-roll and stacked text', 'Tight cut and B-roll, with key phrases stacked big.', false,
+    `<div class="room" style="inset:0"></div>${P(1.1)}<div class="t" style="top:52%;font-size:5cqw;font-weight:600;text-align:left;left:16%">and still get</div>
+     <div class="t" style="top:56%;font-size:12cqw;text-align:left;left:16%">no <span class="s acc">clients.</span></div>`],
+  ['Fitted captions', 'One big accent word with the rest fitted around it.', true,
+    `<div class="room" style="inset:0"></div>${P(1.1)}<div class="t" style="top:54%;font-size:5cqw;font-weight:600">and still get no</div>
+     <div class="t s acc pop" style="top:58%;font-size:17cqw">clients.</div>`],
+  ['Image cluster', 'Groups of images above your head, small quiet captions.', false,
+    `<div class="room" style="inset:0"></div><div class="img i1 pop" style="left:10%;top:10%;width:34%;height:16%"></div><div class="img i2 pop" style="left:40%;top:15%;width:28%;height:20%;animation-delay:.25s"></div><div class="img i3 pop" style="left:62%;top:8%;width:26%;height:14%;animation-delay:.5s"></div>
+     ${P(1)}<div class="t" style="top:56%;left:8%;right:auto;width:30%;font-size:4.5cqw;font-weight:600;text-align:left">most people post every day</div>`],
+  ['YouTube clips', 'A long video in, ranked vertical clips out.', true,
+    `<div class="room" style="inset:0"></div><div class="t" style="top:9%;font-size:7cqw">Not your content.<br><span class="box">It's your system.</span></div>${P(1.15)}
+     <div class="t" style="top:62%;font-size:6.5cqw">it's your <span class="s acc">system</span></div><div class="pill" style="bottom:4%;font-size:4.5cqw;background:var(--accent);color:#fff">CLIP 1 OF 8</div>`],
+  ['Cut-out backdrop', 'You cut out over full-screen images that change with each idea.', false,
+    `<div class="img i3" style="inset:0;border-radius:0"></div><div class="img i1" style="inset:0 0 55% 45%;border-radius:0;opacity:.8"></div>
+     <div class="pill" style="top:10%;font-size:5.5cqw;border-radius:8px">Post daily, still no clients</div>${P(.7, 'left:30%')}<div class="t" style="top:42%;font-size:4.8cqw;font-weight:600">the problem isn't your content</div>`],
+  ['Cut-out grid', 'You in the middle of four images that change together.', false,
+    `<div class="img i1" style="inset:0 50% 50% 0;border-radius:0"></div><div class="img i2" style="inset:0 0 50% 50%;border-radius:0"></div><div class="img i3" style="inset:50% 50% 0 0;border-radius:0"></div><div class="img i4" style="inset:50% 0 0 50%;border-radius:0"></div>
+     <div class="pill" style="top:12%;font-size:5cqw;border-radius:8px">Post daily, still no clients</div>${P(.55, 'bottom:38%')}<div class="t" style="top:63%;font-size:4.5cqw;font-weight:600">it's your system</div>`],
+  ['Depth UI', 'Real app screens behind your head.', false,
+    `<div class="room" style="inset:0"></div><div class="card" style="left:8%;right:8%;top:14%;height:34%"><svg viewBox="0 0 100 50" style="inset:20% 6%" preserveAspectRatio="none"><path d="M0,44 C25,42 45,36 60,25 S85,9 100,5" fill="none" stroke="#22a06b" stroke-width="2.5"/></svg></div>
+     ${P(1.1)}<div class="card pop" style="left:14%;right:14%;top:70%;height:7%;border-radius:99px"><b class="t" style="left:auto;right:8%;top:22%;font-size:6cqw;color:var(--green)">+199%</b></div>`],
+  ['Ranking', 'A tier list that fills up one card at a time.', false,
+    `<div class="room" style="inset:0"></div>${P(1.1)}<div class="t" style="top:8%;font-size:6cqw;color:var(--accent-light);font-style:italic">CONTENT TACTICS</div>
+     ${['#ff6b6b','#ff9f43','#feca57','#1dd1a1','#54a0ff','#a55eea','#f368e0'].map((c,i)=>`<div style="left:16%;right:16%;top:${48+i*5}%;height:4.6%;background:rgba(0,0,0,.65)"></div><b style="left:16%;width:10%;top:${48+i*5}%;height:4.6%;background:${c};color:#111;font:900 5.5cqw var(--sans);display:flex;align-items:center;justify-content:center">${'SABCDEF'[i]}</b>`).join('')}
+     <div class="img i2 pop" style="left:28%;right:28%;top:36%;height:11%"></div>`],
+  ['TikTok style', 'No dead space, small two-line captions, pictures cut in above you.', false,
+    `<div class="room" style="inset:0"></div><div class="t" style="top:10%;font-size:6.5cqw"><span class="box" style="background:#000;color:#fff">Why I stopped</span><br><span class="box" style="background:#000;color:#fff">using a phone case</span></div>
+     ${P(1.1)}<div class="img i2 pop" style="left:22%;right:22%;top:46%;height:16%;transform:rotate(-4deg);box-shadow:0 6px 14px rgba(0,0,0,.5)"></div><div class="t" style="top:68%;font-size:4.5cqw;-webkit-text-stroke:.4px #000">I dropped it 40 times</div>`],
+  ['Yap and show', 'You stay put while proof rotates above your head.', false,
+    `<div class="room" style="inset:0"></div><div class="img i1 pop" style="left:8%;width:26%;top:9%;height:24%"></div><div class="img i2 pop" style="left:37%;width:26%;top:9%;height:24%;animation-delay:.2s"></div><div class="img i3 pop" style="left:66%;width:26%;top:9%;height:24%;animation-delay:.4s"></div>
+     ${P(1.05)}<div class="t" style="top:64%;font-size:5cqw;font-weight:600">your proof</div>`],
+  ['Clone versus', 'Two of you side by side, each arguing one side.', false,
+    `<div class="room" style="inset:0"></div>${P(.62, 'left:27%')}${P(.62, 'left:73%')}
+     <div class="t" style="top:20%;left:2%;right:52%;font-size:5.5cqw;color:var(--accent-light)">Average<br>creator</div><div class="t" style="top:20%;left:52%;right:2%;font-size:5.5cqw;color:var(--accent-light)">Smart<br>creator</div>
+     <div class="pill" style="top:58%;left:27%;font-size:4cqw">I post every day</div>`],
+  ['Dual-role dialogue', 'You play a beginner and an expert, cutting between them.', false,
+    `<div class="room" style="inset:0 50% 0 0"></div><div class="room" style="inset:0 0 0 50%;filter:brightness(.6)"></div>${P(.6, 'left:25%')}${P(.6, 'left:75%', 'dim')}
+     <div class="pill" style="top:7%;font-size:4.5cqw">POV: you ask the algorithm</div><div class="tag" style="top:22%;left:12%;color:#fff">NOVICE</div><div class="tag" style="top:22%;left:56%">THE ALGORITHM</div>`],
+  ['Cinematic type', 'Big cinematic words over black-and-white B-roll.', false,
+    `<div class="room" style="inset:0;filter:grayscale(1) contrast(1.2)"></div>${P(1.05, '', 'gray')}<div class="t s" style="top:40%;font-size:15cqw;text-shadow:2px 0 0 rgba(255,80,80,.5),-2px 0 0 rgba(80,160,255,.5)">more</div>
+     <div class="t" style="top:52%;font-size:6cqw;color:var(--accent-light)">reps.</div>`],
+  ['Top 5 ranking', 'A 1-to-5 board where each pick drops into its spot as you say it.', false,
+    `<div class="room" style="inset:0"></div><div class="t" style="top:6%;font-size:5cqw">Ranking content skills</div>
+     ${[1,2,3,4,5].map(n=>`<div class="card" style="left:12%;right:12%;top:${12+n*6.2}%;height:5.2%"><b class="t" style="left:4%;right:auto;top:10%;font-size:5cqw;color:${n===1?'var(--accent-light)':'#fff'}">${n}</b></div>`).join('')}
+     <div class="img i2 pop" style="left:30%;width:12%;top:31%;height:4%"></div>${P(.85)}`],
+  ['Vlog', 'Day or trip clips cut together with voiceover and timestamps.', false,
+    `<div class="img i1" style="inset:0;border-radius:0;background:linear-gradient(180deg,#f2b48c,#8a5a7c 60%,#2d2440)"></div>
+     ${[18,30,42,58,70].map((l,i)=>`<div style="left:${l-8}%;width:9%;bottom:30%;height:${18+i%3*9}%;background:#1d1830"></div>`).join('')}
+     <div class="tag" style="top:4%;left:6%;color:#fff">DAY 1 · 07:42</div><div class="t" style="top:72%;font-size:5cqw;font-weight:600">we landed in new york</div>`],
+  ['If/then grid', 'A coloured grid that fills in row by row.', false,
+    `<div style="inset:0 0 50% 0;background:#000"></div>${['#f9a8b8','#7ab8ff','#fde68a','#86efac'].map((c,i)=>`<div style="left:${6+i*22}%;width:21%;top:6%;height:5%;background:${c}"></div><div style="left:${6+i*22}%;width:21%;top:11%;height:30%;background:${c};opacity:.28"></div>`).join('')}
+     <div style="left:6%;width:21%;top:11%;height:7%;background:#f9a8b8;outline:1.5px solid #fff"></div><div class="t" style="top:43%;font-size:4.5cqw;font-weight:600">if it's not A or B, it's C</div>
+     <div class="room" style="inset:50% 0 0 0"></div>${P(.8)}`],
+  ['This vs that', 'A two-column chart above your head; each thing drops into one side.', false,
+    `<div class="room" style="inset:0"></div><div class="t s" style="top:7%;left:6%;right:52%;font-size:8cqw;color:#4ade80">Always</div><div class="t s" style="top:7%;left:52%;right:6%;font-size:8cqw;color:var(--red)">Never</div>
+     <div style="left:10%;right:10%;top:16%;height:1px;background:#fff"></div><div style="left:50%;width:1px;top:16%;height:22%;background:#fff"></div>
+     <div class="card pop" style="left:14%;width:30%;top:20%;height:5%"></div>${P(1.05)}<div class="pill" style="top:42%;font-size:4.5cqw;background:var(--accent);color:#fff">hey guys, welcome back</div>`],
+  ['Rapid list', 'A fast list where each item pops into a numbered list.', false,
+    `<div class="room" style="inset:0"></div><div class="pill" style="top:5%;font-size:5.5cqw;background:var(--accent);color:#fff;border-radius:6px">24 viral formats</div>
+     ${[...Array(8)].map((_,i)=>`<b style="left:6%;top:${14+i*4.4}%;font:700 4cqw var(--sans);color:#fff">${i+1}. ────</b><b style="right:6%;top:${14+i*4.4}%;font:700 4cqw var(--sans);color:${i<5?'#fff':'#777'}">${i+13}. ────</b>`).join('')}
+     ${P(1)}<div class="card pop" style="left:38%;right:38%;top:58%;height:16%;background:var(--accent-deep)"><b class="t" style="left:0;right:0;top:18%;font-size:12cqw">9</b></div>`],
+  ['Natural story', 'A calm story in your room, with pictures and quote cards behind you.', false,
+    `<div class="room warm" style="inset:0"></div><div class="img i2" style="left:12%;width:30%;top:14%;height:15%"></div><div class="wcard" style="right:10%;width:32%;top:18%;height:12%"></div>
+     ${P(1.05)}<div class="t" style="top:62%;font-size:4.5cqw;font-weight:600">in your life</div>`],
+];
+document.getElementById('grid').innerHTML = F.map(([name, desc, ready, html], i) => `
+  <figure>
+    <div class="ph-wrap"><div class="ph" role="img" aria-label="${name} mockup">${html}</div>
+      <video src="reel-videos/${String(i + 1).padStart(2, '0')}-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.mp4" autoplay muted loop playsinline preload="metadata" aria-label="${name} preview video"></video></div>
+    <figcaption><b><span class="n">${String(i + 1).padStart(2, '0')}</span>${name} <i class="badge ${ready ? 'ready' : 'draft'}">${ready ? 'Ready' : 'Designed'}</i></b><small>${desc}</small></figcaption>
+  </figure>`).join('');
+</script>

@@ -92,3 +92,28 @@ input[type=url], input[type=text], textarea, select { font: inherit; color: var(
 .word { cursor: pointer; }
 .word.now { background: var(--accent-soft); color: var(--accent); }
 @media (max-width: 760px) { .rv { grid-template-columns: 1fr; height: auto; } .rv-side { border-left: 0; border-top: 1px solid var(--line); min-height: 60vh; } }
+
+/* Format gallery: every style as a card with a looping preview, grouped by format. */
+.gallery { display: grid; gap: 14px; }
+.gal-intro h2 { margin: 0 0 4px; font-size: 22px; }
+.gal-intro p { margin: 0; max-width: 62ch; }
+.gal-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-top: 18px; border-top: 1px solid var(--line); padding-top: 14px; }
+.gal-head h3 { margin: 0; font-size: 18px; }
+.gal { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.gal.long { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.gal.tool { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.sc { display: grid; gap: 8px; align-content: start; text-align: left; padding: 0; border: 0; background: none; cursor: pointer; color: var(--text); min-width: 0; }
+.sc .thumb { position: relative; display: block; overflow: hidden; border-radius: 12px; background: #000; border: 1px solid var(--line); transition: border-color .15s, transform .15s; }
+.sc:hover .thumb, .sc:focus-visible .thumb { border-color: var(--accent); transform: translateY(-2px); }
+.sc.best .thumb { border: 2px solid var(--accent); }
+.thumb.tall { aspect-ratio: 9 / 16; } .thumb.wide { aspect-ratio: 16 / 9; } .thumb.tool { aspect-ratio: 16 / 7; }
+.thumb video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.thumb [class^="ph-"] { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 12px;
+  background: radial-gradient(ellipse at 30% 30%, var(--accent-soft), transparent 70%), linear-gradient(160deg, #1d1a28, #0c0b10); }
+.thumb [class^="ph-"] em { font: italic 20px var(--serif); color: var(--accent); }
+.best-tag { position: absolute; top: 8px; left: 8px; }
+.sc-head { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.sc-head b { font-size: 14.5px; margin-right: 2px; }
+.chip { font-size: 11px; padding: 1px 7px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+.chip.ok { background: #163326; border-color: transparent; color: #6fd6a4; }
+.sc .muted { font-size: 12.5px; line-height: 1.4; }

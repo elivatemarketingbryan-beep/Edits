@@ -3,7 +3,7 @@ name: transcribe-url
 description: "Download and transcribe any video from a social/web URL using yt-dlp and faster-whisper locally. Outputs a markdown file with metadata plus plain and timestamped transcript. Triggers: transcribe this link, transcribe this url, transcribe this reel, pull transcript from, what does this video say, get the transcript of this video, transcribe-url."
 ---
 
-> **Video Studio:** this skill lives in `engines/content-os`. Before running anything from it, `cd engines/content-os` and use that folder's copy (`engines/content-os/.claude/skills/transcribe-url/`), which has its scripts and reference files. Every path below is relative to `engines/content-os`. This copy only lets Claude find the skill from the Video Studio folder.
+> **Video Studio:** this skill lives in Content OS, the one copy at `C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os` (Git Bash: `/c/Users/Dennis/OneDrive/Desktop/Claude FIles/Claude content-os`). Before running anything from it, `cd` there and use that folder's copy (`.claude/skills/transcribe-url/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
 
 
 # Transcribe URL — yt-dlp + faster-whisper

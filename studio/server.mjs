@@ -47,6 +47,14 @@ const inside = (base, rel) => {
 const routes = [
   ['GET', /^\/api\/catalog$/, (req, res) => serveFile(req, res, path.join(ROOT, 'styles', 'catalog.json'))],
   ['GET', /^\/api\/jobs$/, (req, res) => send(res, 200, listJobs())],
+  // Format preview videos (docs/reel-videos/NN-<name>.mp4), keyed by the style's name slug.
+  ['GET', /^\/api\/previews$/, (req, res) => {
+    const dir = path.join(ROOT, 'docs', 'reel-videos');
+    const map = {};
+    if (fs.existsSync(dir)) for (const f of fs.readdirSync(dir)) { const m = f.match(/^\d+-(.+)\.mp4$/); if (m) map[m[1]] = `/previews/${f}`; }
+    send(res, 200, map);
+  }],
+  ['GET', /^\/previews\/([\w.-]+\.mp4)$/, (req, res, [f]) => serveFile(req, res, path.join(ROOT, 'docs', 'reel-videos', f))],
   ['GET', /^\/api\/jobs\/([\w-]+)$/, (req, res, [id]) => {
     const job = readJob(id);
     job ? send(res, 200, job) : send(res, 404, { error: 'No such job' });

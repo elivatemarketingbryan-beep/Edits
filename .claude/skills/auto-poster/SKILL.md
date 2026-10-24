@@ -3,7 +3,7 @@ name: auto-poster
 description: "Post or schedule a provided video directly through Zernio. Input is a local video path or public video URL. If no caption is provided, transcribe the video with faster-whisper (tiny.en by default) and generate a caption from that transcript. No Notion lookup or browser download. Triggers: post this video, post /path/to/video.mp4, schedule this video, queue this video, publish reel, post to instagram, post to zernio."
 ---
 
-> **Video Studio:** this skill lives in `engines/content-os`. Before running anything from it, `cd engines/content-os` and use that folder's copy (`engines/content-os/.claude/skills/auto-poster/`), which has its scripts and reference files. Every path below is relative to `engines/content-os`. This copy only lets Claude find the skill from the Video Studio folder.
+> **Video Studio:** this skill lives in Content OS, the one copy at `C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os` (Git Bash: `/c/Users/Dennis/OneDrive/Desktop/Claude FIles/Claude content-os`). Before running anything from it, `cd` there and use that folder's copy (`.claude/skills/auto-poster/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
 
 
 # Auto Poster

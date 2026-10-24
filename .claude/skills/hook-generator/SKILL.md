@@ -3,7 +3,7 @@ name: hook-generator
 description: "Crafts proven, scroll-stopping video hooks from a 404-hook bank of top-performing reels (ranked by views). The creator brings a video idea, a rough script, or just a topic; Claude diagnoses which of the 8 hook structures fit, pulls the highest-performing frameworks from the data, and writes a spread of spoken hooks in the creator's voice — each anchored to a real framework with its view-count proof. Triggers: write a hook, write me a hook, hook for this video, hook for my video, generate hooks, give me hooks, hook ideas, viral hook, scroll stopper, opening line, hook generator, need a hook, what's a good hook for."
 ---
 
-> **Video Studio:** this skill lives in `engines/content-os`. Before running anything from it, `cd engines/content-os` and use that folder's copy (`engines/content-os/.claude/skills/hook-generator/`), which has its scripts and reference files. Every path below is relative to `engines/content-os`. This copy only lets Claude find the skill from the Video Studio folder.
+> **Video Studio:** this skill lives in Content OS, the one copy at `C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os` (Git Bash: `/c/Users/Dennis/OneDrive/Desktop/Claude FIles/Claude content-os`). Before running anything from it, `cd` there and use that folder's copy (`.claude/skills/hook-generator/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
 
 
 # Hook Generator — proven hooks from real viral data

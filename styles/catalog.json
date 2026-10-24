@@ -1,5 +1,5 @@
 {
-  "_readme": "The one list of edit styles and tools. The launcher reads it, and Claude reads it to rank formats and to know how to build each one. status: ready = an engine here already makes this; draft = recipe written, first real edit will shape it. editor = root pipeline (renders with HyperFrames; no Remotion) (.claude/skills rough-cut, graphics-plan, captions, export; HyperFrames), legacy = engines/legacy-editor skills, content-os = engines/content-os. altEngine: the optional Remotion engine for this style (see styles/engines.json); statusWithRemotion: its status when Remotion is on.",
+  "_readme": "The one list of edit styles and tools. The launcher reads it, and Claude reads it to rank formats and to know how to build each one. status: ready = an engine here already makes this; draft = recipe written, first real edit will shape it. editor = root pipeline (renders with HyperFrames; no Remotion) (.claude/skills rough-cut, graphics-plan, captions, export; HyperFrames), legacy = engines/legacy-editor skills, content-os = the Content OS folder outside Video Studio (see CLAUDE.md). altEngine: the optional Remotion engine for this style (see styles/engines.json); statusWithRemotion: its status when Remotion is on. scriptShape: how the script is written for this format (styles/SCRIPT-SHAPES.md); alsoScriptShape: other shapes that fit.",
   "styles": [
     {
       "id": "business-reel",
@@ -22,7 +22,8 @@
         "export 1080x1920"
       ],
       "spec": "styles/STYLE-GUIDE.md#business-reel",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "explainer"
     },
     {
       "id": "personal-reel",
@@ -45,7 +46,11 @@
         "export 1080x1920"
       ],
       "spec": "styles/STYLE-GUIDE.md#personal-reel",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "story",
+      "alsoScriptShape": [
+        "relatable"
+      ]
     },
     {
       "id": "explainer-panel",
@@ -71,7 +76,8 @@
       "spec": "styles/STYLE-GUIDE.md#explainer-panel",
       "needsMatte": false,
       "altEngine": "split-screen",
-      "statusWithRemotion": "ready"
+      "statusWithRemotion": "ready",
+      "scriptShape": "explainer"
     },
     {
       "id": "glass-explainer",
@@ -96,7 +102,8 @@
       ],
       "spec": "styles/STYLE-GUIDE.md#glass-explainer",
       "needsMatte": false,
-      "altEngine": "split-screen"
+      "altEngine": "split-screen",
+      "scriptShape": "explainer"
     },
     {
       "id": "visual-essay",
@@ -119,7 +126,8 @@
         "captions small"
       ],
       "spec": "styles/STYLE-GUIDE.md#visual-essay",
-      "needsMatte": true
+      "needsMatte": true,
+      "scriptShape": "proof"
     },
     {
       "id": "split-reel",
@@ -146,7 +154,8 @@
       "spec": "styles/STYLE-GUIDE.md#split-reel",
       "needsMatte": false,
       "altEngine": "split-screen",
-      "statusWithRemotion": "ready"
+      "statusWithRemotion": "ready",
+      "scriptShape": "explainer"
     },
     {
       "id": "broll-stacked-text",
@@ -169,7 +178,8 @@
         "export"
       ],
       "spec": "styles/STYLE-GUIDE.md#broll-stacked-text",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "caption-led"
     },
     {
       "id": "fitted-captions",
@@ -191,7 +201,11 @@
         "export"
       ],
       "spec": "styles/STYLE-GUIDE.md#fitted-captions",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "caption-led",
+      "alsoScriptShape": [
+        "relatable"
+      ]
     },
     {
       "id": "image-cluster",
@@ -215,7 +229,8 @@
       ],
       "spec": "styles/STYLE-GUIDE.md#image-cluster",
       "needsMatte": false,
-      "needsHeadroom": true
+      "needsHeadroom": true,
+      "scriptShape": "proof"
     },
     {
       "id": "youtube-clips",
@@ -238,7 +253,8 @@
         "export ranked clips"
       ],
       "spec": "styles/STYLE-GUIDE.md#youtube-clips",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "none"
     },
     {
       "id": "cutout-backdrop",
@@ -261,7 +277,8 @@
         "captions"
       ],
       "spec": "styles/STYLE-GUIDE.md#cutout-backdrop",
-      "needsMatte": true
+      "needsMatte": true,
+      "scriptShape": "proof"
     },
     {
       "id": "cutout-grid",
@@ -284,7 +301,8 @@
         "captions"
       ],
       "spec": "styles/STYLE-GUIDE.md#cutout-grid",
-      "needsMatte": true
+      "needsMatte": true,
+      "scriptShape": "proof"
     },
     {
       "id": "depth-ui",
@@ -307,7 +325,8 @@
         "captions"
       ],
       "spec": "styles/STYLE-GUIDE.md#depth-ui",
-      "needsMatte": true
+      "needsMatte": true,
+      "scriptShape": "explainer"
     },
     {
       "id": "ranking",
@@ -330,7 +349,8 @@
         "captions"
       ],
       "spec": "styles/STYLE-GUIDE.md#ranking",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "list"
     },
     {
       "id": "educational-youtube",
@@ -353,7 +373,8 @@
         "export 16:9"
       ],
       "spec": "styles/STYLE-GUIDE.md#educational-youtube",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "long-form"
     },
     {
       "id": "split-screen-lesson",
@@ -377,7 +398,8 @@
       ],
       "spec": "styles/STYLE-GUIDE.md#split-screen-lesson",
       "needsMatte": false,
-      "altEngine": "split-screen"
+      "altEngine": "split-screen",
+      "scriptShape": "long-form"
     },
     {
       "id": "coaching-call-clips",
@@ -400,7 +422,8 @@
         "export ranked clips"
       ],
       "spec": "styles/STYLE-GUIDE.md#coaching-call-clips",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "long-form"
     },
     {
       "id": "lesson-document",
@@ -422,7 +445,8 @@
       ],
       "spec": "styles/STYLE-GUIDE.md#lesson-document",
       "needsMatte": false,
-      "altEngine": "split-screen"
+      "altEngine": "split-screen",
+      "scriptShape": "long-form"
     },
     {
       "id": "tiktok-style",
@@ -445,7 +469,11 @@
         "image cards with shadow pop in above head or over chest"
       ],
       "spec": "styles/STYLE-GUIDE.md#tiktok-style",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "proof",
+      "alsoScriptShape": [
+        "relatable"
+      ]
     },
     {
       "id": "yap-and-show",
@@ -468,7 +496,8 @@
       ],
       "spec": "styles/STYLE-GUIDE.md#yap-and-show",
       "needsMatte": false,
-      "needsHeadroom": true
+      "needsHeadroom": true,
+      "scriptShape": "proof"
     },
     {
       "id": "clone-versus",
@@ -491,7 +520,8 @@
       ],
       "spec": "styles/STYLE-GUIDE.md#clone-versus",
       "needsMatte": true,
-      "needsTwoTakes": true
+      "needsTwoTakes": true,
+      "scriptShape": "comparison"
     },
     {
       "id": "dual-role-dialogue",
@@ -515,7 +545,8 @@
       ],
       "spec": "styles/STYLE-GUIDE.md#dual-role-dialogue",
       "needsMatte": false,
-      "needsTwoTakes": true
+      "needsTwoTakes": true,
+      "scriptShape": "comparison"
     },
     {
       "id": "cinematic-type",
@@ -537,7 +568,8 @@
         "alternate presenter and B-roll per phrase"
       ],
       "spec": "styles/STYLE-GUIDE.md#cinematic-type",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "story"
     },
     {
       "id": "top-5-ranking",
@@ -558,7 +590,8 @@
         "chest caption"
       ],
       "spec": "styles/STYLE-GUIDE.md#top-5-ranking",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "list"
     },
     {
       "id": "vlog",
@@ -580,7 +613,11 @@
         "cut on beats or on voiceover phrases"
       ],
       "spec": "styles/STYLE-GUIDE.md#vlog",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "story",
+      "alsoScriptShape": [
+        "relatable"
+      ]
     },
     {
       "id": "if-then-grid",
@@ -602,7 +639,8 @@
         "caption under grid, presenter bottom half"
       ],
       "spec": "styles/STYLE-GUIDE.md#if-then-grid",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "list"
     },
     {
       "id": "this-vs-that",
@@ -625,7 +663,8 @@
         "chest captions"
       ],
       "spec": "styles/STYLE-GUIDE.md#this-vs-that",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "comparison"
     },
     {
       "id": "rapid-list",
@@ -646,7 +685,8 @@
         "current item pops as coloured card with big number at chest"
       ],
       "spec": "styles/STYLE-GUIDE.md#rapid-list",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "list"
     },
     {
       "id": "natural-story",
@@ -668,7 +708,11 @@
         "small quiet chest captions"
       ],
       "spec": "styles/STYLE-GUIDE.md#natural-story",
-      "needsMatte": true
+      "needsMatte": true,
+      "scriptShape": "story",
+      "alsoScriptShape": [
+        "relatable"
+      ]
     },
     {
       "id": "ear-to-ear-captions",
@@ -689,7 +733,8 @@
         "no other graphics"
       ],
       "spec": "styles/STYLE-GUIDE.md#ear-to-ear-captions",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "long-form"
     },
     {
       "id": "tips-breakdown",
@@ -712,7 +757,8 @@
         "bullet list beside presenter"
       ],
       "spec": "styles/STYLE-GUIDE.md#tips-breakdown",
-      "needsMatte": false
+      "needsMatte": false,
+      "scriptShape": "long-form"
     },
     {
       "id": "screen-tutorial",
@@ -738,7 +784,8 @@
       ],
       "spec": "styles/STYLE-GUIDE.md#screen-tutorial",
       "needsMatte": false,
-      "reference": "styles/REFERENCES.md (Iman Gadzhi, Gemini tutorial)"
+      "reference": "styles/REFERENCES.md (Iman Gadzhi, Gemini tutorial)",
+      "scriptShape": "long-form"
     },
     {
       "id": "broll-library",
@@ -768,7 +815,7 @@
       "bestFor": [],
       "recipe": [
         "transcribe",
-        "engines/content-os: voice-dna.md + brand-kit.md",
+        "Content OS folder: voice-dna.md + brand-kit.md",
         "yt-description, carousel-generator, email and post drafts into the job's outputs/"
       ],
       "needsMatte": false

@@ -3,7 +3,7 @@ name: knowledge-compile
 description: "Refreshes the repo-native compiled knowledge layer in knowledge/. Reads new research reports, transcripts, backbone docs, voice-corpus entries, and skill learnings, then updates short source-linked markdown pages used for ideation, scripting, and research synthesis. Triggers: update knowledge, compile knowledge, refresh repo memory, update the wiki, knowledge layer."
 ---
 
-> **Video Studio:** this skill lives in `engines/content-os`. Before running anything from it, `cd engines/content-os` and use that folder's copy (`engines/content-os/.claude/skills/knowledge-compile/`), which has its scripts and reference files. Every path below is relative to `engines/content-os`. This copy only lets Claude find the skill from the Video Studio folder.
+> **Video Studio:** this skill lives in Content OS, the one copy at `C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os` (Git Bash: `/c/Users/Dennis/OneDrive/Desktop/Claude FIles/Claude content-os`). Before running anything from it, `cd` there and use that folder's copy (`.claude/skills/knowledge-compile/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
 
 
 # Knowledge Compile

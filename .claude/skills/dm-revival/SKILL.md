@@ -3,7 +3,7 @@ name: dm-revival
 description: Grinds the creator's Instagram DM inbox in their real Chrome (Claude-in-Chrome MCP) to find lost leads, people who showed interest but the convo died, then visits each lead's profile and drafts a personalized re-engagement DM in the creator's voice. Sends in approved batches and keeps looping until the creator says stop. Use whenever the creator says grind my dms, dm revival, revive my dms, find lost leads, lost leads in my dms, dm outreach, follow up with my dms, re-engage leads, work my inbox, or dead leads.
 ---
 
-> **Video Studio:** this skill lives in `engines/content-os`. Before running anything from it, `cd engines/content-os` and use that folder's copy (`engines/content-os/.claude/skills/dm-revival/`), which has its scripts and reference files. Every path below is relative to `engines/content-os`. This copy only lets Claude find the skill from the Video Studio folder.
+> **Video Studio:** this skill lives in Content OS, the one copy at `C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os` (Git Bash: `/c/Users/Dennis/OneDrive/Desktop/Claude FIles/Claude content-os`). Before running anything from it, `cd` there and use that folder's copy (`.claude/skills/dm-revival/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
 
 
 # DM Revival

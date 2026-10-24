@@ -27,6 +27,11 @@
 
   <section id="job" hidden></section>
 
+  <section id="gallery" class="gallery">
+    <div class="gal-intro"><h2>Every format</h2><p class="muted">Drop a video and Claude picks the best 3, or choose any of these yourself. Each preview loops so you can compare them.</p></div>
+    <div id="galleryBody"></div>
+  </section>
+
   <section>
     <h2>Your videos</h2>
     <div id="jobs" class="jobs"></div>
@@ -43,7 +48,7 @@
 <script>
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-let catalog = [], jobs = [], current = new URLSearchParams(location.search).get('job'), showAll = false;
+let catalog = [], previews = {}, jobs = [], current = new URLSearchParams(location.search).get('job'), showAll = false;
 
 async function api(url, opts = {}) {
   const res = await fetch(url, opts);
@@ -96,18 +101,28 @@ $('#linkForm').addEventListener('submit', async (ev) => {
 // ---------- current job ----------
 function open(id) { current = id; history.replaceState(null, '', '?job=' + id); showAll = false; render(); }
 
+// Style card: a looping preview of the format (or a drawn placeholder), its name, format
+// and status chips, and one line on what it looks like.
+const slugOf = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 function styleCard(s, opts = {}) {
-  const status = s.status === 'draft' ? '<span class="tag">New style</span>' : '';
-  return `<button class="card ${opts.best ? 'best' : ''}" data-style="${s.id}">
-    ${opts.preview ? `<video src="${opts.preview}" muted loop playsinline autoplay></video>` : ''}
-    ${opts.best ? '<span class="tag accent">Best fit</span>' : ''}${status}
-    <b>${esc(s.name)}</b><span class="muted">${esc(s.aspect !== '-' ? s.aspect + ' · ' : '')}${esc(opts.reason || s.summary)}</span>
+  const shape = s.group === 'short' ? 'tall' : s.group === 'long' ? 'wide' : 'tool';
+  const src = opts.preview || previews[slugOf(s.name)];
+  const thumb = src ? `<video src="${src}" muted loop playsinline autoplay preload="metadata"></video>`
+    : `<span class="ph-${shape}"><em>${esc(s.name)}</em></span>`;
+  return `<button class="sc ${opts.best ? 'best' : ''}" data-style="${s.id}">
+    <span class="thumb ${shape}">${thumb}${opts.best ? '<span class="tag accent best-tag">Best fit</span>' : ''}</span>
+    <span class="sc-head"><b>${esc(s.name)}</b>${s.aspect !== '-' ? `<span class="chip">${esc(s.aspect)}</span>` : ''}<span class="chip ${s.status === 'ready' ? 'ok' : ''}">${s.status === 'ready' ? 'Ready' : 'Designed'}</span></span>
+    <span class="muted">${esc(opts.reason || s.summary)}</span>
   </button>`;
 }
 
 function allStyles() {
-  const groups = [['short', 'Short form 9:16'], ['long', 'Long form 16:9'], ['tool', 'Tools']];
-  return groups.map(([g, label]) => `<p class="label">${label}</p><div class="grid">${catalog.filter((s) => s.group === g).map((s) => styleCard(s)).join('')}</div>`).join('');
+  const groups = [['short', 'Short form', '9:16'], ['long', 'Long form', '16:9'], ['tool', 'Tools', 'work with any style']];
+  return groups.map(([g, label, sub]) => {
+    const list = catalog.filter((s) => s.group === g);
+    return `<div class="gal-head"><h3>${label}</h3><span class="muted">${sub} · ${list.length} ${g === 'tool' ? 'tools' : 'styles'}</span></div>
+      <div class="gal ${g}">${list.map((s) => styleCard(s)).join('')}</div>`;
+  }).join('');
 }
 
 function render() {
@@ -157,9 +172,17 @@ document.addEventListener('click', async (ev) => {
   if (t.dataset.job) open(t.dataset.job);
   else if (t.id === 'toggleAll') { showAll = !showAll; render(); }
   else if (t.dataset.copy) { navigator.clipboard?.writeText(t.dataset.copy); t.textContent = 'Copied'; setTimeout(() => (t.textContent = 'Copy'), 1500); }
-  else if (t.dataset.style && current) {
-    try { await post(`/api/jobs/${current}/choose`, { style: t.dataset.style }); await refresh(); }
-    catch (e) { alert(e.message); }
+  else if (t.dataset.style) {
+    // A format can be chosen for the open video while it's still being matched or waiting for a pick.
+    const job = jobs.find((j) => j.id === current);
+    const msg = $('#dropMsg');
+    if (!job || !['formats', 'pick'].includes(job.stage)) {
+      msg.className = 'msg'; msg.textContent = 'Drop a video (or open one waiting for a format), then choose a format for it.';
+      $('#drop').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    try { await post(`/api/jobs/${current}/choose`, { style: t.dataset.style }); await refresh(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    catch (e) { msg.className = 'msg err'; msg.textContent = e.message; }
   }
 });
 
@@ -172,6 +195,8 @@ async function refresh() {
 
 (async () => {
   catalog = (await api('/api/catalog')).styles;
+  previews = await api('/api/previews').catch(() => ({}));
+  $('#galleryBody').innerHTML = allStyles();
   await refresh();
   let last = '';
   setInterval(async () => {

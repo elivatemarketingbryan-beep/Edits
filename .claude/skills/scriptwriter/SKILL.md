@@ -3,7 +3,7 @@ name: scriptwriter
 description: "Turns a pick (from ideation/research) or a raw idea into a filmable beat sheet in Notion, written in the creator's literal voice. The edge: retrieval few-shot from voice-corpus/ — every draft is written next to 2-3 verbatim transcripts of the creator's own top-performing videos in the same format, with voice-dna.md as guardrails and a voice-lint subagent pass before anything lands in Notion. Triggers: write a script, script this, script the pick, beat sheet, turn this into a script, scriptwriter, write the reel, script the video, write a video script."
 ---
 
-> **Video Studio:** this skill lives in `engines/content-os`. Before running anything from it, `cd engines/content-os` and use that folder's copy (`engines/content-os/.claude/skills/scriptwriter/`), which has its scripts and reference files. Every path below is relative to `engines/content-os`. This copy only lets Claude find the skill from the Video Studio folder.
+> **Video Studio:** this skill lives in Content OS, the one copy at `C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os` (Git Bash: `/c/Users/Dennis/OneDrive/Desktop/Claude FIles/Claude content-os`). Before running anything from it, `cd` there and use that folder's copy (`.claude/skills/scriptwriter/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
 
 
 # Scriptwriter — beat sheets that sound like the creator, not AI

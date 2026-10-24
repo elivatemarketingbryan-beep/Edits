@@ -23,6 +23,8 @@ styles/brand.json         the user's colours and fonts; every style uses these
 styles/sfx.json           named sound effects (cue -> file, peak, volume, when to use)
 studio/sfx.mjs            places sound effects on a video, peak-aligned; logs them for review
 studio/check.mjs          structure check for everything here (run before jobs)
+styles/SCRIPT-SHAPES.md   the 8 script shapes and cue tags: scripts are written in their format's shape so the edit can follow them (catalog `scriptShape`)
+studio/script-cues.mjs    matches a clip to its Content OS script (score) and times every tagged line (cues)
 styles/CAPTIONS.md        caption modes and rules (from the Dan Martell breakdown); built by the `captions` template
 styles/REFERENCES.md      breakdowns of other creators' videos: techniques to reuse (add new ones here)
 styles/ANIMATIONS.md      ready-made effects (search bar, counter, article highlight, map route, motion background, glow pill, pastel grade): when to use each
@@ -33,7 +35,8 @@ assets/sfx/               the named sound files; assets/sound-effects/ is the fu
 lib/ presets/ scripts/ workflows/   root editing pipeline (was "Claude Editor")
 styles/engines.json       render engines switch: HyperFrames always, Remotion optional (off by default)
 engines/split-screen/     Remotion kit (was "Split-Screen-Editor"): runs only if styles/engines.json says so; otherwise reference for editorial rules and graphics ideas
-engines/content-os/       research, scripts, voice, brand, carousels, descriptions, Notion (was "Claude content-os")
+Content OS                NOT in this folder (one copy only): C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os
+                          research, scripts (written per format, with cue tags), voice, brand, carousels, descriptions, Notion
 engines/legacy-editor/    older editor; only its clipper, CapCut, Premiere, Resolve, thumbnail and music skills are used
 docs/editor-pipeline.md   the root pipeline's full instructions and lab notes (was Claude Editor's CLAUDE.md)
 docs/APP-HANDOFF.md       the user's set workflow for cutting onto Premiere / Resolve / Final Cut / CapCut (the rough-cut-only tool)
@@ -77,9 +80,39 @@ Score every `kind: "style"` entry in `styles/catalog.json` against the video, us
   youtube-clips and coaching-call-clips), length (over 5 min → clip styles), headroom
   above the head (`needsHeadroom`), a clean-enough edge for a person matte
   (`needsMatte`), two takes (`needsTwoTakes`; skip unless the user supplied them).
-- **The script, if there is one:** if the transcript matches a script in the Notion
-  pipeline (engines/content-os/notion-pipeline.md) that has an "Edit style" set, that
-  style goes first.
+- **The script, if there is one:** run "Matching the clip to its Content OS script" (below)
+  first. A matched script's Edit style goes first in `formats.json`, with the reason
+  "Scripted for this format in Content OS"; if the user already set it, the job can skip
+  straight to `edit` with that style.
+
+### Matching the clip to its Content OS script
+
+Content OS (the one copy, at `C:\Users\Dennis\OneDrive\Desktop\Claude FIles\Claude content-os`)
+writes each script for its format, in that format's shape, with cue tags (styles/SCRIPT-SHAPES.md),
+and stores it on a Notion page (schema: that folder's `notion-pipeline.md`; data source
+`collection://b25789bb-ffea-8346-8ef9-87d238345cb6`). In the `formats` stage, after transcribing:
+
+1. Query the Notion data source for pages with Status `Scripting` or `Filming` (and an empty
+   **Studio job**). For each, fetch the page and save its body to
+   `projects/<id>/scripts/<notion-page-id>.md`.
+2. `node studio/script-cues.mjs score projects/<id>/transcript/words.json projects/<id>/scripts/*.md`.
+   The highest score at or above 0.6 is this clip's script. Below 0.6 for all: no script;
+   rank formats as usual and say so in one line.
+3. On a match: write `job.json` `script` = `{ "notion": "<page id>", "title": "...", "editStyle": "<style id>", "scriptShape": "...", "score": 0.89 }`,
+   set the Notion page's **Studio job** to the job id, and save the timed cues:
+   `node studio/script-cues.mjs cues projects/<id>/transcript/words.json projects/<id>/scripts/<page>.md jobs/<id>/cues.json`.
+4. Notion status follows the job (`notion-update-page`, no need to ask): `edit` starts →
+   **Editing**; `review` → **Review**; `done` → **Ready** and **Edited Video** = the final's
+   path. Never set **Posted**; that's Content OS's `auto-poster`.
+
+**Building from cues (the `edit` stage).** Every timed cue in `jobs/<id>/cues.json` places a
+visual at the moment its line is spoken (`start`..`end`), using the style's own building
+blocks: `[TIER]`/`[RANK]` move the card into that row, `[STEP]` lights that step,
+`[NUMBER]` → counter or stat card, `[SIDE]` → that column or clone, `[PROOF]`/`[IMAGE]` →
+proof or image card (ask the user for the asset if it isn't in the job), `[BROLL]` → B-roll,
+`[EMPHASIS]` → the big caption word, `[CHAPTER]` → chapter tracker, `[HOOK]`/`[CTA]` → hook
+card / end card. Lines with no time (not said, or cut) are skipped. Write each placed cue
+as an `edits.json` entry (`why` = the script line), so it shows on the review page.
 
 Write `formats.json` as `[{ "style": "<id>", "reason": "<one short line about THIS video>", "preview": "previews/<id>.mp4" }]`,
 best first, exactly 3. Reasons name what's in the video ("you rank 5 tools"), not
@@ -165,7 +198,7 @@ Read the style's `engine` in the catalog:
   counts as the job's one transcript: copy it into `jobs/<id>/transcript.json` rather
   than transcribing again. Each clip is then styled per the guide.
 - **content-os**: video-to-content (and anything about scripts, hooks, research,
-  carousels, descriptions, posting). Its skills say to run from engines/content-os.
+  carousels, descriptions, posting). Its skills run from the Content OS folder (path above).
 
 `status: "draft"` styles have no template yet: build them from the STYLE-GUIDE section
 with the editor engine, and once the user approves a final, save what worked as that
@@ -176,7 +209,7 @@ to `ready`.
 
 1. **One instruction file.** This file, then the engine docs. engines/legacy-editor's
    CLAUDE.md is reference only; its pipeline is replaced by the root pipeline.
-   engines/content-os's onboarding gate does not apply inside Video Studio; run its
+   Content OS's onboarding gate does not apply inside Video Studio; run its
    `setup.sh` only the first time a content tool is used.
 2. **Transcribe once per job**, in `projects/<id>/transcript/words.json` (root
    pipeline rule). Everything reads that: the
@@ -193,7 +226,7 @@ to `ready`.
    not the default.
 6. **Brand:** if `brand.json` `set` is false, before the first edit ask the user for
    accent colour, fonts and handle, one question at a time (or read
-   engines/content-os/brand-kit.md if it's filled in), write them, set `set: true`.
+   brand-kit.md in the Content OS folder if it's filled in), write them, set `set: true`.
 7. **Platform:** this is Windows with Git Bash. Python is `python` (not `python3`). The
    root pipeline was written for macOS/WSL2 but built and unit-tested on Windows Git
    Bash; treat the first real job as the integration test and add what you learn to
