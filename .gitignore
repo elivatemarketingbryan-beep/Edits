@@ -54,3 +54,7 @@ engines/faceless/videos/*
 engines/faceless/sprite/poses/
 engines/faceless/sprite/sprite.json
 engines/faceless/sprite/preview.png
+
+# Brand Motion engine: its Python env and the ElevenLabs key it saves
+engines/brand-motion/.venv/
+engines/brand-motion/.elevenlabs_key

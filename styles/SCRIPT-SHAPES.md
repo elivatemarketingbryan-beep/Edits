@@ -86,7 +86,7 @@ Rules: start in the middle of the moment, not with background; one B-roll or ima
 per beat.
 
 ### 5. Proof
-Formats: visual-essay, yap-and-show, image-cluster, cutout-backdrop, cutout-grid, tiktok-style.
+Formats: visual-essay, yap-and-show, image-cluster, cutout-backdrop, cutout-grid, tiktok-style, brand-motion, motion-promo.
 ```
 Hook: the claim                                       [HOOK]
 Claim 1 + what proves it                              [PROOF: ...]

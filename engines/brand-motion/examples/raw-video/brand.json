@@ -1,0 +1,3 @@
+{"name": "Loopback", "logo": "logo", "hero": 1,
+ "colors": {"bg": "#FF5A36", "primary": "#FFF4E8", "ink": "#1A1A1A", "paper": "#FFF4E8", "accent": "#FFC94A"},
+ "fonts": {"display": "bricolage", "text": "inter-medium", "label": "inter"}}

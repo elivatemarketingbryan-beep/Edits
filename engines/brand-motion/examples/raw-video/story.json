@@ -1,0 +1,118 @@
+{
+ "duration": 16,
+ "bpm": 112,
+ "mood": "chill",
+ "key": "D",
+ "brand": "brand.json",
+ "base": {
+  "video": "raw_talking.mp4",
+  "zooms": [
+   {
+    "at": 1.16,
+    "scale": 1.12
+   },
+   {
+    "at": 6.1,
+    "scale": 1.15,
+    "hold": 1.0
+   },
+   {
+    "at": 9.42,
+    "scale": 1.1
+   }
+  ]
+ },
+ "audio": {
+  "music": true
+ },
+ "scenes": [
+  {
+   "type": "hook",
+   "start": 0.0,
+   "end": 3.2,
+   "layer": "overlay",
+   "text": "Most coffee shops lose half their regulars",
+   "mark": "half",
+   "y": 700,
+   "sync": true
+  },
+  {
+   "type": "kinetic_words",
+   "start": 3.5,
+   "end": 4.75,
+   "in": "whip",
+   "words": [
+    {
+     "text": "Here's",
+     "at": 3.55
+    },
+    {
+     "text": "the fix.",
+     "at": 3.85
+    }
+   ],
+   "exit": true
+  },
+  {
+   "type": "callout",
+   "start": 5.9,
+   "end": 8.6,
+   "items": [
+    {
+     "text": "Texts your customers",
+     "at": 6.1,
+     "y": 760
+    },
+    {
+     "text": "before they forget",
+     "at": 7.58,
+     "y": 930
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "start": 8.75,
+   "end": 10.6,
+   "in": "circle",
+   "value": 10,
+   "suffix": " min",
+   "label": "to set up"
+  },
+  {
+   "type": "cta",
+   "start": 10.6,
+   "end": 13.0,
+   "in": "whip",
+   "mode": "comment",
+   "keyword": "LOYAL",
+   "sub": "I'll send you the free trial"
+  },
+  {
+   "type": "resolve",
+   "start": 13.0,
+   "end": 16.0,
+   "in": "flash",
+   "wordmark": "Loopback",
+   "tagline": "Regulars that come back.",
+   "move_at": 0.9,
+   "hop_at": 2.5
+  }
+ ],
+ "overlays": [
+  {
+   "type": "captions",
+   "words": "words.json",
+   "y": 1250,
+   "highlight": "bg",
+   "during": "video"
+  },
+  {
+   "type": "logo_bug",
+   "corner": "tl",
+   "start": 0.3,
+   "end": 13.0,
+   "size": 80
+  }
+ ]
+}

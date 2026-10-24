@@ -69,7 +69,8 @@ Style flavours (on top of the rules above):
 - **Dense** (graphics on every beat): business-reel, explainer-panel, glass-explainer,
   split-reel, depth-ui, ranking, top-5-ranking, rapid-list, if-then-grid,
   this-vs-that, tips-breakdown, educational-youtube, screen-tutorial, youtube-clips,
-  coaching-call-clips, faceless-sprite (its engine places them itself).
+  coaching-call-clips, faceless-sprite (its engine places them itself), brand-motion (its
+  own synced score), motion-promo.
 - **Light** (cuts and the few things that appear): personal-reel, visual-essay,
   broll-stacked-text, image-cluster, cutout-backdrop, cutout-grid, tiktok-style,
   yap-and-show, clone-versus, dual-role-dialogue, split-screen-lesson,
@@ -313,6 +314,30 @@ and tips-breakdown follow `apple-liquid-glass`.
   every curve and timing are the engine's (`engines/faceless/style/HOUSE_STYLE.md`, `STYLE_BIBLE.md`).
 - **The engine places its own sounds** (whooshes, risers, swells, ticks and a music bed timed to
   the plan); don't run `studio/sfx.mjs` on top.
+
+### brand-motion: Brand motion
+- **The logo is the character.** One part of the Elivate mark (the hero part) forms, pops out,
+  multiplies and comes home; the story is a metaphor found in the mark.
+- Arc: hook (claim, 1.5-2.5 s) → spark → build (features land on the beat) → tension → payoff
+  (the pop) → proof (stat, tiles, site showcase) → resolve (logo home, wordmark, CTA).
+- Kinetic type 1-3 words per beat, uppercase display fonts, every cut and text hit on the beat
+  (110-128 bpm) or, with a voice, on the word. Motion blur on everything at 60 fps.
+- Purple on black from `styles/brand.json`; text kept inside y 230-1520, x 70-930 (platform UI).
+- Raw-clip mode keeps the speaker on screen most of the time: hook overlay, word captions,
+  punch-in zooms on emphasis words, sticker callouts, one or two full-screen inserts, branded close.
+- **Makes its own original score and syncs every sound to the same timeline**; don't run
+  `studio/sfx.mjs` on top.
+
+### motion-promo: Motion promo
+- **No presenter.** A tight voiceover (pauses cut, noises dropped, mastered) carries a 60 fps
+  motion-graphic ad that feels like a motion designer's portfolio piece.
+- One visual beat per phrase, from tested patterns: count-ups (odometer digits), drop-flip
+  word swaps, animated checklists, beat-cut kinetic words, a phone or browser showcase of real
+  screenshots, and an offer card to close.
+- Real assets only: screenshots, logos and colours captured from the actual site.
+- Elivate's own promos use the brand purple on black, Inter + Playfair Display; promos for other
+  products take that product's captured colours.
+- Sounds follow `styles/SOUND-RULES.md`, placed by the skill's `sfx.mjs` from `assets/sfx`.
 
 ---
 

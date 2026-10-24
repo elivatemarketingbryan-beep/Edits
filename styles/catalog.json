@@ -743,6 +743,61 @@
       ]
     },
     {
+      "id": "brand-motion",
+      "name": "Brand motion",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "brand-motion",
+      "status": "draft",
+      "summary": "Your logo comes alive: kinetic type, playful logo character, original music with sounds on every hit.",
+      "bestFor": [
+        "promoting the offer or the brand itself",
+        "logo animation / brand promo with no footage",
+        "a raw clip that needs a branded hook, captions and close"
+      ],
+      "recipe": [
+        "skill brand-motion-studio (engine in engines/brand-motion)",
+        "mode A motion only, B voiceover + motion, C raw clip + motion",
+        "work folder projects/brand-videos/<slug>/",
+        "$PY engine/make.py story.json -o final.mp4"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#brand-motion",
+      "needsMatte": false,
+      "scriptShape": "proof",
+      "alsoScriptShape": [
+        "explainer"
+      ]
+    },
+    {
+      "id": "motion-promo",
+      "name": "Motion promo",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "remotion-skill",
+      "status": "draft",
+      "summary": "A voiceover turned into a slick 60 fps motion-graphic ad: real screenshots, count-ups, checklists, offer card.",
+      "bestFor": [
+        "voiceover only, no footage",
+        "selling an offer, product or community",
+        "numbers, features and a clear call to action"
+      ],
+      "recipe": [
+        "skill motion-promo (Remotion project in projects/remotion/motion-promo-<id>/)",
+        "voiceover prep cuts pauses and noises, masters, times every word",
+        "capture real site screenshots, logos and colours",
+        "one visual beat per phrase from the pattern kit, review frames, render"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#motion-promo",
+      "needsMatte": false,
+      "scriptShape": "proof",
+      "alsoScriptShape": [
+        "explainer",
+        "list"
+      ]
+    },
+    {
       "id": "ear-to-ear-captions",
       "name": "Ear to ear captions",
       "aspect": "16:9",

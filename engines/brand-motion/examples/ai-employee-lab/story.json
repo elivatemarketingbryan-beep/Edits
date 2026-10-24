@@ -1,0 +1,18 @@
+{
+  "duration": 30, "bpm": 120, "mood": "bright", "key": "F",
+  "brand": "brand.json",
+  "scenes": [
+    {"type": "drop_open", "start": 0, "end": 3, "bg": "paper"},
+    {"type": "logo_trace", "start": 3, "end": 6, "in": {"type": "flood", "x": 540, "y": 1000}, "backdrop": "LAB", "fill_level": 0.18},
+    {"type": "tiles", "start": 6, "end": 10, "backdrop": "LAB", "items": [
+      {"label": "Context", "symbol": "Cx"}, {"label": "Skills", "symbol": "Sk"}, {"label": "Tools", "symbol": "Tl"}, {"label": "Memory", "symbol": "Me"}]},
+    {"type": "headline", "start": 10, "end": 12, "lines": [
+      {"text": "No code.", "at": 10.0}, {"text": "just", "style": "small", "at": 11.0}, {"text": "Chemistry.", "style": "accent", "at": 11.5}], "y": 560},
+    {"type": "build", "start": 12, "end": 16, "text": "BREWING"},
+    {"type": "pop", "start": 16, "end": 19, "words": ["Hire", "Your", "First", "AI\nEmployee."]},
+    {"type": "multiply", "start": 19, "end": 22, "steps": [
+      {"label": "Sales", "count": 2}, {"label": "Support", "count": 4}, {"label": "Content", "count": 9}, {"label": "Ops", "count": 16}, {"label": "24/7", "count": 64}]},
+    {"type": "resolve", "start": 22, "end": 30, "in": "zoom", "wordmark": "AI Employee", "tag": "Lab", "tagline": "Build your AI team.",
+     "move_at": 3.0, "hop_at": 6.5, "sparkle_at": 7.0}
+  ]
+}

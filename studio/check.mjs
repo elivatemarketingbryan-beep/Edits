@@ -21,6 +21,9 @@ for (const rel of ['CLAUDE.md', 'START_HERE.md', 'Start Studio.cmd', 'studio/ser
   'docs/editor-pipeline.md', 'lib', 'presets', 'workflows', 'assets/sfx', 'assets/sound-effects', '.claude/skills', '.claude/settings.json',
   'engines/split-screen/AGENTS.md', 'engines/split-screen/scripts/editor.mjs', 'engines/split-screen/src/custom/registry.tsx',
   'engines/split-screen/inputs', 'engines/split-screen/docs',
+  'engines/brand-motion/SKILL.md', 'engines/brand-motion/engine/make.py', 'studio/words-convert.mjs',
+  '.claude/skills/motion-promo/SKILL.md', '.claude/skills/high-quality-captions/SKILL.md', '.claude/skills/glow-intro-caption/SKILL.md',
+  '.claude/skills/headline-highlight/SKILL.md', '.claude/skills/github-callout/SKILL.md',
   'engines/faceless/CLAUDE.md', 'engines/faceless/engine/docs/planning.md', 'engines/faceless/engine/scripts/make.mjs',
   'engines/content-os/CLAUDE.md','engines/content-os/notion-pipeline.md', 'engines/content-os/.claude/skills/scriptwriter/SKILL.md',
   'engines/legacy-editor/.claude/skills/clipper/scripts/make-clips.py']) {
@@ -38,7 +41,7 @@ if (catalog) {
   const styles = catalog.styles.filter((s) => s.kind === 'style');
   ok(`${styles.length} styles, ${catalog.styles.length - styles.length} tools, ${styles.filter((s) => s.status === 'ready').length} ready`);
   for (const s of catalog.styles) {
-    if (!['editor', 'split-screen', 'legacy', 'content-os', 'faceless'].includes(s.engine)) bad(`${s.id}: unknown engine "${s.engine}"`);
+    if (!['editor', 'split-screen', 'legacy', 'content-os', 'faceless', 'brand-motion', 'remotion-skill'].includes(s.engine)) bad(`${s.id}: unknown engine "${s.engine}"`);
     if (!['ready', 'draft'].includes(s.status)) bad(`${s.id}: unknown status "${s.status}"`);
     if (s.kind === 'style') {
       if (!guide.includes(`### ${s.id}:`)) bad(`${s.id}: no "### ${s.id}:" section in STYLE-GUIDE.md`);

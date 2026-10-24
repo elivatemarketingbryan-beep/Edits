@@ -1,0 +1,6 @@
+{
+  "name": "AI Employee Lab",
+  "logo": "logo",
+  "colors": {"bg": "#FDD405", "primary": "#FFFFFF", "ink": "#15130F", "paper": "#FFFFFF", "accent": "#F6C600"},
+  "fonts": {"display": "unbounded", "text": "space-grotesk-medium", "label": "space-grotesk"}
+}

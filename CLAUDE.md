@@ -40,6 +40,8 @@ engines/content-os/       Content OS (the one copy; open this folder to work in 
                           repurposing (one long-form into a week of clips, reel ideas and captions), content calendar
 engines/faceless/         faceless-sprite style: voiceover in, pixel-art Bryan + motion-graphic browser cards out (its own HyperFrames engine;
                           its CLAUDE.md is the flow, engine/docs/pages.md the 14 B-roll page kinds). Sprite in sprite/, renders in videos/
+engines/brand-motion/     brand-motion style: logo animation + kinetic type + original score (Python + Skia; skill brand-motion-studio)
+studio/words-convert.mjs  a job's WhisperX words in the shape each add-on kit reads (Remotion captions, segments, brand-motion)
 engines/legacy-editor/    older editor; only its clipper, CapCut, Premiere, Resolve, thumbnail and music skills are used
 docs/editor-pipeline.md   the root pipeline's full instructions and lab notes (was Claude Editor's CLAUDE.md)
 docs/APP-HANDOFF.md       the user's set workflow for cutting onto Premiere / Resolve / Final Cut / CapCut (the rough-cut-only tool)
@@ -162,6 +164,21 @@ typing, counters, article highlights, map routes, motion backgrounds, the glow p
 the soft-pastel grade already exist as tested templates for both 9:16 and 16:9
 (`node studio/anim.mjs new ...`), and it lists the matching HyperFrames registry blocks.
 
+Four Remotion add-on skills cover moments the templates don't. Each builds a small Remotion
+project in `projects/remotion/<skill>-<id>/` and reads the job's words through
+`node studio/words-convert.mjs` (never a new transcription); each skill's "Video Studio" block
+says what changes here:
+
+| Skill | Use it when | Output |
+|---|---|---|
+| `high-quality-captions` | 9:16 talking head wants premium word-by-word captions: bold lowercase Inter, serif setup word over a purple-gradient punch word that flickers on | the captioned video |
+| `glow-intro-caption` | the first 3-5 s need a two-line hook title (white setup / purple punch, glow) with the 25% punch-in that pulls back | the intro section |
+| `headline-highlight` | the script cites a real article, study or document: it blurs in, tilts in 3D and a yellow marker draws behind the key words (needs Tesseract) | a B-roll clip to cut in |
+| `github-callout` | the speaker names a GitHub repo: cut to its README in GitHub dark mode with a highlighter sweep | the video with callouts |
+
+They're Remotion, so the HyperFrames-first rule bends here: the skill is the tested look, and
+rebuilding it in HyperFrames is only worth it if one becomes an everyday effect.
+
 ### Motion and design skills (every style)
 
 `emil-design-eng`, `animate`, `animation-vocabulary`, `improve-animations`,
@@ -221,6 +238,18 @@ Read the style's `engine` in the catalog:
   Its page library (stat tiles, charts, chats, posts, docs, tables with highlight, ring,
   click, counter and zoom beats) is reusable for B-roll cards in other styles: build a
   card there and render it as an overlay.
+- **brand-motion** (`engines/brand-motion`, Python + Skia, skill `brand-motion-studio`): the
+  brand-motion style. Logo animation, kinetic type and an original score with sounds synced
+  to every hit, in three modes: motion only, voiceover + motion, or a raw clip + motion
+  (hook, captions, punch-ins, stickers, branded close). Follow the skill; its "Video Studio"
+  block covers the Windows setup, the work folder (`projects/brand-videos/<slug>/`) and
+  reusing the job's words for raw-clip mode. It makes its own music and sounds, so skip
+  `studio/sfx.mjs`.
+- **remotion-skill** (motion-promo): a voiceover turned into a 60 fps motion-graphic promo
+  from tested patterns (count-ups, drop flips, checklists, beat cuts, showcases, offer
+  cards) with real site captures. Follow the `motion-promo` skill; its project goes in
+  `projects/remotion/motion-promo-<id>/`. Like faceless, it trims the voiceover's pauses
+  itself, so its transcript is the job's one transcript.
 
 `status: "draft"` styles have no template yet: build them from the STYLE-GUIDE section
 with the editor engine, and once the user approves a final, save what worked as that
