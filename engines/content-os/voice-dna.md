@@ -153,3 +153,4 @@ below are drawn from the 15 with real transcripts.
 When Bryan rewrites a draft or script, the difference goes here, newest first, one line each
 (`YYYY-MM-DD: wrote X → he changed it to Y. Rule: ...`). These override anything above.
 
+2026-10-24: Bryan approved a batch of 70 short reels (15 s to 1:10) as they are. Rule: short reels are fine; the ~2:50 corpus average is not a target to pad toward. Match length to the shape (caption-led/relatable short, explainers about a minute) unless he asks for a longer walkthrough.
