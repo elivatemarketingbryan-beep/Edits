@@ -153,4 +153,5 @@ below are drawn from the 15 with real transcripts.
 When Bryan rewrites a draft or script, the difference goes here, newest first, one line each
 (`YYYY-MM-DD: wrote X → he changed it to Y. Rule: ...`). These override anything above.
 
-2026-10-24: Bryan approved a batch of 70 short reels (15 s to 1:10) as they are. Rule: short reels are fine; the ~2:50 corpus average is not a target to pad toward. Match length to the shape (caption-led/relatable short, explainers about a minute) unless he asks for a longer walkthrough.
+2026-10-24: wrote 70 reels at 15 s to 1:10 → he said they're too short. Rule: teaching shapes (explainer, list, comparison, story, proof) run about 1:30-2:00 (250-340 words at 168 wpm); caption-led and relatable about 45-60 s. Never ship a 15-second script.
+2026-10-24: he filled `{city}` with "the Bay Area" and a count of 10 himself. Rule: default location is the Bay Area; fill example numbers instead of leaving `{X}`, and flag on the page which ones are test results to confirm before posting.

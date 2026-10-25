@@ -38,3 +38,7 @@ default. Name handles inline or say "all" to override.
 ### Cesar Spark Marketing (@cesar.sparkmarketing)
 - **URL**: https://www.instagram.com/cesar.sparkmarketing/
 - **Notes**: tracked competitor.
+
+### Spark Marketing Agency (@sparkmarketingagency.co)
+- **URL**: https://www.instagram.com/sparkmarketingagency.co/
+- **Notes**: Cesar's agency account. Measured 2026-10-24: talking reels median 165 words (116-215), ~47 s, ~222 wpm; low engagement.
