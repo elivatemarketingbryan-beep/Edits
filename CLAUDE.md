@@ -68,7 +68,7 @@ scripts/transcribe.sh     WhisperX large-v3 word timings on the GPU (CUDA float1
 | `formats` | Claude | Get the video (`source` in the job folder, or download `url` with yt-dlp into it). Intake into `projects/<id>/` and transcribe once (rough-cut skill). Rank styles (below). Render a ~5s preview of each of the top 3 from the strongest moment. | `formats.json`, `previews/<style>.mp4`, `job.json` `transcript` = `transcript.json` (segments `{start,end,text}`), `duration` | `pick` |
 | `edit` | Claude | Build the chosen `style` (or run the chosen tool) per its catalog recipe, STYLE-GUIDE section and brand.json. Render a draft without sounds, then add sounds (see "Sound effects"). | `.nosfx.mp4`, `sfx.json`, `preview.mp4`, `edits.json`, `job.json` `preview` | `review` (tools with no video: put files in `outputs/`, list them in `job.json` `outputs`, go to `done`) |
 | `revise` | Claude | For every note with `status: "open"`: change the edit, then set its `reply` (one line: what changed) and `status: "done"`. If a note can't be done, say why in `reply` and leave it open. Re-render the preview. | `notes.json`, `preview.mp4`, `edits.json` | `review` |
-| `final` | Claude | Full-quality render of the approved edit. Copy it into the job folder. Run the content step if the user asked for it. | `final.mp4`, `job.json` `final`, `outputs` | `done` |
+| `final` | Claude | Full-quality render of the approved edit. Copy it into the job folder. Run the content step if the user asked for it. | `final.mp4`, `job.json` `final`, `finalDuration` (seconds, for the "ready" screen's runtime stat), `outputs` | `done` |
 
 If the user picks a style during `formats` (the page allows it), the job is already in
 `edit`; skip ranking.

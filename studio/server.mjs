@@ -9,7 +9,8 @@ const PORT = Number(process.env.PORT) || 4747;
 const PUBLIC = path.join(ROOT, 'studio', 'public');
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json',
   '.mp4': 'video/mp4', '.mov': 'video/quicktime', '.webm': 'video/webm', '.m4v': 'video/mp4', '.jpg': 'image/jpeg', '.png': 'image/png',
-  '.md': 'text/markdown; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.srt': 'text/plain; charset=utf-8', '.fcpxml': 'application/xml' };
+  '.md': 'text/markdown; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.srt': 'text/plain; charset=utf-8', '.fcpxml': 'application/xml',
+  '.ttf': 'font/ttf', '.mp3': 'audio/mpeg', '.wav': 'audio/wav', '.m4a': 'audio/mp4' };
 const VIDEO_EXT = /\.(mp4|mov|m4v|webm|mkv|mp3|wav|m4a)$/i;   // audio = a voiceover for the faceless-sprite style
 
 const send = (res, code, body, type = 'application/json') => {

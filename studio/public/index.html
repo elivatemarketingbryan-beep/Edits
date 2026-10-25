@@ -6,35 +6,54 @@
 <title>Video Studio</title>
 <link rel="stylesheet" href="/studio.css">
 </head>
-<body>
-<header class="top">
-  <strong>Video Studio</strong>
-  <span class="muted" id="queue"></span>
+<body class="home-page">
+<header class="top bar-top">
+  <a class="brand" href="/" id="homeLink"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.5v11l9-5.5z" fill="currentColor"/></svg></span>Video Studio</a>
+  <div class="seg aspect" role="group" aria-label="Formats to show">
+    <button data-aspect="all" class="on">All</button>
+    <button data-aspect="short"><i class="ic v"></i>Vertical</button>
+    <button data-aspect="long"><i class="ic h"></i>Horizontal</button>
+  </div>
+  <span class="status" id="status"><i></i><span>Ready</span></span>
 </header>
 
 <main class="wrap">
-  <section id="drop" class="drop" tabindex="0">
-    <div class="drop-icon">↑</div>
-    <p class="drop-title">Drop a video here</p>
-    <p class="muted">or <label class="link">choose a file<input id="file" type="file" accept="video/*,audio/*" hidden></label>, or paste a link</p>
-    <form id="linkForm" class="row">
-      <input id="link" type="url" placeholder="https://www.youtube.com/watch?v=…">
+  <section id="hero" class="hero">
+    <p class="eyebrow">AI video editor</p>
+    <h1>Raw clip in. <em>Finished edit</em> out.</h1>
+    <p class="lede">Drop a talking-head video, a voiceover or a YouTube link. Claude picks the 3 formats that fit it best out of 35, edits it in your brand, and hands you a preview to note up.</p>
+    <label id="drop" class="dropcard" tabindex="0">
+      <input id="file" type="file" accept="video/*,audio/*" hidden>
+      <span class="drop-inner">
+        <span class="drop-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5m0 0-4 4m4-4 4 4M5 19h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="drop-title">Drop your raw video here</span>
+        <span class="drop-sub">or click to browse · MP4, MOV or a voiceover · 9:16 or 16:9</span>
+        <span id="progress" class="upbar" hidden><span></span></span>
+      </span>
+    </label>
+    <form id="linkForm" class="linkrow">
+      <input id="link" type="url" placeholder="…or paste a YouTube link">
       <button>Add link</button>
     </form>
     <p id="dropMsg" class="msg"></p>
-    <div id="progress" class="bar" hidden><div></div></div>
+    <ul class="features">
+      <li><i>✂</i>Cuts pauses &amp; retakes</li>
+      <li><i>◆</i>Best 3 of 35 formats</li>
+      <li><i>✦</i>Motion graphics &amp; sound</li>
+      <li><i>●</i>Notes at the exact second</li>
+    </ul>
   </section>
 
-  <section id="job" hidden></section>
+  <section id="job" class="jobview" hidden></section>
+
+  <section id="recent" class="recent" hidden>
+    <div class="sec-head"><h2>Your videos</h2></div>
+    <div id="jobs" class="jobcards"></div>
+  </section>
 
   <section id="gallery" class="gallery">
-    <div class="gal-intro"><h2>Every format</h2><p class="muted">Drop a video and Claude picks the best 3, or choose any of these yourself. Each preview loops so you can compare them.</p></div>
+    <div class="sec-head"><h2>Every format</h2><p class="muted">Drop a video and Claude picks the best 3, or choose any of these yourself. Each preview loops so you can compare them.</p></div>
     <div id="galleryBody"></div>
-  </section>
-
-  <section>
-    <h2>Your videos</h2>
-    <div id="jobs" class="jobs"></div>
   </section>
 </main>
 
@@ -48,7 +67,7 @@
 <script>
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-let catalog = [], previews = {}, jobs = [], current = new URLSearchParams(location.search).get('job'), showAll = false;
+let catalog = [], previews = {}, jobs = [], current = new URLSearchParams(location.search).get('job'), aspect = 'all', compareRaw = false;
 
 async function api(url, opts = {}) {
   const res = await fetch(url, opts);
@@ -57,20 +76,22 @@ async function api(url, opts = {}) {
   return body;
 }
 const post = (url, data) => api(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data || {}) });
-const styleOf = (id) => catalog.find((s) => s.id === id) || { name: id, summary: '' };
+const styleOf = (id) => catalog.find((s) => s.id === id) || { name: id, summary: '', group: 'short' };
+const fileUrl = (job, rel) => `/files/${job.id}/${rel}`;
 
 // ---------- drop / upload ----------
 const drop = $('#drop');
 ['dragenter', 'dragover'].forEach((e) => drop.addEventListener(e, (ev) => { ev.preventDefault(); drop.classList.add('over'); }));
 ['dragleave', 'drop'].forEach((e) => drop.addEventListener(e, () => drop.classList.remove('over')));
 drop.addEventListener('drop', (ev) => { ev.preventDefault(); if (ev.dataTransfer.files[0]) upload(ev.dataTransfer.files[0]); });
+drop.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); $('#file').click(); } });
 $('#file').addEventListener('change', (ev) => ev.target.files[0] && upload(ev.target.files[0]));
 
 function upload(file) {
   const msg = $('#dropMsg'), bar = $('#progress');
   msg.textContent = ''; msg.className = 'msg';
-  if (!/^video\//.test(file.type) && !/\.(mp4|mov|m4v|webm|mkv)$/i.test(file.name)) {
-    msg.textContent = 'That isn\'t a video file. Use mp4, mov, m4v, webm or mkv.'; msg.classList.add('err'); return;
+  if (!/^(video|audio)\//.test(file.type) && !/\.(mp4|mov|m4v|webm|mkv|mp3|wav|m4a)$/i.test(file.name)) {
+    msg.textContent = 'That isn\'t a video or a voiceover. Use mp4, mov, m4v, webm, mkv, mp3, wav or m4a.'; msg.classList.add('err'); return;
   }
   const xhr = new XMLHttpRequest();
   xhr.open('POST', '/api/upload');
@@ -81,7 +102,6 @@ function upload(file) {
     bar.hidden = true;
     const body = JSON.parse(xhr.responseText);
     if (xhr.status !== 200) { msg.textContent = body.error; msg.classList.add('err'); return; }
-    msg.textContent = file.name + ' added';
     open(body.id); refresh();
   };
   xhr.onerror = () => { bar.hidden = true; msg.textContent = 'Upload failed. Is the studio still running?'; msg.classList.add('err'); };
@@ -98,11 +118,11 @@ $('#linkForm').addEventListener('submit', async (ev) => {
   catch (e) { msg.textContent = e.message; msg.classList.add('err'); }
 });
 
-// ---------- current job ----------
-function open(id) { current = id; history.replaceState(null, '', '?job=' + id); showAll = false; render(); }
+// ---------- navigation ----------
+function open(id) { current = id; compareRaw = false; history.replaceState(null, '', id ? '?job=' + id : '/'); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+$('#homeLink').addEventListener('click', (ev) => { ev.preventDefault(); open(null); });
 
-// Style card: a looping preview of the format (or a drawn placeholder), its name, format
-// and status chips, and one line on what it looks like.
+// ---------- format cards ----------
 const slugOf = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 function styleCard(s, opts = {}) {
   const shape = s.group === 'short' ? 'tall' : s.group === 'long' ? 'wide' : 'tool';
@@ -110,73 +130,167 @@ function styleCard(s, opts = {}) {
   const thumb = src ? `<video src="${src}" muted loop playsinline autoplay preload="metadata"></video>`
     : `<span class="ph-${shape}"><em>${esc(s.name)}</em></span>`;
   return `<button class="sc ${opts.best ? 'best' : ''}" data-style="${s.id}">
-    <span class="thumb ${shape}">${thumb}${opts.best ? '<span class="tag accent best-tag">Best fit</span>' : ''}</span>
+    <span class="thumb ${shape}">${thumb}${opts.rank ? `<span class="rank">${opts.rank === 1 ? 'Best fit' : '#' + opts.rank}</span>` : ''}</span>
     <span class="sc-head"><b>${esc(s.name)}</b>${s.aspect !== '-' ? `<span class="chip">${esc(s.aspect)}</span>` : ''}<span class="chip ${s.status === 'ready' ? 'ok' : ''}">${s.status === 'ready' ? 'Ready' : 'Designed'}</span></span>
     <span class="muted">${esc(opts.reason || s.summary)}</span>
   </button>`;
 }
 
 function allStyles() {
-  const groups = [['short', 'Short form', '9:16'], ['long', 'Long form', '16:9'], ['tool', 'Tools', 'work with any style']];
+  const groups = [['short', 'Vertical', '9:16 · Reels, TikTok, Shorts'], ['long', 'Horizontal', '16:9 · YouTube'], ['tool', 'Tools', 'work with any style']]
+    .filter(([g]) => aspect === 'all' || g === aspect || g === 'tool');
   return groups.map(([g, label, sub]) => {
     const list = catalog.filter((s) => s.group === g);
-    return `<div class="gal-head"><h3>${label}</h3><span class="muted">${sub} · ${list.length} ${g === 'tool' ? 'tools' : 'styles'}</span></div>
+    return `<div class="gal-head"><h3>${label}</h3><span class="muted">${sub} · ${list.length} ${g === 'tool' ? 'tools' : 'formats'}</span></div>
       <div class="gal ${g}">${list.map((s) => styleCard(s)).join('')}</div>`;
   }).join('');
 }
 
+// ---------- the open job ----------
+// Steps follow the job stages; `review` and `revise` share one step (notes go back and forth).
+const STEPS = [
+  { key: 'formats', label: 'Transcribing & ranking formats', who: 'claude' },
+  { key: 'pick', label: 'Pick a format', who: 'you' },
+  { key: 'edit', label: 'Editing', who: 'claude' },
+  { key: 'review', label: 'Your review & notes', who: 'you', also: ['revise'] },
+  { key: 'final', label: 'Rendering the final', who: 'claude' },
+];
+const stepIndex = (stage) => stage === 'done' ? STEPS.length : STEPS.findIndex((s) => s.key === stage || s.also?.includes(stage));
+
+function stepDetail(job, s) {
+  const notes = job.notes || [], open = notes.filter((n) => n.status === 'open').length;
+  if (s.key === 'formats') return job.formats ? `top 3 of ${catalog.filter((c) => c.kind === 'style').length}` : (job.duration ? fmtTime(job.duration) : '');
+  if (s.key === 'pick') return job.style ? styleOf(job.style).name : '';
+  if (s.key === 'edit') return (job.edits || []).length ? `${job.edits.length} edits` : (job.style ? styleOf(job.style).name : '');
+  if (s.key === 'review') return notes.length ? `${notes.length} notes${open ? ` · ${open} open` : ''}` : '';
+  if (s.key === 'final') return job.final ? 'MP4' : '';
+  return '';
+}
+const fmtTime = (s) => { s = Math.round(Number(s) || 0); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+
+function mediaFor(job) {
+  // What the phone frame plays: the final, then the preview, then the raw clip.
+  if (job.final && !compareRaw) return { src: fileUrl(job, job.final), badge: 'Edited' };
+  if (job.preview && !compareRaw && job.stage !== 'done') return { src: fileUrl(job, job.preview), badge: 'Preview' };
+  if (job.source) return { src: fileUrl(job, job.source), badge: 'Raw' };
+  return { src: null, badge: job.url ? 'Link' : 'Raw' };
+}
+
+function renderJob(job) {
+  const idx = stepIndex(job.stage), done = job.stage === 'done';
+  const pct = done ? 100 : Math.round((idx / STEPS.length) * 100 + (STEPS[idx]?.who === 'claude' ? 6 : 0));
+  const media = mediaFor(job);
+  const style = job.style ? styleOf(job.style) : null;
+  const wide = style ? style.group === 'long' : false;
+  const isAudio = media.src && /\.(mp3|wav|m4a)$/i.test(media.src);
+  const phone = `<div class="phone ${wide ? 'wide' : ''}" id="phone">
+      <span class="badge">${media.badge}</span>
+      ${media.src ? (isAudio ? `<div class="vo"><span>Voiceover</span><audio src="${media.src}" controls></audio></div>`
+        : `<video id="pv" src="${media.src}" ${done ? 'autoplay' : ''} muted loop playsinline controls></video>`)
+        : `<div class="vo"><span>${esc(job.url || 'Waiting for the video')}</span></div>`}
+    </div>`;
+  const meta = [style && style.name, job.duration && fmtTime(job.duration), new Date(job.created).toLocaleString()].filter(Boolean).join(' · ');
+
+  let side;
+  if (done) {
+    const notes = job.notes || [], edits = job.edits || [];
+    side = `<span class="okpill"><i>✓</i>Edited${style ? ' in ' + esc(style.name) : ''}</span>
+      <h1 class="ready">Your video is <em>ready.</em></h1>
+      <p class="mono">${esc(job.final || '')}${job.final ? ' · ' : ''}${esc(job.title)}</p>
+      <div class="stats">
+        <div><span>Format</span><b>${esc(style ? style.name : 'Tool')}</b><small>${esc(style ? style.aspect : '')}</small></div>
+        <div><span>Runtime</span><b>${job.duration ? fmtTime(job.duration) : '—'}${job.finalDuration ? ` <i>→</i> ${fmtTime(job.finalDuration)}` : ''}</b><small>${job.finalDuration && job.duration ? Math.round((1 - job.finalDuration / job.duration) * 100) + '% tighter' : 'source length'}</small></div>
+        <div><span>Edits</span><b>${edits.length}</b><small>cuts, graphics, captions, sounds</small></div>
+        <div><span>Notes</span><b>${notes.length}</b><small>${notes.filter((n) => n.status === 'done').length} done</small></div>
+      </div>
+      ${edits.length ? `<p class="label">Edits</p><div class="editstrip">${edits.slice(0, 18).map((e) => `<span title="${esc(e.label || e.type)}">${esc((e.type || 'edit').slice(0, 1).toUpperCase())}</span>`).join('')}</div>` : ''}
+      ${(job.outputs || []).length ? `<p class="label">Files</p><div class="files">${job.outputs.map((f) => `<a class="chip" href="${fileUrl(job, f)}" target="_blank">${esc(f)}</a>`).join('')}</div>` : ''}
+      <div class="actions">
+        ${job.final ? `<a class="button cta" href="${fileUrl(job, job.final)}" download>⤓ Download MP4</a>` : ''}
+        ${job.final && job.source ? `<button id="compare">${compareRaw ? 'Show the edit' : 'Compare with raw'}</button>` : ''}
+        <button class="ghost" id="another">Edit another</button>
+      </div>`;
+  } else {
+    const steps = STEPS.map((s, i) => `<li class="${i < idx ? 'done' : i === idx ? 'now ' + s.who : ''}">
+        <i></i><span>${s.label}${i === idx && s.who === 'you' ? ' <em>· your turn</em>' : ''}</span><code>${esc(stepDetail(job, s))}</code></li>`).join('');
+    let card = '';
+    if (job.stage === 'formats') {
+      card = `<div class="ctx"><p class="label">Next</p><p>Claude is watching the video and picking the best 3 formats.</p>${$('#claudeHint').innerHTML}
+        <p class="muted">Already know what you want? <a href="#gallery">Pick any format below</a> and skip this step.</p></div>`;
+    } else if (job.stage === 'pick') {
+      const top = (job.formats || []).slice(0, 3);
+      card = `<div class="ctx"><p class="label">Best 3 formats for this video</p>
+        <div class="top3">${top.map((f, i) => styleCard(styleOf(f.style), { best: i === 0, rank: i + 1, reason: f.reason, preview: f.preview && fileUrl(job, f.preview) })).join('')}</div>
+        <p class="muted">Want something else? <a href="#gallery">Every format is below.</a></p></div>`;
+    } else if (job.stage === 'review') {
+      card = `<div class="ctx"><p class="label">Preview ready</p><p>Watch it, press N to leave a note at the exact second, then approve or request changes.</p>
+        <div class="actions"><a class="button cta" href="/review?job=${job.id}">Open review</a></div></div>`;
+    } else {
+      const say = job.stage === 'edit' ? `Claude is editing this in ${esc(style ? style.name : 'the chosen format')}. You'll get a preview to review first.`
+        : job.stage === 'revise' ? `Claude is working through your ${(job.notes || []).filter((n) => n.status === 'open').length || ''} notes.` : 'Claude is rendering the final version.';
+      card = `<div class="ctx"><p class="label">Now</p><p>${say}</p>${$('#claudeHint').innerHTML}</div>`;
+    }
+    side = `<div class="filehead"><span class="fileicon">▣</span><div><b>${esc(job.title)}</b><p class="mono">${esc(meta)}</p></div></div>
+      <div class="pct"><b>${pct}<small>%</small></b><span>${STEPS[idx]?.who === 'you' ? 'Waiting on you' : 'Waiting on Claude'}</span></div>
+      <div class="pbar"><span style="width:${pct}%"></span></div>
+      <ol class="steps">${steps}</ol>${card}`;
+  }
+  return `<button class="back ghost" id="back">← All videos</button><div class="jobgrid">${phone}<div class="side">${side}</div></div>`;
+}
+
 function render() {
   renderJobs();
-  const box = $('#job');
+  renderStatus();
   const job = jobs.find((j) => j.id === current);
-  if (!job) { box.hidden = true; return; }
+  document.body.classList.toggle('job-open', !!job);
+  $('#hero').hidden = !!job;
+  const box = $('#job');
+  if (!job) { box.hidden = true; box.innerHTML = ''; return; }
   box.hidden = false;
-  const head = `<div class="jobhead"><div><h2>${esc(job.title)}</h2><span class="pill ${job.waitingOn}">${esc(job.stageLabel)}</span>
-    ${job.style ? `<span class="muted"> · ${esc(styleOf(job.style).name)}</span>` : ''}</div></div>`;
-  let body = '';
+  box.innerHTML = renderJob(job);
+  // Fit the frame to the clip itself (a 16:9 source sits in a wide frame).
+  const v = $('#pv');
+  if (v) v.addEventListener('loadedmetadata', () => $('#phone')?.classList.toggle('wide', v.videoWidth > v.videoHeight));
+}
 
-  if (job.stage === 'formats') {
-    body = `<p>Claude is watching the video and picking the best 3 formats for it.</p>${$('#claudeHint').innerHTML}
-      <p class="muted">Already know what you want? Pick it now and skip this step.</p>${allStyles()}`;
-  } else if (job.stage === 'pick') {
-    const top = (job.formats || []).slice(0, 3);
-    body = `<p class="label">Best 3 formats for this video</p>
-      <div class="grid three">${top.map((f, i) => styleCard(styleOf(f.style), { best: i === 0, reason: f.reason, preview: f.preview && `/files/${job.id}/${f.preview}` })).join('')}</div>
-      <p><button id="toggleAll" class="ghost">${showAll ? 'Hide other styles' : 'See all styles'}</button></p>${showAll ? allStyles() : ''}`;
-  } else if (['edit', 'revise', 'final'].includes(job.stage)) {
-    body = `<p>${job.stage === 'edit' ? 'Claude is editing this in ' + esc(styleOf(job.style).name) + '. You\'ll get a preview to review first.'
-      : job.stage === 'revise' ? 'Claude is working through your notes.' : 'Claude is rendering the final version.'}</p>${$('#claudeHint').innerHTML}`;
-  } else if (job.stage === 'review') {
-    body = `<p>The preview is ready. Watch it, leave notes at the exact second, then approve.</p>
-      <p><a class="button primary" href="/review?job=${job.id}">Open review</a></p>`;
-  } else if (job.stage === 'done') {
-    const outs = job.outputs || [];
-    body = `${job.final ? `<video class="final" src="/files/${job.id}/${job.final}" controls></video>` : ''}
-      <p class="label">Files</p><ul class="files">${[job.final, ...outs].filter(Boolean).map((f) => `<li><a href="/files/${job.id}/${f}" target="_blank">${esc(f)}</a></li>`).join('') || '<li class="muted">No files listed</li>'}</ul>
-      <p class="muted">Everything is in the jobs/${esc(job.id)} folder.</p>`;
-  }
-  box.innerHTML = head + body;
+function renderStatus() {
+  const st = $('#status'), job = jobs.find((j) => j.id === current);
+  const waiting = jobs.filter((j) => j.waitingOn === 'claude').length;
+  let cls = 'ok', text = 'Ready';
+  if (job) { cls = job.stage === 'done' ? 'ok' : job.waitingOn === 'you' ? 'you' : 'busy'; text = job.stage === 'done' ? 'Export complete' : job.stageLabel; }
+  else if (waiting) { cls = 'busy'; text = `${waiting} waiting on Claude`; }
+  st.className = 'status ' + cls; st.lastElementChild.textContent = text;
 }
 
 function renderJobs() {
-  const waiting = jobs.filter((j) => j.waitingOn === 'claude').length;
-  $('#queue').textContent = waiting ? `${waiting} waiting on Claude` : '';
-  $('#jobs').innerHTML = jobs.length ? jobs.map((j) => `<button class="jobrow ${j.id === current ? 'on' : ''}" data-job="${j.id}">
-      <span>${esc(j.title)}</span><span class="pill ${j.waitingOn}">${esc(j.stageLabel)}</span></button>`).join('')
-    : '<p class="muted">Drop your first video above.</p>';
+  $('#recent').hidden = !jobs.length;
+  $('#jobs').innerHTML = jobs.map((j) => {
+    const done = j.stage === 'done';
+    return `<button class="jobcard ${j.id === current ? 'on' : ''}" data-job="${j.id}">
+      <span class="jt">${esc(j.title)}</span>
+      <span class="jm">${j.style ? esc(styleOf(j.style).name) : 'No format yet'}</span>
+      <span class="status small ${done ? 'ok' : j.waitingOn === 'you' ? 'you' : 'busy'}"><i></i>${esc(done ? 'Done' : j.stageLabel)}</span></button>`;
+  }).join('');
 }
 
 document.addEventListener('click', async (ev) => {
   const t = ev.target.closest('button, a');
   if (!t) return;
   if (t.dataset.job) open(t.dataset.job);
-  else if (t.id === 'toggleAll') { showAll = !showAll; render(); }
+  else if (t.id === 'back' || t.id === 'another') open(null);
+  else if (t.id === 'compare') { compareRaw = !compareRaw; render(); }
+  else if (t.dataset.aspect) {
+    aspect = t.dataset.aspect;
+    document.querySelectorAll('.aspect button').forEach((b) => b.classList.toggle('on', b === t));
+    $('#galleryBody').innerHTML = allStyles();
+  }
   else if (t.dataset.copy) { navigator.clipboard?.writeText(t.dataset.copy); t.textContent = 'Copied'; setTimeout(() => (t.textContent = 'Copy'), 1500); }
   else if (t.dataset.style) {
     // A format can be chosen for the open video while it's still being matched or waiting for a pick.
     const job = jobs.find((j) => j.id === current);
     const msg = $('#dropMsg');
     if (!job || !['formats', 'pick'].includes(job.stage)) {
+      if (job) open(null);
       msg.className = 'msg'; msg.textContent = 'Drop a video (or open one waiting for a format), then choose a format for it.';
       $('#drop').scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
@@ -188,9 +302,7 @@ document.addEventListener('click', async (ev) => {
 
 async function refresh() {
   jobs = await api('/api/jobs');
-  // Don't rebuild while a preview video is playing in the picker.
-  const playing = [...document.querySelectorAll('#job video')].some((v) => !v.paused && v.controls);
-  if (!playing) render(); else renderJobs();
+  render();
 }
 
 (async () => {
@@ -198,12 +310,16 @@ async function refresh() {
   previews = await api('/api/previews').catch(() => ({}));
   $('#galleryBody').innerHTML = allStyles();
   await refresh();
-  let last = '';
+  let last = JSON.stringify(jobs.map((j) => [j.id, j.stage, j.updated]));
   setInterval(async () => {
     const next = await api('/api/jobs').catch(() => null);
     if (!next) return;
     const sig = JSON.stringify(next.map((j) => [j.id, j.stage, j.updated]));
-    if (sig !== last) { last = sig; jobs = next; render(); }
+    if (sig === last) return;
+    last = sig; jobs = next;
+    // Don't restart a video someone is watching; the next change re-renders.
+    const playing = [...document.querySelectorAll('#job video')].some((v) => !v.paused && !v.muted);
+    if (!playing) render(); else { renderJobs(); renderStatus(); }
   }, 3000);
 })();
 </script>
