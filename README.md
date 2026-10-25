@@ -33,6 +33,10 @@ research → hooks → scriptwriter ──Notion──►  drop clip → match t
   builds the graphics there. Notion moves Scripting → Filming → Editing → Review → Ready.
 - **One transcript per video.** WhisperX large-v3 on the GPU; every add-on reads it through
   `studio/words-convert.mjs` instead of transcribing again.
+- **Review long edits as a sheet.** Every edit comes with a Video Breakdown Sheet
+  (`/sheet?job=<id>`): each scene and animation, timestamped, with a thumbnail and a box to say
+  what to change. Long-form renders one file per scene, so a note re-renders only that scene
+  (`studio/sheet.mjs`).
 
 ## What's inside
 

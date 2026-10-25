@@ -92,11 +92,11 @@ const routes = [
   }],
 
   ['POST', /^\/api\/jobs\/([\w-]+)\/notes$/, async (req, res, [id]) => {
-    const { t, text, edit } = await readBody(req);
+    const { t, text, edit, scene } = await readBody(req);
     if (!text?.trim()) return send(res, 400, { error: 'Write a note first' });
     const file = path.join(jobDir(id), 'notes.json');
     const notes = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : [];
-    notes.push({ id: Date.now().toString(36), t: Number(t) || 0, text: text.trim(), edit: edit ?? null, status: 'open', reply: null, created: new Date().toISOString() });
+    notes.push({ id: Date.now().toString(36), t: Number(t) || 0, text: text.trim(), edit: edit ?? null, scene: scene ?? null, status: 'open', reply: null, created: new Date().toISOString() });
     fs.writeFileSync(file, JSON.stringify(notes, null, 2));
     send(res, 200, readJob(id));
   }],
@@ -119,7 +119,7 @@ const routes = [
     const file = inside(jobDir(id), rel);
     file ? serveFile(req, res, file) : send(res, 403, { error: 'Forbidden' });
   }],
-  ['GET', /^\/(review)?$/, (req, res, [review]) => serveFile(req, res, path.join(PUBLIC, review ? 'review.html' : 'index.html'))],
+  ['GET', /^\/(review|sheet)?$/, (req, res, [page]) => serveFile(req, res, path.join(PUBLIC, (page || 'index') + '.html'))],
   ['GET', /^\/(.+)$/, (req, res, [rel]) => {
     const file = inside(PUBLIC, rel);
     file ? serveFile(req, res, file) : send(res, 403, { error: 'Forbidden' });

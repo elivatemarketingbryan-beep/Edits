@@ -22,7 +22,7 @@ for (const rel of ['CLAUDE.md', 'START_HERE.md', 'Start Studio.cmd', 'studio/ser
   'engines/split-screen/AGENTS.md', 'engines/split-screen/scripts/editor.mjs', 'engines/split-screen/src/custom/registry.tsx',
   'engines/split-screen/inputs', 'engines/split-screen/docs',
   'engines/video-fx/engine/fx.mjs', '.claude/skills/video-fx/SKILL.md', '.claude/skills/fx-checklist/SKILL.md',
-  'engines/brand-motion/SKILL.md', 'engines/brand-motion/engine/make.py', 'studio/words-convert.mjs',
+  'engines/brand-motion/SKILL.md', 'engines/brand-motion/engine/make.py', 'studio/words-convert.mjs', 'studio/sheet.mjs', 'studio/public/sheet.html',
   '.claude/skills/motion-promo/SKILL.md', '.claude/skills/high-quality-captions/SKILL.md', '.claude/skills/glow-intro-caption/SKILL.md',
   '.claude/skills/headline-highlight/SKILL.md', '.claude/skills/github-callout/SKILL.md',
   'engines/faceless/CLAUDE.md', 'engines/faceless/engine/docs/planning.md', 'engines/faceless/engine/scripts/make.mjs',

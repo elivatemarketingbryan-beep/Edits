@@ -10,6 +10,7 @@
 <header class="top">
   <div class="row"><a href="/" class="muted">← Studio</a><strong id="title">Edit review</strong><span id="meta" class="muted"></span><span id="status" class="pill"></span></div>
   <div class="row">
+    <a id="sheetLink" class="button" hidden>Breakdown sheet</a>
     <button id="copyNotes">Copy notes for Claude</button>
     <button id="requestChanges">Request changes</button>
     <button id="approve" class="primary">Approve and render final</button>
@@ -73,6 +74,8 @@ async function load() {
   if (!video.src) setSource();
   if (job.transcript && !transcript.length) transcript = await fetch(`/files/${id}/${job.transcript}`).then((r) => r.json()).catch(() => []);
   $('#approve').hidden = job.stage !== 'review';
+  $('#sheetLink').hidden = !job.sheet?.length;
+  $('#sheetLink').href = '/sheet?job=' + encodeURIComponent(id);
   $('#requestChanges').hidden = job.stage !== 'review';
   renderAll();
 }

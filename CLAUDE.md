@@ -43,6 +43,7 @@ engines/faceless/         faceless-sprite style: voiceover in, pixel-art Bryan +
 engines/video-fx/         Claude Video FX: 17 Remotion effects for talking heads with a person cut-out (skills video-fx, fx-*)
 engines/brand-motion/     brand-motion style: logo animation + kinetic type + original score (Python + Skia; skill brand-motion-studio)
 studio/words-convert.mjs  a job's WhisperX words in the shape each add-on kit reads (Remotion captions, segments, brand-motion)
+studio/sheet.mjs          Video Breakdown Sheet: check a job's scene list, scene thumbnails, join per-scene renders, print it for Claude
 engines/legacy-editor/    older editor; only its clipper, CapCut, Premiere, Resolve, thumbnail and music skills are used
 docs/editor-pipeline.md   the root pipeline's full instructions and lab notes (was Claude Editor's CLAUDE.md)
 docs/APP-HANDOFF.md       the user's set workflow for cutting onto Premiere / Resolve / Final Cut / CapCut (the rough-cut-only tool)
@@ -66,8 +67,8 @@ scripts/transcribe.sh     WhisperX large-v3 word timings on the GPU (CUDA float1
 | Stage | Who | What Claude does | Writes | Next |
 |---|---|---|---|---|
 | `formats` | Claude | Get the video (`source` in the job folder, or download `url` with yt-dlp into it). Intake into `projects/<id>/` and transcribe once (rough-cut skill). Rank styles (below). Render a ~5s preview of each of the top 3 from the strongest moment. | `formats.json`, `previews/<style>.mp4`, `job.json` `transcript` = `transcript.json` (segments `{start,end,text}`), `duration` | `pick` |
-| `edit` | Claude | Build the chosen `style` (or run the chosen tool) per its catalog recipe, STYLE-GUIDE section and brand.json. Render a draft without sounds, then add sounds (see "Sound effects"). | `.nosfx.mp4`, `sfx.json`, `preview.mp4`, `edits.json`, `job.json` `preview` | `review` (tools with no video: put files in `outputs/`, list them in `job.json` `outputs`, go to `done`) |
-| `revise` | Claude | For every note with `status: "open"`: change the edit, then set its `reply` (one line: what changed) and `status: "done"`. If a note can't be done, say why in `reply` and leave it open. Re-render the preview. | `notes.json`, `preview.mp4`, `edits.json` | `review` |
+| `edit` | Claude | Build the chosen `style` (or run the chosen tool) per its catalog recipe, STYLE-GUIDE section and brand.json. Write the breakdown sheet first (see "Video Breakdown Sheet"; long-form renders one file per scene). Render a draft without sounds, then add sounds (see "Sound effects"), then `sheet.mjs thumbs`. | `sheet.json`, `.nosfx.mp4`, `sfx.json`, `preview.mp4`, `edits.json`, `job.json` `preview` | `review` (tools with no video: put files in `outputs/`, list them in `job.json` `outputs`, go to `done`) |
+| `revise` | Claude | Run `node studio/sheet.mjs md <id>` to see which scenes have open notes. For every note with `status: "open"`: change that scene only, then set its `reply` (one line: what changed) and `status: "done"`. If a note can't be done, say why in `reply` and leave it open. Long-form: re-render only the noted scenes, `assemble`, re-place sounds, `thumbs`. Short-form: re-render the preview. | `notes.json`, `preview.mp4`, `edits.json` | `review` |
 | `final` | Claude | Full-quality render of the approved edit. Copy it into the job folder. Run the content step if the user asked for it. | `final.mp4`, `job.json` `final`, `finalDuration` (seconds, for the "ready" screen's runtime stat), `outputs` | `done` |
 
 If the user picks a style during `formats` (the page allows it), the job is already in
@@ -134,6 +135,31 @@ Every edit Claude makes gets one entry, output-timeline seconds:
 `{ "type": "cut|caption|audio|sfx|graphic|headline|broll", "start": 3.2, "end": 4.0, "what": "Removed 0.8s pause", "why": "Dead air after 'every day'" }`.
 Keep `what` under ~60 characters. The review page shows these as chips, timeline
 tracks and the Edits tab, so the user can leave a note on a specific edit.
+
+### Video Breakdown Sheet (every job; required for long-form)
+
+The user reviews a long edit as a sheet, not by scrubbing: one row per scene and animation,
+timestamped, with a thumbnail and a box to say exactly what to change. Notes then point at
+one scene, so Claude changes and re-renders that scene instead of the whole video.
+
+1. Before rendering, write `jobs/<id>/sheet.json`: every scene back to back, output seconds,
+   covering the whole video. A scene is one visual idea: a chapter card, a graphic, a B-roll
+   run, a talking stretch with its captions. A long-form scene is usually 5-40 s.
+   `[{ "id": "s01", "chapter": "Hook", "start": 0, "end": 6.4, "title": "Pilot logo sting", "kind": "graphic", "what": "Glowing Pilot wordmark scales in over the open; tagline types on", "file": "projects/<id>/compositions/hook.html", "render": "scenes/s01.mp4" }]`
+   `chapter` groups rows (use the video's real chapters), `what` is what the viewer sees
+   (under ~120 characters), `file` is the source that builds it, `render` its rendered clip.
+   `node studio/sheet.mjs check <id>` must pass.
+2. **Long-form (over 3 min, or any 16:9 edit):** render each scene on its own to
+   `jobs/<id>/scenes/<scene>.mp4` with identical encoding (same codec, size, fps, audio rate),
+   then `node studio/sheet.mjs assemble <id>` joins them into `.nosfx.mp4` without
+   re-encoding. Short-form can render in one pass; the sheet is still written.
+3. After sounds are placed: `node studio/sheet.mjs thumbs <id>` (a frame per scene from the
+   preview; `thumbAt` on a scene overrides the moment).
+4. The sheet lives at `/sheet?job=<id>` (linked from the review page). Notes from it carry
+   `scene`; review-page notes are matched to scenes by time. On `revise`, re-render only the
+   scenes with open notes, then assemble, re-place sounds from `sfx.json`, and refresh thumbs.
+   If a change moves a scene's length, shift the later scenes' `start`/`end` and `sfx.json`
+   times by the same amount; never re-render scenes nobody commented on.
 
 ### Sound effects (every style)
 

@@ -30,7 +30,7 @@ export function readJob(id) {
   const file = path.join(jobDir(id), 'job.json');
   if (!fs.existsSync(file)) return null;
   const job = JSON.parse(fs.readFileSync(file, 'utf8'));
-  for (const extra of ['formats', 'edits', 'notes']) {
+  for (const extra of ['formats', 'edits', 'notes', 'sheet']) {
     const f = path.join(jobDir(id), `${extra}.json`);
     job[extra] = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : (extra === 'formats' ? null : []);
   }
@@ -40,7 +40,7 @@ export function readJob(id) {
 }
 
 export function writeJob(job) {
-  const { formats, edits, notes, waitingOn, stageLabel, ...rest } = job;
+  const { formats, edits, notes, sheet, waitingOn, stageLabel, ...rest } = job;
   fs.mkdirSync(jobDir(job.id), { recursive: true });
   rest.updated = new Date().toISOString();
   fs.writeFileSync(path.join(jobDir(job.id), 'job.json'), JSON.stringify(rest, null, 2));

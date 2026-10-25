@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Breakdown Sheet</title>
+<link rel="stylesheet" href="/studio.css">
+</head>
+<body>
+<header class="top">
+  <div class="row"><a id="back" class="muted" href="/">← Review</a><strong id="title">Video Breakdown Sheet</strong><span id="status" class="pill"></span></div>
+  <div class="row">
+    <button id="copySheet">Copy sheet for Claude</button>
+    <button id="requestChanges" class="primary">Send changes to Claude</button>
+  </div>
+</header>
+
+<div class="sh">
+  <div class="sh-player">
+    <video id="video" playsinline controls></video>
+    <p class="muted" id="playing">Click a scene to play just that part.</p>
+  </div>
+  <main class="sh-list">
+    <p class="muted sh-intro">Every scene and animation in this edit, in order. Write what to change under a scene; Claude re-renders only the scenes you comment on.</p>
+    <div id="list"></div>
+    <p id="msg" class="msg"></p>
+  </main>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = (t) => { t = Math.max(0, t || 0); return Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0'); };
+const id = new URLSearchParams(location.search).get('job');
+const video = $('#video');
+let job, stopAt = null;
+
+async function api(url, data) {
+  const res = await fetch(url, data === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+  const body = await res.json();
+  if (!res.ok) throw new Error(body.error || 'Something went wrong');
+  return body;
+}
+// Notes left here carry `scene`; notes from the review page are matched by time.
+const notesFor = (s) => job.notes.filter((n) => n.scene ? n.scene === s.id : n.t >= s.start && n.t < s.end);
+
+function render() {
+  $('#title').textContent = 'Video Breakdown Sheet · ' + job.title;
+  $('#status').textContent = job.stageLabel;
+  $('#status').className = 'pill ' + job.waitingOn;
+  if (!job.sheet.length) { $('#list').innerHTML = '<p class="muted">No sheet yet. Claude writes it while editing.</p>'; return; }
+  // Keep what's being typed across the 4-second refresh.
+  const drafts = Object.fromEntries([...document.querySelectorAll('textarea[data-scene]')].map((t) => [t.dataset.scene, t.value]));
+  let chapter = null, html = '';
+  for (const s of job.sheet) {
+    if (s.chapter && s.chapter !== chapter) { chapter = s.chapter; html += `<h2 class="sh-chapter">${esc(chapter)}</h2>`; }
+    const notes = notesFor(s);
+    html += `<article class="scene${notes.some((n) => n.status === 'open') ? ' flagged' : ''}" id="${esc(s.id)}">
+      <button class="scene-thumb" data-play="${s.id}" title="Play this scene">${s.thumb ? `<img src="/files/${id}/${esc(s.thumb)}" alt="">` : '<span>▶</span>'}</button>
+      <div class="scene-body">
+        <div class="scene-head"><span class="scene-time">${fmt(s.start)}–${fmt(s.end)}</span><strong>${esc(s.title)}</strong>${s.kind ? `<span class="tag accent">${esc(s.kind)}</span>` : ''}</div>
+        <p>${esc(s.what)}</p>
+        ${s.file ? `<p class="muted"><code>${esc(s.file)}</code></p>` : ''}
+        ${notes.map((n) => `<div class="scene-note ${n.status}"><span>${esc(n.text)}</span>${n.reply ? `<span class="muted">Claude: ${esc(n.reply)}</span>` : ''}<span class="muted">${n.status === 'open' ? 'Waiting on Claude' : 'Done'}</span></div>`).join('')}
+        <form class="scene-add" data-scene="${s.id}">
+          <textarea data-scene="${s.id}" rows="2" placeholder="What should change in this scene?">${esc(drafts[s.id] || '')}</textarea>
+          <button>Add</button>
+        </form>
+      </div>
+    </article>`;
+  }
+  $('#list').innerHTML = html;
+}
+
+async function load() {
+  job = await api('/api/jobs/' + id);
+  $('#back').href = '/review?job=' + encodeURIComponent(id);
+  if (!video.src && job.preview) video.src = `/files/${id}/${job.preview}`;
+  render();
+}
+
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-play]');
+  if (!b) return;
+  const s = job.sheet.find((x) => x.id === b.dataset.play);
+  video.currentTime = s.start; stopAt = s.end; video.play();
+  $('#playing').textContent = `Playing ${s.id}: ${s.title} (${fmt(s.start)}–${fmt(s.end)})`;
+});
+video.addEventListener('timeupdate', () => { if (stopAt != null && video.currentTime >= stopAt) { video.pause(); stopAt = null; } });
+video.addEventListener('seeking', () => { if (stopAt != null && (video.currentTime < 0 || video.currentTime > stopAt)) stopAt = null; });
+
+document.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target, s = job.sheet.find((x) => x.id === form.dataset.scene);
+  const text = form.querySelector('textarea').value.trim();
+  if (!text) return;
+  form.querySelector('textarea').value = '';
+  job = await api(`/api/jobs/${id}/notes`, { t: s.start, text, scene: s.id });
+  render();
+});
+
+$('#copySheet').onclick = () => {
+  let out = `Video Breakdown Sheet for job ${id}. Change only the scenes marked CHANGE, re-render those scenes, then assemble.\n`;
+  for (const s of job.sheet) {
+    out += `\n${s.id} ${fmt(s.start)}-${fmt(s.end)} ${s.title}: ${s.what}${s.file ? ` (${s.file})` : ''}`;
+    for (const n of notesFor(s).filter((n) => n.status === 'open')) out += `\n  CHANGE: ${n.text}`;
+  }
+  navigator.clipboard?.writeText(out);
+  $('#msg').textContent = 'Sheet copied. Paste it to Claude.';
+};
+$('#requestChanges').onclick = async () => {
+  if (!job.notes.some((n) => n.status === 'open')) { $('#msg').textContent = 'Write a change under at least one scene first.'; return; }
+  job = await api(`/api/jobs/${id}/request-changes`, {});
+  $('#msg').textContent = 'Sent. In Claude Code, say "run my studio jobs"; only the scenes you commented on get re-rendered.';
+  render();
+};
+
+if (!id) $('#msg').textContent = 'Open a video from the studio first.';
+else { load(); setInterval(async () => {
+  const next = await api('/api/jobs/' + id).catch(() => null);
+  if (next && next.updated !== job.updated) { const hadPreview = job.preview; job = next; if (next.preview !== hadPreview) { video.removeAttribute('src'); video.src = `/files/${id}/${job.preview}`; } render(); }
+  else if (next && JSON.stringify(next.notes) !== JSON.stringify(job.notes)) { job = next; render(); }
+}, 4000); }
+</script>
+</body>
+</html>
