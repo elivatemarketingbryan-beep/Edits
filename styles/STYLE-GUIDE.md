@@ -69,12 +69,15 @@ Style flavours (on top of the rules above):
 - **Dense** (graphics on every beat): business-reel, explainer-panel, glass-explainer,
   split-reel, depth-ui, ranking, top-5-ranking, rapid-list, if-then-grid,
   this-vs-that, tips-breakdown, educational-youtube, screen-tutorial, youtube-clips,
+  paper-cut-out, sofa-wall, graph-rise, orbit-spin, phone-frame, news-wall,
+  interface-world, tick-list,
   coaching-call-clips, faceless-sprite (its engine places them itself), brand-motion (its
   own synced score), motion-promo.
 - **Light** (cuts and the few things that appear): personal-reel, visual-essay,
   broll-stacked-text, image-cluster, cutout-backdrop, cutout-grid, tiktok-style,
   yap-and-show, clone-versus, dual-role-dialogue, split-screen-lesson,
-  lesson-document.
+  lesson-document, magazine-cover, pixel-zoom, sketch-boil, glass-text,
+  pull-out-reveal, dolly-zoom, frame-pop, punch-through-cut, green-screen.
 - **Minimal** (a whoosh or riser at most; let the words carry it): fitted-captions,
   cinematic-type (low whooshes and risers only), natural-story, ear-to-ear-captions,
   vlog (music-led; no UI sounds).
@@ -338,6 +341,88 @@ and tips-breakdown follow `apple-liquid-glass`.
 - Elivate's own promos use the brand purple on black, Inter + Playfair Display; promos for other
   products take that product's captured colours.
 - Sounds follow `styles/SOUND-RULES.md`, placed by the skill's `sfx.mjs` from `assets/sfx`.
+
+### video-fx-styles: Video FX styles
+
+Seventeen 9:16 styles, each led by one Video FX effect (`engines/video-fx`); the catalog's
+`fx` is the skill (`fx-<fx>`), whose SKILL.md is the look, frame by frame, and
+`engines/video-fx/docs/EFFECTS.md` has every effect with its example. Names follow the
+"claude can create" reel reference (Oct 2026), which shows all 17 in a phone window over
+the speaker. Rules for all of them:
+
+- The leading effect gets 1-3 ranges at the script's strongest beats; 1-2 other effects
+  can join it where they fit (2-4 effects per 30-60 s reel in all, or whatever a picked
+  combo stacks). Between effects the clip plays clean with the effect's caption look.
+- Brand overrides the effects' defaults: captions accent `#C4B5FD`, graphics in the
+  brand purples (skill "Video Studio" blocks).
+
+### paper-cut-out: Paper cut out
+- Skill `fx-paper-cut`: speaker as a paper sticker over scribbles and ransom-note letters. Needs a person cut-out.
+- Best for: growth, numbers or results; a hook that needs to look handmade.
+
+### magazine-cover: Magazine cover
+- Skill `fx-cover-story`: giant serif masthead rising behind the head. Needs a person cut-out.
+- Best for: naming one big idea or product; a title moment or hook.
+
+### sofa-wall: Sofa wall
+- Skill `fx-couch-wall`: wall of reel thumbnails with view counts behind the speaker. Needs a person cut-out.
+- Best for: social proof: views, posts, a body of work; talking about content, courses or a channel.
+
+### pixel-zoom: Pixel zoom
+- Skill `fx-digital-zoom`: punch-ins with zoom blur on key words.
+- Best for: one-take talking head that needs energy; any script; no b-roll needed.
+
+### sketch-boil: Sketch boil
+- Skill `fx-doodle-boil`: hand-drawn outline boiling round the speaker, doodles drawing on. Needs a person cut-out.
+- Best for: a hook, punchline or turn; playful or personal moments.
+
+### graph-rise: Graph rise
+- Skill `fx-chart-grow`: line chart drawing behind the speaker, spiking to a glowing label. Needs a person cut-out.
+- Best for: growth, numbers and results; [NUMBER] cues.
+
+### glass-text: Glass text
+- Skill `fx-glass-type`: 3D glass word standing on the wall. Needs a person cut-out.
+- Best for: naming one big idea; a single key word worth a beat.
+
+### orbit-spin: Orbit spin
+- Skill `fx-orbit`: cards orbiting the speaker, passing behind and in front. Needs a person cut-out.
+- Best for: social proof: past videos, results, press; listing many things; an eye-catching hook.
+
+### pull-out-reveal: Pull-out reveal
+- Skill `fx-pull-back-reveal`: pull back to show the shot inside an editor app with a % counter.
+- Best for: behind the scenes, "how I made this"; results and process.
+
+### phone-frame: Phone frame
+- Skill `fx-phone-mockup`: floating phone beside the speaker, a chat typing itself out. Needs a person cut-out.
+- Best for: showing an app, DM or result; the exact message or prompt.
+
+### dolly-zoom: Dolly zoom
+- Skill `fx-vertigo`: room zooms, speaker locked in place. Needs a person cut-out.
+- Best for: a hook, realisation or turn; dramatic beats.
+
+### news-wall: News wall
+- Skill `fx-headline-wall`: headlines, tweets and search cards pinning to the wall. Needs a person cut-out.
+- Best for: news, buzz, "everyone is saying"; citing sources.
+
+### frame-pop: Frame pop
+- Skill `fx-frame-break`: video shrinks into a Reels frame, speaker breaks out over the edge. Needs a person cut-out.
+- Best for: posting, going viral, "this exact video"; a 3D hook in the first second.
+
+### punch-through-cut: Punch-through cut
+- Skill `fx-zoom-through-cut`: zoom-blur rush from one shot into the next.
+- Best for: joining two takes or scenes; a hard turn in the script.
+
+### green-screen: Green screen
+- Skill `fx-green-screen`: speaker cut out onto a new background (app UI, image, video). Needs a person cut-out.
+- Best for: showing an app or result behind you; changing scene without reshooting.
+
+### interface-world: Interface world
+- Skill `fx-ui-world`: chat app fills the top, clips drop in, a command types itself. Needs a person cut-out.
+- Best for: a workflow that starts in an AI chat; showing the exact command to type.
+
+### tick-list: Tick list
+- Skill `fx-checklist`: frosted-glass checklist typing in and ticking as steps are said. Needs a person cut-out.
+- Best for: steps or a process; [STEP] cues.
 
 ---
 

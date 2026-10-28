@@ -1,5 +1,5 @@
 {
-  "_readme": "The one list of edit styles and tools. The launcher reads it, and Claude reads it to rank formats and to know how to build each one. status: ready = an engine here already makes this; draft = recipe written, first real edit will shape it. editor = root pipeline (renders with HyperFrames; no Remotion) (.claude/skills rough-cut, graphics-plan, captions, export; HyperFrames), legacy = engines/legacy-editor skills, content-os = the Content OS folder outside Video Studio (see CLAUDE.md). altEngine: the optional Remotion engine for this style (see styles/engines.json); statusWithRemotion: its status when Remotion is on. scriptShape: how the script is written for this format (styles/SCRIPT-SHAPES.md); alsoScriptShape: other shapes that fit.",
+  "_readme": "The one list of edit styles and tools. The launcher reads it, and Claude reads it to rank formats and to know how to build each one. status: ready = an engine here already makes this; draft = recipe written, first real edit will shape it. editor = root pipeline (renders with HyperFrames; no Remotion) (.claude/skills rough-cut, graphics-plan, captions, export; HyperFrames), legacy = engines/legacy-editor skills, content-os = the Content OS folder outside Video Studio (see CLAUDE.md). altEngine: the optional Remotion engine for this style (see styles/engines.json); statusWithRemotion: its status when Remotion is on. scriptShape: how the script is written for this format (styles/SCRIPT-SHAPES.md); alsoScriptShape: other shapes that fit. video-fx = engines/video-fx (Remotion effects with a person cut-out); `fx` is the effect: skill fx-<fx>, preview engines/video-fx/examples/NN-<fx>.mp4.",
   "styles": [
     {
       "id": "business-reel",
@@ -869,6 +869,415 @@
       "needsMatte": false,
       "reference": "styles/REFERENCES.md (Iman Gadzhi, Gemini tutorial)",
       "scriptShape": "long-form"
+    },
+    {
+      "id": "paper-cut-out",
+      "name": "Paper cut out",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "You as a paper sticker on a scrapbook collage of scribbles and ransom-note letters.",
+      "bestFor": [
+        "growth, numbers or results",
+        "a hook that needs to look handmade"
+      ],
+      "recipe": [
+        "skill fx-paper-cut on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#paper-cut-out-paper-cut-out",
+      "needsMatte": true,
+      "scriptShape": "proof",
+      "fx": "paper-cut"
+    },
+    {
+      "id": "magazine-cover",
+      "name": "Magazine cover",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "A giant serif masthead rises in behind your head, like a magazine cover.",
+      "bestFor": [
+        "naming one big idea or product",
+        "a title moment or hook"
+      ],
+      "recipe": [
+        "skill fx-cover-story on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#magazine-cover-magazine-cover",
+      "needsMatte": true,
+      "scriptShape": "caption-led",
+      "fx": "cover-story"
+    },
+    {
+      "id": "sofa-wall",
+      "name": "Sofa wall",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "A wall of reel thumbnails with view counts pops in behind you.",
+      "bestFor": [
+        "social proof: views, posts, a body of work",
+        "talking about content, courses or a channel"
+      ],
+      "recipe": [
+        "skill fx-couch-wall on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#sofa-wall-sofa-wall",
+      "needsMatte": true,
+      "scriptShape": "proof",
+      "fx": "couch-wall"
+    },
+    {
+      "id": "pixel-zoom",
+      "name": "Pixel zoom",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "Punch-in zooms with zoom blur on the key words.",
+      "bestFor": [
+        "one-take talking head that needs energy",
+        "any script; no b-roll needed"
+      ],
+      "recipe": [
+        "skill fx-digital-zoom on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#pixel-zoom-pixel-zoom",
+      "needsMatte": false,
+      "scriptShape": "caption-led",
+      "fx": "digital-zoom"
+    },
+    {
+      "id": "sketch-boil",
+      "name": "Sketch boil",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "A hand-drawn outline boils around you while doodles draw themselves on.",
+      "bestFor": [
+        "a hook, punchline or turn",
+        "playful or personal moments"
+      ],
+      "recipe": [
+        "skill fx-doodle-boil on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#sketch-boil-sketch-boil",
+      "needsMatte": true,
+      "scriptShape": "story",
+      "fx": "doodle-boil"
+    },
+    {
+      "id": "graph-rise",
+      "name": "Graph rise",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "A line chart draws itself behind you and spikes up with a glowing label.",
+      "bestFor": [
+        "growth, numbers and results",
+        "[NUMBER] cues"
+      ],
+      "recipe": [
+        "skill fx-chart-grow on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#graph-rise-graph-rise",
+      "needsMatte": true,
+      "scriptShape": "proof",
+      "fx": "chart-grow"
+    },
+    {
+      "id": "glass-text",
+      "name": "Glass text",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "Giant 3D glass letters stand on the wall behind you, refracting the room.",
+      "bestFor": [
+        "naming one big idea",
+        "a single key word worth a beat"
+      ],
+      "recipe": [
+        "skill fx-glass-type on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#glass-text-glass-text",
+      "needsMatte": true,
+      "scriptShape": "caption-led",
+      "fx": "glass-type"
+    },
+    {
+      "id": "orbit-spin",
+      "name": "Orbit spin",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "Cards orbit around you in 3D, passing behind and in front of you.",
+      "bestFor": [
+        "social proof: past videos, results, press",
+        "listing many things",
+        "an eye-catching hook"
+      ],
+      "recipe": [
+        "skill fx-orbit on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#orbit-spin-orbit-spin",
+      "needsMatte": true,
+      "scriptShape": "proof",
+      "fx": "orbit"
+    },
+    {
+      "id": "pull-out-reveal",
+      "name": "Pull-out reveal",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "The shot pulls back to show it is inside an editor app rendering it, with a % counter.",
+      "bestFor": [
+        "behind the scenes, \"how I made this\"",
+        "results and process"
+      ],
+      "recipe": [
+        "skill fx-pull-back-reveal on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#pull-out-reveal-pull-out-reveal",
+      "needsMatte": false,
+      "scriptShape": "proof",
+      "fx": "pull-back-reveal"
+    },
+    {
+      "id": "phone-frame",
+      "name": "Phone frame",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "A floating phone beside you shows an app conversation that types itself out.",
+      "bestFor": [
+        "showing an app, DM or result",
+        "the exact message or prompt"
+      ],
+      "recipe": [
+        "skill fx-phone-mockup on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#phone-frame-phone-frame",
+      "needsMatte": true,
+      "scriptShape": "explainer",
+      "fx": "phone-mockup"
+    },
+    {
+      "id": "dolly-zoom",
+      "name": "Dolly zoom",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "Vertigo shot: the room zooms while you stay locked in place.",
+      "bestFor": [
+        "a hook, realisation or turn",
+        "dramatic beats"
+      ],
+      "recipe": [
+        "skill fx-vertigo on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#dolly-zoom-dolly-zoom",
+      "needsMatte": true,
+      "scriptShape": "story",
+      "fx": "vertigo"
+    },
+    {
+      "id": "news-wall",
+      "name": "News wall",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "Headlines, tweets and search cards pin themselves to the wall behind you.",
+      "bestFor": [
+        "news, buzz, \"everyone is saying\"",
+        "citing sources"
+      ],
+      "recipe": [
+        "skill fx-headline-wall on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#news-wall-news-wall",
+      "needsMatte": true,
+      "scriptShape": "proof",
+      "fx": "headline-wall"
+    },
+    {
+      "id": "frame-pop",
+      "name": "Frame pop",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "The video shrinks into a Reels frame and you pop out over its edge.",
+      "bestFor": [
+        "posting, going viral, \"this exact video\"",
+        "a 3D hook in the first second"
+      ],
+      "recipe": [
+        "skill fx-frame-break on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#frame-pop-frame-pop",
+      "needsMatte": true,
+      "scriptShape": "caption-led",
+      "fx": "frame-break"
+    },
+    {
+      "id": "punch-through-cut",
+      "name": "Punch-through cut",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "Transition: rush into one shot with zoom blur and burst out of the next.",
+      "bestFor": [
+        "joining two takes or scenes",
+        "a hard turn in the script"
+      ],
+      "recipe": [
+        "skill fx-zoom-through-cut on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#punch-through-cut-punch-through-cut",
+      "needsMatte": false,
+      "scriptShape": "story",
+      "fx": "zoom-through-cut"
+    },
+    {
+      "id": "green-screen",
+      "name": "Green screen",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "You cut out and dropped onto a new background: app UI, image or video.",
+      "bestFor": [
+        "showing an app or result behind you",
+        "changing scene without reshooting"
+      ],
+      "recipe": [
+        "skill fx-green-screen on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#green-screen-green-screen",
+      "needsMatte": true,
+      "scriptShape": "explainer",
+      "fx": "green-screen"
+    },
+    {
+      "id": "interface-world",
+      "name": "Interface world",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "A chat-app UI fills the top of the frame: clips drop in, a command types itself, you poke out over it.",
+      "bestFor": [
+        "a workflow that starts in an AI chat",
+        "showing the exact command to type"
+      ],
+      "recipe": [
+        "skill fx-ui-world on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#interface-world-interface-world",
+      "needsMatte": true,
+      "scriptShape": "explainer",
+      "fx": "ui-world"
+    },
+    {
+      "id": "tick-list",
+      "name": "Tick list",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "video-fx",
+      "status": "ready",
+      "summary": "A frosted-glass checklist card whose steps type in and tick off as you say them.",
+      "bestFor": [
+        "steps or a process",
+        "[STEP] cues"
+      ],
+      "recipe": [
+        "skill fx-checklist on the strongest range (2-4 effects per 30-60 s reel)",
+        "words from the job transcript (studio/words-convert.mjs video-fx)",
+        "brand captions (accent #C4B5FD)",
+        "splice back into the full video, then sounds"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#tick-list-tick-list",
+      "needsMatte": true,
+      "scriptShape": "list",
+      "fx": "checklist"
     },
     {
       "id": "broll-library",

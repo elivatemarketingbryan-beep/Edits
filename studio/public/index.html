@@ -21,7 +21,7 @@
   <section id="hero" class="hero">
     <p class="eyebrow">AI video editor</p>
     <h1>Raw clip in. <em>Finished edit</em> out.</h1>
-    <p class="lede">Drop a talking-head video, a voiceover or a YouTube link. Claude picks the 3 formats that fit it best out of 35, edits it in your brand, and hands you a preview to note up.</p>
+    <p class="lede">Drop a talking-head video, a voiceover or a YouTube link. Claude picks the 3 formats that fit it best out of 52, edits it in your brand, and hands you a preview to note up.</p>
     <label id="drop" class="dropcard" tabindex="0">
       <input id="file" type="file" accept="video/*,audio/*" hidden>
       <span class="drop-inner">
@@ -38,7 +38,7 @@
     <p id="dropMsg" class="msg"></p>
     <ul class="features">
       <li><i>✂</i>Cuts pauses &amp; retakes</li>
-      <li><i>◆</i>Best 3 of 35 formats</li>
+      <li><i>◆</i>Best 3 of 52 formats</li>
       <li><i>✦</i>Motion graphics &amp; sound</li>
       <li><i>●</i>Notes at the exact second</li>
     </ul>
@@ -68,6 +68,8 @@
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 let catalog = [], previews = {}, jobs = [], current = new URLSearchParams(location.search).get('job'), aspect = 'all', compareRaw = false;
+// What you've ticked on the pick screen; kept here so the 3 s refresh doesn't wipe it.
+let pick = { job: null, style: null, ideas: new Set(), combo: null };
 
 async function api(url, opts = {}) {
   const res = await fetch(url, opts);
@@ -129,7 +131,7 @@ function styleCard(s, opts = {}) {
   const src = opts.preview || previews[slugOf(s.name)];
   const thumb = src ? `<video src="${src}" muted loop playsinline autoplay preload="metadata"></video>`
     : `<span class="ph-${shape}"><em>${esc(s.name)}</em></span>`;
-  return `<button class="sc ${opts.best ? 'best' : ''}" data-style="${s.id}">
+  return `<button class="sc ${opts.best ? 'best' : ''} ${opts.on ? 'on' : ''}" data-${opts.as || 'style'}="${s.id}">
     <span class="thumb ${shape}">${thumb}${opts.rank ? `<span class="rank">${opts.rank === 1 ? 'Best fit' : '#' + opts.rank}</span>` : ''}</span>
     <span class="sc-head"><b>${esc(s.name)}</b>${s.aspect !== '-' ? `<span class="chip">${esc(s.aspect)}</span>` : ''}<span class="chip ${s.status === 'ready' ? 'ok' : ''}">${s.status === 'ready' ? 'Ready' : 'Designed'}</span></span>
     <span class="muted">${esc(opts.reason || s.summary)}</span>
@@ -150,7 +152,7 @@ function allStyles() {
 // Steps follow the job stages; `review` and `revise` share one step (notes go back and forth).
 const STEPS = [
   { key: 'formats', label: 'Transcribing & ranking formats', who: 'claude' },
-  { key: 'pick', label: 'Pick a format', who: 'you' },
+  { key: 'pick', label: 'Pick a format & ideas', who: 'you' },
   { key: 'edit', label: 'Editing', who: 'claude' },
   { key: 'review', label: 'Your review & notes', who: 'you', also: ['revise'] },
   { key: 'final', label: 'Rendering the final', who: 'claude' },
@@ -160,7 +162,7 @@ const stepIndex = (stage) => stage === 'done' ? STEPS.length : STEPS.findIndex((
 function stepDetail(job, s) {
   const notes = job.notes || [], open = notes.filter((n) => n.status === 'open').length;
   if (s.key === 'formats') return job.formats ? `top 3 of ${catalog.filter((c) => c.kind === 'style').length}` : (job.duration ? fmtTime(job.duration) : '');
-  if (s.key === 'pick') return job.style ? styleOf(job.style).name : '';
+  if (s.key === 'pick') return job.style ? styleOf(job.style).name + ((job.picked || []).length ? ` + ${job.picked.length} ideas` : '') : '';
   if (s.key === 'edit') return (job.edits || []).length ? `${job.edits.length} edits` : (job.style ? styleOf(job.style).name : '');
   if (s.key === 'review') return notes.length ? `${notes.length} notes${open ? ` · ${open} open` : ''}` : '';
   if (s.key === 'final') return job.final ? 'MP4' : '';
@@ -218,15 +220,17 @@ function renderJob(job) {
       card = `<div class="ctx"><p class="label">Next</p><p>Claude is watching the video and picking the best 3 formats.</p>${$('#claudeHint').innerHTML}
         <p class="muted">Already know what you want? <a href="#gallery">Pick any format below</a> and skip this step.</p></div>`;
     } else if (job.stage === 'pick') {
-      const top = (job.formats || []).slice(0, 3);
-      card = `<div class="ctx"><p class="label">Best 3 formats for this video</p>
-        <div class="top3">${top.map((f, i) => styleCard(styleOf(f.style), { best: i === 0, rank: i + 1, reason: f.reason, preview: f.preview && fileUrl(job, f.preview) })).join('')}</div>
-        <p class="muted">Want something else? <a href="#gallery">Every format is below.</a></p></div>`;
+      const n = (job.ideas || []).length, c = (job.combos || []).length;
+      card = `<div class="ctx shout"><p class="label">Your turn</p>
+        <p class="big">${c ? `Claude has <em>${c} combos</em> to make this video very edited.` : n ? `Claude has <em>${n} ideas</em> for this video.` : 'Claude picked <em>3 formats</em> for this video.'}</p>
+        <p class="muted">${c ? 'Pick a combo (or mix your own from the ideas), then hit Start editing.' : n ? 'Pick a base format, tick the ideas you like, then hit Start editing.' : 'Pick one, then hit Start editing.'}</p>
+        <div class="actions"><a class="button cta" href="#ideas">${n ? 'See the ideas ↓' : 'See the formats ↓'}</a></div></div>`;
     } else if (job.stage === 'review') {
       card = `<div class="ctx"><p class="label">Preview ready</p><p>Watch it, press N to leave a note at the exact second, then approve or request changes.</p>
         <div class="actions"><a class="button cta" href="/review?job=${job.id}">Open review</a></div></div>`;
     } else {
-      const say = job.stage === 'edit' ? `Claude is editing this in ${esc(style ? style.name : 'the chosen format')}. You'll get a preview to review first.`
+      const ideasN = (job.picked || []).length, combo = (job.combos || []).find((c) => c.id === job.combo);
+      const say = job.stage === 'edit' ? `Claude is editing this in ${esc(style ? style.name : 'the chosen format')}${combo ? ` with the <b>${esc(combo.name)}</b> combo (${ideasN} effects)` : ideasN ? ` with your ${ideasN} picked idea${ideasN > 1 ? 's' : ''}` : ''}. You'll get a preview to review first.`
         : job.stage === 'revise' ? `Claude is working through your ${(job.notes || []).filter((n) => n.status === 'open').length || ''} notes.` : 'Claude is rendering the final version.';
       card = `<div class="ctx"><p class="label">Now</p><p>${say}</p>${$('#claudeHint').innerHTML}</div>`;
     }
@@ -235,7 +239,62 @@ function renderJob(job) {
       <div class="pbar"><span style="width:${pct}%"></span></div>
       <ol class="steps">${steps}</ol>${card}`;
   }
-  return `<button class="back ghost" id="back">← All videos</button><div class="jobgrid">${phone}<div class="side">${side}</div></div>`;
+  return `<button class="back ghost" id="back">← All videos</button><div class="jobgrid">${phone}<div class="side">${side}</div></div>${job.stage === 'pick' ? ideasBoard(job) : ''}`;
+}
+
+// ---------- Claude's ideas (pick stage) ----------
+// formats.json = the 3 base formats (pick one); ideas.json = moments Claude wants to dress up (tick any);
+// combos.json = Claude's ready-made mixes of those ideas for a heavily edited video (pick one, then tweak).
+const sameSet = (a, b) => a.size === b.length && b.every((x) => a.has(x));
+function comboCard(job, c, ideas) {
+  const on = pick.combo === c.id, mine = ideas.filter((i) => c.ideas.includes(i.id));
+  const dur = Number(job.duration) || Math.max(1, ...ideas.map((i) => i.end || 0));
+  const timed = mine.filter((i) => i.start != null).sort((a, b) => a.start - b.start), whole = mine.filter((i) => i.start == null);
+  const seg = (i, n) => `<span class="seg c${n % 4}" style="left:${(i.start / dur) * 100}%;width:${Math.max(2, ((i.end ?? i.start + 1) - i.start) / dur * 100)}%" title="${fmtTime(i.start)} ${esc(styleOf(i.style).name)}"></span>`;
+  return `<button class="combo ${on ? 'on' : ''}" data-combo="${esc(c.id)}" aria-pressed="${on}">
+    <span class="combo-top"><span class="combo-name">${esc(c.name)}</span>${c.fav ? '<span class="fav">Claude’s pick</span>' : ''}
+      <span class="muted">${mine.length} effects${c.base ? ' · on ' + esc(styleOf(c.base).name) : ''}</span><span class="tick">${on ? '✓' : '+'}</span></span>
+    <span class="pitch">${esc(c.pitch)}</span>
+    <span class="tl">${timed.map(seg).join('')}</span>
+    ${whole.length ? `<span class="tl-all">${whole.map((i) => esc(styleOf(i.style).name)).join(' + ')} all the way through</span>` : ''}
+    <span class="combo-steps">${timed.map((i, n) => `<span><i class="dot c${n % 4}"></i>${fmtTime(i.start)} ${esc(styleOf(i.style).name)}</span>`).join('')}</span>
+  </button>`;
+}
+function ideasBoard(job) {
+  const top = (job.formats || []).slice(0, 3), ideas = job.ideas || [], combos = job.combos || [];
+  if (pick.job !== job.id) pick = { job: job.id, style: top[0]?.style || null, ideas: new Set(), combo: null };
+  const combo = combos.find((c) => c.id === pick.combo), tweaked = combo && !sameSet(pick.ideas, combo.ideas);
+  const base = pick.style ? styleOf(pick.style) : null;
+  if (pick.style && !top.some((f) => f.style === pick.style)) top.push({ style: pick.style, reason: 'Your pick from every format' });
+  const card = (idea) => {
+    const s = styleOf(idea.style), on = pick.ideas.has(idea.id);
+    const src = (idea.preview && fileUrl(job, idea.preview)) || previews[slugOf(s.name)];
+    const when = idea.start != null ? fmtTime(idea.start) + (idea.end != null ? '–' + fmtTime(idea.end) : '') : 'whole video';
+    return `<button class="idea ${on ? 'on' : ''}" data-idea="${esc(idea.id)}" aria-pressed="${on}">
+      <span class="thumb tall">${src ? `<video src="${src}" muted loop playsinline autoplay preload="metadata"></video>` : `<span class="ph-tall"><em>${esc(s.name)}</em></span>`}</span>
+      <span class="idea-body">
+        <span class="sc-head">${idea.start != null ? `<span class="when" data-seek="${idea.start}" title="Play this moment">▶ ${when}</span>` : `<span class="when">${when}</span>`}<b>${esc(s.name)}</b>${idea.fav ? '<span class="fav">Claude\'s favourite</span>' : ''}</span>
+        ${idea.quote ? `<q>${esc(idea.quote)}</q>` : ''}
+        <span class="pitch">${esc(idea.pitch)}</span>
+      </span>
+      <span class="tick">${on ? '✓' : '+'}</span>
+    </button>`;
+  };
+  return `<section class="board" id="ideas">
+    <div class="board-head"><h2 class="shout-h">${combos.length ? `Claude's <em>edits</em> for this video` : ideas.length ? `Claude's <em>ideas</em> for this video` : `Pick a <em>format</em>`}</h2>
+      <p class="muted">${combos.length ? 'Each combo stacks several effects so the video never sits still. Pick one, then add or drop single ideas below.' : 'Each one is a moment Claude wants to make pop. Tick as many as you like.'}</p></div>
+    ${combos.length ? `<p class="label">1 · Combos <span class="muted">pick one</span></p>
+      <div class="combos">${combos.map((c) => comboCard(job, c, ideas)).join('')}</div>` : ''}
+    ${ideas.length ? `<p class="label">${combos.length ? '2 · Or mix your own' : '1 · Ideas'} <span class="muted">${pick.ideas.size} of ${ideas.length} picked</span>
+        <button class="ghost small" id="ideasAll">${pick.ideas.size === ideas.length ? 'Clear all' : 'Take them all'}</button></p>
+      <div class="ideas">${ideas.map(card).join('')}</div>` : ''}
+    <p class="label">${ideas.length ? (combos.length ? '3 · ' : '2 · ') : ''}Base format <span class="muted">pick one; the ideas go on top of it</span></p>
+    <div class="top3 bases">${top.map((f, i) => styleCard(styleOf(f.style), { as: 'base', on: f.style === pick.style, rank: job.formats?.[i]?.style === f.style ? i + 1 : 0, reason: f.reason, preview: f.preview && fileUrl(job, f.preview) })).join('')}</div>
+    <p class="muted">Want another base? <a href="#gallery">Every format is below</a>; clicking one picks it here.</p>
+    <div class="gobar"><span>${combo ? `<b>${esc(combo.name)}</b>${tweaked ? ' (your tweaks)' : ''} · ` : ''}${base ? `<b>${esc(base.name)}</b>` : 'No base format yet'}${pick.ideas.size ? ` + <b>${pick.ideas.size} ${combo ? 'effect' : 'idea'}${pick.ideas.size > 1 ? 's' : ''}</b>` : ''}</span>
+      <button class="cta" id="go" ${base ? '' : 'disabled'}>Start editing →</button></div>
+    <p class="msg" id="pickMsg"></p>
+  </section>`;
 }
 
 function render() {
@@ -274,9 +333,26 @@ function renderJobs() {
 }
 
 document.addEventListener('click', async (ev) => {
+  const seek = ev.target.closest('[data-seek]'), pv = $('#pv');
+  if (seek && pv) { pv.currentTime = Number(seek.dataset.seek); pv.muted = false; pv.play(); $('#phone').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
   const t = ev.target.closest('button, a');
   if (!t) return;
-  if (t.dataset.job) open(t.dataset.job);
+  const job = jobs.find((j) => j.id === current);
+  if (t.dataset.base) { pick.style = t.dataset.base; render(); }
+  else if (t.dataset.combo) {
+    const c = (job?.combos || []).find((x) => x.id === t.dataset.combo);
+    if (pick.combo === c.id) pick = { ...pick, combo: null, ideas: new Set() };
+    else pick = { ...pick, combo: c.id, ideas: new Set(c.ideas), style: c.base || pick.style };
+    render();
+  }
+  else if (t.dataset.idea) { pick.ideas.has(t.dataset.idea) ? pick.ideas.delete(t.dataset.idea) : pick.ideas.add(t.dataset.idea); render(); }
+  else if (t.id === 'ideasAll') { const all = (job?.ideas || []).map((i) => i.id); pick.ideas = new Set(pick.ideas.size === all.length ? [] : all); render(); }
+  else if (t.id === 'go') {
+    try { await post(`/api/jobs/${current}/choose`, { style: pick.style, ideas: [...pick.ideas], combo: pick.combo }); await refresh(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    catch (e) { $('#pickMsg').className = 'msg err'; $('#pickMsg').textContent = e.message; }
+  }
+  else if (t.dataset.style && job?.stage === 'pick') { pick.style = t.dataset.style; render(); $('#ideas').scrollIntoView({ behavior: 'smooth' }); }
+  else if (t.dataset.job) open(t.dataset.job);
   else if (t.id === 'back' || t.id === 'another') open(null);
   else if (t.id === 'compare') { compareRaw = !compareRaw; render(); }
   else if (t.dataset.aspect) {

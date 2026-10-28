@@ -285,3 +285,52 @@ input[type=url], input[type=text], textarea, select { font: inherit; color: var(
   .sh-player { position: static; }
   .scene { grid-template-columns: 1fr; }
 }
+
+/* Pick stage: Claude's ideas board. Loud on purpose: it's the one screen where Claude pitches. */
+.ctx.shout { border-color: var(--accent); background: linear-gradient(160deg, var(--accent-soft), var(--panel) 70%); }
+.ctx.shout .big { font-size: 22px; font-weight: 800; line-height: 1.2; margin: 0 0 6px; }
+.big em, .shout-h em { font: italic 400 1.15em var(--serif); color: var(--accent-hi); }
+.board { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
+.board-head .shout-h { font-size: clamp(26px, 4.5vw, 38px); font-weight: 800; line-height: 1.05; margin: 0 0 6px; letter-spacing: -.02em; }
+.board .label { margin: 10px 0 0; font: 600 10.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; gap: 10px; align-items: center; }
+.board .label .muted { font: 400 12px var(--sans); letter-spacing: 0; text-transform: none; }
+button.small { font-size: 12px; padding: 3px 10px; margin-left: auto; }
+.sc.on .thumb { border: 2px solid var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+.sc.on .sc-head b::after { content: " ✓"; color: var(--accent-hi); }
+.ideas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 12px; }
+.idea { display: grid; grid-template-columns: 84px minmax(0, 1fr) auto; gap: 14px; align-items: start; text-align: left; padding: 12px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); transition: border-color .15s, background .15s, transform .15s; }
+.idea:hover { border-color: var(--accent); transform: translateY(-1px); }
+.idea.on { border-color: var(--accent); background: linear-gradient(160deg, var(--accent-soft), var(--card) 75%); }
+.idea .thumb { position: relative; display: block; overflow: hidden; border-radius: 9px; background: #000; border: 1px solid var(--line); }
+.idea .thumb em { font-size: 13px; }
+.idea-body { display: grid; gap: 6px; min-width: 0; }
+.idea .pitch { font-size: 17px; font-weight: 800; line-height: 1.25; }
+.idea q { font: italic 15px/1.35 var(--serif); color: var(--accent-hi); }
+.idea q::before { content: "“"; } .idea q::after { content: "”"; }
+.when { font: 600 11px var(--mono); padding: 2px 7px; border-radius: 5px; background: rgba(0, 0, 0, .35); border: 1px solid var(--line); color: var(--text); }
+[data-seek] { cursor: pointer; } [data-seek]:hover { border-color: var(--accent); color: var(--accent-hi); }
+.fav { font: 600 10px var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 5px; background: var(--you); color: #1a1300; }
+.tick { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--line); color: var(--muted); font-weight: 800; }
+.idea.on .tick { background: var(--accent); border-color: var(--accent); color: #fff; }
+.gobar { position: sticky; bottom: 12px; z-index: 5; display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 10px 10px 10px 16px; border-radius: 14px; background: color-mix(in srgb, var(--panel) 88%, transparent); backdrop-filter: blur(10px); border: 1px solid var(--line); box-shadow: 0 12px 32px -12px rgba(0, 0, 0, .7); }
+.gobar button:disabled { opacity: .45; cursor: not-allowed; }
+@media (max-width: 560px) { .idea { grid-template-columns: 64px minmax(0, 1fr) auto; gap: 10px; } .idea .pitch { font-size: 15px; } }
+.board .top3.bases { grid-template-columns: repeat(auto-fill, minmax(130px, 170px)); }
+
+/* Combos: Claude's ready-made stacks of ideas, each with a timeline of where every effect lands. */
+.combos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+.combo { display: grid; gap: 10px; align-content: start; text-align: left; padding: 16px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); transition: border-color .15s, background .15s, transform .15s; }
+.combo:hover { border-color: var(--accent); transform: translateY(-1px); }
+.combo.on { border: 2px solid var(--accent); padding: 15px; background: linear-gradient(160deg, var(--accent-soft), var(--card) 80%); box-shadow: 0 0 0 4px var(--accent-soft); }
+.combo-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.combo-top .tick { margin-left: auto; }
+.combo.on .tick { background: var(--accent); border-color: var(--accent); color: #fff; }
+.combo-name { font: italic 400 26px/1 var(--serif); color: var(--accent-hi); }
+.combo .pitch { font-size: 16px; font-weight: 800; line-height: 1.25; }
+.tl { position: relative; height: 22px; border-radius: 6px; background: var(--bg); border: 1px solid var(--line); overflow: hidden; }
+.tl .seg { position: absolute; top: 3px; bottom: 3px; border-radius: 4px; }
+.c0 { background: var(--accent); } .c1 { background: var(--accent-hi); } .c2 { background: var(--you); } .c3 { background: var(--ok); }
+.tl-all { font: 600 10.5px var(--mono); letter-spacing: .04em; color: var(--muted); padding: 3px 8px; border: 1px dashed var(--line); border-radius: 6px; }
+.combo-steps { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); }
+.combo-steps span { display: inline-flex; gap: 5px; align-items: center; }
+.dot { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }

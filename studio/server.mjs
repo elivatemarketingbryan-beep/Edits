@@ -53,9 +53,18 @@ const routes = [
     const dir = path.join(ROOT, 'docs', 'reel-videos');
     const map = {};
     if (fs.existsSync(dir)) for (const f of fs.readdirSync(dir)) { const m = f.match(/^\d+-(.+)\.mp4$/); if (m) map[m[1]] = `/previews/${f}`; }
+    // Video FX styles preview with the engine's example clip (engines/video-fx/examples/NN-<fx>.mp4).
+    const fxDir = path.join(ROOT, 'engines', 'video-fx', 'examples');
+    const fxFiles = fs.existsSync(fxDir) ? fs.readdirSync(fxDir) : [];
+    const slug = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    for (const s of JSON.parse(fs.readFileSync(path.join(ROOT, 'styles', 'catalog.json'), 'utf8')).styles) {
+      const f = s.fx && fxFiles.find((x) => x.match(/^\d+-(.+)\.mp4$/)?.[1] === s.fx);
+      if (f && !map[slug(s.name)]) map[slug(s.name)] = `/fx-previews/${f}`;
+    }
     send(res, 200, map);
   }],
   ['GET', /^\/previews\/([\w.-]+\.mp4)$/, (req, res, [f]) => serveFile(req, res, path.join(ROOT, 'docs', 'reel-videos', f))],
+  ['GET', /^\/fx-previews\/([\w.-]+\.mp4)$/, (req, res, [f]) => serveFile(req, res, path.join(ROOT, 'engines', 'video-fx', 'examples', f))],
   ['GET', /^\/api\/jobs\/([\w-]+)$/, (req, res, [id]) => {
     const job = readJob(id);
     job ? send(res, 200, job) : send(res, 404, { error: 'No such job' });
@@ -83,12 +92,16 @@ const routes = [
     send(res, 200, writeJob({ id, title: url, url, created: new Date().toISOString(), stage: 'formats' }));
   }],
 
-  // Pick a format (or a tool) straight away, or from the top 3.
+  // Pick a format (or a tool) straight away, or from the top 3, plus any of Claude's ideas (ideas.json ids).
   ['POST', /^\/api\/jobs\/([\w-]+)\/choose$/, async (req, res, [id]) => {
-    const { style } = await readBody(req);
+    const { style, ideas, combo } = await readBody(req);
     const catalog = JSON.parse(fs.readFileSync(path.join(ROOT, 'styles', 'catalog.json'), 'utf8'));
     if (!catalog.styles.some((s) => s.id === style)) return send(res, 400, { error: 'Unknown style' });
-    send(res, 200, setStage(id, 'edit', { style }));
+    const job = readJob(id);
+    const known = new Set((job?.ideas || []).map((i) => i.id));
+    const picked = Array.isArray(ideas) ? ideas.filter((i) => known.has(i)) : [];
+    // combo = the combo they started from (combos.json id), or null if they picked ideas one by one.
+    send(res, 200, setStage(id, 'edit', { style, picked, combo: (job?.combos || []).some((c) => c.id === combo) ? combo : null }));
   }],
 
   ['POST', /^\/api\/jobs\/([\w-]+)\/notes$/, async (req, res, [id]) => {

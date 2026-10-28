@@ -10,7 +10,7 @@ export const JOBS = path.join(ROOT, 'jobs');
 // Stages in order. `who` says whose move it is.
 export const STAGES = {
   formats: { who: 'claude', label: 'Finding the best 3 formats' },
-  pick:    { who: 'you',    label: 'Pick a format' },
+  pick:    { who: 'you',    label: 'Pick a format and ideas' },
   edit:    { who: 'claude', label: 'Editing' },
   review:  { who: 'you',    label: 'Review the preview' },
   revise:  { who: 'claude', label: 'Applying your notes' },
@@ -30,7 +30,7 @@ export function readJob(id) {
   const file = path.join(jobDir(id), 'job.json');
   if (!fs.existsSync(file)) return null;
   const job = JSON.parse(fs.readFileSync(file, 'utf8'));
-  for (const extra of ['formats', 'edits', 'notes', 'sheet']) {
+  for (const extra of ['formats', 'ideas', 'combos', 'edits', 'notes', 'sheet']) {
     const f = path.join(jobDir(id), `${extra}.json`);
     job[extra] = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : (extra === 'formats' ? null : []);
   }
@@ -40,7 +40,7 @@ export function readJob(id) {
 }
 
 export function writeJob(job) {
-  const { formats, edits, notes, sheet, waitingOn, stageLabel, ...rest } = job;
+  const { formats, ideas, combos, edits, notes, sheet, waitingOn, stageLabel, ...rest } = job;
   fs.mkdirSync(jobDir(job.id), { recursive: true });
   rest.updated = new Date().toISOString();
   fs.writeFileSync(path.join(jobDir(job.id), 'job.json'), JSON.stringify(rest, null, 2));

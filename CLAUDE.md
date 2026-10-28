@@ -66,8 +66,8 @@ scripts/transcribe.sh     WhisperX large-v3 word timings on the GPU (CUDA float1
 
 | Stage | Who | What Claude does | Writes | Next |
 |---|---|---|---|---|
-| `formats` | Claude | Get the video (`source` in the job folder, or download `url` with yt-dlp into it). Intake into `projects/<id>/` and transcribe once (rough-cut skill). Rank styles (below). Render a ~5s preview of each of the top 3 from the strongest moment. | `formats.json`, `previews/<style>.mp4`, `job.json` `transcript` = `transcript.json` (segments `{start,end,text}`), `duration` | `pick` |
-| `edit` | Claude | Build the chosen `style` (or run the chosen tool) per its catalog recipe, STYLE-GUIDE section and brand.json. Write the breakdown sheet first (see "Video Breakdown Sheet"; long-form renders one file per scene). Render a draft without sounds, then add sounds (see "Sound effects"), then `sheet.mjs thumbs`. | `sheet.json`, `.nosfx.mp4`, `sfx.json`, `preview.mp4`, `edits.json`, `job.json` `preview` | `review` (tools with no video: put files in `outputs/`, list them in `job.json` `outputs`, go to `done`) |
+| `formats` | Claude | Get the video (`source` in the job folder, or download `url` with yt-dlp into it). Intake into `projects/<id>/` and transcribe once (rough-cut skill). Rank styles (below). Render a ~5s preview of each of the top 3 from the strongest moment. Pitch ideas for its moments (see "Claude's ideas"). | `formats.json`, `ideas.json`, `previews/<style>.mp4`, `job.json` `transcript` = `transcript.json` (segments `{start,end,text}`), `duration` | `pick` |
+| `edit` | Claude | Build the chosen `style` (or run the chosen tool) per its catalog recipe, STYLE-GUIDE section and brand.json, plus every idea in `job.json` `picked` at its moment (unpicked ideas are skipped). Write the breakdown sheet first (see "Video Breakdown Sheet"; long-form renders one file per scene). Render a draft without sounds, then add sounds (see "Sound effects"), then `sheet.mjs thumbs`. | `sheet.json`, `.nosfx.mp4`, `sfx.json`, `preview.mp4`, `edits.json`, `job.json` `preview` | `review` (tools with no video: put files in `outputs/`, list them in `job.json` `outputs`, go to `done`) |
 | `revise` | Claude | Run `node studio/sheet.mjs md <id>` to see which scenes have open notes. For every note with `status: "open"`: change that scene only, then set its `reply` (one line: what changed) and `status: "done"`. If a note can't be done, say why in `reply` and leave it open. Long-form: re-render only the noted scenes, `assemble`, re-place sounds, `thumbs`. Short-form: re-render the preview. | `notes.json`, `preview.mp4`, `edits.json` | `review` |
 | `final` | Claude | Full-quality render of the approved edit. Copy it into the job folder. Run the content step if the user asked for it. | `final.mp4`, `job.json` `final`, `finalDuration` (seconds, for the "ready" screen's runtime stat), `outputs` | `done` |
 
@@ -128,6 +128,41 @@ Write `formats.json` as `[{ "style": "<id>", "reason": "<one short line about TH
 best first, exactly 3. Reasons name what's in the video ("you rank 5 tools"), not
 generic praise. A `draft` style can be suggested; say so in the reason if it will
 need extra time.
+
+### Claude's ideas (ideas.json)
+
+The pick screen shouts Claude's ideas at the user and lets them tick the ones they want, on
+top of one base format. Write `jobs/<id>/ideas.json` in the `formats` stage, 8-14 ideas (enough to fill the combos below):
+`[{ "id": "i1", "style": "graph-rise", "start": 12.4, "end": 17.0, "quote": "we went from zero to 10k", "pitch": "You say 10k: a chart rips up the wall behind you.", "fav": true }]`
+
+- Each idea is one moment from the transcript (`start`/`end` in source seconds; leave both
+  out for a whole-video idea such as pixel zoom throughout) dressed up with one catalog
+  style or effect. The Video FX styles fit most moments; any style's building blocks
+  can be pitched (a ranking card, a search bar from ANIMATIONS.md, a glow intro).
+- `quote` is the exact words said there. `pitch` is one punchy line in plain words that
+  sells what the viewer will see at that moment (under ~90 characters, no jargon).
+- Spread the ideas across the video, no two on the same moment, mixed kinds. Mark 1-3
+  strongest with `fav: true`. `preview` (optional, job-relative path) overrides the
+  style's example clip.
+- The choice lands in `job.json`: `style` = base format, `picked` = the ticked idea ids.
+  In `edit`, build each picked idea at its moment, log it in `edits.json` with
+  `why` = its pitch, and put it in the breakdown sheet. Ideas not picked are not built.
+
+**Combos (combos.json).** The user wants videos that feel heavily edited, so Claude also
+stacks its ideas into 2-3 ready-made combos and the pick screen leads with them. Write
+`jobs/<id>/combos.json` next to `ideas.json`:
+`[{ "id": "c1", "name": "Full send", "base": "personal-reel", "ideas": ["i1", "i2", "i4", "i6", "i9"], "pitch": "Something new every 3 seconds: cover open, chart on the 10k, tick list on the steps.", "fav": true }]`
+
+- A combo is a set of idea ids plus a base format (`base`, optional: one of `formats.json`).
+  Mix kinds (a big title moment, a data moment, a list, a wall, a transition) and add one
+  whole-video idea (pixel zoom, captions style) so nothing sits still between effects.
+- Make them different levels: one **max** combo (an effect or punch-in every 2-4 s, 6-10
+  ideas, marked `fav` if the footage can take it), one **punchy** (4-6), one **clean** (2-3
+  on the biggest beats). Names are 1-3 words; `pitch` sells the whole edit in one line.
+- Picking a combo ticks its ideas; the user can add or drop single ideas after.
+  `job.json` gets `combo` (the id they started from) and `picked` (the final idea list,
+  which is what gets built). Over 4 Video FX effects in one reel: render each on its own
+  range and splice them in order, as for any effect list.
 
 ### edits.json (feeds the review page)
 
@@ -219,7 +254,8 @@ graphics sit behind the speaker. Pick by what's being said:
 | showing an app or result | `fx-phone-mockup`, `fx-frame-break` (pops out of a Reels frame), `fx-green-screen` |
 | at a hook, punchline or turn | `fx-vertigo` (dolly zoom), `fx-zoom-through-cut`, `fx-orbit`, `fx-doodle-boil` |
 
-2-4 effects per 30-60 s reel; each renders on its own range and `splice`s back into the
+2-4 effects per 30-60 s reel by default, more when the user picks a combo (see "Claude's
+ideas"); each renders on its own range and `splice`s back into the
 full video. Words come from the job's transcript (`studio/words-convert.mjs video-fx`, passed
 with `--words`), captions get the brand purple (`"captions": {"accent": "#C4B5FD"}`); every
 skill's "Video Studio" block has the details. Sounds go on after, with `studio/sfx.mjs`.
@@ -296,6 +332,15 @@ Read the style's `engine` in the catalog:
   cards) with real site captures. Follow the `motion-promo` skill; its project goes in
   `projects/remotion/motion-promo-<id>/`. Like faceless, it trims the voiceover's pauses
   itself, so its transcript is the job's one transcript.
+- **video-fx** (`engines/video-fx`, the 17 Video FX styles: paper cut out, magazine cover,
+  sofa wall, pixel zoom, sketch boil, graph rise, glass text, orbit spin, pull-out reveal,
+  phone frame, dolly zoom, news wall, frame pop, punch-through cut, green screen,
+  interface world, tick list). The style's `fx` names its skill (`fx-<fx>`). Picked as a
+  style, that effect leads: run it on the 1-3 strongest ranges, then add 1-2 other effects
+  from the Video FX table above where they fit, splice into the full video, then sounds.
+  Ranking: these suit a 9:16 talking head with a clean matte; their `bestFor` cues
+  follow the table above. Its 5 s format preview is a real render on the job's clip, not
+  the example.
 
 `status: "draft"` styles have no template yet: build them from the STYLE-GUIDE section
 with the editor engine, and once the user approves a final, save what worked as that

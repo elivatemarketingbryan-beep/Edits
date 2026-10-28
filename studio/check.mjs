@@ -42,7 +42,8 @@ if (catalog) {
   const styles = catalog.styles.filter((s) => s.kind === 'style');
   ok(`${styles.length} styles, ${catalog.styles.length - styles.length} tools, ${styles.filter((s) => s.status === 'ready').length} ready`);
   for (const s of catalog.styles) {
-    if (!['editor', 'split-screen', 'legacy', 'content-os', 'faceless', 'brand-motion', 'remotion-skill'].includes(s.engine)) bad(`${s.id}: unknown engine "${s.engine}"`);
+    if (!['editor', 'split-screen', 'legacy', 'content-os', 'faceless', 'brand-motion', 'remotion-skill', 'video-fx'].includes(s.engine)) bad(`${s.id}: unknown engine "${s.engine}"`);
+    if (s.engine === 'video-fx' && !exists(`.claude/skills/fx-${s.fx}/SKILL.md`)) bad(`${s.id}: no skill fx-${s.fx}`);
     if (!['ready', 'draft'].includes(s.status)) bad(`${s.id}: unknown status "${s.status}"`);
     if (s.kind === 'style') {
       if (!guide.includes(`### ${s.id}:`)) bad(`${s.id}: no "### ${s.id}:" section in STYLE-GUIDE.md`);

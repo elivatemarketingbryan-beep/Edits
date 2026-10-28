@@ -10,7 +10,7 @@
    `run my studio jobs`
 4. **Pick a format.** The page shows the best 3 formats for that video, each with a
    reason and a 5-second preview. Click one. (Or scroll to "Every format" and choose any
-   of the 35 styles yourself.) Say `run my studio jobs` again. If you scripted the video
+   of the 52 styles yourself.) Say `run my studio jobs` again. If you scripted the video
    in Content OS, the format you scripted it for is already first.
 5. **Review.** Open the review page. Pause anywhere, press **N**, type a note ("cut
    this pause"). You can also leave a note on a specific cut or caption. Then:
@@ -35,7 +35,7 @@
 
 ## What's in here
 
-- **35 styles**: 28 short-form (three of them need no camera: faceless sprite, brand
+- **52 styles**: 45 short-form (17 Video FX styles; three need no camera: faceless sprite, brand
   motion, motion promo) and 7 long-form. Styles marked "New style" haven't been made
   here yet; the first one you approve becomes the template for next time.
 - **Effects for any style**: premium word-by-word captions, a glowing two-line intro
