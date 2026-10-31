@@ -83,6 +83,9 @@ in front of the head; place them above the head so they don't cover the face.
 5. Words come from the real word timings (words.json), never guessed.
 6. Safe zones (docs/editor-pipeline.md) still apply: keep captions out of the top 200px
    and bottom 300px of a 1080x1920 frame.
+7. **Premium finish on every video** (STYLE-GUIDE.md "Premium finish"): tracking -1/-2, two or three
+   motions per line, a treated power word every ~15 s, `premium` or `gradient` on the hook, CTA and
+   numbers, one `shine`, `flicker` on the turn.
 
 ## captions.json
 

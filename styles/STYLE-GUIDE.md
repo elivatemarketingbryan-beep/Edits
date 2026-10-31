@@ -39,6 +39,29 @@ holds the ids, engines and ranking cues.
   empty grid), reframe (accent word), steps (numbered list, active row lit), payoff
   (30-day grid fills, counter goes up, line chart rises).
 
+## Premium finish (applies to every video, every style)
+
+Bryan's standing rule (Oct 31 2026): these effects from Patrik Key's caption-styles video
+(youtu.be/Q04FF5KZyt4, details in styles/CAPTIONS.md) go on **every** edit, short or long, on top of
+whatever the style is. They're what makes an edit read as premium rather than default CapCut.
+A style that says otherwise (e.g. floating-window's no-motion rule) keeps its own rule for that item.
+
+1. **Tight type.** Every caption and title font gets letter-spacing -1 to -2 (`-0.01em` to `-0.02em`).
+2. **Two or three motions, never one.** Every caption line and title combines at least two (slide up +
+   blur-in, pop + baseline rise, drop + bounce); a plain fade or a single default preset is not enough.
+3. **Power words.** At least one line in every ~15 s gets a treated power word: `power-split` behind or
+   across the head, a `box` around it, or a `gradient` / `premium` look, in brand purple.
+4. **Premium look on the key captions.** The hook line, the CTA and every number on screen use the
+   `premium` look (crisp white offset copy behind a purple fill) or the `gradient` look.
+5. **One shine per video.** The logo, the main title or the CTA gets a single `shine` sweep. Once.
+6. **Flicker on the turn.** The big reveal or reframe line enters with `flicker` (6 frames), at most
+   once or twice per video.
+7. **Defaults are banned.** No CapCut/template default animation used as-is: change its duration,
+   easing or masking so it doesn't look like everyone else's.
+
+Until the `captions` template can render `power-split`, `box`, `pop-rise` and the four looks
+(CAPTIONS.md "to build"), build them in the HyperFrames composition of the edit itself.
+
 ## Sound (applies to every style)
 
 **The full rulebook is `styles/SOUND-RULES.md`** (which sound for which moment, where
