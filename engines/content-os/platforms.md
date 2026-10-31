@@ -9,7 +9,8 @@ defaults and say which cadence they assumed.
 - **Reels:** <<REELS_PER_WEEK, e.g. 5>> per week. Edited in Video Studio, posted by `auto-poster`.
 - **Carousels:** <<CAROUSELS_PER_WEEK, e.g. 1-2>> per week, from `carousel-generator`.
 - **Captions:** hook before "more", short lines, the comment keyword from `backbone/offer.md` as the CTA.
-- **Hashtags:** <<HASHTAG_RULE, e.g. 3-5 niche tags / none>>
+  Shape, length and CTA rules from competitor data: `knowledge/ig-caption-patterns.md`.
+- **Hashtags:** 5-6 on their own line: `#contractors #contractormarketing #googlereviews #homeimprovement #leadgeneration #contractorsofinstagram`, swapping #googlereviews for the video's topic and adding a trade tag when it fits.
 - **What's worked lately:** <<e.g. relatable-thought reels, rankings>>
 - **Stopped doing:** <<anything quit on purpose>>
 

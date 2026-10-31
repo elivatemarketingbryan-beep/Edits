@@ -185,7 +185,9 @@ Instead:
 
 ## Caption Rules
 
-Generate the caption from the transcript, not from a generic template.
+Generate the caption from the transcript, not from a generic template. For Instagram, follow the
+shape in `knowledge/ig-caption-patterns.md` (hook line under ~12 words, 25-60 words, one ask, 5-6
+hashtags from `platforms.md`) and the rules below.
 
 - If the transcript includes a real comment/DM CTA the creator said on camera, put that CTA on line 1 and repeat it at the end.
 - If there is no spoken CTA, do not manufacture one. Use the strongest hook/take from the transcript and keep it casual.

@@ -65,7 +65,7 @@ different. Short on ideas? Make fewer pieces. Four good ones beat seven recycled
 
 Only captions, community posts, carousel briefs and similar text are written here (scripts go to
 `scriptwriter`, clips to `clipper`, YouTube descriptions to `yt-description`). For each: apply
-`platform-formats` → write five hook options with `reference/text-hooks.md` → write the body in
+`platform-formats` (IG captions: also `engines/content-os/knowledge/ig-caption-patterns.md`) → write five hook options with `reference/text-hooks.md` → write the body in
 Bryan's voice (`voice-dna.md`) → cut 20% → tie to the CTA where `platforms.md` says a CTA belongs.
 
 One piece per file: `drafts/YYYY-MM-DD/<platform>-<slug>.md`, ending with the source line:
