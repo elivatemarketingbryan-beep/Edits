@@ -79,7 +79,7 @@ Style flavours (on top of the rules above):
   yap-and-show, clone-versus, dual-role-dialogue, split-screen-lesson,
   lesson-document, magazine-cover, pixel-zoom, sketch-boil, glass-text,
   pull-out-reveal, dolly-zoom, frame-pop, punch-through-cut, green-screen, film-grade-short,
-  story-montage, silhouette, film-grade, mono-explainer.
+  story-montage, silhouette, film-grade, mono-explainer, cinematic-authority (dense in the hook only).
 - **Minimal** (a whoosh or riser at most; let the words carry it): fitted-captions,
   cinematic-type (low whooshes and risers only), natural-story, ear-to-ear-captions,
   vlog (music-led; no UI sounds), floating-window (hard cuts, no UI sounds).
@@ -610,6 +610,30 @@ active step, the underline under the claim).
 - **Pacing:** the cold open changes picture every 1.5-3 s (a run of proof cards); inside chapters one
   diagram holds 10-30 s and keeps building.
 - Status draft until Bryan approves a first edit; then save the template in presets/mono-explainer/.
+
+### cinematic-authority: Cinematic authority
+From Sabri Suby's "The New Era of Digital Marketing Has Just Begun" (REFERENCES.md, Oct 2026). The
+speaker carries the video; graphics are loud, short punctuation. His red-on-black becomes Bryan's
+purple-on-black; white stays the type colour.
+
+- **A-roll:** full-frame medium shot is ~80% of the runtime. Warm cinematic grade (`lut.mjs`), slow
+  push-ins on key lines, shallow-focus look. Recording tip for Bryan: open space and soft light behind.
+- **Hook (first ~40 s), a picture change every 1.5-3 s:** giant proof numbers in heavy condensed caps
+  (League Gothic) beside the head, the speaker matted in front of them (a hand passing over the number
+  sells it); the background swaps to a wall of real client ads or results behind him; money or coins
+  bursting for revenue lines. Numbers only from the backbone proof bank.
+- **Takeover slides:** cut to near-black for a beat, 1-2 huge white condensed-caps words with a dark
+  edge and faint film-scratch texture, blurring in and out word by word.
+- **Curiosity list:** a title with numbered cards whose contents are pixelated, so the viewer sees how
+  many things are coming; each card is revealed in its own section.
+- **Diagrams on black, glowing:** neon line charts (purple + light purple, pill labels), node maps with
+  purple pill nodes, either/or headers with white pills under; platform logos as the cast (logo bars,
+  a coin burst behind a logo).
+- **Captions:** keyword lower-thirds only, white condensed caps bottom-centre, about one every 10-20 s.
+  No word-by-word captions on the talking head.
+- **Proof full frame:** real search results, reviews, ads and advertorials for a few seconds each.
+- **Pacing after the hook:** long talking stretches with a takeover, diagram or keyword every 30-90 s.
+- Status draft until Bryan approves a first edit; then save the template in presets/cinematic-authority/.
 
 ## Edit review (the preview-and-notes step)
 

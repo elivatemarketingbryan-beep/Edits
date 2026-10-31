@@ -5,6 +5,43 @@ reuse. Descriptions only; no footage, graphics or words are copied.
 
 ---
 
+## Sabri Suby: "The New Era of Digital Marketing Has Just Begun"
+
+youtu.be/xsdoHywBD0I · 21:59 · 16:9 (shot 4K) · Oct 2026 · ~29K views at study time (Oct 31 2026).
+Studied from frames every ~40s across the whole video plus every 1.5s of the first 45s.
+Picture and structure only; the audio wasn't studied. Same niche as Bryan (digital
+marketing for business owners). Became the **cinematic-authority** style (STYLE-GUIDE.md).
+
+**Format:** a single-speaker authority talk, no chapters. The opposite balance to the
+Nick Saraev course: here the **cinematic talking head is ~80% of the runtime** and the
+graphics are short, loud punctuation.
+
+### What he does, and how we'd use it
+
+| # | Technique | What it looks like | How Video Studio uses it |
+|---|---|---|---|
+| 1 | **Cinematic A-roll** | Seated in an armchair, medium shot, shallow depth of field, a warm-lit open office blurred into bokeh behind him, black tee. The frame itself says "premium" | Shoot guidance for Bryan (open background, light behind, shallow focus); in the edit, a gentle warm grade (`lut.mjs`) and slow push-ins |
+| 2 | **Proof-number hook with the speaker in front** | First seconds: a giant number per line ("$4.6", "$10.2 BILLION", "683", "1,184") in heavy condensed caps beside his head, his hand passing in front of it; money raining around him; then the background swaps to a wall of real client ad screenshots behind him | Needs a matte: number layer between background and person, real proof screenshots as the backdrop. Every number from the script (backbone proof bank only) |
+| 3 | **Black takeover slides with heavy caps** | Cut to black for a beat: one or two words in huge white condensed caps with a dark edge and film-scratch texture ("COMPLETELY CHANGED", "IN THIS NEW"), blurring in and out word by word | Kinetic type takeover on the turn of a sentence; brand purple replaces his red |
+| 4 | **Blurred numbered list = curiosity tease** | "MASTER DIGITAL MARKETING" with 7 numbered cards whose contents are pixelated, so the viewer sees there are 7 things but not what they are | Hook device for list videos: show the count, hide the items, reveal each one in its section |
+| 5 | **Platform logos as the cast** | "THE RULES" over Meta, Google, YouTube and Instagram logos; later a bar chart where each bar wears a platform logo; the Google G with coins bursting out | Real logos (media-use), one platform per bar; a coin/money burst behind a logo for "where the money goes" |
+| 6 | **Neon line charts** | Glowing red line rising on black with a "CPM" pill, then a blue "CPC" line racing it | `graph-rise` or a HyperFrames chart, brand purple + light purple lines, pill labels |
+| 7 | **Red-node mind maps** | "POOLS OF INTEREST": a centre node with red pill nodes around it; "DEMAND CAPTURE vs DEMAND GENERATION" as two red headers with white pills under | Thin-glow node diagram on black, purple pills; good for frameworks and either/or |
+| 8 | **Keyword lower-thirds, not full captions** | Most of the talking head has no captions; a key phrase lands as a big condensed caption low in the frame ("YOUR UNIQUE VANTAGE POINT", "+ THEIR SUGGESTED VIDEOS") | Caption mode: keywords only, 1 per 10-20s, white condensed caps bottom-centre |
+| 9 | **Real screens full frame** | Google search typing, an AI answer, a Google reviews list, a newspaper-style advertorial | Proof beats full frame for a few seconds; `search-bar`, real screenshots |
+
+### Pacing notes
+- The hook changes picture every 1.5-3s for ~40s; after that, long talking-head stretches
+  (often 60s+) with a takeover or keyword caption every 30-90s.
+- Graphics are loud and short: they punch a point and get out, the speaker carries the rest.
+- Proof is real and specific (his clients' actual ads and numbers), never stock.
+
+### For reels (9:16)
+- The proof-number hook (number beside the head, hand in front) and the blurred numbered
+  list both work as 9:16 openers.
+
+---
+
 ## Nick Saraev: "How I'd Make $12,373/Mo as an AI Consultant in 2027 (Course)"
 
 youtu.be/25KVZUg56_s · 28:24 · 16:9 · Oct 2026 · ~90K views at study time (Oct 31 2026).

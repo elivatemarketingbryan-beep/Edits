@@ -481,6 +481,38 @@
       ]
     },
     {
+      "id": "cinematic-authority",
+      "name": "Cinematic authority",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Cinematic talking head carries it; loud proof-number hook and short bold takeovers punch the points.",
+      "bestFor": [
+        "marketing or business authority talk",
+        "real client results and ad examples to show",
+        "an opinion piece on where the market is going",
+        "a list video (\"the 7 things\")"
+      ],
+      "recipe": [
+        "warm cinematic grade, slow push-ins; the talking head is ~80% of the runtime",
+        "hook: giant proof numbers beside the head with the speaker cut out in front, a wall of real client ads behind",
+        "black takeover slides: 1-2 huge condensed caps words, blur in and out",
+        "blurred numbered list as a curiosity tease, revealed section by section",
+        "platform logos as the cast (bars, coin bursts), neon line charts, glowing node maps in brand purple",
+        "keyword lower-thirds only (one every 10-20 s), not full captions",
+        "real screens full frame for proof (search, reviews, ads)"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#cinematic-authority",
+      "needsMatte": true,
+      "scriptShape": "long-form",
+      "alsoScriptShape": [
+        "proof",
+        "list"
+      ]
+    },
+    {
       "id": "tiktok-style",
       "name": "TikTok style",
       "aspect": "9:16",
