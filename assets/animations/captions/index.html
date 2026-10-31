@@ -1,10 +1,13 @@
 <!doctype html>
 <!-- Captions: a transparent caption overlay built from word timings, one mode per line:
-     build, karaoke, blur, accent, emphasis, statement, strike-swap, scattered, command
-     (see styles/CAPTIONS.md). --file is a captions.json { "lines": [ { "mode", "words":
-     [ { "w", "s", "e" } ], "accent": [...], "swap": "..." } ] } with output-timeline
+     build, karaoke, blur, accent, emphasis, statement, strike-swap, scattered, command, slide,
+     stack, brush, pointer, power-split, apple, pop-rise, box, tilt (see styles/CAPTIONS.md),
+     plus an optional "look" per line: gradient, premium, shine, flicker. --file is a
+     captions.json { "lines": [ { "mode", "words": [ { "w", "s", "e" } ], "accent": [...],
+     "swap": "...", "power": [...], "box": [...], "look": "..." } ] } with output-timeline
      seconds. Renders to WebM with alpha to sit over the edit. Seek-safe: every change is
-     placed on the timeline at its word's time. -->
+     placed on the timeline at its word's time. Premium finish (STYLE-GUIDE.md): tracking is
+     tight by default (-0.015em) and every line uses at least two motions. -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -22,6 +25,23 @@
       .ul { position: absolute; height: .09em; background: __ACCENT__; border-radius: .05em; transform-origin: left center; transform: scaleX(0); }
       .strike { position: absolute; left: 4%; right: 4%; overflow: visible; }
       .command { color: #E5484D; text-transform: uppercase; text-shadow: 0 6px 24px rgba(0, 0, 0, .7); }
+      .line { letter-spacing: -0.015em; }
+      /* looks */
+      .look-gradient .w { background: linear-gradient(180deg, #fff 0%, #fff 52%, __ACCENT_LIGHT__ 52%, __ACCENT_LIGHT__ 100%); -webkit-background-clip: text; background-clip: text;
+        color: transparent; text-shadow: none; filter: drop-shadow(0 4px 14px rgba(0, 0, 0, .6)); }
+      .look-premium .w { color: __ACCENT__; text-shadow: .045em .045em 0 #fff, 0 0 .06em rgba(0, 0, 0, .85), 0 0 .02em rgba(0, 0, 0, .9), 0 8px 26px rgba(0, 0, 0, .7); }
+      .line.shine .w { color: transparent; text-shadow: none; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat; background-size: 250% 100%;
+        background-color: transparent; background-image: linear-gradient(105deg, transparent 0%, transparent 38%, rgba(255, 255, 255, .55) 44%, #fff 50%, rgba(255, 255, 255, .55) 56%, transparent 62%, transparent 100%);
+        filter: drop-shadow(0 0 6px rgba(255, 255, 255, .9)) drop-shadow(0 0 18px rgba(255, 255, 255, .6)); }
+      /* power-split: the huge bold italic power word */
+      .power { font-family: "__FONT_SANS__", "Inter", sans-serif; font-weight: 900; font-style: italic; letter-spacing: -0.03em; color: #fff; text-shadow: 0 6px 26px rgba(0, 0, 0, .6); }
+      .apple { font-family: "__FONT_SANS__", "Inter", sans-serif; font-weight: 600; letter-spacing: -0.025em; }
+      .apple .w {
+        background: linear-gradient(120deg, __ACCENT_LIGHT__ 0%, #fff 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+        filter: drop-shadow(0 3px 12px rgba(0, 0, 0, .45)); }
+      .rise { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0 .02em .06em; }
+      .rise > span { display: inline-block; }
+      .boxmark { position: absolute; border-radius: .12em; pointer-events: none; }
     </style>
   </head>
   <body>
@@ -30,7 +50,7 @@
       const W = __W__, H = __H__, DUR = __DURATION__, DATA = __CAPTIONS__;
       const portrait = H > W, root = document.getElementById('root');
       const u = portrait ? W / 1080 : H / 1080;               // one design unit = 1px at 1080 short side
-      const LOUD = new Set(['emphasis', 'statement', 'strike-swap', 'scattered', 'command', 'brush', 'pointer']);
+      const LOUD = new Set(['emphasis', 'statement', 'strike-swap', 'scattered', 'command', 'brush', 'pointer', 'power-split', 'tilt']);
       const lines = DATA.lines.filter((l) => l.words && l.words.length).map((l) => ({ ...l, start: l.words[0].s, last: l.words[l.words.length - 1].e }));
       // A line ends at its hold time or when the next line of the same kind (running vs loud) starts.
       lines.forEach((l, i) => {
@@ -41,10 +61,12 @@
       let seed = 3; const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
       const tl = gsap.timeline({ paused: true });
       const sfx = [];
+      let curLine = null; const lineEls = new Map();   // line -> its elements (for looks)
 
       function mk(cls, parent, text) { const e = document.createElement('div'); e.className = cls; if (text != null) e.textContent = text; parent.appendChild(e); return e; }
       function lineBox(top, fontPx, maxW, cls) {
         const el = mk('line ' + cls, root);
+        if (curLine) { if (!lineEls.has(curLine)) lineEls.set(curLine, []); lineEls.get(curLine).push(el); }
         Object.assign(el.style, { top: top + 'px', fontSize: fontPx + 'px', padding: `0 ${(W - maxW) / 2}px`, columnGap: fontPx * 0.26 + 'px', rowGap: fontPx * 0.05 + 'px', lineHeight: 1.15 });
         return el;
       }
@@ -56,7 +78,7 @@
       const lowY = portrait ? H * 0.66 : H * 0.8, highY = portrait ? H * 0.115 : H * 0.1;
 
       for (const l of lines) {
-        const words = l.words;
+        const words = l.words; curLine = l;
         if (['build', 'karaoke', 'blur', 'accent'].includes(l.mode)) {
           const fs = (l.mode === 'blur' ? 46 : 58) * u * (portrait ? 1.1 : 1);
           const el = lineBox(lowY, fs, W * (portrait ? 0.84 : 0.7), 'sans');
@@ -139,6 +161,7 @@
       // slide: the whole line arrives at once, each word sliding up (or down, dir:"down")
       // into place 2 frames after the previous one; on exit the words blur out.
       for (const l of lines.filter((x) => x.mode === 'slide')) {
+        curLine = l;
         const down = l.dir === 'down', fs = 60 * u * (portrait ? 1.1 : 1);
         const el = lineBox(down ? (portrait ? H * 0.16 : H * 0.12) : lowY, fs, W * (portrait ? 0.84 : 0.72), 'sans');
         el.style.overflow = 'hidden';                        // words rise out of the line's own edge
@@ -225,6 +248,131 @@
           tl.to(head, { strokeDashoffset: 0, duration: 0.15, ease: 'power2.out' }, l.start + 0.42);
           tl.to(svg, { opacity: 0, duration: 0.18 }, l.end - 0.18);
           sfx.push({ cue: 'pop', at: +l.start.toFixed(2), note: 'pointer note' });
+        }
+      }
+      // ---- Patrik Key's caption styles (CAPTIONS.md): power-split, apple, pop-rise, box, tilt ----
+      for (const l of lines) {
+        const words = l.words; curLine = l;
+        const clean = (w) => w.toLowerCase().replace(/[^\w']/g, '');
+        const inList = (list, w) => (list || []).some((a) => clean(a) === clean(w));
+        if (l.mode === 'power-split') {
+          // Small words slide up in the lower band; the power word(s) arrive huge across the head:
+          // x slide + blur + scale (three motions). With a matte composited on top, the head covers its middle.
+          const powerIdx = words.map((w, i) => (inList(l.power, w.w) ? i : -1)).filter((i) => i >= 0);
+          const pw = powerIdx.length ? powerIdx : [words.reduce((b, w, i) => (w.w.length > words[b].w.length ? i : b), 0)];
+          const text = pw.map((i) => words[i].w).join(' ').toUpperCase();
+          const pfs = Math.min(230 * u, (W * 0.94) / (text.length * 0.62));
+          const big = lineBox(portrait ? H * 0.3 : H * 0.34, pfs, W * 0.98, 'power');
+          Object.assign(big.style, { flexWrap: 'nowrap', columnGap: '0px' });
+          const ps = mk('w', big, text);
+          showHide(big, l);
+          gsap.set(ps, { opacity: 0, x: -W * 0.08, scale: 1.08, filter: 'blur(16px)' });
+          tl.to(ps, { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)', duration: 0.5, ease: 'power3.out' }, words[pw[0]].s);
+          const rest = words.filter((_, i) => !pw.includes(i));
+          const sfs = 46 * u * (portrait ? 1.1 : 1);
+          const small = lineBox(lowY, sfs, W * (portrait ? 0.84 : 0.7), 'sans');
+          small.style.overflow = 'hidden'; small.style.paddingTop = small.style.paddingBottom = sfs * 0.15 + 'px';
+          const ss = rest.map((w) => mk('w', small, w.w));
+          showHide(small, l);
+          ss.forEach((sp, i) => { gsap.set(sp, { yPercent: 120, opacity: 0 }); tl.to(sp, { yPercent: 0, opacity: 1, duration: 0.45, ease: 'power3.out' }, rest[i].s); });
+          lineEls.set(l, [big]);
+          sfx.push({ cue: 'whoosh-simple', at: +words[pw[0]].s.toFixed(2), note: 'power word' });
+        } else if (l.mode === 'apple') {
+          // Light gradient title that drops in with a 4-keyframe bounce (4, 5, 4 frames).
+          const fs = 64 * u * (portrait ? 1.1 : 1);
+          const el = lineBox(l.title ? (portrait ? H * 0.17 : H * 0.14) : lowY, fs, W * (portrait ? 0.84 : 0.72), 'apple');
+          const spans = words.map((w) => mk('w', el, w.w));
+          showHide(el, l);
+          spans.forEach((sp, i) => {
+            const t = words[i].s, f = 1 / 30;
+            gsap.set(sp, { opacity: 0, y: -fs * 0.7 });
+            tl.to(sp, { opacity: 1, y: fs * 0.14, duration: 4 * f, ease: 'power2.in' }, t);
+            tl.to(sp, { y: -fs * 0.05, duration: 5 * f, ease: 'sine.inOut' }, t + 4 * f);
+            tl.to(sp, { y: 0, duration: 4 * f, ease: 'sine.out' }, t + 9 * f);
+          });
+          lineEls.set(l, [el]);
+        } else if (l.mode === 'pop-rise') {
+          // Each word pops up but rises out of a baseline (its bottom stays cut until it's in place).
+          const fs = 62 * u * (portrait ? 1.1 : 1);
+          const el = lineBox(lowY, fs, W * (portrait ? 0.84 : 0.7), 'sans');
+          const inner = words.map((w) => { const r = mk('w rise', el); const s = document.createElement('span'); s.textContent = w.w; r.appendChild(s); return s; });
+          showHide(el, l);
+          inner.forEach((sp, i) => {
+            gsap.set(sp, { yPercent: 105, scale: 0.85, transformOrigin: '50% 100%' });
+            tl.to(sp, { yPercent: 0, scale: 1, duration: 0.5, ease: 'back.out(1.8)' }, words[i].s);
+          });
+          lineEls.set(l, [el]);
+          sfx.push({ cue: 'pop', at: +l.start.toFixed(2), note: 'pop-rise line' });
+        } else if (l.mode === 'box') {
+          // A build line with a rectangle drawn around the key word(s): dashed by default, or solid/dotted/fill.
+          const fs = 58 * u * (portrait ? 1.1 : 1);
+          const el = lineBox(lowY, fs, W * (portrait ? 0.84 : 0.7), 'sans');
+          const spans = words.map((w) => mk('w', el, w.w));
+          showHide(el, l);
+          const style = ['solid', 'dotted', 'fill'].includes(l.boxStyle) ? l.boxStyle : 'dashed';
+          spans.forEach((sp, i) => {
+            const t = words[i].s;
+            gsap.set(sp, { opacity: 0, y: fs * 0.18 }); tl.to(sp, { opacity: 1, y: 0, duration: 0.14, ease: 'power2.out' }, t);
+            if (!inList(l.box, words[i].w)) return;
+            sp.style.position = 'relative';
+            const b = mk('boxmark', sp);
+            Object.assign(b.style, { left: -fs * 0.16 + 'px', right: -fs * 0.16 + 'px', top: -fs * 0.06 + 'px', bottom: -fs * 0.1 + 'px' },
+              style === 'fill' ? { background: '__ACCENT__', zIndex: -1 } : { border: Math.max(3, 5 * u) + 'px ' + style + ' __ACCENT_LIGHT__', boxShadow: '0 0 14px rgba(0, 0, 0, .45)' });
+            if (style === 'fill') sp.style.isolation = 'isolate';
+            gsap.set(b, { clipPath: 'inset(0 100% 0 0)' });
+            tl.to(b, { clipPath: 'inset(0 0% 0 0)', duration: 0.3, ease: 'power2.inOut' }, t + 0.05);
+            sfx.push({ cue: 'stretch', at: +(t + 0.05).toFixed(2), note: 'box around the key word' });
+          });
+          lineEls.set(l, [el]);
+        } else if (l.mode === 'tilt') {
+          // stack/scattered words with a 3D tilt and mixed sizes; accent words light purple.
+          const fs = 64 * u * (portrait ? 1.05 : 1);
+          const el = lineBox(portrait ? lowY - fs * 0.2 : H * 0.62, fs, W * (portrait ? 0.86 : 0.6), 'sans');
+          Object.assign(el.style, { perspective: fs * 12 + 'px', rowGap: fs * 0.02 + 'px', columnGap: fs * 0.2 + 'px', lineHeight: 0.95 });
+          const spans = words.map((w) => mk('w', el, w.w));
+          showHide(el, l);
+          spans.forEach((sp, i) => {
+            const size = 0.75 + rand() * 0.85;
+            sp.style.fontSize = fs * size + 'px'; sp.style.fontWeight = size > 1.15 ? 900 : 800;
+            if (inList(l.accent, words[i].w)) sp.style.color = '__ACCENT_LIGHT__';
+            const rx = (rand() - 0.5) * 30, ry = (rand() - 0.5) * 40, rz = (rand() - 0.5) * 12;
+            gsap.set(sp, { opacity: 0, rotationX: rx + 50, rotationY: ry, rotationZ: rz, scale: 0.6 });
+            tl.to(sp, { opacity: 1, rotationX: rx, scale: 1, duration: 0.35, ease: 'back.out(1.7)' }, words[i].s);
+          });
+          lineEls.set(l, [el]);
+          sfx.push({ cue: 'pop', at: +l.start.toFixed(2), note: 'tilt words' });
+        }
+      }
+
+      // ---- looks: gradient, premium, shine, flicker (any mode, via "look") ----
+      // Every line made with lineBox registered its elements; power-split keeps only its power word.
+      curLine = null;
+      for (const l of lines.filter((x) => x.look)) {
+        const looks = [].concat(l.look);                     // one look, or several ("premium" + "shine")
+        for (const el of lineEls.get(l) || []) {
+          if (looks.includes('gradient')) el.classList.add('look-gradient');
+          if (looks.includes('premium')) el.classList.add('look-premium');
+          if (looks.includes('flicker')) {
+            // 6 one-frame flickers on entry, then it holds (the line's own motion runs underneath)
+            for (let i = 0; i <= 6; i++) tl.set(el, { opacity: i % 2 ? 0 : 1 }, l.start + i / 30);
+            tl.set(el, { opacity: 1 }, l.start + 7 / 30);
+            sfx.push({ cue: 'glitch', at: +l.start.toFixed(2), note: 'flicker entrance (keep quiet)' });
+          }
+          if (looks.includes('shine')) {
+            // A copy of the line on top, its letters filled only by a moving white streak, once, after it lands.
+            const copy = el.cloneNode(true);
+            copy.classList.add('shine');
+            el.parentNode.appendChild(copy);
+            const cs = [...copy.querySelectorAll('.w')];
+            copy.style.opacity = 1;
+            copy.querySelectorAll('*').forEach((c) => { c.style.opacity = 1; c.style.transform = 'none'; c.style.filter = 'none'; c.style.clipPath = 'none'; });
+            const at = l.last + 0.05;                       // inside the line's 0.6 s hold
+            gsap.set(copy, { opacity: 0 });
+            tl.set(copy, { opacity: 1 }, at);
+            // one light travelling across the line: each word's sweep starts a little after the one before it
+            cs.forEach((c, i) => { gsap.set(c, { backgroundPosition: '120% 0' }); tl.to(c, { backgroundPosition: '-20% 0', duration: 0.28, ease: 'none' }, at + (i / cs.length) * 0.3); });
+            tl.set(copy, { opacity: 0 }, at + 0.6);
+          }
         }
       }
       tl.set({}, {}, DUR);                                   // timeline spans the whole overlay

@@ -59,8 +59,8 @@ A style that says otherwise (e.g. floating-window's no-motion rule) keeps its ow
 7. **Defaults are banned.** No CapCut/template default animation used as-is: change its duration,
    easing or masking so it doesn't look like everyone else's.
 
-Until the `captions` template can render `power-split`, `box`, `pop-rise` and the four looks
-(CAPTIONS.md "to build"), build them in the HyperFrames composition of the edit itself.
+All of these are in the `captions` template (`node studio/anim.mjs new captions ...`); tracking is
+tight there by default. A HyperFrames edit with its own captions applies the same rules inline.
 
 ## Sound (applies to every style)
 

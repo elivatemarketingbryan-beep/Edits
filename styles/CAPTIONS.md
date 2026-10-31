@@ -45,8 +45,8 @@ From Patrik Key's "How To Create 10 VIRAL Caption Styles Using CapCut" (youtu.be
 15:35, Aug 2026, ~114K views, studied Oct 31 2026 from each chapter's demo and the transcript). His
 two standing tips: **the font does most of the work** (tracking -1 to -2 on every caption font), and
 a good caption uses **2-3 motions, not one**. His "multiple word slide up" is our `slide`; his "3D
-viral text" is close to `stack` (add `tilt` below). New in the template: **to build** (not in
-`anim.mjs captions` yet; build and test each once before a client edit).
+viral text" is close to `stack` (add `tilt` below). All of them are **built in the `captions` template** (Oct 31 2026), tested on Bryan's reel footage;
+looks can be combined (`"look": ["premium", "shine"]`). `apple` takes `title: true` to sit in the upper band.
 
 | Mode | What it looks like | Use it for | Sound |
 |---|---|---|---|
@@ -56,12 +56,12 @@ viral text" is close to `stack` (add `tilt` below). New in the template: **to bu
 | `box` | A rectangle drawn around the key word: stroke only (dashed by default; solid or dotted), ~3px, brand purple; or a filled box behind it. Draws on, holds, leaves with the line | Pointing at the exact word that matters; prices, names | `stretch` as it draws |
 | `tilt` | `stack` or `scattered` words with a 3D perspective tilt, split one word per layer, mixed sizes, key words in light purple and the rest white, placed around the head | Fast hooks with several short words | `pop` per word (quiet) |
 
-**Looks** (a `look` field that can sit on any mode above):
+**Looks** (a `look` field, one or a list, that can sit on any mode):
 
 | Look | What it does | Sound |
 |---|---|---|
 | `gradient` | Two-tone fill: the top half white, the bottom half light grey (or white over brand purple), split by a hard horizontal mask | none |
-| `shine` | A soft white streak sweeps across the letters once after they land, with a light glow; works on icons too | none |
+| `shine` | A white streak with a bloom travels across the line once, word by word, right after the last word lands. Shows best on coloured text (pair it with `premium`); barely visible on white | none |
 | `flicker` | On entry the text flickers on and off 1 frame at a time, 6 times, then holds (best with `gradient`) | `glitch` (quiet) |
 | `premium` | A hard offset copy behind the text in white (no blur, full opacity, ~1px offset) with the fill in brand purple: same font, looks expensive | none |
 
