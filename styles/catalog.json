@@ -488,7 +488,7 @@
       "kind": "style",
       "engine": "editor",
       "status": "draft",
-      "summary": "Cinematic talking head carries it; loud proof-number hook and short bold takeovers punch the points.",
+      "summary": "Cinematic talking head carries it; proof-number hook, bold takeovers and a blurred chapter map punch the points.",
       "bestFor": [
         "marketing or business authority talk",
         "real client results and ad examples to show",
@@ -502,7 +502,8 @@
         "blurred numbered list as a curiosity tease, revealed section by section",
         "platform logos as the cast (bars, coin bursts), neon line charts, glowing node maps in brand purple",
         "keyword lower-thirds only (one every 10-20 s), not full captions",
-        "real screens full frame for proof (search, reviews, ads)"
+        "real screens full frame for proof (search, reviews, ads)",
+        "the blurred numbered grid returns at every chapter as the chapter map; 3D folder openers; two angles or offset punch-ins"
       ],
       "spec": "styles/STYLE-GUIDE.md#cinematic-authority",
       "needsMatte": true,
@@ -1082,6 +1083,34 @@
       "needsMatte": false,
       "reference": "styles/REFERENCES.md (Iman Gadzhi, Gemini tutorial)",
       "scriptShape": "long-form"
+    },
+    {
+      "id": "screen-side-cam",
+      "name": "Screen + side cam",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Layout only: your screen as a big card on a light dot grid, you in a small portrait card at the right, a progress bar along the bottom.",
+      "bestFor": [
+        "a walkthrough of your tools, CRM, ads or website",
+        "long screen-recorded tutorials",
+        "showing a setup end to end"
+      ],
+      "recipe": [
+        "layout from Riley Brown \"My AI Setup Feels Like Cheating\" (layout only, not his graphics)",
+        "screen recording in a rounded card, ~85% of the frame, left-aligned on a white dot-grid ground",
+        "face cam in a portrait card right of the screen card, vertically centred",
+        "thin progress bar along the bottom in brand purple",
+        "talking-head stretches full frame between demos; pairs with any style's graphics"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#screen-side-cam",
+      "needsMatte": false,
+      "scriptShape": "long-form",
+      "alsoScriptShape": [
+        "explainer"
+      ]
     },
     {
       "id": "paper-cut-out",

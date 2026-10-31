@@ -80,7 +80,7 @@ Style flavours (on top of the rules above):
   lesson-document, magazine-cover, pixel-zoom, sketch-boil, glass-text,
   pull-out-reveal, dolly-zoom, frame-pop, punch-through-cut, green-screen, film-grade-short,
   story-montage, silhouette, film-grade, mono-explainer, cinematic-authority (dense in the hook only),
-  keynote-glass (dense in the cold open only).
+  keynote-glass (dense in the cold open only), screen-side-cam (clicks and whooshes on screen changes).
 - **Minimal** (a whoosh or riser at most; let the words carry it): fitted-captions,
   cinematic-type (low whooshes and risers only), natural-story, ear-to-ear-captions,
   vlog (music-led; no UI sounds), floating-window (hard cuts, no UI sounds).
@@ -509,6 +509,25 @@ From the Iman Gadzhi Gemini tutorial breakdown (styles/REFERENCES.md).
   a hand-drawn underline on the key line.
 - **Proof beats**: full-frame screenshots or stat slides on black; level meters for tiers.
 
+### screen-side-cam: Screen + side cam
+**A layout, not a look**, taken from Riley Brown's "My AI Setup Feels Like Cheating (Here's All of It)"
+(youtu.be/YT0u2eQ-Aj4, Oct 2026), measured off a frame. Use it for the screen-demo parts of a long-form
+video; it can sit under any style's graphics (captions, cards, accents follow `brand.json`).
+
+Geometry at 1920x1080:
+- **Ground:** white (`#FFFFFF`) with a light grey dot grid (~3px dots, ~48px apart). Dark mode variant:
+  `#0D0B14` with faint purple dots.
+- **Screen card:** x 26, y 81, 1629x917 (about 85% x 85%), left-aligned, corner radius ~16px, soft shadow,
+  no border. The screen recording fills it (scale to fit, crop the menu bar if it's noise).
+- **Face-cam card:** x 1668, y 372, 225x336 (portrait 2:3), vertically centred, ~13px right of the screen
+  card, corner radius ~6px, face cropped head and shoulders.
+- **Progress bar:** full width along the bottom, ~25px tall, brand purple (`#8B5CF6`); it fills left to
+  right with the video's runtime (his is orange-red).
+- **Between demos:** full-frame talking head with small list cards top-right (pill title + bullet lines),
+  as in his intro.
+- Motion: the screen card and face card stay put; zoom inside the screen card to the area being used.
+- Status draft until Bryan approves a first edit; then save the template in presets/screen-side-cam/.
+
 ### educational-youtube: Educational YouTube
 - Mostly full-frame presenter with **floating dark cards** top-left (habit tracker,
   "Day 8" grid filling to "Day 30" with a green line).
@@ -634,6 +653,12 @@ purple-on-black; white stays the type colour.
   No word-by-word captions on the talking head.
 - **Proof full frame:** real search results, reviews, ads and advertorials for a few seconds each.
 - **Pacing after the hook:** long talking stretches with a takeover, diagram or keyword every 30-90 s.
+- **From his second video (HsjuAvqs3zU):** two angles (front medium + tight three-quarter close-up, or a
+  130-150% offset punch-in); a darker night grade for teaching pieces; hook words huge over the chest
+  with the key word in purple; black-and-white "before" B-roll with a purple scribble over the eyes;
+  the pixelated numbered grid returns at every chapter as the chapter map, un-blurring the current
+  card; a 3D folder spilling numbered sheets as the chapter opener; spaced acronyms ("A I D A") with
+  the active letter in purple; either/or words placed left and right of the head.
 - Status draft until Bryan approves a first edit; then save the template in presets/cinematic-authority/.
 
 ### keynote-glass: Keynote glass

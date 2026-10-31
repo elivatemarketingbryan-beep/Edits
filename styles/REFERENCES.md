@@ -5,6 +5,32 @@ reuse. Descriptions only; no footage, graphics or words are copied.
 
 ---
 
+## Herman Huang: "How to Edit ANY Video Like You've Done it 1,000 Times"
+
+youtu.be/Zm7J3KqqXPk · 8:23 · Aug 2026 · ~531K views at study time (Oct 31 2026). Studied from
+its transcript (auto-captions). Not a style: a method for learning any style, which became the
+"Learning a new style" rule in CLAUDE.md.
+
+**The five levels**, in his words paraphrased:
+1. **Watch a lot (the bar).** Every genre has a structure; watching many videos in it shows the
+   patterns everyone uses. That's the minimum the client expects.
+2. **Find the best.** Look only at the top performers with the biggest budgets; bookmark the ones that
+   make you wish you'd made them. Don't learn from average.
+3. **Dissect.** Put the best into the editor and go frame by frame: pacing, framing, camera movement,
+   graphics, effects, music, sound effects. Work out why each decision was made, like figuring out how a
+   magic trick is done. Repeated tricks across videos are the ones to learn.
+4. **Close the skill gap.** Knowing the trick isn't doing it: practise each effect from tutorials, and
+   use assets and templates (grain, overlays, textures) to close the gap faster on client work.
+5. **Apply your taste.** Emulate the building blocks that matter, then bring in what you already know
+   or love from elsewhere (expensive-looking fonts from commercials, cinematic stock, bold anime
+   captions) so you aren't a commodity. Progress is measured against your own previous work.
+
+**What it changed here:** our breakdowns so far (Nick Saraev, Sabri Suby, Sanji Nai-Chien, Riley
+Brown) studied the picture only. From now on a breakdown also covers the music and sound effects, notes
+the genre's bar, and every new technique is built and tested once before it goes into a client edit.
+
+---
+
 ## Sanji Nai-Chien: "How I Make $880/Day with AI Motion Design (Claude Motion)"
 
 youtu.be/D5qpBbEWTxo · 19:55 · 16:9 (shot 4K) · Oct 2026 · ~220K views at study time (Oct 31 2026).
@@ -39,6 +65,29 @@ structure. Feels like an Apple keynote crossed with a vlog.
 ### For reels (9:16)
 - The particle number and the typing chat box make strong 9:16 hooks; the floating words
   sit above and below the head instead of beside it.
+
+---
+
+## Sabri Suby: "Give Me 27 Minutes and I'll Make You Disgustingly Good at Digital Marketing"
+
+youtu.be/HsjuAvqs3zU · 27:51 · 16:9 (shot 4K) · Jul 2026 · ~388K views at study time (Oct 31 2026).
+Studied from one frame in every chapter plus every 1.5s of the first 45s; picture only. The same
+house style as his "New Era" video below, so it extends the **cinematic-authority** style rather
+than making a new one. 11 chapters, one per lesson.
+
+What it adds:
+
+| # | Technique | What it looks like | How Video Studio uses it |
+|---|---|---|---|
+| 1 | **Two angles** | A front medium shot and a tight three-quarter close-up, alternating on sentence boundaries | Punch-in to a tight crop (130-150%, offset to the side) if only one camera |
+| 2 | **Low-key night set** | Darker than the "New Era" video: warm practical lamps, brick and shelves deep in bokeh, his face lit from the side | Grade darker and warmer for teaching pieces; recording tip |
+| 3 | **Hook words over the chest** | One or a few huge condensed caps words low over his chest, the key word in red ("IF I HAD TO START OVER", "NO MONEY", "EXACTLY") | Hook captions in the lower third, key word in brand purple |
+| 4 | **Black-and-white "before" B-roll** | The struggling version of the viewer in desaturated footage, red X marks drawn over the eyes; cinematic B-roll of him alone at night with a phone | Story B-roll in grey with a purple scribble mark; pull from the B-roll library |
+| 5 | **Chapter grid as the map** | The pixelated numbered card grid from the hook comes back at every chapter: the camera flies across it and the current card un-blurs ("Standing foundation") | The curiosity list doubles as the chapter tracker: reveal one card per chapter |
+| 6 | **3D folder opener** | A glossy blue folder labelled "DIGITAL MARKETING" spills paper sheets; one sheet flies to camera with "1", then "CAPTURE ATTENTION" | Chapter openers: folder in brand purple, a numbered sheet per lesson |
+| 7 | **Spaced acronym** | "A I D A" in widely spaced white caps, the active letter turning red | Frameworks with letters (purple for the active letter) |
+| 8 | **Words either side of the head** | "LEADS" left, "PRODUCTS" right; "3 MONTH" big in red beside his face | Either/or and big-number beats beside the head |
+| 9 | **Chapter title takeovers** | "MARKET SOPHISTICATION AND COMPETITION" in condensed caps, the key words in red, blurring in | Chapter title cards on near-black |
 
 ---
 
