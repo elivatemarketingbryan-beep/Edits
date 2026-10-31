@@ -1,0 +1,28 @@
+{
+ "url": "https://code.claude.com/docs/en/cross-session-messaging",
+ "css_width": 420,
+ "scale_into_frame": 2.57,
+ "rects": [
+  {
+   "phrase": "deliver a message from one of your Claude Code sessions to another",
+   "left": 71.95,
+   "top": 44.93,
+   "width": 15.18,
+   "height": 2.68
+  },
+  {
+   "phrase": "deliver a message from one of your Claude Code sessions to another",
+   "left": 4.76,
+   "top": 48.68,
+   "width": 86.62,
+   "height": 2.68
+  },
+  {
+   "phrase": "deliver a message from one of your Claude Code sessions to another",
+   "left": 4.76,
+   "top": 52.43,
+   "width": 18.34,
+   "height": 2.68
+  }
+ ]
+}

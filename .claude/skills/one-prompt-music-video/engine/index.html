@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Music Video Engine</title>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js", "three/addons/": "./vendor/jsm/" } }
+</script>
+<style>
+  :root { --bg: #0b0c12; --fg: #e9e6dd; --dim: #8a8aa0; --acc: #ff6a1f; }
+  html, body { margin: 0; background: var(--bg); color: var(--fg); font: 13px/1.4 ui-monospace, Menlo, monospace; }
+  #wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 12px; }
+  canvas#out { width: min(96vw, calc((100vh - 120px) * 16 / 9)); aspect-ratio: 16 / 9; background: #000; display: block; }
+  #bar { display: flex; gap: 10px; align-items: center; width: min(96vw, calc((100vh - 120px) * 16 / 9)); }
+  #scrub { flex: 1; accent-color: var(--acc); }
+  button, select { background: #1b1d29; color: var(--fg); border: 1px solid #333; border-radius: 6px; padding: 5px 10px; font: inherit; }
+  #info { color: var(--dim); min-width: 330px; text-align: right; }
+  body.capture #bar, body.capture #help { display: none; }
+  #help { color: var(--dim); }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="out" width="1920" height="1080"></canvas>
+  <div id="bar">
+    <button id="play">▶ play</button>
+    <input id="scrub" type="range" min="0" max="600" step="0.0333" value="0" />
+    <select id="jump"></select>
+    <span id="info">loading…</span>
+  </div>
+  <div id="help">space play/pause · ←/→ 1 frame · shift+←/→ 1 s · [ / ] prev/next scene · ?t=12.3 or ?scene=V04 in the URL</div>
+</div>
+<audio id="song" src="data/song.mp3" preload="auto"></audio>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

@@ -388,6 +388,20 @@ Read the style's `engine` in the catalog:
   Ranking: these suit a 9:16 talking head with a clean matte; their `bestFor` cues
   follow the table above. Its 5 s format preview is a real render on the job's clip, not
   the example.
+- **skill** (creator-pack styles, added 2026-10-31): the style's `skill` in the catalog is the
+  skill that edits it (`.claude/skills/<skill>/SKILL.md`). Short: nextphase-short
+  (`nextphase-short-editing`), film-grade-short (`nextphase-persa-shorts`), floating-window
+  (`zak`). Long: nextphase-long (`nextphase-long-editing`), screen-share-demo
+  (`nextphase-screenshare`), glow-motion (`motiongraphics`), cobalt-cut-paper (`vibecode`),
+  story-montage (`editor-v2`), silhouette (`editor-v3`, Higgsfield credits: show the cost and
+  wait for a yes), film-grade (`persa`). Each skill opens with a "Video Studio" block: start
+  from the job (never its own intake or "which style?"), the job's one transcript, the brand
+  instead of its colours, Bryan's graphics approval before rendering, the studio's sounds,
+  Windows paths. Run a skill's own setup/doctor only the first time its style is used.
+  The long-form playbook in `nextphase-long-editing` (silence-tightening, cold open, chapters,
+  re-hooks, layout rotation, real media on every claim) and the short-form one in
+  `nextphase-short-editing` (hook → face → body → CTA, retention-first timing) are worth
+  reading for any long or short edit, whatever the style.
 
 `status: "draft"` styles have no template yet: build them from the STYLE-GUIDE section
 with the editor engine, and once the user approves a final, save what worked as that
@@ -435,6 +449,15 @@ to `ready`.
   ig-/yt- research skills.
 - Legacy editor: clipper, capcut, premiere-pro, davinci-resolve, thumbnail-generator,
   background-music. Where both editors had a skill, the newer root version was kept.
+- Creator packs (Bryan's downloads, 2026-10-31; each SKILL.md has a "Video Studio" block on top):
+  NextPhase skill pack (nextphase-long-editing, nextphase-short-editing, motiongraphics, persa,
+  vibecode, zak, and nextphase-studio, its intake router, which is NOT used here: the studio page
+  is the intake), NextPhase free skills (nextphase-persa-shorts, nextphase-screenshare), Editor V2
+  and V3 (editor-v2, editor-v3), and two that make videos from scratch rather than edit, kept out
+  of the format list: motion-studio (showreels, lyric videos, story films) and
+  one-prompt-music-video (music video in code). Both need the ~15 GB ACE-Step music model for
+  original songs: ask before installing. Left out of the copies: the Claude mascot GIFs, other
+  companies' logos, the packs' bundled songs and demo footage of real people.
 
 ## Scripts that pick their own style
 

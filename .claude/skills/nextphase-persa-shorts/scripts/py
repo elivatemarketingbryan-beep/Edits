@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Run a kit script with the right Python: the kit's private env if doctor.sh made one,
+# otherwise the system python3.   usage:  scripts/py scripts/<name>.py [args...]
+PRIV="$HOME/.cache/persa-shorts/py/bin/python"
+if [[ -x "$PRIV" ]]; then exec "$PRIV" "$@"; else exec python3 "$@"; fi

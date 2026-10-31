@@ -72,15 +72,17 @@ Style flavours (on top of the rules above):
   paper-cut-out, sofa-wall, graph-rise, orbit-spin, phone-frame, news-wall,
   interface-world, tick-list,
   coaching-call-clips, faceless-sprite (its engine places them itself), brand-motion (its
-  own synced score), motion-promo.
+  own synced score), motion-promo, nextphase-short, nextphase-long, screen-share-demo,
+  glow-motion, cobalt-cut-paper.
 - **Light** (cuts and the few things that appear): personal-reel, visual-essay,
   broll-stacked-text, image-cluster, cutout-backdrop, cutout-grid, tiktok-style,
   yap-and-show, clone-versus, dual-role-dialogue, split-screen-lesson,
   lesson-document, magazine-cover, pixel-zoom, sketch-boil, glass-text,
-  pull-out-reveal, dolly-zoom, frame-pop, punch-through-cut, green-screen.
+  pull-out-reveal, dolly-zoom, frame-pop, punch-through-cut, green-screen, film-grade-short,
+  story-montage, silhouette, film-grade.
 - **Minimal** (a whoosh or riser at most; let the words carry it): fitted-captions,
   cinematic-type (low whooshes and risers only), natural-story, ear-to-ear-captions,
-  vlog (music-led; no UI sounds).
+  vlog (music-led; no UI sounds), floating-window (hard cuts, no UI sounds).
 
 ## Motion rules (from the Patrik Key breakdown, REFERENCES.md)
 
@@ -327,6 +329,27 @@ pack's mustard.
 - **AI B-roll (optional):** where a beat needs real depth (a full-screen diorama, a moving map), generate
   a 4-6 s clip with `styles/AI-BROLL.md` and drop it in as a torn photo; everything else stays HyperFrames.
 
+### nextphase-short: NextPhase short
+- Built by the `nextphase-short-editing` skill (creator pack, Oct 2026): its SKILL.md and `reference/` are the look, frame by
+  frame. Its "Video Studio" block on top overrides it: brand purple instead of its own colours, the studio job
+  instead of its intake, graphics approved as stills before rendering, studio sounds.
+- Hook, face, body, CTA; real media on every claim, highlighter, dense sound.
+- Status draft until Bryan approves a first edit; then record what worked here.
+
+### film-grade-short: Film grade short
+- Built by the `nextphase-persa-shorts` skill (creator pack, Oct 2026): its SKILL.md and `reference/` are the look, frame by
+  frame. Its "Video Studio" block on top overrides it: brand purple instead of its own colours, the studio job
+  instead of its intake, graphics approved as stills before rendering, studio sounds.
+- Warm film grade, one-word hard-cut captions, your head over big words.
+- Status draft until Bryan approves a first edit; then record what worked here.
+
+### floating-window: Floating window
+- Built by the `zak` skill (creator pack, Oct 2026): its SKILL.md and `reference/` are the look, frame by
+  frame. Its "Video Studio" block on top overrides it: brand purple instead of its own colours, the studio job
+  instead of its intake, graphics approved as stills before rendering, studio sounds.
+- A rounded window on black, one serif line above, no motion at all.
+- Status draft until Bryan approves a first edit; then record what worked here.
+
 ### faceless-sprite: Faceless sprite
 - **No camera.** The voice is a voiceover (Bryan's ElevenLabs clone, or a phone recording); the
   on-screen "presenter" is a **pixel-art sprite of Bryan** that lip-syncs and gestures, in a small
@@ -516,6 +539,55 @@ From the Iman Gadzhi Gemini tutorial breakdown (styles/REFERENCES.md).
 - Output is both the scrolling panel for the video and a standalone document.
 
 ---
+
+### nextphase-long: NextPhase long-form
+- Built by the `nextphase-long-editing` skill (creator pack, Oct 2026): its SKILL.md and `reference/` are the look, frame by
+  frame. Its "Video Studio" block on top overrides it: brand purple instead of its own colours, the studio job
+  instead of its intake, graphics approved as stills before rendering, studio sounds.
+- Cold open, chapters, re-hooks; layout rotation and real media on every claim.
+- Status draft until Bryan approves a first edit; then record what worked here.
+
+### screen-share-demo: Screen-share demo
+- Built by the `nextphase-screenshare` skill (creator pack, Oct 2026): its SKILL.md and `reference/` are the look, frame by
+  frame. Its "Video Studio" block on top overrides it: brand purple instead of its own colours, the studio job
+  instead of its intake, graphics approved as stills before rendering, studio sounds.
+- Like a live screen-share: your camera travels between full, half and a corner card.
+- Status draft until Bryan approves a first edit; then record what worked here.
+
+### glow-motion: Glow motion graphics
+- Built by the `motiongraphics` skill (creator pack, Oct 2026): its SKILL.md and `reference/` are the look, frame by
+  frame. Its "Video Studio" block on top overrides it: brand purple instead of its own colours, the studio job
+  instead of its intake, graphics approved as stills before rendering, studio sounds.
+- Violet glow: lit glass tiles, self-building diagrams, slam headlines.
+- Status draft until Bryan approves a first edit; then record what worked here.
+
+### cobalt-cut-paper: Cobalt cut-paper
+- Built by the `vibecode` skill (creator pack, Oct 2026): its SKILL.md and `reference/` are the look, frame by
+  frame. Its "Video Studio" block on top overrides it: brand purple instead of its own colours, the studio job
+  instead of its intake, graphics approved as stills before rendering, studio sounds.
+- Cut-paper collage on a saturated ground: torn notebook cards, hand-drawn X marks.
+- Status draft until Bryan approves a first edit; then record what worked here.
+
+### story-montage: Story montage
+- Built by the `editor-v2` skill (creator pack, Oct 2026): its SKILL.md and `reference/` are the look, frame by
+  frame. Its "Video Studio" block on top overrides it: brand purple instead of its own colours, the studio job
+  instead of its intake, graphics approved as stills before rendering, studio sounds.
+- Picture-montage hook, B-roll, huge captions behind you, an end title you stand in front of.
+- Status draft until Bryan approves a first edit; then record what worked here.
+
+### silhouette: Silhouette
+- Built by the `editor-v3` skill (creator pack, Oct 2026): its SKILL.md and `reference/` are the look, frame by
+  frame. Its "Video Studio" block on top overrides it: brand purple instead of its own colours, the studio job
+  instead of its intake, graphics approved as stills before rendering, studio sounds.
+- Backlit side-profile silhouette on a colour backdrop, words behind the head. Uses Higgsfield credits.
+- Status draft until Bryan approves a first edit; then record what worked here.
+
+### film-grade: Film grade
+- Built by the `persa` skill (creator pack, Oct 2026): its SKILL.md and `reference/` are the look, frame by
+  frame. Its "Video Studio" block on top overrides it: brand purple instead of its own colours, the studio job
+  instead of its intake, graphics approved as stills before rendering, studio sounds.
+- Warm grain-and-bloom grade, one-word captions, head over the big words and panels.
+- Status draft until Bryan approves a first edit; then record what worked here.
 
 ## Edit review (the preview-and-notes step)
 

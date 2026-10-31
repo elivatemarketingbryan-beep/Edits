@@ -1,0 +1,21 @@
+{
+ "url": "https://code.claude.com/docs/en/cross-session-messaging",
+ "css_width": 420,
+ "scale_into_frame": 2.57,
+ "rects": [
+  {
+   "phrase": "doesn\u2019t offer cross-session messaging on native Windows",
+   "left": 22.88,
+   "top": 46.79,
+   "width": 68.45,
+   "height": 2.68
+  },
+  {
+   "phrase": "doesn\u2019t offer cross-session messaging on native Windows",
+   "left": 12.38,
+   "top": 50.54,
+   "width": 33.84,
+   "height": 2.68
+  }
+ ]
+}

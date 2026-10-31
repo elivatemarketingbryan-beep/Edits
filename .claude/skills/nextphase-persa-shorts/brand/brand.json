@@ -1,0 +1,22 @@
+{
+  "setup_complete": false,
+  "creator": {
+    "name": "",
+    "handle": "",
+    "niche": "",
+    "audience": "",
+    "cta_keyword": ""
+  },
+  "look": "dark",
+  "accent": "red",
+  "brand_colors": [],
+  "font_feel": "poster",
+  "grade": "film",
+  "research": 1,
+  "budget": "balanced",
+  "sfx": true,
+  "music": false,
+  "music_file": "",
+  "cutout": "quick",
+  "videos_dir": "~/persa-shorts"
+}

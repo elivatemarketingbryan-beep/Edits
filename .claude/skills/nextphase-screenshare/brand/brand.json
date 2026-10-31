@@ -1,0 +1,18 @@
+{
+  "filled": false,
+  "channel": "",
+  "handle": "",
+  "niche": "",
+  "audience": "",
+  "ground": "bright",
+  "accent": "blue",
+  "accent2": null,
+  "font": "clean",
+  "research": 1,
+  "tokens": "balanced",
+  "captions": true,
+  "sfx": true,
+  "music": false,
+  "camera_side": "swap",
+  "language": "en"
+}

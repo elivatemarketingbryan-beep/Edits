@@ -1,5 +1,5 @@
 {
-  "_readme": "The one list of edit styles and tools. The launcher reads it, and Claude reads it to rank formats and to know how to build each one. status: ready = an engine here already makes this; draft = recipe written, first real edit will shape it. editor = root pipeline (renders with HyperFrames; no Remotion) (.claude/skills rough-cut, graphics-plan, captions, export; HyperFrames), legacy = engines/legacy-editor skills, content-os = the Content OS folder outside Video Studio (see CLAUDE.md). altEngine: the optional Remotion engine for this style (see styles/engines.json); statusWithRemotion: its status when Remotion is on. scriptShape: how the script is written for this format (styles/SCRIPT-SHAPES.md); alsoScriptShape: other shapes that fit. video-fx = engines/video-fx (Remotion effects with a person cut-out); `fx` is the effect: skill fx-<fx>, preview engines/video-fx/examples/NN-<fx>.mp4.",
+  "_readme": "The one list of edit styles and tools. The launcher reads it, and Claude reads it to rank formats and to know how to build each one. status: ready = an engine here already makes this; draft = recipe written, first real edit will shape it. editor = root pipeline (renders with HyperFrames; no Remotion) (.claude/skills rough-cut, graphics-plan, captions, export; HyperFrames), legacy = engines/legacy-editor skills, content-os = the Content OS folder outside Video Studio (see CLAUDE.md). altEngine: the optional Remotion engine for this style (see styles/engines.json); statusWithRemotion: its status when Remotion is on. scriptShape: how the script is written for this format (styles/SCRIPT-SHAPES.md); alsoScriptShape: other shapes that fit. skill = a style from the creator packs: its own skill in .claude/skills/<skill> (a \"Video Studio\" block on top says what changes here); video-fx = engines/video-fx (Remotion effects with a person cut-out); `fx` is the effect: skill fx-<fx>, preview engines/video-fx/examples/NN-<fx>.mp4.",
   "styles": [
     {
       "id": "business-reel",
@@ -747,6 +747,93 @@
       ]
     },
     {
+      "id": "floating-window",
+      "name": "Floating window",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "skill",
+      "skill": "zak",
+      "status": "draft",
+      "summary": "A rounded window on black, one serif line above, no motion at all.",
+      "bestFor": [
+        "calm, serious or reflective delivery",
+        "faith or story moments",
+        "a quote that should sit still"
+      ],
+      "recipe": [
+        "skill zak (HyperFrames)",
+        "rounded window floating on pure black",
+        "one Didone serif line set above",
+        "tight 2-4 word white captions, hard cuts, no shadows",
+        "camera never moves"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#floating-window",
+      "needsMatte": false,
+      "scriptShape": "relatable",
+      "alsoScriptShape": [
+        "caption-led"
+      ]
+    },
+    {
+      "id": "film-grade-short",
+      "name": "Film grade short",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "skill",
+      "skill": "nextphase-persa-shorts",
+      "status": "draft",
+      "summary": "Warm film grade, one-word hard-cut captions, your head over big words.",
+      "bestFor": [
+        "personal take or opinion",
+        "showing an app or website",
+        "one strong word per line"
+      ],
+      "recipe": [
+        "skill nextphase-persa-shorts (HyperFrames)",
+        "one-word captions on one fixed line",
+        "head matted in front of big display words",
+        "real app/site screens own the frame, you in a rounded card",
+        "optional warm film grade"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#film-grade-short",
+      "needsMatte": true,
+      "scriptShape": "relatable",
+      "alsoScriptShape": [
+        "story"
+      ]
+    },
+    {
+      "id": "nextphase-short",
+      "name": "NextPhase short",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "skill",
+      "skill": "nextphase-short-editing",
+      "status": "draft",
+      "summary": "Hook, face, body, CTA; real media on every claim, highlighter, dense sound.",
+      "bestFor": [
+        "tips or a how-to with things to show",
+        "claims backed by real pages or posts",
+        "fast retention-first reel"
+      ],
+      "recipe": [
+        "skill nextphase-short-editing (HyperFrames)",
+        "fixed arc: hook > face > body > CTA",
+        "at least 4 real web media + designed takeovers",
+        "highlighter on articles (brand purple here)",
+        "dense, varied sound pass on the locked render"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#nextphase-short",
+      "needsMatte": false,
+      "scriptShape": "explainer",
+      "alsoScriptShape": [
+        "proof"
+      ]
+    },
+    {
       "id": "faceless-sprite",
       "name": "Faceless sprite",
       "aspect": "9:16",
@@ -1374,6 +1461,208 @@
         "follow docs/APP-HANDOFF.md (the user set this workflow)"
       ],
       "needsMatte": false
+    },
+    {
+      "id": "nextphase-long",
+      "name": "NextPhase long-form",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "skill",
+      "skill": "nextphase-long-editing",
+      "status": "draft",
+      "summary": "Cold open, chapters, re-hooks; layout rotation and real media on every claim.",
+      "bestFor": [
+        "YouTube teaching video",
+        "many claims that need proof on screen",
+        "long talk that needs pace"
+      ],
+      "recipe": [
+        "skill nextphase-long-editing (HyperFrames)",
+        "silence-tightening first",
+        "cold open > chapters > payoff > CTA, re-hooks between",
+        "mandatory layout rotation (full, split, pop-out cut-out)",
+        "real web media on every claim",
+        "dense SFX pass + ducked music bed"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#nextphase-long",
+      "needsMatte": true,
+      "scriptShape": "long-form"
+    },
+    {
+      "id": "screen-share-demo",
+      "name": "Screen-share demo",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "skill",
+      "skill": "nextphase-screenshare",
+      "status": "draft",
+      "summary": "Like a live screen-share: your camera travels between full, half and a corner card.",
+      "bestFor": [
+        "walkthrough of a website, ad account or CRM",
+        "showing a client result on screen",
+        "tutorial"
+      ],
+      "recipe": [
+        "skill nextphase-screenshare (HyperFrames)",
+        "camera panel travels (never cuts): full / half card / corner card",
+        "rebuilt UIs with scripted cursor, typing, clicks + real captured sites",
+        "breathing dot-field ground in brand colours",
+        "layout change about every 8 s, captions locked in one place"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#screen-share-demo",
+      "needsMatte": false,
+      "scriptShape": "long-form",
+      "alsoScriptShape": [
+        "explainer"
+      ]
+    },
+    {
+      "id": "glow-motion",
+      "name": "Glow motion graphics",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "skill",
+      "skill": "motiongraphics",
+      "status": "draft",
+      "summary": "Violet glow: lit glass tiles, self-building diagrams, slam headlines.",
+      "bestFor": [
+        "explaining a system or process",
+        "frameworks and diagrams",
+        "big claims that need a headline"
+      ],
+      "recipe": [
+        "skill motiongraphics (HyperFrames)",
+        "dark violet glow look (close to the brand purple)",
+        "self-building node diagrams, glass tiles",
+        "slam headlines on wiping bars",
+        "real media as rimmed cards; light-leak flash transitions; camera drift"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#glow-motion",
+      "needsMatte": false,
+      "scriptShape": "long-form",
+      "alsoScriptShape": [
+        "explainer"
+      ]
+    },
+    {
+      "id": "cobalt-cut-paper",
+      "name": "Cobalt cut-paper",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "skill",
+      "skill": "vibecode",
+      "status": "draft",
+      "summary": "Cut-paper collage on a saturated ground: torn notebook cards, hand-drawn X marks.",
+      "bestFor": [
+        "old way vs new way",
+        "building something step by step",
+        "playful teaching video"
+      ],
+      "recipe": [
+        "skill vibecode (HyperFrames)",
+        "cut-paper collage, torn notebook cards",
+        "timeline drawn on ruled paper that builds block by block",
+        "hand-drawn X marks kill the old way",
+        "stop-motion on 2s; ground recoloured to the brand"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#cobalt-cut-paper",
+      "needsMatte": false,
+      "scriptShape": "long-form",
+      "alsoScriptShape": [
+        "comparison"
+      ]
+    },
+    {
+      "id": "story-montage",
+      "name": "Story montage",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "skill",
+      "skill": "editor-v2",
+      "status": "draft",
+      "summary": "Picture-montage hook, B-roll, huge captions behind you, an end title you stand in front of.",
+      "bestFor": [
+        "personal or client story",
+        "you have B-roll of the work",
+        "a strong ending line"
+      ],
+      "recipe": [
+        "skill editor-v2 (Python + ffmpeg, local)",
+        "fast picture-montage hook (12.5 images/s, shutter roll)",
+        "talking head with real B-roll",
+        "huge captions behind the speaker (needs matte)",
+        "massive end title in front of the speaker"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#story-montage",
+      "needsMatte": true,
+      "scriptShape": "story",
+      "alsoScriptShape": [
+        "long-form"
+      ]
+    },
+    {
+      "id": "silhouette",
+      "name": "Silhouette",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "skill",
+      "skill": "editor-v3",
+      "status": "draft",
+      "summary": "Backlit side-profile silhouette on a colour backdrop, words behind the head. Uses Higgsfield credits.",
+      "bestFor": [
+        "cinematic story or documentary feel",
+        "chapters with dates",
+        "a side-angle take was filmed too"
+      ],
+      "recipe": [
+        "skill editor-v3",
+        "silhouette clips made in Higgsfield (credits: show cost, wait for yes)",
+        "one backdrop colour per chapter",
+        "date titles inside the head, huge words behind it",
+        "film burns, typed screens, counting charts, sparse B-roll"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#silhouette",
+      "needsMatte": false,
+      "needsTwoTakes": true,
+      "scriptShape": "long-form",
+      "alsoScriptShape": [
+        "story"
+      ]
+    },
+    {
+      "id": "film-grade",
+      "name": "Film grade",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "skill",
+      "skill": "persa",
+      "status": "draft",
+      "summary": "Warm grain-and-bloom grade, one-word captions, head over the big words and panels.",
+      "bestFor": [
+        "opinion or story long-form",
+        "showing apps and sites as panels",
+        "a warmer, cinematic feel"
+      ],
+      "recipe": [
+        "skill persa (HyperFrames)",
+        "warm desaturated film grade, grain and bloom",
+        "hard-cut one-word captions",
+        "subject matted on top so the head covers big words and panels",
+        "rounded screen panels and head cards; accents from the brand"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#film-grade",
+      "needsMatte": true,
+      "scriptShape": "long-form",
+      "alsoScriptShape": [
+        "story"
+      ]
     }
   ]
 }

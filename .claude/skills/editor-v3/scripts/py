@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Runs the private Python this skill set up.
+exec "$HOME/.cache/editor-v3/venv/bin/python" "$@"

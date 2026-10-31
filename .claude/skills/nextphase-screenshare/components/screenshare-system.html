@@ -1,0 +1,438 @@
+<!doctype html>
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SCREENSHARE — the component kit.
+
+     Every device in the style, with the markup and the CSS. Copy the pieces
+     you need into a segment; do not @import this file.
+
+     ⚠ EVERY STRING IN HERE IS PLACEHOLDER. Rewrite all of it from the real
+       transcript and the real sourced media. `scripts/check-screenshare.sh`
+       fails the render on any of it surviving.
+
+     ⚠ NO EMOJIS. Every mark in here is drawn — a CSS tile, a CSS check, an
+       inline SVG. Keep it that way.
+
+     Open this file in a browser to see the whole system on one page.
+     ═══════════════════════════════════════════════════════════════════════ -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>screenshare — component kit</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<style>
+/* ── the frame ─────────────────────────────────────────────────────────── */
+body{margin:0;background:#52525B;font-family:var(--ss-font);}
+.kit-rail{display:flex;flex-direction:column;gap:40px;padding:40px;}
+.kit-label{color:#fff;font:500 20px var(--ss-font);opacity:.75;}
+.kit-stage{transform-origin:top left;transform:scale(.5);height:540px;}
+
+/* ══ 1 · THE CANVAS ─────────────────────────────────────────────────────
+   The ground is #FFFFFF and nothing else. .ss-canvas exists only to hold
+   the content inset and to keep the camera keep-out honest.              */
+.ss-canvas{
+  position:absolute; inset:0;
+  padding:var(--ss-pad);
+  box-sizing:border-box;
+}
+/* everything that is not a `bleed` layout lives inside this, which reserves
+   the bottom-right corner for the parked camera card. */
+.ss-safe{
+  position:absolute;
+  left:var(--ss-pad); top:var(--ss-pad);
+  right:var(--ss-cam-keepout); bottom:var(--ss-pad);
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* ══ 2 · THE CAMERA CARD ────────────────────────────────────────────────
+   A full-frame element. The clip does the framing, the inner transform
+   does the object-fit:cover. See reference/motion-grammar.md §1.3 — never
+   drive this with a CSS transition, only an onUpdate-driven timeline.     */
+.ss-cam{
+  position:absolute; left:0; top:0; width:1920px; height:1080px;
+  z-index:40;                       /* above the canvas, always            */
+  filter:drop-shadow(0 20px 40px rgba(16,16,18,.13));
+}
+.ss-cam video, .ss-cam img{
+  position:absolute; left:0; top:0; width:1920px; height:1080px;
+  object-fit:cover; display:block;
+}
+/* the parked state, for a static beat that never animates */
+.ss-cam[data-ss-state="parked"]{
+  clip-path:inset(
+    calc(1080px - var(--ss-cam-size) - var(--ss-cam-bottom))
+    var(--ss-cam-right)
+    var(--ss-cam-bottom)
+    calc(1920px - var(--ss-cam-size) - var(--ss-cam-right))
+    round var(--ss-cam-radius));
+}
+.ss-cam[data-ss-state="parked"] video,
+.ss-cam[data-ss-state="parked"] img{
+  transform-origin:960px 540px;            /* CENTRE. See applyCam below — */
+  transform:translate(750px,330px) scale(.27778);   /* origin must be the  */
+                                           /* element centre, or the translate
+                                              is applied outside the scaled
+                                              space and the plate flies off. */
+}
+/* the full-bleed state — square corners, identity transform */
+.ss-cam[data-ss-state="full"]{clip-path:inset(0 0 0 0 round 0);}
+.ss-cam[data-ss-state="full"] video,
+.ss-cam[data-ss-state="full"] img{transform:none;}
+
+/* ══ 3 · THE CAPTION ────────────────────────────────────────────────────
+   Same place on both grounds. Positioned by CAP-TOP, not baseline — hence
+   the negative half-leading correction.                                   */
+.ss-cap{
+  position:absolute; left:50%; top:var(--ss-cap-captop);
+  transform:translate(-50%,-0.155em);        /* cap-top, not baseline      */
+  width:var(--ss-cap-max); max-width:var(--ss-cap-max);
+  text-align:center; z-index:60;
+  font-size:var(--ss-cap-size);
+  font-weight:var(--ss-cap-weight);
+  letter-spacing:var(--ss-cap-track);
+  line-height:1.08;
+  color:var(--ss-cap-ink-canvas);
+}
+.ss-cap--footage{
+  color:var(--ss-cap-ink-footage);
+  text-shadow:var(--ss-cap-shadow);
+}
+/* one word may take an accent, and only for one of the four jobs */
+.ss-cap .live{color:var(--ss-blue);}
+.ss-cap .win {color:var(--ss-green);}
+.ss-cap .cost{color:var(--ss-red);}
+
+/* ══ 4 · ss-shot — a real screenshot on the surface ─────────────────────
+   The workhorse. A white UI needs the border or it has no silhouette.     */
+.ss-shot{
+  display:block; max-width:100%;
+  border-radius:var(--ss-card-radius);
+  border:var(--ss-card-border);
+  box-shadow:var(--ss-shadow-card);
+  background:var(--ss-canvas);
+}
+.ss-shot-wrap{position:relative; display:inline-block;}
+.ss-shot-cap{                      /* the small line under a shot         */
+  margin-top:18px; text-align:center;
+  font-size:var(--ss-label-size); font-weight:500;
+  letter-spacing:.02em; color:var(--ss-slate-500);
+}
+
+/* ══ 5 · ss-window — a capture inside a drawn app window ────────────────
+   For a tool being OPERATED, not a page being read. The dots are neutral,
+   never the real macOS red/yellow/green — colour is functional here.      */
+.ss-window{
+  border-radius:var(--ss-card-radius);
+  border:var(--ss-card-border);
+  box-shadow:var(--ss-shadow-card);
+  overflow:hidden; background:var(--ss-canvas);
+}
+.ss-window-bar{
+  position:relative; height:56px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--ss-slate-100);
+  border-bottom:1px solid var(--ss-slate-300);
+}
+.ss-window-dots{position:absolute; left:20px; display:flex; gap:9px;}
+.ss-window-dots i{
+  width:13px; height:13px; border-radius:50%;
+  background:var(--ss-slate-300); display:block;
+}
+.ss-window-title{
+  font-size:var(--ss-label-size); font-weight:600;
+  color:var(--ss-slate-700);
+}
+.ss-window-body{display:block; width:100%;}
+
+/* ══ 6 · ss-callout — one number, one phrase ────────────────────────────
+   The only purely typographic device, and it earns that because a number
+   is not a screenshot of anything. Never set a sentence in it.            */
+.ss-callout{text-align:center;}
+.ss-callout .n{
+  display:block;
+  font-size:var(--ss-display-size);
+  font-weight:var(--ss-display-wt);
+  letter-spacing:var(--ss-display-track);
+  line-height:1;
+  font-variant-numeric:proportional-nums;
+}
+.ss-callout .n .unit{font-size:var(--ss-h-size); font-weight:700;}
+.ss-callout .lab{
+  display:block; margin-top:20px;
+  font-size:var(--ss-label-size); font-weight:500;
+  letter-spacing:.02em; color:var(--ss-slate-500);
+}
+.ss-callout .n.win {color:var(--ss-green);}
+.ss-callout .n.cost{color:var(--ss-red);}
+.ss-callout .n.live{color:var(--ss-blue);}
+/* the compare form — the ONLY multi-callout layout */
+.ss-compare{display:flex; align-items:center; gap:110px;}
+.ss-compare .rule{width:1px; align-self:stretch; background:var(--ss-slate-300);}
+
+/* ══ 7 · ss-board — a diagram the beat builds ───────────────────────────
+   The one device allowed to build, and only AFTER the camera has parked.  */
+.ss-board{display:flex; align-items:center; gap:0;}
+.ss-node{
+  display:flex; align-items:center; gap:22px;
+  padding:26px 34px 26px 26px;
+  border-radius:var(--ss-card-radius);
+  border:var(--ss-card-border);
+  box-shadow:var(--ss-shadow-card);
+  background:var(--ss-canvas);
+}
+.ss-node .tile{               /* a DRAWN mark. Never an emoji.            */
+  width:66px; height:66px; border-radius:16px; flex:0 0 auto;
+  display:flex; align-items:center; justify-content:center;
+  background:color-mix(in srgb, var(--ss-blue) 12%, #fff);
+}
+.ss-node .tile svg{width:32px; height:32px; display:block;}
+.ss-node .t{font-size:var(--ss-h-size); font-weight:700; line-height:1.1;}
+.ss-node .s{font-size:var(--ss-body-size); color:var(--ss-slate-500); line-height:1.3;}
+.ss-edge{position:relative; height:1px; width:96px; background:var(--ss-slate-300);}
+.ss-edge.live::after{         /* the blue dot marks the live edge         */
+  content:''; position:absolute; left:50%; top:50%;
+  width:16px; height:16px; margin:-8px 0 0 -8px;
+  border-radius:50%; background:var(--ss-blue);
+}
+
+/* ══ 8 · ss-list — an agenda / checklist ────────────────────────────────
+   Greying the not-yet-reached rows is a real retention device. Keep it.   */
+.ss-list{display:flex; flex-direction:column; gap:26px;}
+.ss-list .row{display:flex; align-items:center; gap:22px;
+  font-size:var(--ss-body-size); font-weight:500;}
+.ss-list .row.todo{color:var(--ss-slate-300);}
+.ss-list .row.todo .chk{background:var(--ss-slate-100); border-color:var(--ss-slate-300);}
+.ss-list .row.todo .chk svg{stroke:var(--ss-slate-300);}
+.ss-list .chk{                /* a DRAWN check, not a glyph, not an emoji */
+  width:38px; height:38px; border-radius:50%; flex:0 0 auto;
+  display:flex; align-items:center; justify-content:center;
+  background:color-mix(in srgb, var(--ss-green) 14%, #fff);
+  border:1px solid color-mix(in srgb, var(--ss-green) 30%, #fff);
+}
+.ss-list .chk svg{width:19px; height:19px; stroke:var(--ss-green);
+  stroke-width:2.6; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+
+/* ══ 9 · ss-mark — the marker layer ─────────────────────────────────────
+   What makes the surface feel operated. Draws ONCE over ~6 frames, then
+   stops. A highlighter that pulses is a banner ad.
+   ⚠ On a DARK screenshot the amber fill disappears — use .ss-underline or
+     .ss-circle there instead.                                             */
+.ss-hl{position:relative; z-index:0;}
+.ss-hl::before{
+  content:''; position:absolute; z-index:-1;
+  left:-.12em; right:-.12em; top:.06em; bottom:-.02em;
+  background:var(--ss-amber); border-radius:3px;
+  transform:scaleX(0); transform-origin:left center;   /* tween scaleX→1  */
+}
+.ss-underline{position:relative;}
+.ss-underline::after{
+  content:''; position:absolute; left:0; right:0; bottom:-.16em; height:4px;
+  background:var(--ss-red); border-radius:2px;
+  transform:scaleX(0); transform-origin:left center;
+}
+.ss-circle{position:absolute; pointer-events:none;}
+.ss-circle ellipse{
+  fill:none; stroke:var(--ss-red); stroke-width:5; stroke-linecap:round;
+  /* set stroke-dasharray/offset to the path length and tween the offset  */
+}
+.ss-arrow path{fill:none; stroke:var(--ss-blue); stroke-width:5;
+  stroke-linecap:round; stroke-linejoin:round;}
+.ss-redact{background:var(--ss-slate-300); border-radius:4px; color:transparent;}
+
+/* ══ 10 · composition patterns ──────────────────────────────────────────  */
+.ss-solo   {display:flex; align-items:center; justify-content:center;}
+.ss-stack  {display:flex; flex-direction:column; align-items:center; gap:44px;}
+.ss-bleed  {position:absolute; inset:0; display:flex;
+            align-items:center; justify-content:center;}
+.ss-bleed .ss-shot{max-width:none; width:1728px; border-radius:var(--ss-card-radius);}
+</style>
+</head>
+<body>
+<div class="kit-rail">
+
+<!-- ─────────────────────────────────────────────────────────────────────
+     1 · CANVAS + ss-callout + parked camera. The compare form.
+     ───────────────────────────────────────────────────────────────────── -->
+<div class="kit-label">1 · ss-callout (compare) + camera parked</div>
+<div class="kit-stage"><div class="ss-frame">
+  <div class="ss-canvas"><div class="ss-safe">
+    <div class="ss-compare">
+      <div class="ss-callout">
+        <span class="n win">000<span class="unit">unit</span></span>
+        <span class="lab">placeholder label</span>
+      </div>
+      <div class="rule"></div>
+      <div class="ss-callout">
+        <span class="n cost">000<span class="unit">unit</span></span>
+        <span class="lab">placeholder label</span>
+      </div>
+    </div>
+  </div></div>
+  <div class="ss-cam" data-ss-state="parked"><img src="" alt=""></div>
+  <div class="ss-cap">caption goes here</div>
+</div></div>
+
+<!-- ─────────────────────────────────────────────────────────────────────
+     2 · ss-window — a tool being operated, with a marker on it.
+     ───────────────────────────────────────────────────────────────────── -->
+<div class="kit-label">2 · ss-window + ss-mark</div>
+<div class="kit-stage"><div class="ss-frame">
+  <div class="ss-canvas"><div class="ss-safe">
+    <div class="ss-window" style="width:1280px">
+      <div class="ss-window-bar">
+        <div class="ss-window-dots"><i></i><i></i><i></i></div>
+        <div class="ss-window-title">window title placeholder</div>
+      </div>
+      <img class="ss-window-body" src="" alt="">
+    </div>
+  </div></div>
+  <div class="ss-cam" data-ss-state="parked"><img src="" alt=""></div>
+  <div class="ss-cap">the <span class="live">placeholder</span> word</div>
+</div></div>
+
+<!-- ─────────────────────────────────────────────────────────────────────
+     3 · ss-board — builds node by node, AFTER the camera parks.
+     ───────────────────────────────────────────────────────────────────── -->
+<div class="kit-label">3 · ss-board</div>
+<div class="kit-stage"><div class="ss-frame">
+  <div class="ss-canvas"><div class="ss-safe">
+    <div class="ss-board">
+      <div class="ss-node">
+        <div class="tile"><svg viewBox="0 0 24 24" fill="none"
+          stroke="var(--ss-blue)" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></div>
+        <div><div class="t">node title</div><div class="s">node subtitle</div></div>
+      </div>
+      <div class="ss-edge live"></div>
+      <div class="ss-node">
+        <div class="tile" style="background:color-mix(in srgb,var(--ss-green) 12%,#fff)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--ss-green)"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 13l5 5L20 7"/></svg></div>
+        <div><div class="t">node title</div><div class="s">node subtitle</div></div>
+      </div>
+    </div>
+  </div></div>
+  <div class="ss-cam" data-ss-state="parked"><img src="" alt=""></div>
+</div></div>
+
+<!-- ─────────────────────────────────────────────────────────────────────
+     4 · ss-list — the agenda, with the unreached rows greyed.
+     ───────────────────────────────────────────────────────────────────── -->
+<div class="kit-label">4 · ss-list</div>
+<div class="kit-stage"><div class="ss-frame">
+  <div class="ss-canvas"><div class="ss-safe" style="justify-content:flex-start">
+    <div class="ss-list">
+      <div class="row"><span class="chk"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 7"/></svg></span>first list row placeholder</div>
+      <div class="row"><span class="chk"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 7"/></svg></span>second list row placeholder</div>
+      <div class="row todo"><span class="chk"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 7"/></svg></span>third list row placeholder</div>
+    </div>
+  </div></div>
+  <div class="ss-cam" data-ss-state="parked"><img src="" alt=""></div>
+</div></div>
+
+<!-- ─────────────────────────────────────────────────────────────────────
+     5 · ss-shot, solo, with a caption under it and a highlighter on it.
+     ───────────────────────────────────────────────────────────────────── -->
+<div class="kit-label">5 · ss-shot (solo) + ss-shot-cap</div>
+<div class="kit-stage"><div class="ss-frame">
+  <div class="ss-canvas"><div class="ss-safe">
+    <div class="ss-shot-wrap">
+      <img class="ss-shot" src="" alt="" style="width:1180px">
+      <div class="ss-shot-cap">source label placeholder</div>
+      <svg class="ss-circle" style="left:300px;top:180px;width:420px;height:180px"
+           viewBox="0 0 420 180"><ellipse cx="210" cy="90" rx="200" ry="78"/></svg>
+    </div>
+  </div></div>
+  <div class="ss-cam" data-ss-state="parked"><img src="" alt=""></div>
+  <div class="ss-cap">two to six words</div>
+</div></div>
+
+<!-- ─────────────────────────────────────────────────────────────────────
+     6 · The CAMERA ground — full bleed, SQUARE corners, white caption.
+     ───────────────────────────────────────────────────────────────────── -->
+<div class="kit-label">6 · camera ground (full bleed, square corners)</div>
+<div class="kit-stage"><div class="ss-frame" style="background:#3F3F46">
+  <div class="ss-cam" data-ss-state="full"><img src="" alt=""></div>
+  <div class="ss-cap ss-cap--footage">caption goes here</div>
+</div></div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   THE SHRINK — the one piece of real logic in this style.
+
+   Copy applyCam() and the tween into the segment. Drive it from ONE proxy
+   value so the box, the cover scale and the radius can never drift apart,
+   and so it stays seek-safe under HyperFrames' paused timeline.
+
+   ⚠ onUpdate only. Never a CSS transition — HyperFrames renders by seeking
+     a paused timeline and a wall-clock transition renders its end state.
+   ⚠ immediateRender:false on every fromTo in the chain, or a later beat's
+     `from` state is applied at creation and the camera renders parked at
+     frame 0.
+   ═══════════════════════════════════════════════════════════════════════ */
+const SS = {
+  W: 1920, H: 1080,
+  SIZE: 300, RIGHT: 60, BOTTOM: 60, RADIUS: 40,
+  SHRINK: 11 / 30,          // --ss-shrink-frames
+  GROW:   10 / 30,          // --ss-grow-frames
+  EASE:  'power2.inOut',
+};
+
+/* p: 0 = full bleed (square corners), 1 = parked in the corner */
+function applyCam(el, p){
+  const w = SS.W + (SS.SIZE - SS.W) * p;
+  const h = SS.H + (SS.SIZE - SS.H) * p;
+  const r = SS.RADIUS * p;
+  const mx = SS.RIGHT * p, my = SS.BOTTOM * p;
+
+  el.style.clipPath = `inset(${SS.H - h - my}px ${mx}px ${my}px ` +
+                      `${SS.W - w - mx}px round ${r}px)`;
+
+  // object-fit: cover. For a 16:9 source collapsing to a square, h/H is
+  // always the governing ratio, so one uniform scale about the rect centre.
+  const k  = h / SS.H;
+  const cx = SS.W - mx - w / 2;
+  const cy = SS.H - my - h / 2;
+  // ⚠ transform-origin is the element CENTRE, never (cx,cy). CSS composes
+  //   as origin + T(S(p - origin)), so an origin at the destination applies
+  //   the translate outside the scaled space and the plate leaves the frame.
+  //   Scale about the centre, then translate the centre to (cx,cy).
+  const v  = el.firstElementChild;
+  v.style.transformOrigin = `${SS.W / 2}px ${SS.H / 2}px`;
+  v.style.transform = `translate(${cx - SS.W / 2}px, ${cy - SS.H / 2}px) scale(${k})`;
+}
+
+/* shrink at `at`, on the master timeline */
+function camShrink(tl, el, at){
+  const s = {p: 0};
+  return tl.to(s, {p: 1, duration: SS.SHRINK, ease: SS.EASE,
+                   onUpdate: () => applyCam(el, s.p)}, at);
+}
+/* grow back at `at` */
+function camGrow(tl, el, at){
+  const s = {p: 1};
+  return tl.to(s, {p: 0, duration: SS.GROW, ease: SS.EASE,
+                   onUpdate: () => applyCam(el, s.p)}, at);
+}
+
+/* an element arriving on the canvas — 6 frames, 18px, power3.out. That is
+   the entire travel budget in this style. Once arrived, it never moves.  */
+function ssEnter(tl, el, at){
+  return tl.fromTo(el, {opacity: 0, y: 18},
+    {opacity: 1, y: 0, duration: 6 / 30, ease: 'power3.out',
+     immediateRender: false}, at);
+}
+
+/* a marker drawing on — once, 6 frames, then still. */
+function ssMark(tl, el, at){
+  return tl.fromTo(el, {scaleX: 0}, {scaleX: 1, duration: 6 / 30,
+    ease: 'power2.out', transformOrigin: 'left center',
+    immediateRender: false}, at);
+}
+
+// demo only — the kit page renders its parked/full states from CSS.
+</script>
+</body>
+</html>

@@ -1,0 +1,1754 @@
+[
+ {
+  "id": "I01",
+  "gain": 1,
+  "t": 0.05,
+  "type": "boom"
+ },
+ {
+  "id": "I01",
+  "gain": 0.9,
+  "t": 0.32,
+  "type": "whoosh"
+ },
+ {
+  "id": "I01",
+  "gain": 0.7,
+  "t": 0.4,
+  "type": "impact"
+ },
+ {
+  "id": "I02",
+  "gain": 0.5,
+  "t": 1.13,
+  "type": "type"
+ },
+ {
+  "id": "I02",
+  "gain": 0.5,
+  "t": 1.178,
+  "type": "type"
+ },
+ {
+  "id": "I02",
+  "gain": 0.5,
+  "t": 1.226,
+  "type": "type"
+ },
+ {
+  "id": "I02",
+  "gain": 0.5,
+  "t": 1.274,
+  "type": "type"
+ },
+ {
+  "id": "I02",
+  "gain": 0.5,
+  "t": 1.3219999999999998,
+  "type": "type"
+ },
+ {
+  "id": "I02",
+  "gain": 0.5,
+  "t": 1.3699999999999999,
+  "type": "type"
+ },
+ {
+  "id": "I02",
+  "gain": 0.5,
+  "t": 1.418,
+  "type": "type"
+ },
+ {
+  "id": "I02",
+  "gain": 0.5,
+  "t": 1.466,
+  "type": "type"
+ },
+ {
+  "id": "I02",
+  "gain": 0.5,
+  "t": 1.5139999999999998,
+  "type": "type"
+ },
+ {
+  "id": "I02",
+  "gain": 0.5,
+  "t": 1.5619999999999998,
+  "type": "type"
+ },
+ {
+  "id": "I02",
+  "gain": 1,
+  "t": 1.858,
+  "type": "impact"
+ },
+ {
+  "id": "I02",
+  "gain": 0.4,
+  "t": 1.96,
+  "type": "tick"
+ },
+ {
+  "id": "I02",
+  "gain": 0.5,
+  "t": 2.2,
+  "type": "zap"
+ },
+ {
+  "id": "I03",
+  "gain": 1,
+  "t": 2.38,
+  "type": "boom"
+ },
+ {
+  "id": "I03",
+  "gain": 0.6,
+  "t": 2.4,
+  "type": "shatter"
+ },
+ {
+  "id": "I03",
+  "gain": 0.8,
+  "t": 3.25,
+  "type": "impact"
+ },
+ {
+  "id": "I03",
+  "gain": 0.6,
+  "t": 3.85,
+  "type": "riser"
+ },
+ {
+  "id": "I04",
+  "gain": 0.9,
+  "t": 5.05,
+  "type": "boom"
+ },
+ {
+  "id": "I04",
+  "gain": 1,
+  "t": 5.45,
+  "type": "pop"
+ },
+ {
+  "id": "I04",
+  "gain": 0.3,
+  "t": 5.75,
+  "type": "swoosh"
+ },
+ {
+  "id": "I04",
+  "gain": 0.3,
+  "t": 6.1,
+  "type": "swoosh"
+ },
+ {
+  "id": "I04",
+  "gain": 0.6,
+  "t": 6.62,
+  "type": "ding"
+ },
+ {
+  "id": "I05",
+  "gain": 0.6,
+  "t": 7.32,
+  "type": "swoosh"
+ },
+ {
+  "id": "I05",
+  "gain": 1,
+  "t": 7.76,
+  "type": "boom"
+ },
+ {
+  "id": "I05",
+  "gain": 0.8,
+  "t": 7.779999999999999,
+  "type": "pop"
+ },
+ {
+  "id": "I05",
+  "gain": 0.5,
+  "t": 8.12,
+  "type": "impact"
+ },
+ {
+  "id": "I05",
+  "gain": 0.9,
+  "t": 8.47,
+  "type": "whoosh"
+ },
+ {
+  "id": "V01",
+  "gain": 0.8,
+  "t": 8.76,
+  "type": "click"
+ },
+ {
+  "id": "V01",
+  "gain": 1,
+  "t": 9.96,
+  "type": "click"
+ },
+ {
+  "id": "V01",
+  "gain": 0.6,
+  "t": 10.23,
+  "type": "impact"
+ },
+ {
+  "id": "V02",
+  "gain": 1,
+  "t": 10.34,
+  "type": "click"
+ },
+ {
+  "id": "V02",
+  "gain": 0.7,
+  "t": 10.56,
+  "type": "whoosh"
+ },
+ {
+  "id": "V02",
+  "gain": 1,
+  "t": 11.12,
+  "type": "boom"
+ },
+ {
+  "id": "V02",
+  "gain": 0.6,
+  "t": 11.14,
+  "type": "shatter"
+ },
+ {
+  "id": "V03",
+  "gain": 0.8,
+  "t": 11.64,
+  "type": "whoosh"
+ },
+ {
+  "id": "V03",
+  "gain": 1,
+  "t": 12.04,
+  "type": "swoosh"
+ },
+ {
+  "id": "V04",
+  "gain": 0.6,
+  "t": 12.92,
+  "type": "zap"
+ },
+ {
+  "id": "V04",
+  "gain": 0.7,
+  "t": 13.82,
+  "type": "riser"
+ },
+ {
+  "id": "V04",
+  "gain": 1,
+  "t": 13.98,
+  "type": "shatter"
+ },
+ {
+  "id": "V05",
+  "gain": 1,
+  "t": 14.52,
+  "type": "stamp"
+ },
+ {
+  "id": "V05",
+  "gain": 0.6,
+  "t": 14.76,
+  "type": "glitch"
+ },
+ {
+  "id": "V05",
+  "gain": 0.7,
+  "t": 15.2,
+  "type": "swoosh"
+ },
+ {
+  "id": "V06",
+  "gain": 0.8,
+  "t": 15.7,
+  "type": "paper"
+ },
+ {
+  "id": "V06",
+  "gain": 1,
+  "t": 16.07,
+  "type": "impact"
+ },
+ {
+  "id": "V07",
+  "gain": 0.6,
+  "t": 16.29,
+  "type": "impact"
+ },
+ {
+  "id": "V07",
+  "gain": 0.5,
+  "t": 16.4,
+  "type": "tick"
+ },
+ {
+  "id": "V07",
+  "gain": 0.8,
+  "t": 16.74,
+  "type": "boom"
+ },
+ {
+  "id": "V08",
+  "gain": 0.6,
+  "t": 17.1,
+  "type": "type"
+ },
+ {
+  "id": "V08",
+  "gain": 1,
+  "t": 17.97,
+  "type": "click"
+ },
+ {
+  "id": "V08",
+  "gain": 0.9,
+  "t": 18.8,
+  "type": "impact"
+ },
+ {
+  "id": "V09",
+  "gain": 0.5,
+  "t": 19.47,
+  "type": "tick"
+ },
+ {
+  "id": "V09",
+  "gain": 0.5,
+  "t": 19.72,
+  "type": "tick"
+ },
+ {
+  "id": "V09",
+  "gain": 0.5,
+  "t": 19.98,
+  "type": "tick"
+ },
+ {
+  "id": "V09",
+  "gain": 0.9,
+  "t": 20.42,
+  "type": "pop"
+ },
+ {
+  "id": "V10",
+  "gain": 0.7,
+  "t": 20.72,
+  "type": "whoosh"
+ },
+ {
+  "id": "V10",
+  "gain": 0.6,
+  "t": 21.16,
+  "type": "click"
+ },
+ {
+  "id": "V10",
+  "gain": 1,
+  "t": 21.6,
+  "type": "stamp"
+ },
+ {
+  "id": "V11",
+  "gain": 0.5,
+  "t": 21.97,
+  "type": "whoosh"
+ },
+ {
+  "id": "V11",
+  "gain": 0.8,
+  "t": 22.8,
+  "type": "ding"
+ },
+ {
+  "id": "V12",
+  "gain": 0.6,
+  "t": 23.05,
+  "type": "zap"
+ },
+ {
+  "id": "V12",
+  "gain": 0.7,
+  "t": 23.4,
+  "type": "whoosh"
+ },
+ {
+  "id": "V12",
+  "gain": 0.6,
+  "t": 23.96,
+  "type": "glitch"
+ },
+ {
+  "id": "V13",
+  "gain": 0.6,
+  "t": 24.64,
+  "type": "stamp"
+ },
+ {
+  "id": "V13",
+  "gain": 0.6,
+  "t": 25.287,
+  "type": "shatter"
+ },
+ {
+  "id": "V13",
+  "gain": 0.6,
+  "t": 25.96,
+  "type": "swoosh"
+ },
+ {
+  "id": "V14",
+  "gain": 1,
+  "t": 27.04,
+  "type": "click"
+ },
+ {
+  "id": "V14",
+  "gain": 0.6,
+  "t": 27.09,
+  "type": "ding"
+ },
+ {
+  "id": "V15",
+  "gain": 0.6,
+  "t": 28.52,
+  "type": "bell"
+ },
+ {
+  "id": "V15",
+  "gain": 0.9,
+  "t": 29.14,
+  "type": "riser"
+ },
+ {
+  "id": "P01",
+  "gain": 0.4,
+  "t": 30.05,
+  "type": "riser"
+ },
+ {
+  "id": "P01",
+  "gain": 1,
+  "t": 31.12,
+  "type": "impact"
+ },
+ {
+  "id": "P01",
+  "gain": 0.6,
+  "t": 31.17,
+  "type": "bell"
+ },
+ {
+  "id": "P02",
+  "gain": 0.6,
+  "t": 31.6,
+  "type": "whoosh"
+ },
+ {
+  "id": "P02",
+  "gain": 0.9,
+  "t": 32.98,
+  "type": "firework"
+ },
+ {
+  "id": "P03",
+  "gain": 0.5,
+  "t": 33.58,
+  "type": "click"
+ },
+ {
+  "id": "P03",
+  "gain": 1,
+  "t": 33.93,
+  "type": "stamp"
+ },
+ {
+  "id": "P03",
+  "gain": 1,
+  "t": 35.46,
+  "type": "stamp"
+ },
+ {
+  "id": "P03",
+  "gain": 0.7,
+  "t": 35.98,
+  "type": "whoosh"
+ },
+ {
+  "id": "P04",
+  "gain": 0.6,
+  "t": 36.2,
+  "type": "zap"
+ },
+ {
+  "id": "P04",
+  "gain": 0.9,
+  "t": 37.15,
+  "type": "ding"
+ },
+ {
+  "id": "P05",
+  "gain": 0.9,
+  "t": 37.32,
+  "type": "riser"
+ },
+ {
+  "id": "P05",
+  "gain": 0.5,
+  "t": 37.442,
+  "type": "pop"
+ },
+ {
+  "id": "P05",
+  "gain": 0.6,
+  "t": 37.593,
+  "type": "pop"
+ },
+ {
+  "id": "P05",
+  "gain": 0.7,
+  "t": 37.744,
+  "type": "pop"
+ },
+ {
+  "id": "P05",
+  "gain": 0.8,
+  "t": 37.895,
+  "type": "pop"
+ },
+ {
+  "id": "P05",
+  "gain": 0.9,
+  "t": 38.04600000000001,
+  "type": "pop"
+ },
+ {
+  "id": "P05",
+  "gain": 0.8,
+  "t": 38.07600000000001,
+  "type": "swoosh"
+ },
+ {
+  "id": "C01",
+  "gain": 0.6,
+  "t": 38.3,
+  "type": "boom"
+ },
+ {
+  "id": "C01",
+  "gain": 1,
+  "t": 38.97,
+  "type": "impact"
+ },
+ {
+  "id": "C01",
+  "gain": 0.8,
+  "t": 39.349999999999994,
+  "type": "impact"
+ },
+ {
+  "id": "C01",
+  "gain": 1,
+  "t": 39.667,
+  "type": "boom"
+ },
+ {
+  "id": "C01",
+  "gain": 0.9,
+  "t": 39.72,
+  "type": "whoosh"
+ },
+ {
+  "id": "C02",
+  "gain": 0.8,
+  "t": 40.82,
+  "type": "swoosh"
+ },
+ {
+  "id": "C03",
+  "gain": 0.8,
+  "t": 41.15,
+  "type": "impact"
+ },
+ {
+  "id": "C03",
+  "gain": 0.6,
+  "t": 41.59,
+  "type": "stamp"
+ },
+ {
+  "id": "C03",
+  "gain": 0.7,
+  "t": 41.95,
+  "type": "stamp"
+ },
+ {
+  "id": "C04",
+  "gain": 0.5,
+  "t": 42.4,
+  "type": "glitch"
+ },
+ {
+  "id": "C04",
+  "gain": 1,
+  "t": 42.62,
+  "type": "shatter"
+ },
+ {
+  "id": "C04",
+  "gain": 0.8,
+  "t": 43.24,
+  "type": "rip"
+ },
+ {
+  "id": "C05",
+  "gain": 0.7,
+  "t": 43.620000000000005,
+  "type": "swoosh"
+ },
+ {
+  "id": "C05",
+  "gain": 1,
+  "t": 44.2,
+  "type": "boom"
+ },
+ {
+  "id": "C05",
+  "gain": 0.9,
+  "t": 44.8,
+  "type": "click"
+ },
+ {
+  "id": "C06",
+  "gain": 0.8,
+  "t": 45.08,
+  "type": "impact"
+ },
+ {
+  "id": "C06",
+  "gain": 1,
+  "t": 45.6,
+  "type": "pop"
+ },
+ {
+  "id": "C07",
+  "gain": 0.5,
+  "t": 46.28,
+  "type": "swoosh"
+ },
+ {
+  "id": "C07",
+  "gain": 0.9,
+  "t": 46.86,
+  "type": "impact"
+ },
+ {
+  "id": "C08",
+  "gain": 0.4,
+  "t": 47.48,
+  "type": "swoosh"
+ },
+ {
+  "id": "C08",
+  "gain": 0.8,
+  "t": 48.08,
+  "type": "pop"
+ },
+ {
+  "id": "C09",
+  "gain": 0.7,
+  "t": 48.32,
+  "type": "whoosh"
+ },
+ {
+  "id": "C09",
+  "gain": 0.9,
+  "t": 49.27,
+  "type": "boom"
+ },
+ {
+  "id": "C09",
+  "gain": 0.6,
+  "t": 49.84,
+  "type": "whoosh"
+ },
+ {
+  "id": "C10",
+  "gain": 0.5,
+  "t": 50.3,
+  "type": "riser"
+ },
+ {
+  "id": "C10",
+  "gain": 0.9,
+  "t": 51.69,
+  "type": "firework"
+ },
+ {
+  "id": "C10",
+  "gain": 0.9,
+  "t": 52.5,
+  "type": "whoosh"
+ },
+ {
+  "id": "C11",
+  "gain": 0.8,
+  "t": 52.72,
+  "type": "impact"
+ },
+ {
+  "id": "C11",
+  "gain": 0.8,
+  "t": 53.48,
+  "type": "impact"
+ },
+ {
+  "id": "C11",
+  "gain": 1,
+  "t": 54.08,
+  "type": "firework"
+ },
+ {
+  "id": "C12",
+  "gain": 0.9,
+  "t": 56.12,
+  "type": "impact"
+ },
+ {
+  "id": "C12",
+  "gain": 1,
+  "t": 56.47,
+  "type": "boom"
+ },
+ {
+  "id": "C12",
+  "gain": 0.7,
+  "t": 56.9,
+  "type": "riser"
+ },
+ {
+  "id": "C12",
+  "gain": 1,
+  "t": 57.4,
+  "type": "stamp"
+ },
+ {
+  "id": "W01",
+  "gain": 0.6,
+  "t": 58.2,
+  "type": "coin"
+ },
+ {
+  "id": "W01",
+  "gain": 0.7,
+  "t": 58.5,
+  "type": "coin"
+ },
+ {
+  "id": "W01",
+  "gain": 1,
+  "t": 58.8,
+  "type": "glitch"
+ },
+ {
+  "id": "W02",
+  "gain": 0.7,
+  "t": 59.38,
+  "type": "pop"
+ },
+ {
+  "id": "W02",
+  "gain": 0.8,
+  "t": 59.66,
+  "type": "glitch"
+ },
+ {
+  "id": "W02",
+  "gain": 0.8,
+  "t": 59.8,
+  "type": "click"
+ },
+ {
+  "id": "W02",
+  "gain": 0.9,
+  "t": 60.13,
+  "type": "impact"
+ },
+ {
+  "id": "W03",
+  "gain": 0.8,
+  "t": 60.3,
+  "type": "paper"
+ },
+ {
+  "id": "W03",
+  "gain": 0.9,
+  "t": 60.86,
+  "type": "stamp"
+ },
+ {
+  "id": "W03",
+  "gain": 0.5,
+  "t": 61,
+  "type": "riser"
+ },
+ {
+  "id": "W04",
+  "gain": 1,
+  "t": 61.78,
+  "type": "rip"
+ },
+ {
+  "id": "W04",
+  "gain": 0.8,
+  "t": 62.02,
+  "type": "paper"
+ },
+ {
+  "id": "W04",
+  "gain": 0.9,
+  "t": 62.28,
+  "type": "stamp"
+ },
+ {
+  "id": "W05",
+  "gain": 0.6,
+  "t": 62.92,
+  "type": "pop"
+ },
+ {
+  "id": "W05",
+  "gain": 0.6,
+  "t": 63.6,
+  "type": "pop"
+ },
+ {
+  "id": "W05",
+  "gain": 0.7,
+  "t": 63.82,
+  "type": "stamp"
+ },
+ {
+  "id": "W05",
+  "gain": 0.6,
+  "t": 64.04,
+  "type": "zap"
+ },
+ {
+  "id": "W05",
+  "gain": 0.7,
+  "t": 64.26,
+  "type": "riser"
+ },
+ {
+  "id": "W05",
+  "gain": 1,
+  "t": 64.44,
+  "type": "firework"
+ },
+ {
+  "id": "W06",
+  "gain": 0.6,
+  "t": 65.32,
+  "type": "whoosh"
+ },
+ {
+  "id": "W06",
+  "gain": 1,
+  "t": 65.88,
+  "type": "ding"
+ },
+ {
+  "id": "W07",
+  "gain": 0.9,
+  "t": 66.3,
+  "type": "impact"
+ },
+ {
+  "id": "W07",
+  "gain": 0.7,
+  "t": 66.86,
+  "type": "stamp"
+ },
+ {
+  "id": "W07",
+  "gain": 0.9,
+  "t": 67.12,
+  "type": "pop"
+ },
+ {
+  "id": "W08",
+  "gain": 0.7,
+  "t": 67.64,
+  "type": "click"
+ },
+ {
+  "id": "W08",
+  "gain": 0.5,
+  "t": 67.72,
+  "type": "riser"
+ },
+ {
+  "id": "W08",
+  "gain": 1,
+  "t": 67.87,
+  "type": "shatter"
+ },
+ {
+  "id": "W09",
+  "gain": 0.8,
+  "t": 68.3,
+  "type": "zap"
+ },
+ {
+  "id": "W09",
+  "gain": 0.6,
+  "t": 68.6,
+  "type": "type"
+ },
+ {
+  "id": "W09",
+  "gain": 0.8,
+  "t": 68.98,
+  "type": "ding"
+ },
+ {
+  "id": "W10",
+  "gain": 0.9,
+  "t": 69.16,
+  "type": "click"
+ },
+ {
+  "id": "W10",
+  "gain": 0.6,
+  "t": 69.24,
+  "type": "pop"
+ },
+ {
+  "id": "W10",
+  "gain": 0.7,
+  "t": 69.32,
+  "type": "pop"
+ },
+ {
+  "id": "W10",
+  "gain": 0.8,
+  "t": 69.41,
+  "type": "pop"
+ },
+ {
+  "id": "W11",
+  "gain": 0.5,
+  "t": 69.62,
+  "type": "whoosh"
+ },
+ {
+  "id": "W11",
+  "gain": 1,
+  "t": 69.8,
+  "type": "boom"
+ },
+ {
+  "id": "W12",
+  "gain": 0.9,
+  "t": 70.82,
+  "type": "swoosh"
+ },
+ {
+  "id": "W12",
+  "gain": 0.5,
+  "t": 71.42,
+  "type": "whoosh"
+ },
+ {
+  "id": "W12",
+  "gain": 0.7,
+  "t": 71.92,
+  "type": "bell"
+ },
+ {
+  "id": "W13",
+  "gain": 1,
+  "t": 72.88,
+  "type": "swoosh"
+ },
+ {
+  "id": "W13",
+  "gain": 1,
+  "t": 73.22,
+  "type": "stamp"
+ },
+ {
+  "id": "W14",
+  "gain": 1,
+  "t": 73.7,
+  "type": "click"
+ },
+ {
+  "id": "W14",
+  "gain": 1,
+  "t": 74.095,
+  "type": "click"
+ },
+ {
+  "id": "W15",
+  "gain": 0.8,
+  "t": 75.56,
+  "type": "bell"
+ },
+ {
+  "id": "W15",
+  "gain": 0.9,
+  "t": 76.82,
+  "type": "whoosh"
+ },
+ {
+  "id": "G01",
+  "gain": 1,
+  "t": 77.5,
+  "type": "impact"
+ },
+ {
+  "id": "G01",
+  "gain": 0.6,
+  "t": 77.55,
+  "type": "riser"
+ },
+ {
+  "id": "G01",
+  "gain": 1,
+  "t": 78.089,
+  "type": "ding"
+ },
+ {
+  "id": "G02",
+  "gain": 1,
+  "t": 78.6,
+  "type": "stamp"
+ },
+ {
+  "id": "G02",
+  "gain": 1,
+  "t": 78.78,
+  "type": "stamp"
+ },
+ {
+  "id": "G02",
+  "gain": 1,
+  "t": 78.96,
+  "type": "stamp"
+ },
+ {
+  "id": "G02",
+  "gain": 1,
+  "t": 79.1,
+  "type": "coin"
+ },
+ {
+  "id": "G02",
+  "gain": 0.9,
+  "t": 79.12,
+  "type": "boom"
+ },
+ {
+  "id": "G03",
+  "gain": 1,
+  "t": 80.1,
+  "type": "swoosh"
+ },
+ {
+  "id": "G03",
+  "gain": 1,
+  "t": 81.14,
+  "type": "ding"
+ },
+ {
+  "id": "G04",
+  "gain": 1,
+  "t": 81.6,
+  "type": "stamp"
+ },
+ {
+  "id": "G04",
+  "gain": 1,
+  "t": 82.14,
+  "type": "rip"
+ },
+ {
+  "id": "G04",
+  "gain": 0.8,
+  "t": 82.4,
+  "type": "rip"
+ },
+ {
+  "id": "G04",
+  "gain": 0.8,
+  "t": 82.84,
+  "type": "boom"
+ },
+ {
+  "id": "G05",
+  "gain": 1,
+  "t": 83.66,
+  "type": "click"
+ },
+ {
+  "id": "G05",
+  "gain": 0.5,
+  "t": 83.67,
+  "type": "rip"
+ },
+ {
+  "id": "G06",
+  "gain": 1,
+  "t": 84.54,
+  "type": "impact"
+ },
+ {
+  "id": "G06",
+  "gain": 0.7,
+  "t": 84.66,
+  "type": "riser"
+ },
+ {
+  "id": "G06",
+  "gain": 1,
+  "t": 85.2,
+  "type": "whoosh"
+ },
+ {
+  "id": "G07",
+  "gain": 0.9,
+  "t": 85.31,
+  "type": "stamp"
+ },
+ {
+  "id": "G07",
+  "gain": 1,
+  "t": 85.914,
+  "type": "stamp"
+ },
+ {
+  "id": "G07",
+  "gain": 1,
+  "t": 86.494,
+  "type": "impact"
+ },
+ {
+  "id": "G07",
+  "gain": 0.5,
+  "t": 86.6,
+  "type": "riser"
+ },
+ {
+  "id": "G07",
+  "gain": 0.9,
+  "t": 86.62,
+  "type": "whoosh"
+ },
+ {
+  "id": "K01",
+  "gain": 0.9,
+  "t": 86.86,
+  "type": "boom"
+ },
+ {
+  "id": "K01",
+  "gain": 1,
+  "t": 88.28,
+  "type": "stamp"
+ },
+ {
+  "id": "K01",
+  "gain": 1,
+  "t": 88.44,
+  "type": "whoosh"
+ },
+ {
+  "id": "K02",
+  "gain": 0.7,
+  "t": 88.78,
+  "type": "glitch"
+ },
+ {
+  "id": "K02",
+  "gain": 1,
+  "t": 89.8,
+  "type": "type"
+ },
+ {
+  "id": "K03",
+  "gain": 1,
+  "t": 90.7,
+  "type": "shatter"
+ },
+ {
+  "id": "K03",
+  "gain": 1,
+  "t": 90.81,
+  "type": "glitch"
+ },
+ {
+  "id": "K03",
+  "gain": 1,
+  "t": 91.22,
+  "type": "rip"
+ },
+ {
+  "id": "K04",
+  "gain": 1,
+  "t": 93.04,
+  "type": "pop"
+ },
+ {
+  "id": "K04",
+  "gain": 1,
+  "t": 93.42,
+  "type": "zap"
+ },
+ {
+  "id": "K04",
+  "gain": 1,
+  "t": 93.64,
+  "type": "boom"
+ },
+ {
+  "id": "K05",
+  "gain": 1,
+  "t": 94.64,
+  "type": "swoosh"
+ },
+ {
+  "id": "K05",
+  "gain": 1,
+  "t": 96.06,
+  "type": "ding"
+ },
+ {
+  "id": "K06",
+  "gain": 0.6,
+  "t": 96.32,
+  "type": "whoosh"
+ },
+ {
+  "id": "K06",
+  "gain": 1,
+  "t": 97.27,
+  "type": "zap"
+ },
+ {
+  "id": "K06",
+  "gain": 1,
+  "t": 98.94,
+  "type": "firework"
+ },
+ {
+  "id": "K07",
+  "gain": 1,
+  "t": 100.92,
+  "type": "stamp"
+ },
+ {
+  "id": "K07",
+  "gain": 1,
+  "t": 101.48,
+  "type": "stamp"
+ },
+ {
+  "id": "K07",
+  "gain": 0.8,
+  "t": 102.08,
+  "type": "boom"
+ },
+ {
+  "id": "K08",
+  "gain": 0.7,
+  "t": 104.57,
+  "type": "riser"
+ },
+ {
+  "id": "K08",
+  "gain": 0.9,
+  "t": 104.57,
+  "type": "boom"
+ },
+ {
+  "id": "B01",
+  "gain": 1,
+  "t": 107.32,
+  "type": "click"
+ },
+ {
+  "id": "B01",
+  "gain": 1,
+  "t": 107.36999999999999,
+  "type": "pop"
+ },
+ {
+  "id": "B01",
+  "gain": 0.9,
+  "t": 107.44,
+  "type": "bell"
+ },
+ {
+  "id": "B02",
+  "gain": 0.6,
+  "t": 109.27,
+  "type": "swoosh"
+ },
+ {
+  "id": "B02",
+  "gain": 0.7,
+  "t": 109.68,
+  "type": "whoosh"
+ },
+ {
+  "id": "B02",
+  "gain": 0.4,
+  "t": 109.73,
+  "type": "bell"
+ },
+ {
+  "id": "B03",
+  "gain": 0.6,
+  "t": 111.02,
+  "type": "whoosh"
+ },
+ {
+  "id": "B03",
+  "gain": 0.9,
+  "t": 112.74,
+  "type": "impact"
+ },
+ {
+  "id": "B03",
+  "gain": 0.7,
+  "t": 112.75999999999999,
+  "type": "pop"
+ },
+ {
+  "id": "B04",
+  "gain": 0.5,
+  "t": 113.25,
+  "type": "riser"
+ },
+ {
+  "id": "B04",
+  "gain": 0.6,
+  "t": 114.1,
+  "type": "ding"
+ },
+ {
+  "id": "B05",
+  "gain": 0.5,
+  "t": 114.81,
+  "type": "pop"
+ },
+ {
+  "id": "B05",
+  "gain": 0.5,
+  "t": 115.31,
+  "type": "ding"
+ },
+ {
+  "id": "B06",
+  "gain": 0.6,
+  "t": 115.97,
+  "type": "swoosh"
+ },
+ {
+  "id": "B06",
+  "gain": 1,
+  "t": 116.5,
+  "type": "impact"
+ },
+ {
+  "id": "B06",
+  "gain": 0.6,
+  "t": 116.52,
+  "type": "boom"
+ },
+ {
+  "id": "B06",
+  "gain": 0.9,
+  "t": 118.04,
+  "type": "stamp"
+ },
+ {
+  "id": "B07",
+  "gain": 0.5,
+  "t": 118.56,
+  "type": "swoosh"
+ },
+ {
+  "id": "B07",
+  "gain": 1,
+  "t": 118.8,
+  "type": "pop"
+ },
+ {
+  "id": "B07",
+  "gain": 0.6,
+  "t": 118.81,
+  "type": "boom"
+ },
+ {
+  "id": "B07",
+  "gain": 0.5,
+  "t": 118.91,
+  "type": "riser"
+ },
+ {
+  "id": "B08",
+  "gain": 0.7,
+  "t": 119.98,
+  "type": "paper"
+ },
+ {
+  "id": "B08",
+  "gain": 0.5,
+  "t": 120.4,
+  "type": "paper"
+ },
+ {
+  "id": "B08",
+  "gain": 0.5,
+  "t": 120.9,
+  "type": "paper"
+ },
+ {
+  "id": "B08",
+  "gain": 0.5,
+  "t": 121.4,
+  "type": "paper"
+ },
+ {
+  "id": "B08",
+  "gain": 0.5,
+  "t": 121.9,
+  "type": "paper"
+ },
+ {
+  "id": "B09",
+  "gain": 0.7,
+  "t": 122.9,
+  "type": "glitch"
+ },
+ {
+  "id": "B09",
+  "gain": 0.9,
+  "t": 122.95,
+  "type": "riser"
+ },
+ {
+  "id": "B09",
+  "gain": 1,
+  "t": 125.2,
+  "type": "impact"
+ },
+ {
+  "id": "F01",
+  "gain": 1,
+  "t": 125.3,
+  "type": "whoosh"
+ },
+ {
+  "id": "F01",
+  "gain": 1,
+  "t": 126.08,
+  "type": "impact"
+ },
+ {
+  "id": "F01",
+  "gain": 1,
+  "t": 127.22,
+  "type": "swoosh"
+ },
+ {
+  "id": "F02",
+  "gain": 0.8,
+  "t": 127.77,
+  "type": "rip"
+ },
+ {
+  "id": "F02",
+  "gain": 0.8,
+  "t": 128.19,
+  "type": "rip"
+ },
+ {
+  "id": "F02",
+  "gain": 0.8,
+  "t": 128.46,
+  "type": "rip"
+ },
+ {
+  "id": "F02",
+  "gain": 0.8,
+  "t": 129.02,
+  "type": "rip"
+ },
+ {
+  "id": "F02",
+  "gain": 1,
+  "t": 129.62,
+  "type": "rip"
+ },
+ {
+  "id": "F03",
+  "gain": 1,
+  "t": 130.29,
+  "type": "boom"
+ },
+ {
+  "id": "F03",
+  "gain": 1,
+  "t": 130.7,
+  "type": "whoosh"
+ },
+ {
+  "id": "F03",
+  "gain": 1,
+  "t": 132.04,
+  "type": "impact"
+ },
+ {
+  "id": "F04",
+  "gain": 0.6,
+  "t": 132.36,
+  "type": "stamp"
+ },
+ {
+  "id": "F04",
+  "gain": 0.8,
+  "t": 133.18,
+  "type": "stamp"
+ },
+ {
+  "id": "F04",
+  "gain": 0.8,
+  "t": 133.7,
+  "type": "stamp"
+ },
+ {
+  "id": "F04",
+  "gain": 1,
+  "t": 133.72,
+  "type": "pop"
+ },
+ {
+  "id": "F04",
+  "gain": 1,
+  "t": 134.92,
+  "type": "boom"
+ },
+ {
+  "id": "F05",
+  "gain": 1,
+  "t": 135.26,
+  "type": "whoosh"
+ },
+ {
+  "id": "F05",
+  "gain": 1,
+  "t": 136.28,
+  "type": "swoosh"
+ },
+ {
+  "id": "F05",
+  "gain": 1,
+  "t": 137.3,
+  "type": "whoosh"
+ },
+ {
+  "id": "F05",
+  "gain": 1,
+  "t": 138.09,
+  "type": "swoosh"
+ },
+ {
+  "id": "F06",
+  "gain": 0.8,
+  "t": 138.96,
+  "type": "whoosh"
+ },
+ {
+  "id": "F06",
+  "gain": 1,
+  "t": 140.48,
+  "type": "ding"
+ },
+ {
+  "id": "F06",
+  "gain": 1,
+  "t": 142.52,
+  "type": "firework"
+ },
+ {
+  "id": "O01",
+  "gain": 0.7,
+  "t": 142.96,
+  "type": "type"
+ },
+ {
+  "id": "O01",
+  "gain": 0.8,
+  "t": 143.3,
+  "type": "whoosh"
+ },
+ {
+  "id": "O01",
+  "gain": 0.7,
+  "t": 144.64,
+  "type": "type"
+ },
+ {
+  "id": "O01",
+  "gain": 0.9,
+  "t": 145,
+  "type": "boom"
+ },
+ {
+  "id": "O02",
+  "gain": 0.8,
+  "t": 145.56,
+  "type": "swoosh"
+ },
+ {
+  "id": "O02",
+  "gain": 0.7,
+  "t": 147.68,
+  "type": "paper"
+ },
+ {
+  "id": "O02",
+  "gain": 0.5,
+  "t": 149.64,
+  "type": "paper"
+ },
+ {
+  "id": "O02",
+  "gain": 1,
+  "t": 149.94,
+  "type": "ding"
+ },
+ {
+  "id": "O03",
+  "gain": 0.7,
+  "t": 150.4,
+  "type": "whoosh"
+ },
+ {
+  "id": "O03",
+  "gain": 0.8,
+  "t": 150.6,
+  "type": "paper"
+ },
+ {
+  "id": "O03",
+  "gain": 0.6,
+  "t": 151.4,
+  "type": "paper"
+ },
+ {
+  "id": "O03",
+  "gain": 0.9,
+  "t": 152.485,
+  "type": "stamp"
+ },
+ {
+  "id": "O04",
+  "gain": 0.8,
+  "t": 153.3,
+  "type": "impact"
+ },
+ {
+  "id": "O04",
+  "gain": 0.6,
+  "t": 154.18,
+  "type": "impact"
+ },
+ {
+  "id": "O04",
+  "gain": 0.6,
+  "t": 154.45,
+  "type": "swoosh"
+ },
+ {
+  "id": "O04",
+  "gain": 1,
+  "t": 154.74,
+  "type": "pop"
+ },
+ {
+  "id": "O04",
+  "gain": 0.8,
+  "t": 154.78,
+  "type": "bell"
+ },
+ {
+  "id": "O05",
+  "gain": 0.5,
+  "t": 155.2,
+  "type": "whoosh"
+ },
+ {
+  "id": "O05",
+  "gain": 0.5,
+  "t": 156.2,
+  "type": "zap"
+ },
+ {
+  "id": "O05",
+  "gain": 0.9,
+  "t": 156.62,
+  "type": "click"
+ },
+ {
+  "id": "O06",
+  "gain": 0.6,
+  "t": 157.34,
+  "type": "type"
+ },
+ {
+  "id": "O06",
+  "gain": 0.4,
+  "t": 158.7,
+  "type": "tick"
+ },
+ {
+  "id": "O06",
+  "gain": 0.7,
+  "t": 160.3,
+  "type": "pop"
+ },
+ {
+  "id": "O06",
+  "gain": 0.5,
+  "t": 163,
+  "type": "glitch"
+ },
+ {
+  "id": "O06",
+  "gain": 0.5,
+  "t": 163.5,
+  "type": "type"
+ },
+ {
+  "id": "O06",
+  "gain": 0.6,
+  "t": 164,
+  "type": "click"
+ }
+]

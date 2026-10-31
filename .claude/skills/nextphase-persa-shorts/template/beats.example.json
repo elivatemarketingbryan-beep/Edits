@@ -1,0 +1,43 @@
+{
+  "_readme": "The beat map for ONE video. Times are seconds on the tightened recording, taken from assets/transcript.json word onsets — never round numbers. Beats must be contiguous and cover the whole video. Kinds: face · title · ui · window · broll · cta. Delete every _comment key you like; build.py ignores them.",
+  "duration": 51.83,
+  "fixes": {
+    "_comment": "ASR fixes for the CAPTION TEXT only, keyed by word index in transcript.json. \"\" drops a word. Never change timings.",
+    "19": "Acme",
+    "22": ""
+  },
+  "beats": [
+    {"start": 0.00, "end": 2.30, "kind": "ui", "src": "assets/pages/pricing.png",
+     "_comment": "HOOK on a real surface: the competitor's real pricing page owns the frame, the creator sits in the card with the head breaking its edge"},
+
+    {"start": 2.30, "end": 4.40, "kind": "face", "rep": {"word": "MONTH", "at": 2.56},
+     "_comment": "stacked repetition — only when the line IS repetition ('every single month')"},
+
+    {"start": 4.40, "end": 9.44, "kind": "face",
+     "emph": {"word": "PAYING", "at": 6.16, "dur": 1.0, "tone": "accent"},
+     "_comment": "the pain word as a hollow outline in the emphasis accent; tone white for a neutral word"},
+
+    {"start": 9.44, "end": 13.20, "kind": "title",
+     "pill": "acme.app", "mark": "assets/brand/app-icon.png", "line": "the open source one", "word": "ACME",
+     "_comment": "title stack: pill (real name) · SQUARE app mark (not a wordmark) · marker line · payoff word"},
+
+    {"start": 13.20, "end": 31.40, "kind": "ui", "src": "assets/ui/product-demo.mp4", "media_start": 3.0,
+     "_comment": "THE DEMO SPINE: a real screen recording owns the frame for 15s+. Split it into several ui beats that jump to the moment each named feature is on screen, if the creator names several."},
+
+    {"start": 31.40, "end": 35.10, "kind": "face",
+     "emph": {"word": "SUBSCRIPTION", "at": 32.64, "dur": 1.3, "tone": "accent"}},
+
+    {"start": 35.10, "end": 39.00, "kind": "window", "src": "assets/ui/terminal.png", "box": [46, 300, 988, 552],
+     "_comment": "a real app window floating over the live take, with a shadow"},
+
+    {"start": 39.00, "end": 43.00, "kind": "ui", "src": "assets/pages/repo.png",
+     "annot": {"text": "FREE +\nOPEN SOURCE", "x": 70, "y": 150, "size": 58, "at": 39.4},
+     "_comment": "a claim typed into the shot's real empty space — x/y from scripts/find-empty-space.py, never guessed"},
+
+    {"start": 43.00, "end": 48.60, "kind": "broll", "src": "assets/broll/clip.mp4", "media_start": 0,
+     "_comment": "real b-roll of the thing, graded like the camera"},
+
+    {"start": 48.60, "end": 51.83, "kind": "cta", "keyword": "SEO", "line": "comment",
+     "_comment": "the CTA on the live take; captions drop automatically"}
+  ]
+}

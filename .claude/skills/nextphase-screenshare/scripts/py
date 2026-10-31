@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# py — run a kit script with the kit's Python (the private venv when it exists).
+#   usage: <skill>/scripts/py <script.py> [args]
+V="$HOME/.cache/nextphase-screenshare/venv/bin/python"
+if [ -x "$V" ]; then exec "$V" "$@"; else exec python3 "$@"; fi
