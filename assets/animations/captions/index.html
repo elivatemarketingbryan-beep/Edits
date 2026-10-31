@@ -32,9 +32,9 @@
       .look-negative .w { color: #fff; text-shadow: none; filter: none; background: none; }
       .flashbox { position: absolute; inset: -.08em -.06em; background: #fff; pointer-events: none; }
       .look-premium .w { color: __ACCENT__; text-shadow: .045em .045em 0 #fff, 0 0 .06em rgba(0, 0, 0, .85), 0 0 .02em rgba(0, 0, 0, .9), 0 8px 26px rgba(0, 0, 0, .7); }
-      .line.shine .w { color: transparent; text-shadow: none; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat; background-size: 250% 100%;
-        background-color: transparent; background-image: linear-gradient(105deg, transparent 0%, transparent 38%, rgba(255, 255, 255, .55) 44%, #fff 50%, rgba(255, 255, 255, .55) 56%, transparent 62%, transparent 100%);
-        filter: drop-shadow(0 0 6px rgba(255, 255, 255, .9)) drop-shadow(0 0 18px rgba(255, 255, 255, .6)); }
+      .line.shine .w { color: transparent; text-shadow: none; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat; background-size: 300% 100%;
+        background-color: transparent; background-image: linear-gradient(100deg, transparent 0%, transparent 30%, var(--shine, #EDE9FE) 50%, transparent 70%, transparent 100%);
+        filter: drop-shadow(0 0 8px var(--shine, #EDE9FE)) drop-shadow(0 0 20px var(--shine, #EDE9FE)); }
       /* power-split: the huge bold italic power word */
       .power { font-family: "__FONT_SANS__", "Inter", sans-serif; font-weight: 900; font-style: italic; letter-spacing: -0.03em; color: #fff; text-shadow: 0 6px 26px rgba(0, 0, 0, .6); }
       .apple { font-family: "__FONT_SANS__", "Inter", sans-serif; font-weight: 600; letter-spacing: -0.025em; }
@@ -373,13 +373,16 @@
             sfx.push({ cue: 'glitch', at: +l.start.toFixed(2), note: 'flicker entrance (keep quiet)' });
           }
           if (looks.includes('shine')) {
-            // A copy of the line on top, its letters filled only by a moving white streak, once, after it lands.
+            // A copy of the line on top, its letters filled only by a soft moving band of a lighter colour
+            // (Zeven 7: lighter duplicate, film-strip mask ~50 wide, rotated ~10°, feather ~50, plus glow), once,
+            // after it lands. "shine": "gold" or "silver" for those finishes; default is a light brand lavender.
             const copy = el.cloneNode(true);
             copy.classList.add('shine');
+            copy.style.setProperty('--shine', { gold: '#FFD9A0', silver: '#E8EAEE' }[l.shine] || '#EDE9FE');
             el.parentNode.appendChild(copy);
             const cs = [...copy.querySelectorAll('.w')];
             copy.style.opacity = 1;
-            copy.querySelectorAll('*').forEach((c) => { c.style.opacity = 1; c.style.transform = 'none'; c.style.filter = 'none'; c.style.clipPath = 'none'; });
+            copy.querySelectorAll('*').forEach((c) => { c.style.opacity = 1; c.style.transform = 'none'; c.style.filter = ''; c.style.clipPath = 'none'; });
             const at = l.last + 0.05;                       // inside the line's 0.6 s hold
             gsap.set(copy, { opacity: 0 });
             tl.set(copy, { opacity: 1 }, at);

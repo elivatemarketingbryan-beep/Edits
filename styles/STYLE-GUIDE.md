@@ -70,11 +70,11 @@ From Zeven 7's "7 Stupidly Simple CapCut Tricks" (youtu.be/odxTRtU0HH8, REFERENC
 |---|---|---|
 | **Keyframes with curve handles** | Any motion. Bouncy versions use 3-4 keyframes: fast move, a small reverse, settle | GSAP: `back.out(2-2.5)` or explicit keyframes; the running caption slides up with a bounce by default |
 | **Shading** | Depth on any flat background, object or clip: a feathered gradient or vignette instead of a flat fill | Graphics: a feathered radial/linear gradient (mask with feather). Footage: `node studio/fx.mjs shade` |
-| **Shine** | Captions, titles, logos, icons on coloured or dark grounds | Caption look `shine` (pair with `premium`) |
+| **Shine** | Captions, titles, logos, icons on coloured or dark grounds | Caption look `shine` (pair with `premium`); `shine: gold` / `silver` for metallic finishes |
 | **FPS lag** | Motion-design beats that should feel deliberate and choppy, 10-20 fps | `node studio/fx.mjs lag --from --to --amount 12` on footage; `SteppedEase` / stepped time in HyperFrames graphics |
 | **Warp (wide angle, fisheye)** | Depth on a flat 2D graphic or shot, a punchy moment | `node studio/fx.mjs wide` or `fisheye --amount 0.2-0.5`, on a short range |
 | **White flash reveal** | Revealing words or a new shot: each word lands under a white box for one frame, words 2 frames apart | Caption look `flash`; on footage `node studio/fx.mjs flash --at` |
-| **Negative text** | A caption that is a window of inverted footage (only the letters invert) | Caption look `negative` on its own overlay, then `node studio/fx.mjs negative --overlay` |
+| **Negative text** | A caption that is a window of inverted footage (only the letters invert) | Caption look `negative` on its own overlay, then `node studio/fx.mjs negative --overlay` (`--amount 0.7` to soften) |
 
 Every effect takes an exact range (`--from`/`--to` in seconds, or a word's timing), so any one can be
 placed on a single word or beat. As with every graphic, show a still of each before rendering.

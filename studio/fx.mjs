@@ -11,6 +11,7 @@
 //   shade     soft vignette shading for depth. --amount 0-1, default 0.6
 //   flash     white flash frames (a reveal): --at times, each 2 frames of full white
 //   negative  negative text: the picture inverted inside the letters of a caption overlay (--overlay, a
+//             --amount 0-1 to ease it off, default 1;
 //             transparent WebM from `anim.mjs captions`; render the negative lines on their own overlay)
 // Audio is copied untouched. Output: H.264 (NVENC), keyframe every second, same size and fps as the input.
 import { spawnSync } from 'node:child_process';
@@ -22,7 +23,7 @@ const EFFECTS = {
   fisheye: 'fisheye bulge from the centre (--amount 0-1, default 0.35)',
   shade: 'soft vignette shading (--amount 0-1, default 0.6)',
   flash: 'white flash frames at --at times (2 frames each)',
-  negative: 'picture inverted inside the caption letters (--overlay captions.webm)',
+  negative: 'picture inverted inside the caption letters (--overlay captions.webm, --amount 0-1, default 1)',
 };
 
 const [cmd, input, output, ...rest] = process.argv.slice(2);
@@ -72,7 +73,8 @@ if (cmd === 'flash') {
   const [w, h] = probe(input, 'stream=width,height').split(',').map(Number);
   // All three in planar RGB so the mask (the overlay's alpha, copied to every plane) applies to every channel.
   run(['-i', input, '-c:v', 'libvpx-vp9', '-i', ov, '-filter_complex',
-    `[0:v]format=gbrp,split[a][b];[b]negate[n];[1:v]scale=${w}:${h},format=yuva420p,alphaextract,format=gbrp[m];[a][n][m]maskedmerge,format=yuv420p[v]`,
+    // --amount 0-1 eases it off ("if it looks too flashy, bring it slightly down"): 1 = full negative.
+    `[0:v]format=gbrp,split[a][b];[b]negate[n];[1:v]scale=${w}:${h},format=yuva420p,alphaextract,format=gbrp,lutrgb=r=val*${Number(amount ?? 1)}:g=val*${Number(amount ?? 1)}:b=val*${Number(amount ?? 1)}[m];[a][n][m]maskedmerge,format=yuv420p[v]`,
     '-map', '[v]', ...audio, '-shortest', ...enc, output]);
 } else {
   // Split into before / effect / after so frame-rate and lens effects only touch the chosen range.

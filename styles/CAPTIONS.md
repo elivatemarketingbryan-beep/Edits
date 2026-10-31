@@ -61,10 +61,10 @@ looks can be combined (`"look": ["premium", "shine"]`). `apple` takes `title: tr
 | Look | What it does | Sound |
 |---|---|---|
 | `gradient` | Two-tone fill: the top half white, the bottom half light grey (or white over brand purple), split by a hard horizontal mask | none |
-| `shine` | A white streak with a bloom travels across the line once, word by word, right after the last word lands. Shows best on coloured text (pair it with `premium`); barely visible on white | none |
+| `shine` | A soft band of a lighter colour with a glow travels across the line once, word by word, right after the last word lands (Zeven 7's recipe: film-strip mask ~50 wide, ~10° tilt, feather ~50). `"shine": "gold"` or `"silver"` for those finishes, default light lavender. Shows best on coloured text (pair with `premium`) and dark grounds | none |
 | `flicker` | On entry the text flickers on and off 1 frame at a time, 6 times, then holds (best with `gradient`) | `glitch` (quiet) |
 | `flash` | Each word lands under a solid white box for exactly one frame, then the word is there (Zeven 7's white flash reveal); best with words ~2 frames apart | `whoosh-flash` |
-| `negative` | Plain white letters used as a mask: render these lines on their own overlay, then `node studio/fx.mjs negative in.mp4 out.mp4 --overlay neg.webm` inverts the footage inside the letters | none |
+| `negative` | Plain white letters used as a mask: render these lines on their own overlay, then `node studio/fx.mjs negative in.mp4 out.mp4 --overlay neg.webm` inverts the footage inside the letters; `--amount 0.6-0.8` if full inversion looks too flashy | none |
 | `premium` | A hard offset copy behind the text in white (no blur, full opacity, ~1px offset) with the fill in brand purple: same font, looks expensive | none |
 
 Behind-the-head versions (`emphasis`, `statement`, `power-split`) need a person matte: render the
