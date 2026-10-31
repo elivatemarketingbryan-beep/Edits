@@ -5,6 +5,43 @@ reuse. Descriptions only; no footage, graphics or words are copied.
 
 ---
 
+## Sanji Nai-Chien: "How I Make $880/Day with AI Motion Design (Claude Motion)"
+
+youtu.be/D5qpBbEWTxo · 19:55 · 16:9 (shot 4K) · Oct 2026 · ~220K views at study time (Oct 31 2026).
+Studied from frames every ~40s across all 9 chapters plus every 1.5s of the first 45s.
+Picture and structure only; the audio wasn't studied. Became the **keynote-glass** style
+(STYLE-GUIDE.md).
+
+**Format:** a documentary challenge ("can I earn $X in a day doing Y?"): find the client,
+pitch, build, client feedback, compare with a human pro, profit breakdown. Talking head at a
+cosy desk between chapters, screen recordings for the doing, designed glass cards for the
+structure. Feels like an Apple keynote crossed with a vlog.
+
+### What he does, and how we'd use it
+
+| # | Technique | What it looks like | How Video Studio uses it |
+|---|---|---|---|
+| 1 | **Pure motion-graphics cold open** | The first ~15s have no face: a line typing in with blurred words resolving ("People are making"), a "$500" built from glowing particles, a caption in a frosted pill over a soft landscape, a chat box typing a prompt with an orange light streak, code scrolling ending on "Claude wrote." | Long-form hook built entirely in HyperFrames from the video's own claim, before the first face shot; brand purple light streaks instead of orange |
+| 2 | **Cosy, lit set** | Desk with a laptop, a podcast mic on an arm, framed posters and warm practical lights blurred behind, a cap and an overshirt. Medium shot | Shoot guidance; in the edit, warm grade and gentle punch-ins |
+| 3 | **Words in the negative space** | Clean white sans words float beside his head, one per side, building as he says them ("ONE DAY" ... "MANY CLIENTS"); a price ("$791", "$988") next to an app icon; "Pro / 5 DAYS" vs "Claude / 1 DAY" as icon stickers either side | Ear-to-ear text beats, no boxes, no shadows beyond a soft drop; comparisons placed left vs right of the head |
+| 4 | **Key-line captions, blur in** | A key question lands low and centred, words resolving from blur one by one ("BUT CAN IT MATCH A PRO?"), then blurs out | Caption mode: key lines only, blur-in per word, white bold sans |
+| 5 | **Screen recordings with a face card** | Upwork/Fiverr pages, client messages, Claude, file browser, all full frame with his face in a rounded card bottom-right | Screen beats with the face card (as in screen-tutorial); zoom to the line that matters |
+| 6 | **Glass chapter and concept cards** | Saturated electric-blue gradient ground with frosted-glass UI on it: a "02 TIMING" pill over a glass timeline card, floating glass icon tiles in 3D ("THE STORY", "FIRST", "SECOND"), "PROFIT BREAKDOWN & REAL LEARNINGS" in big bold white, "Two Options" with a glass profile card | `apple-liquid-glass` cards on a brand-purple gradient for chapters, frameworks and choices |
+| 7 | **UI mock-ups as storytelling** | A FaceTime-style incoming call with his face, a chat prompt on an orange gradient split with B-roll of a real designer at work | Phone and chat mock-ups for "the client called", "I asked Claude"; split-screen with B-roll |
+| 8 | **Device mock-up for the deliverable** | The finished launch video shown on a laptop on a sunlit desk, framed by a rounded blue card | Show results inside a device on a soft scene, not as a bare screenshot |
+
+### Pacing notes
+- The hook is all graphics and changes every 1-2s; the first face shot lands ~20s in.
+- After that it alternates: talking head (with floating words) → screen recording with face
+  card → a glass chapter card, roughly every 20-60s.
+- Chapter cards are big, clean and brief (2-4s): a heading and one glass object.
+
+### For reels (9:16)
+- The particle number and the typing chat box make strong 9:16 hooks; the floating words
+  sit above and below the head instead of beside it.
+
+---
+
 ## Sabri Suby: "The New Era of Digital Marketing Has Just Begun"
 
 youtu.be/xsdoHywBD0I · 21:59 · 16:9 (shot 4K) · Oct 2026 · ~29K views at study time (Oct 31 2026).

@@ -513,6 +513,36 @@
       ]
     },
     {
+      "id": "keynote-glass",
+      "name": "Keynote glass",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "Motion-graphics cold open, words floating beside you, glass chapter cards on a purple gradient.",
+      "bestFor": [
+        "a challenge or case-study story (\"I tried X for a day\")",
+        "showing tools, AI or software at work",
+        "a process from client to result with a profit breakdown",
+        "tech-forward, premium feel"
+      ],
+      "recipe": [
+        "cold open with no face: particle numbers, a typing prompt box with a light streak, frosted caption pills",
+        "talking head with clean white words floating in the space beside the head",
+        "key-line captions only, blurring in word by word",
+        "screen recordings full frame with a rounded face card bottom-right",
+        "glass chapter and concept cards (apple-liquid-glass) on a brand-purple gradient",
+        "phone/chat mock-ups and device mock-ups for the story beats"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#keynote-glass",
+      "needsMatte": false,
+      "scriptShape": "long-form",
+      "alsoScriptShape": [
+        "story"
+      ]
+    },
+    {
       "id": "tiktok-style",
       "name": "TikTok style",
       "aspect": "9:16",

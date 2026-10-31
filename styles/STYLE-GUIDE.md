@@ -79,7 +79,8 @@ Style flavours (on top of the rules above):
   yap-and-show, clone-versus, dual-role-dialogue, split-screen-lesson,
   lesson-document, magazine-cover, pixel-zoom, sketch-boil, glass-text,
   pull-out-reveal, dolly-zoom, frame-pop, punch-through-cut, green-screen, film-grade-short,
-  story-montage, silhouette, film-grade, mono-explainer, cinematic-authority (dense in the hook only).
+  story-montage, silhouette, film-grade, mono-explainer, cinematic-authority (dense in the hook only),
+  keynote-glass (dense in the cold open only).
 - **Minimal** (a whoosh or riser at most; let the words carry it): fitted-captions,
   cinematic-type (low whooshes and risers only), natural-story, ear-to-ear-captions,
   vlog (music-led; no UI sounds), floating-window (hard cuts, no UI sounds).
@@ -634,6 +635,27 @@ purple-on-black; white stays the type colour.
 - **Proof full frame:** real search results, reviews, ads and advertorials for a few seconds each.
 - **Pacing after the hook:** long talking stretches with a takeover, diagram or keyword every 30-90 s.
 - Status draft until Bryan approves a first edit; then save the template in presets/cinematic-authority/.
+
+### keynote-glass: Keynote glass
+From Sanji Nai-Chien's "How I Make $880/Day with AI Motion Design" (REFERENCES.md, Oct 2026). An
+Apple-keynote feel for a story told in chapters. His electric blue becomes a brand-purple gradient
+(`#8B5CF6` → `#4C1D95`); his orange light streaks become light purple (`#C4B5FD`).
+
+- **Cold open, no face (~15-20 s):** the claim told in pure motion graphics, a new beat every 1-2 s:
+  words resolving from blur, the key number built from glowing particles, a caption in a frosted
+  pill over a soft scene, a prompt box typing with a light streak sweeping past, code or a result
+  scrolling. First face shot lands after the hook.
+- **Talking head:** warm, cosy, lit set; medium shot with gentle punch-ins. Clean white sans words
+  (Inter, bold) float in the empty space beside the head, one per side, building as they are said;
+  prices and app icons sit beside the head; comparisons go left vs right ("Pro 5 days" / "Us 1 day").
+- **Captions:** key lines only, low and centred, each word resolving from blur, then blurring out.
+- **Screens:** full-frame screen recordings with a rounded face card bottom-right; zoom to the line.
+- **Glass cards (`apple-liquid-glass`) on the purple gradient:** chapter titles ("02 TIMING" pill over a
+  glass card), floating glass icon tiles in 3D for a framework, big bold white headings ("PROFIT
+  BREAKDOWN"), a glass profile card for a choice. 2-4 s each.
+- **Mock-ups:** incoming-call and chat UIs for story beats, results shown inside a device on a soft scene.
+- **Pacing:** talking head → screen with face card → glass card, a change roughly every 20-60 s.
+- Status draft until Bryan approves a first edit; then save the template in presets/keynote-glass/.
 
 ## Edit review (the preview-and-notes step)
 
