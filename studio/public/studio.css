@@ -334,3 +334,58 @@ button.small { font-size: 12px; padding: 3px 10px; margin-left: auto; }
 .combo-steps { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); }
 .combo-steps span { display: inline-flex; gap: 5px; align-items: center; }
 .dot { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+
+/* ---------- what to make: one edit or reels ---------- */
+.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: min(760px, 100%); margin-bottom: 12px; }
+.mode { display: flex; gap: 12px; align-items: center; text-align: left; padding: 14px 16px; border-radius: 14px; background: var(--panel); transition: border-color .15s, background .15s; }
+.mode b { display: block; font-size: 15px; }
+.mode small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+.mode.on { border-color: var(--accent); background: linear-gradient(160deg, var(--accent-soft), var(--panel) 75%); box-shadow: 0 0 0 3px rgba(139, 92, 246, .15); }
+.mode-ic { flex: none; width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; border: 1px solid var(--line); background: var(--card); color: var(--accent-hi); }
+.mode-ic .ic.h { width: 20px; height: 12px; }
+.mode-ic.stack { display: flex; gap: 2px; justify-content: center; }
+.mode-ic.stack .ic.v { width: 8px; height: 14px; }
+.reelopts { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 18px; margin: 0 0 14px; font-size: 12.5px; color: var(--muted); }
+.reelopts[hidden] { display: none; }
+.reelopts > div { display: flex; gap: 8px; align-items: center; }
+.reelopts .seg button { padding: 5px 11px; font-size: 12.5px; }
+.reelopts .seg button.on, .aspect button.on { background: var(--accent); color: #fff; }
+.intake { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: min(760px, 100%); }
+.intake .dropcard { width: auto; }
+.intake .drop-inner { height: 100%; box-sizing: border-box; }
+.linkcard { cursor: default; margin: 0; }
+.linkcard .linkrow { width: 100%; margin-top: 6px; }
+.sec-head .aspect { justify-self: start; margin-top: 8px; }
+@media (max-width: 640px) { .modes, .intake { grid-template-columns: 1fr; } }
+
+/* ---------- reels: pick ---------- */
+.reelrows { display: grid; gap: 8px; }
+.reelrow { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 14px; align-items: start; text-align: left; padding: 12px 14px; border-radius: 14px; background: var(--card); transition: border-color .15s, background .15s; }
+.reelrow:hover { border-color: var(--accent); }
+.reelrow.on { border-color: var(--accent); background: linear-gradient(160deg, var(--accent-soft), var(--card) 75%); }
+.reelrow.on .tick { background: var(--accent); border-color: var(--accent); color: #fff; }
+.num { font: 700 13px var(--mono); color: var(--accent-hi); width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; border: 1px solid var(--line); background: var(--panel); flex: none; }
+.reel-body { display: grid; gap: 5px; min-width: 0; }
+.reel-title { font-size: 16.5px; font-weight: 800; line-height: 1.25; }
+.reel-body q, .gfx-body q { font: italic 15px/1.35 var(--serif); color: var(--accent-hi); }
+.reel-body q::before, .gfx-body q::before { content: "“"; } .reel-body q::after, .gfx-body q::after { content: "”"; }
+.reel-body .sc-head, .gfx-body .sc-head, .reelcard .sc-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+/* ---------- graphics approval ---------- */
+.gfxgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 12px; }
+.gfx { display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--line); background: var(--card); border-radius: 14px; overflow: hidden; }
+.gfx.ok { border-color: rgba(52, 211, 153, .4); }
+.gfx-img { display: grid; place-items: center; background: #000; overflow: hidden; }
+.gfx-img img { width: 100%; height: auto; max-height: 440px; object-fit: contain; display: block; }
+.gfx-body { display: grid; gap: 6px; padding: 10px 12px 12px; align-content: start; }
+.gfx-body textarea { width: 100%; box-sizing: border-box; resize: vertical; font: inherit; font-size: 13px; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; }
+.gfx-body textarea:focus { outline: none; border-color: var(--accent); }
+
+/* ---------- reels: finished ---------- */
+.reelgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 14px; }
+.reelcard { border: 1px solid var(--line); background: var(--card); border-radius: 14px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+.reelcard video { width: 100%; aspect-ratio: 9 / 16; background: #000; display: block; }
+.reelcard-body { display: grid; gap: 8px; padding: 10px 12px 12px; align-content: start; }
+.reelcard .actions button.small { margin-left: 0; }
+.reelcard .button.small { font-size: 12px; padding: 3px 10px; }
+.caption { margin: 0; white-space: pre-wrap; font: 12.5px/1.45 var(--sans); color: var(--muted); max-height: 140px; overflow: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }

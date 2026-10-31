@@ -9,11 +9,6 @@
 <body class="home-page">
 <header class="top bar-top">
   <a class="brand" href="/" id="homeLink"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.5v11l9-5.5z" fill="currentColor"/></svg></span>Video Studio</a>
-  <div class="seg aspect" role="group" aria-label="Formats to show">
-    <button data-aspect="all" class="on">All</button>
-    <button data-aspect="short"><i class="ic v"></i>Vertical</button>
-    <button data-aspect="long"><i class="ic h"></i>Horizontal</button>
-  </div>
   <span class="status" id="status"><i></i><span>Ready</span></span>
 </header>
 
@@ -21,20 +16,39 @@
   <section id="hero" class="hero">
     <p class="eyebrow">AI video editor</p>
     <h1>Raw clip in. <em>Finished edit</em> out.</h1>
-    <p class="lede">Drop a talking-head video, a voiceover or a YouTube link. Claude picks the 3 formats that fit it best out of 52, edits it in your brand, and hands you a preview to note up.</p>
-    <label id="drop" class="dropcard" tabindex="0">
-      <input id="file" type="file" accept="video/*,audio/*" hidden>
-      <span class="drop-inner">
-        <span class="drop-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5m0 0-4 4m4-4 4 4M5 19h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <span class="drop-title">Drop your raw video here</span>
-        <span class="drop-sub">or click to browse · MP4, MOV or a voiceover · 9:16 or 16:9</span>
-        <span id="progress" class="upbar" hidden><span></span></span>
-      </span>
-    </label>
-    <form id="linkForm" class="linkrow">
-      <input id="link" type="url" placeholder="…or paste a YouTube link">
-      <button>Add link</button>
-    </form>
+    <p class="lede">Drop a talking-head video, a voiceover or a YouTube link. Get one finished edit, or a stack of reels cut from it. You approve the motion graphics before anything renders.</p>
+    <div class="modes" role="radiogroup" aria-label="What to make">
+      <button class="mode on" data-mode="video" role="radio" aria-checked="true">
+        <span class="mode-ic"><i class="ic h"></i></span>
+        <span><b>Edit the video</b><small>One finished edit · a YouTube video or a single reel</small></span>
+      </button>
+      <button class="mode" data-mode="reels" role="radio" aria-checked="false">
+        <span class="mode-ic stack"><i class="ic v"></i><i class="ic v"></i><i class="ic v"></i></span>
+        <span><b>Cut into reels</b><small>Many 9:16 reels from one long video</small></span>
+      </button>
+    </div>
+    <div class="reelopts" id="reelOpts" hidden>
+      <div><span>How many</span><div class="seg" data-opt="count"><button data-v="auto" class="on">Auto</button><button data-v="5">5</button><button data-v="10">10</button><button data-v="15">15</button></div></div>
+      <div><span>Length</span><div class="seg" data-opt="length"><button data-v="15-30">15–30s</button><button data-v="30-60" class="on">30–60s</button><button data-v="60-90">60–90s</button></div></div>
+    </div>
+    <div class="intake">
+      <label id="drop" class="dropcard" tabindex="0">
+        <input id="file" type="file" accept="video/*,audio/*" hidden>
+        <span class="drop-inner">
+          <span class="drop-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V5m0 0-4 4m4-4 4 4M5 19h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="drop-title">Drop your raw video</span>
+          <span class="drop-sub">or click to browse · MP4, MOV or a voiceover</span>
+          <span id="progress" class="upbar" hidden><span></span></span>
+        </span>
+      </label>
+      <form id="linkForm" class="dropcard linkcard">
+        <span class="drop-inner">
+          <span class="drop-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          <span class="drop-title">Paste a YouTube link</span>
+          <span class="linkrow"><input id="link" type="url" placeholder="https://youtube.com/watch?v=…" aria-label="YouTube link"><button>Add</button></span>
+        </span>
+      </form>
+    </div>
     <p id="dropMsg" class="msg"></p>
     <ul class="features">
       <li><i>✂</i>Cuts pauses &amp; retakes</li>
@@ -52,7 +66,12 @@
   </section>
 
   <section id="gallery" class="gallery">
-    <div class="sec-head"><h2>Every format</h2><p class="muted">Drop a video and Claude picks the best 3, or choose any of these yourself. Each preview loops so you can compare them.</p></div>
+    <div class="sec-head"><h2>Every format</h2><p class="muted">Drop a video and Claude picks the best 3, or choose any of these yourself. Each preview loops so you can compare them.</p>
+      <div class="seg aspect" role="group" aria-label="Formats to show">
+        <button data-aspect="all" class="on">All</button>
+        <button data-aspect="short"><i class="ic v"></i>Vertical</button>
+        <button data-aspect="long"><i class="ic h"></i>Horizontal</button>
+      </div></div>
     <div id="galleryBody"></div>
   </section>
 </main>
@@ -70,6 +89,10 @@ const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<
 let catalog = [], previews = {}, jobs = [], current = new URLSearchParams(location.search).get('job'), aspect = 'all', compareRaw = false;
 // What you've ticked on the pick screen; kept here so the 3 s refresh doesn't wipe it.
 let pick = { job: null, style: null, ideas: new Set(), combo: null };
+// What the drop screen will make: one edit, or reels (with how many / how long).
+let intake = { mode: 'video', reels: { count: 'auto', length: '30-60' } };
+// Reels ticked on the pick-reels screen, and notes typed on the graphics screen (survive the refresh).
+let reelPick = { job: null, ids: new Set() }, gfxNotes = {};
 
 async function api(url, opts = {}) {
   const res = await fetch(url, opts);
@@ -98,6 +121,7 @@ function upload(file) {
   const xhr = new XMLHttpRequest();
   xhr.open('POST', '/api/upload');
   xhr.setRequestHeader('x-filename', encodeURIComponent(file.name));
+  xhr.setRequestHeader('x-intake', encodeURIComponent(JSON.stringify(intake)));
   bar.hidden = false;
   xhr.upload.onprogress = (e) => { bar.firstElementChild.style.width = (e.loaded / e.total * 100) + '%'; };
   xhr.onload = () => {
@@ -116,9 +140,16 @@ $('#linkForm').addEventListener('submit', async (ev) => {
   const msg = $('#dropMsg'); msg.className = 'msg';
   const url = $('#link').value.trim();
   if (!url) { msg.textContent = 'Paste a link first'; msg.classList.add('err'); return; }
-  try { const job = await post('/api/link', { url }); $('#link').value = ''; open(job.id); refresh(); }
+  try { const job = await post('/api/link', { url, ...intake }); $('#link').value = ''; open(job.id); refresh(); }
   catch (e) { msg.textContent = e.message; msg.classList.add('err'); }
 });
+
+function setMode(mode) {
+  intake.mode = mode;
+  document.querySelectorAll('.mode').forEach((b) => { const on = b.dataset.mode === mode; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
+  $('#reelOpts').hidden = mode !== 'reels';
+  $('.drop-title').textContent = mode === 'reels' ? 'Drop the long video' : 'Drop your raw video';
+}
 
 // ---------- navigation ----------
 function open(id) { current = id; compareRaw = false; history.replaceState(null, '', id ? '?job=' + id : '/'); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
@@ -150,17 +181,34 @@ function allStyles() {
 
 // ---------- the open job ----------
 // Steps follow the job stages; `review` and `revise` share one step (notes go back and forth).
-const STEPS = [
+const STEPS_VIDEO = [
   { key: 'formats', label: 'Transcribing & ranking formats', who: 'claude' },
   { key: 'pick', label: 'Pick a format & ideas', who: 'you' },
+  { key: 'design', label: 'Designing the motion graphics', who: 'claude' },
+  { key: 'graphics', label: 'Approve the graphics', who: 'you' },
   { key: 'edit', label: 'Editing', who: 'claude' },
   { key: 'review', label: 'Your review & notes', who: 'you', also: ['revise'] },
   { key: 'final', label: 'Rendering the final', who: 'claude' },
 ];
+const STEPS_REELS = [
+  { key: 'formats', label: 'Transcribing & finding reels', who: 'claude' },
+  { key: 'clips', label: 'Pick your reels', who: 'you' },
+  { key: 'design', label: 'Designing the motion graphics', who: 'claude' },
+  { key: 'graphics', label: 'Approve the graphics', who: 'you' },
+  { key: 'final', label: 'Rendering your reels', who: 'claude' },
+];
+let STEPS = STEPS_VIDEO;
+const stepsFor = (job) => (job.mode === 'reels' ? STEPS_REELS : STEPS_VIDEO);
 const stepIndex = (stage) => stage === 'done' ? STEPS.length : STEPS.findIndex((s) => s.key === stage || s.also?.includes(stage));
 
 function stepDetail(job, s) {
   const notes = job.notes || [], open = notes.filter((n) => n.status === 'open').length;
+  const gfx = job.graphics || [];
+  if (job.mode === 'reels' && s.key === 'formats') return job.clips.length ? `${job.clips.length} found` : (job.duration ? fmtTime(job.duration) : '');
+  if (s.key === 'clips') return (job.chosen || []).length ? `${job.chosen.length} picked` : '';
+  if (s.key === 'design') return gfx.length ? `${gfx.length} graphics` : '';
+  if (s.key === 'graphics') return gfx.length ? `${gfx.filter((g) => g.status === 'approved').length} of ${gfx.length} approved` : '';
+  if (job.mode === 'reels' && s.key === 'final') return (job.reels || []).length ? `${job.reels.length} reels` : '';
   if (s.key === 'formats') return job.formats ? `top 3 of ${catalog.filter((c) => c.kind === 'style').length}` : (job.duration ? fmtTime(job.duration) : '');
   if (s.key === 'pick') return job.style ? styleOf(job.style).name + ((job.picked || []).length ? ` + ${job.picked.length} ideas` : '') : '';
   if (s.key === 'edit') return (job.edits || []).length ? `${job.edits.length} edits` : (job.style ? styleOf(job.style).name : '');
@@ -171,7 +219,8 @@ function stepDetail(job, s) {
 const fmtTime = (s) => { s = Math.round(Number(s) || 0); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
 
 function mediaFor(job) {
-  // What the phone frame plays: the final, then the preview, then the raw clip.
+  // What the phone frame plays: the final, then the preview, then the raw clip. Reels mode, done: reel 1.
+  if (job.mode === 'reels' && job.stage === 'done' && job.reels?.[0]) return { src: fileUrl(job, job.reels[0].file), badge: 'Reel 1' };
   if (job.final && !compareRaw) return { src: fileUrl(job, job.final), badge: 'Edited' };
   if (job.preview && !compareRaw && job.stage !== 'done') return { src: fileUrl(job, job.preview), badge: 'Preview' };
   if (job.source) return { src: fileUrl(job, job.source), badge: 'Raw' };
@@ -179,6 +228,7 @@ function mediaFor(job) {
 }
 
 function renderJob(job) {
+  STEPS = stepsFor(job);
   const idx = stepIndex(job.stage), done = job.stage === 'done';
   const pct = done ? 100 : Math.round((idx / STEPS.length) * 100 + (STEPS[idx]?.who === 'claude' ? 6 : 0));
   const media = mediaFor(job);
@@ -194,7 +244,24 @@ function renderJob(job) {
   const meta = [style && style.name, job.duration && fmtTime(job.duration), new Date(job.created).toLocaleString()].filter(Boolean).join(' · ');
 
   let side;
-  if (done) {
+  if (done && job.mode === 'reels') {
+    const reels = job.reels || [], gfx = job.graphics || [];
+    const total = reels.reduce((s, r) => s + ((r.end ?? 0) - (r.start ?? 0)), 0);
+    side = `<span class="okpill"><i>✓</i>${reels.length} reels cut</span>
+      <h1 class="ready">Your reels are <em>ready.</em></h1>
+      <p class="mono">${esc(job.title)}</p>
+      <div class="stats">
+        <div><span>Reels</span><b>${reels.length}</b><small>9:16 · with captions</small></div>
+        <div><span>Source</span><b>${job.duration ? fmtTime(job.duration) : '—'}</b><small>${total ? fmtTime(total) + ' used' : 'long video'}</small></div>
+        <div><span>Graphics</span><b>${gfx.length}</b><small>${gfx.filter((g) => g.status === 'approved').length} approved by you</small></div>
+        <div><span>Captions</span><b>${reels.filter((r) => r.caption).length}</b><small>ready to paste</small></div>
+      </div>
+      <div class="actions">
+        ${reels.length ? `<button class="cta" id="getAll">⤓ Download all ${reels.length}</button>` : ''}
+        <a class="button" href="#reelgrid">See the reels ↓</a>
+        <button class="ghost" id="another">Edit another</button>
+      </div>`;
+  } else if (done) {
     const notes = job.notes || [], edits = job.edits || [];
     side = `<span class="okpill"><i>✓</i>Edited${style ? ' in ' + esc(style.name) : ''}</span>
       <h1 class="ready">Your video is <em>ready.</em></h1>
@@ -216,7 +283,24 @@ function renderJob(job) {
     const steps = STEPS.map((s, i) => `<li class="${i < idx ? 'done' : i === idx ? 'now ' + s.who : ''}">
         <i></i><span>${s.label}${i === idx && s.who === 'you' ? ' <em>· your turn</em>' : ''}</span><code>${esc(stepDetail(job, s))}</code></li>`).join('');
     let card = '';
-    if (job.stage === 'formats') {
+    const gfx = job.graphics || [];
+    if (job.stage === 'formats' && job.mode === 'reels') {
+      card = `<div class="ctx"><p class="label">Next</p><p>Claude is transcribing the video and finding the strongest ${job.reelOpts?.count && job.reelOpts.count !== 'auto' ? esc(job.reelOpts.count) + ' ' : ''}moments for reels${job.reelOpts?.length ? ` (${esc(job.reelOpts.length.replace('-', '–'))}s each)` : ''}.</p>${$('#claudeHint').innerHTML}</div>`;
+    } else if (job.stage === 'clips') {
+      card = `<div class="ctx shout"><p class="label">Your turn</p>
+        <p class="big">Claude found <em>${job.clips.length} reels</em> in this video.</p>
+        <p class="muted">Tick the ones you want, then hit Make these reels.</p>
+        <div class="actions"><a class="button cta" href="#reelpick">See the reels ↓</a></div></div>`;
+    } else if (job.stage === 'design') {
+      const fixes = gfx.filter((g) => g.status === 'changes').length;
+      card = `<div class="ctx"><p class="label">Now</p><p>${fixes ? `Claude is changing the ${fixes} graphic${fixes > 1 ? 's' : ''} you noted.` : `Claude is designing the motion graphics${job.mode === 'reels' ? ` for your ${(job.chosen || []).length} reels` : ''}.`} You'll see stills of each one to approve before anything renders.</p>${$('#claudeHint').innerHTML}</div>`;
+    } else if (job.stage === 'graphics') {
+      const left = gfx.filter((g) => g.status !== 'approved').length;
+      card = `<div class="ctx shout"><p class="label">Your turn</p>
+        <p class="big"><em>${left} graphic${left === 1 ? '' : 's'}</em> to approve.</p>
+        <p class="muted">Each still shows the graphic over the real frame at its moment. Approve them, or write what to change. Nothing renders until they're all approved.</p>
+        <div class="actions"><a class="button cta" href="#gfx">See the graphics ↓</a></div></div>`;
+    } else if (job.stage === 'formats') {
       card = `<div class="ctx"><p class="label">Next</p><p>Claude is watching the video and picking the best 3 formats.</p>${$('#claudeHint').innerHTML}
         <p class="muted">Already know what you want? <a href="#gallery">Pick any format below</a> and skip this step.</p></div>`;
     } else if (job.stage === 'pick') {
@@ -231,7 +315,8 @@ function renderJob(job) {
     } else {
       const ideasN = (job.picked || []).length, combo = (job.combos || []).find((c) => c.id === job.combo);
       const say = job.stage === 'edit' ? `Claude is editing this in ${esc(style ? style.name : 'the chosen format')}${combo ? ` with the <b>${esc(combo.name)}</b> combo (${ideasN} effects)` : ideasN ? ` with your ${ideasN} picked idea${ideasN > 1 ? 's' : ''}` : ''}. You'll get a preview to review first.`
-        : job.stage === 'revise' ? `Claude is working through your ${(job.notes || []).filter((n) => n.status === 'open').length || ''} notes.` : 'Claude is rendering the final version.';
+        : job.stage === 'revise' ? `Claude is working through your ${(job.notes || []).filter((n) => n.status === 'open').length || ''} notes.`
+        : job.mode === 'reels' ? `Claude is rendering your ${(job.chosen || []).length || ''} reels with the graphics you approved, and writing a caption for each.` : 'Claude is rendering the final version.';
       card = `<div class="ctx"><p class="label">Now</p><p>${say}</p>${$('#claudeHint').innerHTML}</div>`;
     }
     side = `<div class="filehead"><span class="fileicon">▣</span><div><b>${esc(job.title)}</b><p class="mono">${esc(meta)}</p></div></div>
@@ -239,7 +324,82 @@ function renderJob(job) {
       <div class="pbar"><span style="width:${pct}%"></span></div>
       <ol class="steps">${steps}</ol>${card}`;
   }
-  return `<button class="back ghost" id="back">← All videos</button><div class="jobgrid">${phone}<div class="side">${side}</div></div>${job.stage === 'pick' ? ideasBoard(job) : ''}`;
+  const board = job.stage === 'pick' ? ideasBoard(job) : job.stage === 'clips' ? reelsBoard(job)
+    : job.stage === 'graphics' ? graphicsBoard(job) : done && job.mode === 'reels' ? reelGrid(job) : '';
+  return `<button class="back ghost" id="back">← All videos</button><div class="jobgrid">${phone}<div class="side">${side}</div></div>${board}`;
+}
+
+// ---------- reels mode: pick the reels (clips.json) ----------
+function reelsBoard(job) {
+  const clips = job.clips || [];
+  if (reelPick.job !== job.id) reelPick = { job: job.id, ids: new Set(clips.filter((c) => c.fav).map((c) => c.id)) };
+  const n = reelPick.ids.size;
+  const row = (c, i) => {
+    const on = reelPick.ids.has(c.id), len = (c.end ?? 0) - (c.start ?? 0);
+    return `<button class="reelrow ${on ? 'on' : ''}" data-reel="${esc(c.id)}" aria-pressed="${on}">
+      <span class="num">${i + 1}</span>
+      <span class="reel-body">
+        <span class="sc-head"><span class="when" data-seek="${c.start}" title="Play this moment">▶ ${fmtTime(c.start)}–${fmtTime(c.end)}</span><span class="chip">${Math.round(len)}s</span>${c.fav ? '<span class="fav">Claude\'s pick</span>' : ''}</span>
+        <b class="reel-title">${esc(c.title)}</b>
+        ${c.hook ? `<q>${esc(c.hook)}</q>` : ''}
+        ${c.why ? `<span class="muted">${esc(c.why)}</span>` : ''}
+      </span>
+      <span class="tick">${on ? '✓' : '+'}</span>
+    </button>`;
+  };
+  return `<section class="board" id="reelpick">
+    <div class="board-head"><h2 class="shout-h">Pick your <em>reels</em></h2>
+      <p class="muted">Each one is a moment Claude would cut into its own 9:16 reel, with the hook it opens on. Click the time to watch it.</p></div>
+    <p class="label">${n} of ${clips.length} picked <button class="ghost small" id="reelsAll">${n === clips.length ? 'Clear all' : 'Take them all'}</button></p>
+    <div class="reelrows">${clips.map(row).join('')}</div>
+    <div class="gobar"><span>${n ? `<b>${n} reel${n > 1 ? 's' : ''}</b> · motion graphics next, for you to approve` : 'Tick at least one reel'}</span>
+      <button class="cta" id="makeReels" ${n ? '' : 'disabled'}>Make these reels →</button></div>
+    <p class="msg" id="reelMsg"></p>
+  </section>`;
+}
+
+// ---------- every job: approve the motion graphics (graphics.json) before rendering ----------
+function graphicsBoard(job) {
+  const gfx = job.graphics || [];
+  const groups = [...new Set(gfx.map((g) => g.reel ?? ''))];
+  const titleOf = (r) => (job.clips || []).find((c) => c.id === r)?.title;
+  const card = (g) => {
+    const ok = g.status === 'approved';
+    return `<div class="gfx ${ok ? 'ok' : ''}">
+      <span class="gfx-img">${g.still ? `<img src="${fileUrl(job, g.still)}" alt="${esc(g.label || 'Graphic')} at ${fmtTime(g.t)}" loading="lazy">` : '<span class="ph-tall"><em>No still</em></span>'}</span>
+      <span class="gfx-body">
+        <span class="sc-head"><span class="when">${fmtTime(g.t)}</span><b>${esc(g.label || 'Graphic')}</b>${ok ? '<span class="chip ok">Approved</span>' : ''}</span>
+        ${g.line ? `<q>${esc(g.line)}</q>` : ''}
+        ${g.reply ? `<span class="muted">Changed: ${esc(g.reply)}</span>` : ''}
+        ${ok ? '' : `<textarea data-gnote="${esc(g.id)}" rows="2" placeholder="What should change? Leave empty to approve">${esc(gfxNotes[g.id] ?? '')}</textarea>`}
+      </span>
+    </div>`;
+  };
+  const open = gfx.filter((g) => g.status !== 'approved');
+  const typed = open.filter((g) => (gfxNotes[g.id] || '').trim()).length;
+  return `<section class="board" id="gfx">
+    <div class="board-head"><h2 class="shout-h">Approve the <em>motion graphics</em></h2>
+      <p class="muted">Stills of each graphic over the real frame, at the moment it plays, with the line it's timed to.</p></div>
+    ${groups.map((r) => `${r ? `<p class="label">${esc(titleOf(r) || r)}</p>` : ''}<div class="gfxgrid">${gfx.filter((g) => (g.reel ?? '') === r).map(card).join('')}</div>`).join('')}
+    <div class="gobar"><span>${typed ? `<b>${typed} change${typed > 1 ? 's' : ''}</b> go back to Claude, the rest are approved` : `<b>${open.length}</b> to approve`}</span>
+      <button class="cta" id="gfxGo" ${open.length ? '' : 'disabled'}>${typed ? 'Send changes →' : 'Approve all →'}</button></div>
+    <p class="msg" id="gfxMsg"></p>
+  </section>`;
+}
+
+// ---------- reels mode: the finished reels (reels.json) ----------
+function reelGrid(job) {
+  const reels = job.reels || [];
+  return `<section class="board" id="reelgrid">
+    <div class="board-head"><h2 class="shout-h">Your <em>reels</em></h2><p class="muted">Each one comes with its Instagram caption, ready to paste.</p></div>
+    <div class="reelgrid">${reels.map((r, i) => `<article class="reelcard">
+      <video src="${fileUrl(job, r.file)}" muted loop playsinline controls preload="metadata"></video>
+      <div class="reelcard-body">
+        <span class="sc-head"><span class="num">${i + 1}</span><b>${esc(r.title || 'Reel ' + (i + 1))}</b></span>
+        ${r.caption ? `<pre class="caption">${esc(r.caption)}</pre>` : ''}
+        <div class="actions">${r.caption ? `<button class="small" data-copy="${esc(r.caption)}">Copy caption</button>` : ''}<a class="button small" href="${fileUrl(job, r.file)}" download>⤓ MP4</a></div>
+      </div></article>`).join('')}</div>
+  </section>`;
 }
 
 // ---------- Claude's ideas (pick stage) ----------
@@ -327,7 +487,7 @@ function renderJobs() {
     const done = j.stage === 'done';
     return `<button class="jobcard ${j.id === current ? 'on' : ''}" data-job="${j.id}">
       <span class="jt">${esc(j.title)}</span>
-      <span class="jm">${j.style ? esc(styleOf(j.style).name) : 'No format yet'}</span>
+      <span class="jm">${j.mode === 'reels' ? `Reels${(j.reels || j.chosen || []).length ? ' · ' + (j.reels.length || j.chosen.length) : ''}` : j.style ? esc(styleOf(j.style).name) : 'No format yet'}</span>
       <span class="status small ${done ? 'ok' : j.waitingOn === 'you' ? 'you' : 'busy'}"><i></i>${esc(done ? 'Done' : j.stageLabel)}</span></button>`;
   }).join('');
 }
@@ -338,6 +498,36 @@ document.addEventListener('click', async (ev) => {
   const t = ev.target.closest('button, a');
   if (!t) return;
   const job = jobs.find((j) => j.id === current);
+  const opt = t.closest('[data-opt]');
+  if (t.dataset.mode) { setMode(t.dataset.mode); return; }
+  if (opt && t.dataset.v) {
+    intake.reels[opt.dataset.opt] = t.dataset.v;
+    opt.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b === t));
+    return;
+  }
+  if (t.dataset.reel) { reelPick.ids.has(t.dataset.reel) ? reelPick.ids.delete(t.dataset.reel) : reelPick.ids.add(t.dataset.reel); render(); return; }
+  if (t.id === 'reelsAll') { const all = (job?.clips || []).map((c) => c.id); reelPick.ids = new Set(reelPick.ids.size === all.length ? [] : all); render(); return; }
+  if (t.id === 'makeReels') {
+    try { await post(`/api/jobs/${current}/reels`, { ids: [...reelPick.ids] }); await refresh(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    catch (e) { $('#reelMsg').className = 'msg err'; $('#reelMsg').textContent = e.message; }
+    return;
+  }
+  if (t.id === 'gfxGo') {
+    const open = (job?.graphics || []).filter((g) => g.status !== 'approved');
+    const notes = Object.fromEntries(open.map((g) => [g.id, (gfxNotes[g.id] || '').trim()]).filter(([, v]) => v));
+    try {
+      await post(`/api/jobs/${current}/graphics`, { notes, approve: open.filter((g) => !notes[g.id]).map((g) => g.id) });
+      gfxNotes = {}; await refresh(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) { $('#gfxMsg').className = 'msg err'; $('#gfxMsg').textContent = e.message; }
+    return;
+  }
+  if (t.id === 'getAll') {
+    // One download per reel, a beat apart so the browser doesn't drop any.
+    (job?.reels || []).forEach((r, i) => setTimeout(() => {
+      const a = document.createElement('a'); a.href = fileUrl(job, r.file); a.download = r.file.split('/').pop(); a.click();
+    }, i * 400));
+    return;
+  }
   if (t.dataset.base) { pick.style = t.dataset.base; render(); }
   else if (t.dataset.combo) {
     const c = (job?.combos || []).find((x) => x.id === t.dataset.combo);
@@ -376,12 +566,24 @@ document.addEventListener('click', async (ev) => {
   }
 });
 
+// Typing a graphic note: keep it across refreshes and update the button without re-rendering (keeps focus).
+document.addEventListener('input', (ev) => {
+  const id = ev.target.dataset?.gnote;
+  if (!id) return;
+  gfxNotes[id] = ev.target.value;
+  const typed = Object.values(gfxNotes).filter((v) => v.trim()).length, go = $('#gfxGo');
+  if (go) go.textContent = typed ? 'Send changes →' : 'Approve all →';
+  const bar = go?.previousElementSibling;
+  if (bar) bar.innerHTML = typed ? `<b>${typed} change${typed > 1 ? 's' : ''}</b> go back to Claude, the rest are approved` : 'Leave a box empty to approve that graphic';
+});
+
 async function refresh() {
   jobs = await api('/api/jobs');
   render();
 }
 
 (async () => {
+  if (current) $('#hero').hidden = true;   // opening a job link: don't flash the drop screen while it loads
   catalog = (await api('/api/catalog')).styles;
   previews = await api('/api/previews').catch(() => ({}));
   $('#galleryBody').innerHTML = allStyles();

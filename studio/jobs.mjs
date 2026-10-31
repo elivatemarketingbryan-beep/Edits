@@ -8,15 +8,25 @@ export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 export const JOBS = path.join(ROOT, 'jobs');
 
 // Stages in order. `who` says whose move it is.
+// mode "video" (one edit):  formats -> pick  -> design -> graphics -> edit -> review <-> revise -> final -> done
+// mode "reels" (cut a long video into reels): formats -> clips -> design -> graphics -> final -> done
 export const STAGES = {
   formats: { who: 'claude', label: 'Finding the best 3 formats' },
   pick:    { who: 'you',    label: 'Pick a format and ideas' },
+  clips:   { who: 'you',    label: 'Pick your reels' },
+  design:  { who: 'claude', label: 'Designing the motion graphics' },
+  graphics:{ who: 'you',    label: 'Approve the motion graphics' },
   edit:    { who: 'claude', label: 'Editing' },
   review:  { who: 'you',    label: 'Review the preview' },
   revise:  { who: 'claude', label: 'Applying your notes' },
   final:   { who: 'claude', label: 'Rendering the final' },
   done:    { who: 'nobody', label: 'Done' },
 };
+// Where the reels flow words a stage differently.
+const REELS_LABELS = { formats: 'Finding the best reels', final: 'Rendering your reels' };
+// Extra files read into the job: Claude writes them, the page shows them.
+// clips.json = reels Claude found (reels mode), graphics.json = graphic stills to approve, reels.json = finished reels.
+const EXTRAS = ['formats', 'ideas', 'combos', 'edits', 'notes', 'sheet', 'clips', 'graphics', 'reels'];
 
 export function newId(name = 'video') {
   const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, '');
@@ -30,17 +40,19 @@ export function readJob(id) {
   const file = path.join(jobDir(id), 'job.json');
   if (!fs.existsSync(file)) return null;
   const job = JSON.parse(fs.readFileSync(file, 'utf8'));
-  for (const extra of ['formats', 'ideas', 'combos', 'edits', 'notes', 'sheet']) {
+  for (const extra of EXTRAS) {
     const f = path.join(jobDir(id), `${extra}.json`);
     job[extra] = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : (extra === 'formats' ? null : []);
   }
   job.waitingOn = STAGES[job.stage]?.who ?? 'claude';
-  job.stageLabel = STAGES[job.stage]?.label ?? job.stage;
+  job.mode = job.mode === 'reels' ? 'reels' : 'video';
+  job.stageLabel = (job.mode === 'reels' && REELS_LABELS[job.stage]) || STAGES[job.stage]?.label || job.stage;
   return job;
 }
 
 export function writeJob(job) {
-  const { formats, ideas, combos, edits, notes, sheet, waitingOn, stageLabel, ...rest } = job;
+  const rest = { ...job };
+  for (const k of [...EXTRAS, 'waitingOn', 'stageLabel']) delete rest[k];
   fs.mkdirSync(jobDir(job.id), { recursive: true });
   rest.updated = new Date().toISOString();
   fs.writeFileSync(path.join(jobDir(job.id), 'job.json'), JSON.stringify(rest, null, 2));
@@ -65,7 +77,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   if (cmd === 'pending') {
     const todo = listJobs().filter((j) => j.waitingOn === 'claude');
     if (!todo.length) console.log('No jobs waiting on Claude.');
-    for (const j of todo) console.log(`${j.id}  stage=${j.stage}  style=${j.style ?? '-'}  source=${j.source ?? j.url}`);
+    for (const j of todo) console.log(`${j.id}  mode=${j.mode}  stage=${j.stage}  style=${j.style ?? '-'}  source=${j.source ?? j.url}`);
   } else if (cmd === 'show') {
     console.log(JSON.stringify(readJob(id), null, 2));
   } else if (cmd === 'stage') {
