@@ -63,6 +63,11 @@ scripts/transcribe.sh     WhisperX large-v3 word timings on the GPU (CUDA float1
    `node studio/jobs.mjs stage <id> <next>`. The page polls and updates on its own.
 3. Never skip a stage that belongs to the user (`pick`, `review`). Never render the final
    before the user approves.
+4. **Show the motion graphics before rendering (Bryan's rule).** Before rendering any edit,
+   design its motion graphics first and show them in batches of about 5: a still of each
+   graphic composited over the real frame at its moment (its key pose, not raw footage),
+   with the timestamp and the line it's timed to. Wait for the user to approve or change a
+   batch before rendering the video. Raw-footage frames alone don't count as the preview.
 
 | Stage | Who | What Claude does | Writes | Next |
 |---|---|---|---|---|
