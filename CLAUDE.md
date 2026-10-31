@@ -27,6 +27,7 @@ styles/SCRIPT-SHAPES.md   the 8 script shapes and cue tags: scripts are written 
 studio/script-cues.mjs    matches a clip to its Content OS script (score) and times every tagged line (cues)
 styles/CAPTIONS.md        caption modes and rules (from the Dan Martell breakdown); built by the `captions` template
 styles/REFERENCES.md      breakdowns of other creators' videos: techniques to reuse (add new ones here)
+styles/AI-BROLL.md        generated B-roll clips (kie.ai): when to use them, the 4-block prompt, rules (no real people)
 styles/ANIMATIONS.md      ready-made effects (search bar, counter, article highlight, map route, motion background, glow pill, pastel grade): when to use each
 studio/anim.mjs           makes an effect from assets/animations/<name>/ in 9x16 or 16x9 with brand colours
 studio/lut.mjs            colour grades (.cube in assets/luts/); apply to footage before graphics

@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <!-- Paper collage style template (styles/STYLE-GUIDE.md#paper-collage). Approved by Bryan 2026-10-31 on
+         reel 10 of the reviews job ("11 -> 64 reviews"). To reuse: copy into the job's HyperFrames project,
+         point #a-roll at that reel's 9:16 base clip, keep the stage / photo / caption parts as they are, and
+         rebuild the six beat blocks (g-hook ... g-sold) from that reel's cues, timed to its words.json.
+         Building blocks: torn card (.cut + data-torn seed), stat hero tag (#c-tag), clipping (.clip-card),
+         graph paper (#chart), ledger (#ledger), stamp (.stamp), chips (.chip), alert wash (#wash). -->
+    <style>
+      :root {
+        --paper: #d9cdb2;      /* archival tan */
+        --paper-hi: #efe6d0;   /* clippings, graph paper */
+        --ink: #1a1a1a;
+        --gray: #8c8c8c;
+        --accent: #8b5cf6;     /* the hot accent: strokes, underlines, tags, stamps (was Vox red) */
+        --accent-light: #c4b5fd; /* secondary accent, sparingly (was Vox mustard) */
+        --accent-deep: #4c1d95;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
+      body { font-family: "Oswald", sans-serif; color: var(--ink); }
+      .layer { position: absolute; inset: 0; }
+      .H { font-family: "League Gothic", "Oswald", sans-serif; text-transform: uppercase; line-height: .9; letter-spacing: .5px; }
+      .M { font-family: "Space Mono", monospace; }
+      .hot { color: var(--accent); }
+
+      /* paper stage: tan field, print grain, faint ledger rules, burnt edges */
+      #stage { position: absolute; inset: 0; }
+      .paper { position: absolute; inset: 0; background: var(--paper); }
+      .rules { position: absolute; inset: 0; background: repeating-linear-gradient(180deg, transparent 0 63px, rgba(26,26,26,.05) 63px 65px); }
+      .grain { position: absolute; inset: 0; mix-blend-mode: multiply; opacity: .55; }
+      .burn { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(80,58,30,.28) 100%); }
+
+      /* torn cut-outs: white keyline + offset accent stroke behind (same torn shape) */
+      .cut { position: absolute; }
+      .cut .stroke, .cut .face { position: absolute; inset: 0; }
+      .cut .stroke { background: var(--accent); }
+      .cut .face { background: #fff; padding: 14px; }
+      .cut .inner { position: relative; width: 100%; height: 100%; overflow: hidden; }
+      .halftone { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: multiply; opacity: .16;
+        background-image: radial-gradient(circle, #000 1.1px, transparent 1.6px); background-size: 7px 7px; }
+
+      /* the speaker: a torn archival photo */
+      #photo { left: 80px; top: 790px; width: 920px; height: 1010px; }
+      #photo .tilt { position: absolute; inset: 0; transform: rotate(-1.6deg); }
+      #photo video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%; }
+      .fig { position: absolute; padding: 8px 18px 10px; font-family: "Space Mono", monospace; font-size: 30px; font-weight: 700;
+        background: var(--accent-light); color: var(--ink); box-shadow: 4px 6px 0 rgba(26,26,26,.18); white-space: nowrap; }
+      #photo-fig { left: 620px; top: 752px; }
+      #photo-fig .t { display: inline-block; transform: rotate(3deg); }
+
+      /* headlines with the underline swipe */
+      .uline { display: block; overflow: visible; }
+      .uline path { fill: none; stroke: var(--accent); stroke-width: 14; stroke-linecap: round; }
+
+      /* 1 hook */
+      #hook { position: absolute; left: 60px; right: 60px; top: 110px; text-align: center; }
+      #h-n { font-size: 300px; }
+      #h-n .arr { font-size: 200px; color: var(--ink); position: relative; top: -24px; margin: 0 10px; }
+      #h-n .old { color: var(--gray); }
+      #h-l2 { font-size: 132px; margin-top: 10px; display: inline-block; }
+      #h-ul { width: 760px; height: 40px; margin: 6px auto 0; }
+
+      /* 2 graph paper chart */
+      #chart { left: 70px; top: 90px; width: 940px; height: 650px; }
+      #chart .face { background: var(--paper-hi); }
+      #chart .grid { position: absolute; inset: 0; background-image:
+        linear-gradient(rgba(139,92,246,.13) 2px, transparent 2px), linear-gradient(90deg, rgba(139,92,246,.13) 2px, transparent 2px);
+        background-size: 46px 46px; }
+      #chart .ttl { position: absolute; left: 40px; top: 30px; font-size: 92px; }
+      #chart .uline { position: absolute; left: 36px; top: 112px; width: 560px; height: 30px; }
+      #chart svg.plot { position: absolute; left: 30px; top: 150px; width: 850px; height: 440px; overflow: visible; }
+      .pin { transform-box: fill-box; transform-origin: 50% 100%; }
+
+      /* 3 case: stat hero + clippings */
+      #case { position: absolute; left: 60px; right: 60px; top: 80px; height: 680px; }
+      #c-row { position: absolute; left: 0; right: 0; top: 0; height: 380px; display: flex; align-items: center; justify-content: center; gap: 26px; }
+      #c-11 { font-size: 250px; color: var(--ink); position: relative; }
+      #c-11 svg { position: absolute; left: -20px; top: 40%; width: 200px; height: 60px; overflow: visible; }
+      #c-arr { width: 150px; height: 90px; overflow: visible; }
+      #c-arr path { fill: none; stroke: var(--ink); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+      #c-tag { position: relative; width: 400px; height: 330px; }
+      #c-tag .face { background: var(--accent); padding: 0; display: grid; place-items: center; }
+      #c-tag .stroke { background: var(--ink); }
+      #c-tag .num { font-size: 290px; color: #fff; }
+      #c-tag .sub { position: absolute; left: 0; right: 0; bottom: 20px; text-align: center; font-size: 26px; color: #fff; letter-spacing: 3px; }
+      .clip-card { position: absolute; width: 470px; height: 270px; }
+      .clip-card .face { background: var(--paper-hi); padding: 26px 30px; }
+      .clip-card .k { font-size: 26px; letter-spacing: 1px; color: #555; }
+      .clip-card .v { font-size: 120px; margin-top: 14px; }
+      .clip-card .v .was { color: var(--gray); font-size: 70px; position: relative; }
+      .clip-card .v .was::after { content: ""; position: absolute; left: -4px; right: -4px; top: 46%; height: 9px; background: var(--accent); transform: rotate(-6deg); }
+      #st-1 { left: 0; top: 400px; }
+      #st-2 { right: 0; top: 410px; }
+
+      /* 4 alert wash + ledger */
+      #wash { position: absolute; inset: 0; background: var(--accent); display: grid; place-items: center; }
+      #wash .H { color: #fff; font-size: 210px; text-align: center; }
+      #ledger { left: 60px; top: 90px; width: 960px; height: 660px; }
+      #ledger .face { background: var(--paper-hi); padding: 34px 40px; }
+      #ledger .ttl { font-size: 92px; }
+      .lrow { margin-top: 34px; }
+      .lrow .lb { display: flex; justify-content: space-between; align-items: baseline; font-size: 54px; }
+      .lrow .lb .M { font-size: 24px; color: #555; }
+      .months { display: grid; grid-template-columns: repeat(12, 1fr); gap: 10px; height: 150px; align-items: end; margin-top: 12px; border-bottom: 4px solid var(--ink); padding-bottom: 4px; }
+      .months i { display: block; background: var(--accent); height: 34%; }
+      .months.burst i { background: transparent; border: 3px dashed rgba(26,26,26,.25); height: 22%; }
+      .months.burst i.b { background: var(--ink); border: 0; height: 100%; }
+      .stamp { position: absolute; font-family: "League Gothic", sans-serif; text-transform: uppercase; color: var(--accent);
+        border: 9px solid var(--accent); padding: 4px 26px 0; line-height: 1; mix-blend-mode: multiply; }
+      #win { right: 50px; top: 268px; font-size: 92px; }
+      #win .t { display: inline-block; transform: rotate(-9deg); }
+
+      /* 5 flywheel */
+      #wheel { position: absolute; left: 140px; top: 70px; width: 800px; height: 700px; }
+      #disc { left: 120px; top: 60px; width: 560px; height: 560px; }
+      #disc .face, #disc .stroke { border-radius: 50%; }
+      #disc .face { background: var(--paper-hi); }
+      #wheel svg { position: absolute; inset: 0; overflow: visible; }
+      .chip { position: absolute; padding: 10px 30px 4px; font-size: 76px; background: #fff; box-shadow: 8px 8px 0 var(--accent); }
+      .chip.hot { background: var(--accent); color: #fff; box-shadow: 8px 8px 0 var(--ink); }
+      #k1 { left: 270px; top: 0; }
+      #k2 { left: 560px; top: 520px; }
+      #k3 { left: 0; top: 520px; }
+      #trust { left: 292px; top: 262px; font-size: 120px; }
+      #trust .t { display: inline-block; transform: rotate(-7deg); }
+
+      /* 6 half sold */
+      #sold { left: 70px; top: 90px; width: 940px; height: 640px; }
+      #sold .face { background: var(--paper-hi); padding: 36px 44px; }
+      #sold .k { font-size: 26px; color: #555; letter-spacing: 1px; }
+      #sold .big { display: flex; align-items: flex-end; gap: 26px; margin-top: 8px; }
+      #sold .n { font-size: 250px; }
+      #sold .stars { font-size: 66px; color: var(--accent); letter-spacing: 6px; padding-bottom: 36px; font-family: "Oswald", sans-serif; }
+      #sold .hl { font-size: 104px; margin-top: 6px; }
+      #halfsold { right: 60px; top: 70px; font-size: 120px; }
+      #halfsold .t { display: inline-block; transform: rotate(8deg); }
+      #ring { position: absolute; left: 44px; bottom: 34px; font-size: 30px; padding: 10px 22px; background: var(--ink); color: #fff; }
+
+      /* captions: label tape over the bottom of the photo */
+      .cap { position: absolute; left: 40px; right: 40px; top: 1676px; text-align: center; }
+      .cap span { display: inline-block; background: var(--ink); color: #fff; font-family: "Oswald", sans-serif; font-weight: 700;
+        text-transform: uppercase; font-size: 66px; line-height: 1; padding: 14px 26px 16px; box-shadow: 6px 6px 0 var(--accent); }
+      .cap em { font-style: normal; color: var(--accent-light); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="41.02" data-width="1080" data-height="1920">
+      <div id="stage">
+        <div class="paper"></div>
+        <div class="rules"></div>
+        <svg class="grain" width="1080" height="1920" aria-hidden="true">
+          <filter id="noise"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .18  0 0 0 .9 0"/></filter>
+          <rect width="100%" height="100%" filter="url(#noise)"/>
+        </svg>
+        <div class="burn"></div>
+
+        <!-- the speaker, a torn archival photo for the whole reel -->
+        <div id="photo" class="cut">
+          <div class="tilt">
+            <div class="stroke" data-torn="11" style="transform: translate(16px, 14px)"></div>
+            <div class="face" data-torn="11"><div class="inner">
+              <video id="a-roll" class="clip" src="base.mp4" data-var-src="base" playsinline data-start="0" data-duration="41.02" data-track-index="0" data-has-audio="true"></video>
+              <div class="halftone"></div>
+            </div></div>
+          </div>
+        </div>
+        <div id="photo-fig" class="fig"><span class="t">Fig. 1 &#8212; Bryan, Elivate</span></div>
+      </div>
+
+      <!-- 1 hook, 0.0-2.4 -->
+      <div id="g-hook" class="clip layer" data-start="0" data-duration="2.4" data-track-index="1" data-track-kind="graphics">
+        <div id="hook">
+          <div id="h-n" class="H"><span class="old">11</span><span class="arr">&#8594;</span><span class="hot">64</span></div>
+          <div id="h-l2" class="H">reviews in 6 months</div>
+          <svg id="h-ul" class="uline" viewBox="0 0 760 40"><path id="h-ulp" d="M10 26 C200 14 420 30 750 12" pathLength="1" stroke-dasharray="1 1.2" stroke-dashoffset="1.1"/></svg>
+        </div>
+      </div>
+
+      <!-- 2 graph paper, 2.5-10.0: "first 10" 2.84, "next 20" 5.04, "80 to 100" 7.02, "shifts" 8.82 -->
+      <div id="g-curve" class="clip layer" data-start="2.5" data-duration="7.5" data-track-index="2" data-track-kind="graphics">
+        <div id="chart" class="cut">
+          <div class="stroke" data-torn="23" style="transform: translate(14px, 14px)"></div>
+          <div class="face" data-torn="23"><div class="inner">
+            <div class="grid"></div>
+            <div class="ttl H">How reviews compound</div>
+            <svg class="uline" viewBox="0 0 560 30"><path id="cu-ul" d="M6 18 C160 8 360 24 552 10" pathLength="1" stroke-dasharray="1 1.2" stroke-dashoffset="1.1"/></svg>
+            <svg class="plot" viewBox="0 0 850 440">
+              <path d="M10 420 L840 420" stroke="#1a1a1a" stroke-width="5"/>
+              <path id="cv" d="M20 405 C200 398 330 370 450 318 C580 262 690 170 830 50" fill="none" stroke="#1a1a1a" stroke-width="9" stroke-linecap="round" pathLength="1" stroke-dasharray="1 1.2" stroke-dashoffset="1.1"/>
+              <g id="p1"><g class="pin"><path d="M190 392 c-22 -26 -30 -38 -30 -54 a30 30 0 0 1 60 0 c0 16 -8 28 -30 54z" fill="#8b5cf6"/><circle cx="190" cy="338" r="11" fill="#1a1a1a"/></g>
+                <text x="190" y="290" text-anchor="middle" font-family="Space Mono" font-size="30" font-weight="700" fill="#1a1a1a">first 10 &#183; slow</text></g>
+              <g id="p2"><g class="pin"><path d="M450 312 c-22 -26 -30 -38 -30 -54 a30 30 0 0 1 60 0 c0 16 -8 28 -30 54z" fill="#8b5cf6"/><circle cx="450" cy="258" r="11" fill="#1a1a1a"/></g>
+                <text x="450" y="210" text-anchor="middle" font-family="Space Mono" font-size="30" font-weight="700" fill="#1a1a1a">next 20 &#183; faster</text></g>
+              <g id="p3"><g class="pin"><path d="M780 92 c-26 -30 -36 -44 -36 -62 a36 36 0 0 1 72 0 c0 18 -10 32 -36 62z" fill="#8b5cf6"/><circle cx="780" cy="30" r="13" fill="#1a1a1a"/></g>
+                <rect x="340" y="70" width="380" height="96" fill="#8b5cf6"/><text x="530" y="134" text-anchor="middle" font-family="League Gothic" font-size="72" fill="#fff">80&#8211;100: IT SHIFTS</text></g>
+            </svg>
+          </div></div>
+        </div>
+      </div>
+
+      <!-- 3 client case, 10.1-24.6: "11" 11.30, "six months" 12.74, "64" 14.00, calls 15.30/17.09, keywords 18.51, top three 23.49 -->
+      <div id="g-case" class="clip layer" data-start="10.1" data-duration="14.5" data-track-index="3" data-track-kind="graphics">
+        <div id="case">
+          <div id="c-row">
+            <div id="c-11" class="H">11<svg viewBox="0 0 200 60"><path id="c-strike" d="M6 40 L194 18" stroke="#8b5cf6" stroke-width="16" stroke-linecap="round" pathLength="1" stroke-dasharray="1 1.2" stroke-dashoffset="1.1"/></svg></div>
+            <svg id="c-arr" viewBox="0 0 150 90"><path id="c-arrp" d="M8 50 C50 40 90 44 132 46 M104 22 L136 46 L104 70" pathLength="1" stroke-dasharray="1 1.2" stroke-dashoffset="1.1"/></svg>
+            <div id="c-tag" class="cut">
+              <div class="stroke" data-torn="37" style="transform: translate(14px, 14px)"></div>
+              <div class="face" data-torn="37"><span class="num H" id="c-64">64</span><span class="sub M">REVIEWS &#183; 6 MONTHS</span><div class="halftone"></div></div>
+            </div>
+          </div>
+          <div id="st-1" class="cut clip-card">
+            <div class="stroke" data-torn="41" style="transform: translate(10px, 10px)"></div>
+            <div class="face" data-torn="41"><div class="k M">CALLS FROM GOOGLE MAPS</div><div class="v H">2&#215; <span class="hot">+</span></div></div>
+          </div>
+          <div id="st-2" class="cut clip-card">
+            <div class="stroke" data-torn="43" style="transform: translate(10px, 10px)"></div>
+            <div class="face" data-torn="43"><div class="k M">MAIN KEYWORDS</div><div class="v H"><span class="was">#11+</span> <span id="v-top3" class="hot">TOP 3</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 alert wash 24.8, then the ledger 25.25-30.3: steady 24.94, burst "60 in one month" 28.25, silence 29.59 -->
+      <div id="g-wash" class="clip layer" data-start="24.8" data-duration="0.62" data-track-index="7" data-track-kind="graphics">
+        <div id="wash"><div class="H" id="wash-t">Same 60<br>reviews</div></div>
+      </div>
+      <div id="g-s60" class="clip layer" data-start="25.25" data-duration="5.05" data-track-index="4" data-track-kind="graphics">
+        <div id="ledger" class="cut">
+          <div class="stroke" data-torn="53" style="transform: translate(14px, 14px)"></div>
+          <div class="face" data-torn="53"><div class="inner">
+            <div class="ttl H">Same 60 reviews. <span class="hot">One wins.</span></div>
+            <div class="lrow"><div class="lb"><span class="H">5 a month, all year</span><span class="M">12 MONTHS</span></div>
+              <div class="months steady"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="lrow"><div class="lb"><span class="H">60 in one month</span><span class="M">THEN SILENCE</span></div>
+              <div class="months burst"><i class="b" id="burst-b"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          </div></div>
+          <div id="win" class="stamp"><span class="t">Wins</span></div>
+        </div>
+      </div>
+
+      <!-- 5 flywheel, 30.4-36.2: clicks 31.91, calls 32.55, reviews 33.29, trust 34.67 -->
+      <div id="g-fly" class="clip layer" data-start="30.4" data-duration="5.8" data-track-index="5" data-track-kind="graphics">
+        <div id="wheel">
+          <div id="disc" class="cut">
+            <div class="stroke" style="transform: translate(14px, 14px)"></div>
+            <div class="face"></div>
+          </div>
+          <svg viewBox="0 0 800 700"><circle id="loop" cx="400" cy="340" r="210" fill="none" stroke="#1a1a1a" stroke-width="8" stroke-dasharray="26 18"/>
+            <path id="loop-arr" d="M586 262 L610 300 L566 300" fill="none" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div id="k1" class="chip H">Clicks</div>
+          <div id="k2" class="chip H">Calls</div>
+          <div id="k3" class="chip H hot">Reviews</div>
+          <div id="trust" class="stamp"><span class="t">Trust</span></div>
+        </div>
+      </div>
+
+      <!-- 6 half sold, 36.3-41.02: "90 reviews" 37.54, "half sold" 38.92, "answer the phone" 40.36 -->
+      <div id="g-sold" class="clip layer" data-start="36.3" data-duration="4.72" data-track-index="6" data-track-kind="graphics">
+        <div id="sold" class="cut">
+          <div class="stroke" data-torn="61" style="transform: translate(14px, 14px)"></div>
+          <div class="face" data-torn="61"><div class="inner">
+            <div class="k M">A HOMEOWNER FINDS YOU AT</div>
+            <div class="big"><span class="n H" id="s-90">90</span><span class="stars" id="s-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+            <div class="hl H">Sold before you <span class="hot">pick up</span></div>
+            <div id="ring" class="M">&#9742; INCOMING CALL</div>
+          </div></div>
+          <div id="halfsold" class="stamp"><span class="t">Half sold</span></div>
+        </div>
+      </div>
+
+      <div id="captions" data-track-kind="captions">
+      <!-- CAPTIONS -->
+      <div id="cap-1" class="clip cap" data-start="0.16" data-duration="0.76" data-track-index="9"><span>in every <em>business</em></span></div>
+      <div id="cap-2" class="clip cap" data-start="0.92" data-duration="0.60" data-track-index="9"><span>that <em>we've</em> grown</span></div>
+      <div id="cap-3" class="clip cap" data-start="1.52" data-duration="0.78" data-track-index="9"><span>from <em>scratch</em></span></div>
+      <div id="cap-4" class="clip cap" data-start="2.30" data-duration="0.78" data-track-index="9"><span>the first <em>10</em></span></div>
+      <div id="cap-5" class="clip cap" data-start="3.08" data-duration="1.40" data-track-index="9"><span><em>reviews</em> feel slow</span></div>
+      <div id="cap-6" class="clip cap" data-start="4.48" data-duration="0.80" data-track-index="9"><span>the next <em>20</em></span></div>
+      <div id="cap-7" class="clip cap" data-start="5.28" data-duration="1.14" data-track-index="9"><span>come <em>faster</em></span></div>
+      <div id="cap-8" class="clip cap" data-start="6.42" data-duration="0.60" data-track-index="9"><span>and at <em>around</em></span></div>
+      <div id="cap-9" class="clip cap" data-start="7.02" data-duration="1.60" data-track-index="9"><span><em>80</em> to 100</span></div>
+      <div id="cap-10" class="clip cap" data-start="8.82" data-duration="1.36" data-track-index="9"><span><em>something</em> shifts</span></div>
+      <div id="cap-11" class="clip cap" data-start="10.18" data-duration="0.36" data-track-index="9"><span>one of our</span></div>
+      <div id="cap-12" class="clip cap" data-start="10.54" data-duration="0.76" data-track-index="9"><span><em>clients</em> started with</span></div>
+      <div id="cap-13" class="clip cap" data-start="11.30" data-duration="1.24" data-track-index="9"><span><em>11</em> reviews</span></div>
+      <div id="cap-14" class="clip cap" data-start="12.54" data-duration="0.68" data-track-index="9"><span>and six <em>months</em></span></div>
+      <div id="cap-15" class="clip cap" data-start="13.22" data-duration="0.78" data-track-index="9"><span><em>later</em> they had</span></div>
+      <div id="cap-16" class="clip cap" data-start="14.00" data-duration="1.12" data-track-index="9"><span><em>64</em></span></div>
+      <div id="cap-17" class="clip cap" data-start="15.30" data-duration="0.88" data-track-index="9"><span><em>their</em> calls from</span></div>
+      <div id="cap-18" class="clip cap" data-start="16.18" data-duration="1.10" data-track-index="9"><span><em>google</em> maps more</span></div>
+      <div id="cap-19" class="clip cap" data-start="17.29" data-duration="1.22" data-track-index="9"><span>than <em>doubled</em></span></div>
+      <div id="cap-20" class="clip cap" data-start="18.51" data-duration="1.16" data-track-index="9"><span>their main <em>keywords</em></span></div>
+      <div id="cap-21" class="clip cap" data-start="19.67" data-duration="0.94" data-track-index="9"><span>went from <em>ranking</em></span></div>
+      <div id="cap-22" class="clip cap" data-start="20.61" data-duration="0.90" data-track-index="9"><span><em>outside</em> the top</span></div>
+      <div id="cap-23" class="clip cap" data-start="21.51" data-duration="0.70" data-track-index="9"><span><em>10</em></span></div>
+      <div id="cap-24" class="clip cap" data-start="22.21" data-duration="1.64" data-track-index="9"><span>to <em>consistently</em> top</span></div>
+      <div id="cap-25" class="clip cap" data-start="23.85" data-duration="0.86" data-track-index="9"><span><em>three</em></span></div>
+      <div id="cap-26" class="clip cap" data-start="24.94" data-duration="1.24" data-track-index="9"><span>five</span></div>
+      <div id="cap-27" class="clip cap" data-start="26.54" data-duration="0.68" data-track-index="9"><span><em>reviews</em> a month</span></div>
+      <div id="cap-28" class="clip cap" data-start="27.23" data-duration="0.62" data-track-index="9"><span>for a year</span></div>
+      <div id="cap-29" class="clip cap" data-start="27.85" data-duration="0.90" data-track-index="9"><span>beats <em>60</em> in</span></div>
+      <div id="cap-30" class="clip cap" data-start="28.75" data-duration="0.60" data-track-index="9"><span>one <em>month</em> and</span></div>
+      <div id="cap-31" class="clip cap" data-start="29.35" data-duration="1.14" data-track-index="9"><span>then <em>silence</em></span></div>
+      <div id="cap-32" class="clip cap" data-start="30.49" data-duration="0.52" data-track-index="9"><span>as the <em>count</em></span></div>
+      <div id="cap-33" class="clip cap" data-start="31.01" data-duration="0.34" data-track-index="9"><span><em>grows</em></span></div>
+      <div id="cap-34" class="clip cap" data-start="31.35" data-duration="0.56" data-track-index="9"><span>you get more</span></div>
+      <div id="cap-35" class="clip cap" data-start="31.91" data-duration="0.64" data-track-index="9"><span><em>clicks</em></span></div>
+      <div id="cap-36" class="clip cap" data-start="32.55" data-duration="0.74" data-track-index="9"><span>more <em>calls</em></span></div>
+      <div id="cap-37" class="clip cap" data-start="33.29" data-duration="1.36" data-track-index="9"><span>and more <em>reviews</em></span></div>
+      <div id="cap-38" class="clip cap" data-start="34.67" data-duration="0.88" data-track-index="9"><span>trust <em>builds</em> on</span></div>
+      <div id="cap-39" class="clip cap" data-start="35.56" data-duration="0.86" data-track-index="9"><span><em>itself</em></span></div>
+      <div id="cap-40" class="clip cap" data-start="36.42" data-duration="0.66" data-track-index="9"><span>a <em>homeowner</em> who</span></div>
+      <div id="cap-41" class="clip cap" data-start="37.08" data-duration="0.46" data-track-index="9"><span><em>finds</em> you at</span></div>
+      <div id="cap-42" class="clip cap" data-start="37.54" data-duration="1.38" data-track-index="9"><span><em>90</em> reviews is</span></div>
+      <div id="cap-43" class="clip cap" data-start="38.92" data-duration="1.00" data-track-index="9"><span>half sold <em>before</em></span></div>
+      <div id="cap-44" class="clip cap" data-start="39.92" data-duration="0.68" data-track-index="9"><span>you even <em>answer</em></span></div>
+      <div id="cap-45" class="clip cap" data-start="40.60" data-duration="0.38" data-track-index="9"><span>the <em>phone</em></span></div>
+      <!-- /CAPTIONS -->
+      </div>
+    </div>
+    <script>
+      // Torn paper edges: a seeded jagged polygon per element (same seed = same tear, so a stroke matches its face).
+      function torn(el, seed) {
+        let s = seed * 9301 + 49297;
+        const r = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+        const w = el.offsetWidth || 400, h = el.offsetHeight || 300, ax = 1.1 * 100 / w * 9, ay = 1.1 * 100 / h * 9;
+        const pts = [], step = 2.4;
+        for (let x = 0; x <= 100; x += step) pts.push(`${x}% ${r() * ay}%`);
+        for (let y = 0; y <= 100; y += step) pts.push(`${100 - r() * ax}% ${y}%`);
+        for (let x = 100; x >= 0; x -= step) pts.push(`${x}% ${100 - r() * ay}%`);
+        for (let y = 100; y >= 0; y -= step) pts.push(`${r() * ax}% ${y}%`);
+        el.style.clipPath = `polygon(${pts.join(",")})`;
+      }
+      document.querySelectorAll("[data-torn]").forEach((el) => torn(el, Number(el.dataset.torn)));
+
+      const tl = gsap.timeline({ paused: true });
+      const SPRING = "back.out(2.2)";
+      const IN = (sel, at, extra = {}) => tl.from(sel, { opacity: 0, y: 70, rotation: -4, duration: 0.5, ease: SPRING, ...extra }, at);
+      const OUT = (sel, at) => tl.to(sel, { opacity: 0, y: -40, duration: 0.3, ease: "power2.in" }, at);
+      const DRAW = (sel, at, d = 0.45) => tl.to(sel, { strokeDashoffset: 0, duration: d, ease: "power2.out" }, at);
+      const STAMP = (sel, at) => tl.fromTo(sel, { opacity: 0, scale: 2.4 }, { opacity: 1, scale: 1, duration: 0.22, ease: "power4.in" }, at);
+
+      // camera: a slow 2% drift on the paper stage; the photo springs up with overshoot
+      tl.fromTo("#stage", { scale: 1, transformOrigin: "50% 60%" }, { scale: 1.02, duration: 41.02, ease: "none" }, 0);
+      tl.from("#photo", { y: 260, rotation: 5, opacity: 0, duration: 0.6, ease: SPRING }, 0);
+      tl.from("#photo-fig", { opacity: 0, x: 60, duration: 0.35, ease: SPRING }, 0.5);
+
+      // 1 hook
+      IN("#h-n", 0.05, { rotation: 0, scale: 0.85 });
+      IN("#h-l2", 0.3, { rotation: 0 });
+      DRAW("#h-ulp", 0.65);
+      OUT("#hook", 2.05);
+
+      // 2 graph paper
+      IN("#chart", 2.5);
+      DRAW("#cu-ul", 2.9);
+      tl.set(["#p1", "#p2", "#p3"], { opacity: 0 }, 0);
+      tl.to("#cv", { strokeDashoffset: 0.75, duration: 0.8, ease: "power1.inOut" }, 2.84);
+      tl.to("#p1", { opacity: 1, duration: 0.01 }, 3.0); tl.from("#p1 .pin", { scaleY: 0, duration: 0.4, ease: SPRING }, 3.0);
+      tl.to("#cv", { strokeDashoffset: 0.45, duration: 0.8, ease: "power1.inOut" }, 5.04);
+      tl.to("#p2", { opacity: 1, duration: 0.01 }, 5.3); tl.from("#p2 .pin", { scaleY: 0, duration: 0.4, ease: SPRING }, 5.3);
+      tl.to("#cv", { strokeDashoffset: 0, duration: 1.0, ease: "power2.in" }, 7.02);
+      tl.to("#p3", { opacity: 1, duration: 0.01 }, 8.0); tl.from("#p3 .pin", { scaleY: 0, duration: 0.45, ease: SPRING }, 8.0);
+      tl.from("#p3 rect, #p3 text", { opacity: 0, x: -30, duration: 0.3 }, 8.82);
+      OUT("#chart", 9.65);
+
+      // 3 case
+      tl.from("#c-11", { opacity: 0, scale: 0.6, duration: 0.4, ease: SPRING }, 11.3);
+      DRAW("#c-strike", 12.74, 0.3);
+      DRAW("#c-arrp", 13.4, 0.4);
+      IN("#c-tag", 14.0, { y: 120, rotation: 12, scale: 0.6 });
+      const n = { v: 11 };
+      tl.to(n, { v: 64, duration: 0.6, ease: "power2.out", onUpdate: () => { document.getElementById("c-64").textContent = Math.round(n.v); } }, 14.0);
+      IN("#st-1", 15.3, { rotation: -8 });
+      IN("#st-2", 18.51, { rotation: 8 });
+      tl.from("#v-top3", { opacity: 0, scale: 1.8, duration: 0.25, ease: "power4.in" }, 23.49);
+      OUT("#case", 24.3);
+
+      // 4 alert wash, then the ledger
+      tl.from("#wash", { opacity: 0, duration: 0.08 }, 24.8);
+      tl.from("#wash-t", { scale: 0.8, duration: 0.3, ease: SPRING }, 24.82);
+      tl.to("#wash", { opacity: 0, duration: 0.15 }, 25.25);
+      IN("#ledger", 25.25, { y: 30, rotation: -2 });
+      tl.from(".months.steady i", { scaleY: 0, transformOrigin: "50% 100%", duration: 0.25, ease: SPRING, stagger: 0.1 }, 25.5);
+      tl.from("#burst-b", { scaleY: 0, transformOrigin: "50% 100%", duration: 0.35, ease: SPRING }, 28.25);
+      tl.from(".months.burst i:not(.b)", { opacity: 0, duration: 0.2, stagger: 0.04 }, 29.59);
+      STAMP("#win", 29.75);
+      OUT("#ledger", 30.0);
+
+      // 5 flywheel
+      IN("#disc", 30.4, { scale: 0.5, rotation: -30 });
+      tl.from("#loop", { opacity: 0, duration: 0.5 }, 30.6);
+      tl.to("#loop", { rotation: 40, transformOrigin: "400px 340px", duration: 5.4, ease: "none" }, 30.8);
+      tl.from("#loop-arr", { opacity: 0, duration: 0.2 }, 31.2);
+      IN("#k1", 31.91, { rotation: -10 });
+      IN("#k2", 32.55, { rotation: 10 });
+      IN("#k3", 33.29, { rotation: -6 });
+      STAMP("#trust", 34.67);
+      OUT("#wheel", 35.85);
+
+      // 6 half sold
+      IN("#sold", 36.3, { rotation: 3 });
+      tl.from("#s-90", { opacity: 0, scale: 0.5, duration: 0.4, ease: SPRING }, 37.54);
+      tl.from("#s-stars", { opacity: 0, x: -30, duration: 0.3 }, 37.8);
+      STAMP("#halfsold", 38.92);
+      tl.from("#ring", { opacity: 0, y: 20, duration: 0.25, ease: SPRING }, 40.36);
+      tl.to("#ring", { x: 6, duration: 0.05, repeat: 9, yoyo: true }, 40.5);
+
+      // captions: tape pops on each line
+      document.querySelectorAll(".cap").forEach((c) => {
+        tl.from(c.querySelector("span"), { scale: 0.7, opacity: 0, rotation: -3, duration: 0.18, ease: SPRING }, Number(c.dataset.start));
+      });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

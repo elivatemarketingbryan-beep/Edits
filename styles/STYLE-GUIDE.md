@@ -68,7 +68,7 @@ averaged **about 40 sounds a minute**: half were ticks and pops.
 Style flavours (on top of the rules above):
 - **Dense** (graphics on every beat): business-reel, explainer-panel, glass-explainer,
   split-reel, depth-ui, ranking, top-5-ranking, rapid-list, if-then-grid,
-  this-vs-that, tips-breakdown, educational-youtube, screen-tutorial, youtube-clips,
+  this-vs-that, paper-collage, tips-breakdown, educational-youtube, screen-tutorial, youtube-clips,
   paper-cut-out, sofa-wall, graph-rise, orbit-spin, phone-frame, news-wall,
   interface-world, tick-list,
   coaching-call-clips, faceless-sprite (its engine places them itself), brand-motion (its
@@ -298,6 +298,34 @@ and tips-breakdown follow `apple-liquid-glass`.
 - Real room footage, warm and calm. **Pictures, quote cards and clips appear around and
   partly behind the head** (person matte), a few at a time.
 - Small, quiet chest captions.
+
+### paper-collage: Paper collage
+Documentary cut-paper collage (from the "Vox style" pack, Oct 2026), approved on reel 10 of the
+reviews job. Template: `presets/paper-collage/index.html`. This style swaps the shared look's black
+base for **aged paper**; the accent stays the brand purple (the pack's red), `accentLight` takes the
+pack's mustard.
+
+- **Stage:** archival tan paper (`#D9CDB2`), print grain, faint ledger rules, burnt edges. A slow 2%
+  camera drift over the whole reel.
+- **Speaker:** a **torn archival photo** in the lower half (white keyline, purple offset stroke behind,
+  tilted ~1.5°), labelled with a light-purple tag "Fig. 1 — Bryan, Elivate". No matte needed.
+- **Graphics in the top half, one per beat**, each a torn paper piece with a purple offset stroke:
+  stat hero (old number struck through in purple → arrow drawn → new number on a torn purple tag that
+  springs in and counts up), newspaper clippings (mono label + big condensed value), graph paper with
+  an ink line drawing on and purple map pins dropping on the named points, a ledger (month cells
+  filling), a paper disc flywheel with cut-out chips, rubber stamps (WINS, TRUST, HALF SOLD) slamming on.
+- **Type:** headlines and numbers in League Gothic caps, labels in Space Mono, captions in Oswald.
+  Every headline's key line gets a hand-drawn purple underline swipe.
+- **Alert wash:** once per reel, on the turn ("same 60 reviews"), the whole frame floods purple for
+  ~0.4 s with the line in white caps, then the next graphic lands.
+- **Captions:** black label tape over the bottom of the photo, white caps, key word light purple,
+  purple offset shadow; each line pops on with a little rotation.
+- **Motion:** springs with overshoot (`back.out(2.2)`), staggered entrances, ticking counters, stamps
+  drop from 2.4× scale in 0.22 s. Red (loss) is not used; strike-throughs are purple.
+- **Long form 16:9:** same stage; the photo card sits right of centre (about 55% of the width), the
+  graphics stack on the left.
+- **AI B-roll (optional):** where a beat needs real depth (a full-screen diorama, a moving map), generate
+  a 4-6 s clip with `styles/AI-BROLL.md` and drop it in as a torn photo; everything else stays HyperFrames.
 
 ### faceless-sprite: Faceless sprite
 - **No camera.** The voice is a voiceover (Bryan's ElevenLabs clone, or a phone recording); the

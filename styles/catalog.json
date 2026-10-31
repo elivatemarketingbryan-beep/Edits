@@ -715,6 +715,38 @@
       ]
     },
     {
+      "id": "paper-collage",
+      "name": "Paper collage",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "ready",
+      "summary": "You in a torn archival photo on aged paper; stats, clippings and stamps in purple.",
+      "bestFor": [
+        "numbers and results",
+        "a case study or before/after",
+        "a story told with stats",
+        "explaining how something works"
+      ],
+      "recipe": [
+        "template presets/paper-collage/index.html (HyperFrames)",
+        "speaker in a torn photo card, lower half; graphics in the top half",
+        "one graphic per beat: stat tag, graph paper, clipping, ledger, flywheel, stamp",
+        "one alert wash (whole frame floods purple) on the turn",
+        "captions as black label tape, key word light purple",
+        "sounds dense: pop, stamp, stretch, tick (SOUND-RULES.md)"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#paper-collage",
+      "template": "presets/paper-collage/index.html",
+      "needsMatte": false,
+      "scriptShape": "proof",
+      "alsoScriptShape": [
+        "explainer",
+        "story"
+      ]
+    },
+    {
       "id": "faceless-sprite",
       "name": "Faceless sprite",
       "aspect": "9:16",
