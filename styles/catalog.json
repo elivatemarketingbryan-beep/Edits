@@ -449,6 +449,38 @@
       "scriptShape": "long-form"
     },
     {
+      "id": "mono-explainer",
+      "name": "Monochrome explainer",
+      "aspect": "16:9",
+      "group": "long",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "You in a small card; greyscale editorial diagrams, 3D clay metaphors and real headlines own the frame.",
+      "bestFor": [
+        "a course or full teaching video",
+        "frameworks and step-by-step methods",
+        "claims backed by real articles",
+        "long talk with one idea at a time"
+      ],
+      "recipe": [
+        "charcoal ground, greyscale graphics, one brand-purple accent per beat at most",
+        "face as a small portrait card right-middle for most of the video; full frame only at open, turn and close",
+        "editorial serif title + small grey label on every graphic",
+        "thin-line diagrams that build as each part is said",
+        "grey 3D clay metaphors (doors, iceberg, arch) for the big ideas",
+        "real news headlines in browser cards",
+        "split-flap board for chapter titles",
+        "cold open: a new proof card every 1.5-3 s"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#mono-explainer",
+      "needsMatte": false,
+      "scriptShape": "long-form",
+      "alsoScriptShape": [
+        "explainer"
+      ]
+    },
+    {
       "id": "tiktok-style",
       "name": "TikTok style",
       "aspect": "9:16",

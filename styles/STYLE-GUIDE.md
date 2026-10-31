@@ -79,7 +79,7 @@ Style flavours (on top of the rules above):
   yap-and-show, clone-versus, dual-role-dialogue, split-screen-lesson,
   lesson-document, magazine-cover, pixel-zoom, sketch-boil, glass-text,
   pull-out-reveal, dolly-zoom, frame-pop, punch-through-cut, green-screen, film-grade-short,
-  story-montage, silhouette, film-grade.
+  story-montage, silhouette, film-grade, mono-explainer.
 - **Minimal** (a whoosh or riser at most; let the words carry it): fitted-captions,
   cinematic-type (low whooshes and risers only), natural-story, ear-to-ear-captions,
   vlog (music-led; no UI sounds), floating-window (hard cuts, no UI sounds).
@@ -588,6 +588,28 @@ From the Iman Gadzhi Gemini tutorial breakdown (styles/REFERENCES.md).
   instead of its intake, graphics approved as stills before rendering, studio sounds.
 - Warm grain-and-bloom grade, one-word captions, head over the big words and panels.
 - Status draft until Bryan approves a first edit; then record what worked here.
+
+### mono-explainer: Monochrome explainer
+From Nick Saraev's AI-consultant course (REFERENCES.md, Oct 2026). The graphics are the video; the
+speaker is a guide in the corner. This style swaps the shared look's purple-on-black for **greyscale
+on charcoal**: brand purple appears at most once per beat, as the one lit thing (the open door, the
+active step, the underline under the claim).
+
+- **Layout:** face in a portrait card (~220x300, rounded 14px, soft shadow) pinned right, mid-height,
+  ~40px from the edge, on for ~85% of the video. Full-frame face only for the cold open, the big turn
+  and the close. Graphics fill the frame behind and to the left of the card.
+- **Ground:** charcoal (#141414 to #1B1B1B) with a soft vignette, never flat black.
+- **Type:** graphic titles top-left in Playfair Display, regular weight; a small grey Inter label under
+  each ("Illustration", "Being automated"); mono for small data labels. No burned-in captions.
+- **Graphics, one idea per frame:** thin white-line diagrams that build part by part as each part is
+  named (cycles, funnels, line charts with the constraint marked, quadrants, radar, node maps); grey 3D
+  clay metaphors with a slow camera move (HyperFrames 3D or rendered stills); real news articles in a
+  dark browser card with the claim underlined; greyscale UI rebuilds (search bar, phone call or texts,
+  calendar, kanban, spreadsheet, chat); big serif numbers with a small sparkline.
+- **Split-flap titles:** chapter and hook titles flip in on an airport departure board, a tick per letter.
+- **Pacing:** the cold open changes picture every 1.5-3 s (a run of proof cards); inside chapters one
+  diagram holds 10-30 s and keeps building.
+- Status draft until Bryan approves a first edit; then save the template in presets/mono-explainer/.
 
 ## Edit review (the preview-and-notes step)
 

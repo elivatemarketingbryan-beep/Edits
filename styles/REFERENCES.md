@@ -5,6 +5,47 @@ reuse. Descriptions only; no footage, graphics or words are copied.
 
 ---
 
+## Nick Saraev: "How I'd Make $12,373/Mo as an AI Consultant in 2027 (Course)"
+
+youtu.be/25KVZUg56_s · 28:24 · 16:9 · Oct 2026 · ~90K views at study time (Oct 31 2026).
+Studied from frames across the whole video (one every ~40s, every chapter) plus every 1.5s
+of the first 36s. Picture and structure only; the audio wasn't studied. Became the
+**mono-explainer** style (STYLE-GUIDE.md).
+
+**Format:** a 28-minute course with 14 chapters in the description (Intro, What an AI
+Consultant Does, The Six-Step Method, then one chapter per step, Three Common Mistakes,
+Final Thoughts). Shot as one seated talking head, but **the graphics are the video**: his
+face is full frame only at the open, a chapter break or two and the close. Everywhere else
+he's a small card while a designed illustration owns the frame.
+
+### What he does, and how we'd use it
+
+| # | Technique | What it looks like | How Video Studio uses it |
+|---|---|---|---|
+| 1 | **Face as a small card, graphics full frame** | A portrait face-cam card (about 3:4, rounded corners, soft shadow) pinned to the right edge at mid height, overlapping whatever is behind it. On for ~85% of the runtime | The style's default layout. Card ~220×300 at 1080p, right inset ~40px; full-frame face only for the cold open, the big turn and the close |
+| 2 | **Monochrome everything** | Charcoal ground (soft vignette, never flat black), white/grey type, grey clay objects. No accent colour at all; light (a glowing doorway, a white highlight) does the emphasising | Greyscale with **one** brand-purple accent per beat at most (the lit door, the active node); the rest stays grey |
+| 3 | **Editorial serif titles + "Illustration" sub-label** | Each graphic has a title in a condensed editorial serif at top left ("The job with the most long-term value"), a small grey sans label under it, sometimes "Illustration" | Title in Playfair Display (brand serif), small Inter label in grey under it; top-left anchored |
+| 4 | **Grey 3D clay metaphors** | Rendered grey objects that carry the idea: three doors with the middle one opening onto light, an iceberg (what people see / the actual work), a Rubik's cube, a sailboat, an arch, Newton's cradle, a wireframe globe, a 3D road with trucks, a 3D spiral | HyperFrames 3D (Three.js) or pre-rendered clay stills with a slow camera move; one metaphor per chapter idea, never decoration |
+| 5 | **Real news articles as browser cards** | Headline screenshots (CNBC, etc.) in a dark browser frame with the URL bar; several in a row for "everyone is doing X", a headline underline drawing on | Proof beats: real article in a browser card, underline the claim. `headline-highlight` / `article-highlight` |
+| 6 | **Thin-line diagrams and charts** | White 1-2px strokes on charcoal: a cycle of six steps around a circle, a line chart dipping at "the constraint", a funnel of bars, a quadrant, a radar chart, a 0-10 scale, a node map with one broken link | Every framework he names becomes a thin-line diagram that builds as he says each part |
+| 7 | **Split-flap board titles** | Airport departure-board letters flipping into a phrase ("AUTOMATING JOBS", "AI CONSULTING IN 2027") | Chapter and hook titles; new template **split-flap** (letters flip through random characters, then settle), with a tick per letter |
+| 8 | **Rebuilt UIs in greyscale** | A search bar typing a query, a phone with an incoming call / a text thread, a calendar week, a kanban board, a spreadsheet, a tools-connector list, a chat window, a terminal | `search-bar`, phone mockups and UI rebuilds, all recoloured to the grey palette so they sit in the same world |
+| 9 | **Big numbers as type** | A clock "6:45" with a small rising chart, "12/min 4/min", "20%", "1 of 5" set large in serif beside a diagram | `counter` in the serif, grey, with one small sparkline |
+| 10 | **Fast proof run in the cold open** | First 36s: face full frame for one line, then a new card every ~1.5-3s (headlines, doors, iceberg, his site, "Exactly how", split-flap, search) | Long-form hook: a rapid run of proof cards over the voice before the first chapter |
+
+### Pacing notes
+- In the cold open the picture changes every 1.5-3s; inside chapters a diagram holds
+  10-30s and builds piece by piece while he explains it.
+- The face card never leaves during graphics, so it always feels like he's walking you
+  through it; full-frame face is rare enough that it signals "this matters".
+- One idea per frame, a lot of empty charcoal around it. Nothing competes for attention.
+
+### For reels (9:16)
+- The split-flap title and the opening door work as 9:16 hooks; the face card moves to the
+  bottom third.
+
+---
+
 ## Iman Gadzhi: "You're Not Late (Yet): Learn 98% of Gemini in Under 26 Minutes"
 
 youtu.be/_FGrUBi7Zno · 23:45 · 16:9 · Aug 2026 · ~417K views at study time (Oct 2026).
