@@ -41,7 +41,31 @@ From Patrik Key's "Make Your CapCut Edits Look Like After Effects" (youtu.be/Uwu
 |---|---|---|---|
 | `slide` | The whole line arrives together: each word slides up out of the line's own edge, 2 frames after the previous one (0.6s ease-out), then the words blur out on exit. `dir: "down"` slides down from the top instead | A premium alternative to `build` for whole phrases; titles and lower-thirds | none |
 
-Behind-the-head versions (`emphasis`, `statement`) need a person matte: render the
+From Patrik Key's "How To Create 10 VIRAL Caption Styles Using CapCut" (youtu.be/Q04FF5KZyt4,
+15:35, Aug 2026, ~114K views, studied Oct 31 2026 from each chapter's demo and the transcript). His
+two standing tips: **the font does most of the work** (tracking -1 to -2 on every caption font), and
+a good caption uses **2-3 motions, not one**. His "multiple word slide up" is our `slide`; his "3D
+viral text" is close to `stack` (add `tilt` below). New in the template: **to build** (not in
+`anim.mjs captions` yet; build and test each once before a client edit).
+
+| Mode | What it looks like | Use it for | Sound |
+|---|---|---|---|
+| `power-split` | **The "real estate" caption.** The line in small white sans, its power word huge in a bold italic with a two-tone gradient fill, set across the speaker at head height so the head covers the middle of it (needs a matte; without one, sit it just above the head). The word slides in while the small words slide up | The one power word of a key line ("every day", the service, the city) | `whoosh-simple` |
+| `apple` | Clean light-weight sans in a soft purple-to-lavender gradient on a pale ground; the line drops in with a 4-keyframe bounce (down past its spot, back up, small settle) over ~13 frames | Calm, premium titles and chapter names; light-background beats | none |
+| `pop-rise` | Words pop up (0.8s pop with a soft overshoot) but the bottom of each word is cut off at the baseline until it's in place, so it rises *out of* a line instead of scaling from nothing | A punchier `build` for hooks; numbers | `pop` on the line |
+| `box` | A rectangle drawn around the key word: stroke only (dashed by default; solid or dotted), ~3px, brand purple; or a filled box behind it. Draws on, holds, leaves with the line | Pointing at the exact word that matters; prices, names | `stretch` as it draws |
+| `tilt` | `stack` or `scattered` words with a 3D perspective tilt, split one word per layer, mixed sizes, key words in light purple and the rest white, placed around the head | Fast hooks with several short words | `pop` per word (quiet) |
+
+**Looks** (a `look` field that can sit on any mode above):
+
+| Look | What it does | Sound |
+|---|---|---|
+| `gradient` | Two-tone fill: the top half white, the bottom half light grey (or white over brand purple), split by a hard horizontal mask | none |
+| `shine` | A soft white streak sweeps across the letters once after they land, with a light glow; works on icons too | none |
+| `flicker` | On entry the text flickers on and off 1 frame at a time, 6 times, then holds (best with `gradient`) | `glitch` (quiet) |
+| `premium` | A hard offset copy behind the text in white (no blur, full opacity, ~1px offset) with the fill in brand purple: same font, looks expensive | none |
+
+Behind-the-head versions (`emphasis`, `statement`, `power-split`) need a person matte: render the
 caption layer, then put the matted speaker on top (`hyperframes remove-background`, or
 CapCut's own Remove background on a duplicate of the clip). Without a matte, they sit
 in front of the head; place them above the head so they don't cover the face.
@@ -49,7 +73,7 @@ in front of the head; place them above the head so they don't cover the face.
 ## Rules
 1. One running mode (`build`) for the whole video; switch to `karaoke` or `blur` only for
    a stretch with a reason (B-roll, a list).
-2. Loud modes (`emphasis`, `statement`, `strike-swap`, `scattered`, `command`, `brush`, `pointer`) on the lines
+2. Loud modes (`emphasis`, `statement`, `strike-swap`, `scattered`, `command`, `brush`, `pointer`, `power-split`, `tilt`, `box`) on the lines
    that matter, never two of the same loud mode in a row, never more than one every
    ~8 seconds.
 3. During a loud mode the running caption can keep going underneath (as in the
@@ -66,6 +90,7 @@ in front of the head; place them above the head so they don't cover the face.
 { "lines": [
   { "mode": "build", "words": [ { "w": "Just", "s": 0.20, "e": 0.42 }, { "w": "give", "s": 0.42, "e": 0.60 } ] },
   { "mode": "accent", "accent": ["right"], "words": [ ... ] },
+  { "mode": "power-split", "power": ["every", "day"], "look": "gradient", "words": [ ... ] },
   { "mode": "strike-swap", "swap": "Discipline", "words": [ { "w": "MOTIVATION", "s": 27.1, "e": 27.9 } ] }
 ] }
 ```
