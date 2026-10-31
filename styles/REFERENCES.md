@@ -5,6 +5,24 @@ reuse. Descriptions only; no footage, graphics or words are copied.
 
 ---
 
+## Zeven 7: "7 Stupidly Simple CapCut Tricks You NEED to Know"
+
+youtu.be/odxTRtU0HH8 · 5:35 · Sep 2026 · ~35K views at study time (Oct 31 2026). Studied from each
+chapter's demo frames and the transcript. Bryan's brief: "our editor needs to have this much control
+and must do these things". Became the "Control" table in STYLE-GUIDE.md and the studio/fx.mjs tool.
+
+| # | Trick | How he builds it in CapCut | Ours |
+|---|---|---|---|
+| 1 | **Shading** | Lower the white (or raise the fade on black), add a split/film-strip mask for a gradient or a circle mask for a vignette, feather it | Feathered gradients in graphics; `fx.mjs shade` on footage |
+| 2 | **Bounce motion** | 3-4 keyframes instead of 2: the curve handles overshoot then slightly reverse | `back.out` / explicit keyframes; bouncy caption slide-up by default |
+| 3 | **Shiny text** | Duplicate the text, lighten it with curves, a film-strip mask (size 50, rotated 10°, feather 50) sweeping across, plus glow; gold or silver by changing the base colour | Caption look `shine` |
+| 4 | **FPS lag** | CapCut's FPS lag effect at 10-20 | `fx.mjs lag` |
+| 5 | **Warp screens** | Wide angle (bends from the corners) and fisheye (bulges from the centre) effects | `fx.mjs wide` / `fisheye` |
+| 6 | **White flash** | Two text layers 2 frames apart, a white square over each word for one frame, the whole stack nudged earlier | Caption look `flash`; `fx.mjs flash` |
+| 7 | **Negative text** | Duplicate the clip, a text mask with the word, curves inverted inside it | Caption look `negative` + `fx.mjs negative` |
+
+---
+
 ## Herman Huang: "How to Edit ANY Video Like You've Done it 1,000 Times"
 
 youtu.be/Zm7J3KqqXPk · 8:23 · Aug 2026 · ~531K views at study time (Oct 31 2026). Studied from

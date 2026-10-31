@@ -30,6 +30,7 @@ styles/REFERENCES.md      breakdowns of other creators' videos: techniques to re
 styles/AI-BROLL.md        generated B-roll clips (kie.ai): when to use them, the 4-block prompt, rules (no real people)
 styles/ANIMATIONS.md      ready-made effects (search bar, counter, article highlight, map route, motion background, glow pill, pastel grade): when to use each
 studio/anim.mjs           makes an effect from assets/animations/<name>/ in 9x16 or 16x9 with brand colours
+studio/fx.mjs             footage effects on any time range: lag (FPS lag), wide, fisheye, shade, flash, negative text
 studio/lut.mjs            colour grades (.cube in assets/luts/); apply to footage before graphics
 assets/sfx/               the named sound files; assets/sound-effects/ is the full Motionix pack
 .claude/skills/           all skills from every kit, merged (see "Where each skill came from")

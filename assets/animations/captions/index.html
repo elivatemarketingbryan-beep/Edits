@@ -29,6 +29,8 @@
       /* looks */
       .look-gradient .w { background: linear-gradient(180deg, #fff 0%, #fff 52%, __ACCENT_LIGHT__ 52%, __ACCENT_LIGHT__ 100%); -webkit-background-clip: text; background-clip: text;
         color: transparent; text-shadow: none; filter: drop-shadow(0 4px 14px rgba(0, 0, 0, .6)); }
+      .look-negative .w { color: #fff; text-shadow: none; filter: none; background: none; }
+      .flashbox { position: absolute; inset: -.08em -.06em; background: #fff; pointer-events: none; }
       .look-premium .w { color: __ACCENT__; text-shadow: .045em .045em 0 #fff, 0 0 .06em rgba(0, 0, 0, .85), 0 0 .02em rgba(0, 0, 0, .9), 0 8px 26px rgba(0, 0, 0, .7); }
       .line.shine .w { color: transparent; text-shadow: none; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat; background-size: 250% 100%;
         background-color: transparent; background-image: linear-gradient(105deg, transparent 0%, transparent 38%, rgba(255, 255, 255, .55) 44%, #fff 50%, rgba(255, 255, 255, .55) 56%, transparent 62%, transparent 100%);
@@ -86,7 +88,7 @@
           showHide(el, l);
           spans.forEach((sp, i) => {
             const t = words[i].s;
-            if (l.mode === 'build' || l.mode === 'accent') { gsap.set(sp, { opacity: 0, y: fs * 0.18 }); tl.to(sp, { opacity: 1, y: 0, duration: 0.12, ease: 'power2.out' }, t); }
+            if (l.mode === 'build' || l.mode === 'accent') { gsap.set(sp, { opacity: 0, y: fs * 0.32 }); tl.to(sp, { opacity: 1, duration: 0.1, ease: 'power1.out' }, t); tl.to(sp, { y: 0, duration: 0.32, ease: 'back.out(2.4)' }, t); }
             if (l.mode === 'karaoke') { gsap.set(sp, { opacity: 0.38 }); tl.to(sp, { opacity: 1, duration: 0.08 }, t); }
             if (l.mode === 'blur') { gsap.set(sp, { opacity: 0.15, filter: 'blur(14px)' }); tl.to(sp, { opacity: 1, filter: 'blur(0px)', duration: 0.28, ease: 'power2.out' }, t); }
             if (l.mode === 'accent' && (l.accent || []).some((a) => a.toLowerCase() === words[i].w.toLowerCase().replace(/[^\w']/g, ''))) {
@@ -351,6 +353,18 @@
         const looks = [].concat(l.look);                     // one look, or several ("premium" + "shine")
         for (const el of lineEls.get(l) || []) {
           if (looks.includes('gradient')) el.classList.add('look-gradient');
+          if (looks.includes('negative')) el.classList.add('look-negative');   // composite with: node studio/fx.mjs negative
+          if (looks.includes('flash')) {
+            // each word lands under a solid white box that shows for one frame, then the word is there
+            const ws = [...el.querySelectorAll('.w')];
+            ws.forEach((w, i) => {
+              const t = (l.words[i] || l.words[l.words.length - 1]).s;
+              w.style.position = 'relative';
+              const b = mk('flashbox', w); gsap.set(b, { opacity: 0 });
+              tl.set(b, { opacity: 1 }, t); tl.set(b, { opacity: 0 }, t + 1 / 30);
+            });
+            sfx.push({ cue: 'whoosh-flash', at: +l.start.toFixed(2), note: 'white flash reveal' });
+          }
           if (looks.includes('premium')) el.classList.add('look-premium');
           if (looks.includes('flicker')) {
             // 6 one-frame flickers on entry, then it holds (the line's own motion runs underneath)
