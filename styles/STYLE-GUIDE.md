@@ -77,7 +77,8 @@ From Zeven 7's "7 Stupidly Simple CapCut Tricks" (youtu.be/odxTRtU0HH8, REFERENC
 | **Negative text** | A caption that is a window of inverted footage (only the letters invert) | Caption look `negative` on its own overlay, then `node studio/fx.mjs negative --overlay` (`--amount 0.7` to soften) |
 
 Every effect takes an exact range (`--from`/`--to` in seconds, or a word's timing), so any one can be
-placed on a single word or beat. As with every graphic, show a still of each before rendering.
+placed on a single word or beat. Bryan approved all of these on test stills of his footage (Oct 31 2026).
+As with every graphic, show a still of each before rendering in a real edit.
 
 ## Sound (applies to every style)
 

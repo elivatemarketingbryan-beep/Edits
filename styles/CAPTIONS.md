@@ -45,7 +45,7 @@ From Patrik Key's "How To Create 10 VIRAL Caption Styles Using CapCut" (youtu.be
 15:35, Aug 2026, ~114K views, studied Oct 31 2026 from each chapter's demo and the transcript). His
 two standing tips: **the font does most of the work** (tracking -1 to -2 on every caption font), and
 a good caption uses **2-3 motions, not one**. His "multiple word slide up" is our `slide`; his "3D
-viral text" is close to `stack` (add `tilt` below). All of them are **built in the `captions` template** (Oct 31 2026), tested on Bryan's reel footage;
+viral text" is close to `stack` (add `tilt` below). All of them are **built in the `captions` template** (Oct 31 2026), tested on Bryan's reel footage and approved by him the same day;
 looks can be combined (`"look": ["premium", "shine"]`). `apple` takes `title: true` to sit in the upper band.
 
 | Mode | What it looks like | Use it for | Sound |
