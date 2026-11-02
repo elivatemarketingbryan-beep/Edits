@@ -42,6 +42,8 @@ engines/content-os/       Content OS (the one copy; open this folder to work in 
                           repurposing (one long-form into a week of clips, reel ideas and captions), content calendar
 engines/faceless/         faceless-sprite style: voiceover in, pixel-art Bryan + motion-graphic browser cards out (its own HyperFrames engine;
                           its CLAUDE.md is the flow, engine/docs/pages.md the 14 B-roll page kinds). Sprite in sprite/, renders in videos/
+engines/earshot/          earshot (MIT): 252 sound effects made in code, rendered to an exact length / apex / pitch
+                          (via `node studio/sfx.mjs gen`); its listening tools are an opt-in install
 engines/video-fx/         Claude Video FX: 17 Remotion effects for talking heads with a person cut-out (skills video-fx, fx-*)
 engines/brand-motion/     brand-motion style: logo animation + kinetic type + original score (Python + Skia; skill brand-motion-studio)
 studio/words-convert.mjs  a job's WhisperX words in the shape each add-on kit reads (Remotion captions, segments, brand-motion)
@@ -475,6 +477,8 @@ through the five levels in order; each builds on the last.
   ig-/yt- research skills.
 - Legacy editor: clipper, capcut, premiere-pro, davinci-resolve, thumbnail-generator,
   background-music. Where both editors had a skill, the newer root version was kept.
+- earshot and real-sound (github.com/Leonxlnx/earshot, MIT, 2026-11-01): sound made in code + a real-recordings
+  soundtrack workflow; package in engines/earshot.
 - Creator packs (Bryan's downloads, 2026-10-31; each SKILL.md has a "Video Studio" block on top):
   NextPhase skill pack (nextphase-long-editing, nextphase-short-editing, motiongraphics, persa,
   vibecode, zak, and nextphase-studio, its intake router, which is NOT used here: the studio page

@@ -103,6 +103,8 @@ averaged **about 40 sounds a minute**: half were ticks and pops.
   per short video.
 - **Never over speech:** volumes stay 0.08-0.35 and the mix never ducks the voice.
   No sound on the presenter just talking; silence is allowed.
+- When the library has nothing that fits (or a riser must last exactly the gap, a whoosh must peak on the
+  cut), generate one: `node studio/sfx.mjs gen <earshot-id> <cue> --dur/--apex/--pitch` (CLAUDE.md).
 - Every placed sound is logged as an `sfx` edit, so on the review page the user can
   pause on it and say "turn this down" or "no sound here".
 

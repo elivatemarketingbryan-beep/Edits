@@ -4,12 +4,19 @@
 //   node studio/sfx.mjs place <in.mp4> <cues.json> <out.mp4> [--job <id>]
 //   node studio/sfx.mjs remotion <cues.json> [fps]      -> plan.audio.effects for engines/split-screen
 //   node studio/sfx.mjs peak <file.wav>                 -> seconds to the loudest point
+//   node studio/sfx.mjs gen <earshot-id> <cue> [--dur s] [--apex s] [--pitch E5] [--seed n] [--volume v] [--use "..."]
+//                                                       -> make a sound in code (engines/earshot bank, 252 sounds:
+//                                                          `earshot sfx list`) and register it as a cue
+//
+// Generated cues keep their earshot recipe in styles/sfx.json; if the file is missing, place() re-renders it.
+// earshot runs from its own venv: EARSHOT_PY, else ~/.cache/earshot-venv (setup: engines/earshot/UPSTREAM.txt).
 //
 // cues.json: [{ "cue": "pop", "at": 3.2, "volume": 0.2, "note": "tier card lands" }, ...]
 // `at` is the output-timeline second the sound should HIT; the file starts `peak` earlier.
 // `volume` is optional (defaults from styles/sfx.json). With --job, the cues are also
 // written to jobs/<id>/edits.json as "sfx" edits so the review page shows them.
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -26,12 +33,40 @@ const run = (args, opts = {}) => {
 const hasAudio = (file) => spawnSync('ffprobe', ['-v', 'error', '-select_streams', 'a', '-show_entries', 'stream=index', '-of', 'csv=p=0', file], { encoding: 'utf8' }).stdout.trim() !== '';
 const duration = (file) => Number(spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file], { encoding: 'utf8' }).stdout);
 
+// earshot (engines/earshot): sounds made in code, rendered by bank id with exact length, apex and pitch.
+const EARSHOT_PY = process.env.EARSHOT_PY || path.join(os.homedir(), '.cache', 'earshot-venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
+function earshotRender(recipe, out) {
+  if (!fs.existsSync(EARSHOT_PY)) throw new Error(`earshot isn't set up (no ${EARSHOT_PY}); see engines/earshot/UPSTREAM.txt`);
+  const args = ['-m', 'earshot', 'sfx', 'render', recipe.id, '-o', out, '--json'];
+  for (const k of ['dur', 'apex', 'pitch', 'seed']) if (recipe[k] != null) args.push('--' + k, String(recipe[k]));
+  const r = spawnSync(EARSHOT_PY, args, { encoding: 'utf8' });
+  if (r.status !== 0) throw new Error(`earshot: ${(r.stderr || r.stdout).trim().split('\n').pop()}`);
+  return JSON.parse(r.stdout).meta;
+}
+
+function gen(id, cue, opts) {
+  if (!id || !cue) throw new Error('usage: node studio/sfx.mjs gen <earshot-id> <cue> [--dur s] [--apex s] [--pitch E5] [--seed n] [--volume v] [--use "..."]');
+  if (!/^[a-z0-9-]+$/.test(cue)) throw new Error('cue names are lowercase letters, digits and dashes');
+  const recipe = { id };
+  for (const k of ['dur', 'apex', 'pitch', 'seed']) if (opts[k] != null) recipe[k] = k === 'pitch' ? opts[k] : Number(opts[k]);
+  const file = `gen/${cue}.wav`;
+  fs.mkdirSync(path.join(SFX_DIR, 'gen'), { recursive: true });
+  const meta = earshotRender(recipe, path.join(SFX_DIR, file));
+  recipe.seed = meta.seed;                               // pin the take so a re-render is identical
+  const libFile = path.join(ROOT, 'styles', 'sfx.json'), lib = JSON.parse(fs.readFileSync(libFile, 'utf8'));
+  lib.cues[cue] = { file, peak: +meta.peak_s.toFixed(3), volume: Number(opts.volume ?? lib.cues[cue]?.volume ?? 0.2),
+    use: opts.use ?? lib.cues[cue]?.use ?? `generated: ${id}`, earshot: recipe };
+  fs.writeFileSync(libFile, JSON.stringify(lib, null, 2) + '\n');
+  console.log(`${cue}: ${file} from ${id} (${meta.dur_s.toFixed(2)} s, peak at ${meta.peak_s.toFixed(3)} s, ${meta.checks?.summary ?? 'checked'})`);
+}
+
 function loadCues(file) {
   const raw = JSON.parse(fs.readFileSync(file, 'utf8'));
   const cues = Array.isArray(raw) ? raw : raw.cues;
   return cues.map((c, i) => {
     const def = LIB[c.cue];
-    if (!def) throw new Error(`Cue ${i + 1}: unknown sound "${c.cue}". Run "node studio/sfx.mjs list".`);
+    if (!def) throw new Error(`Cue ${i + 1}: unknown sound "${c.cue}". Run "node studio/sfx.mjs list", or make it: "node studio/sfx.mjs gen <earshot-id> ${c.cue}".`);
+    if (def.earshot && !fs.existsSync(path.join(SFX_DIR, def.file))) earshotRender(def.earshot, path.join(SFX_DIR, def.file));
     if (!(c.at >= 0)) throw new Error(`Cue ${i + 1} (${c.cue}): "at" must be a time in seconds`);
     return { ...c, file: path.join(SFX_DIR, def.file), peak: def.peak, volume: c.volume ?? def.volume };
   }).sort((a, b) => a.at - b.at);
@@ -97,5 +132,9 @@ try {
   else if (cmd === 'place') { const j = rest.indexOf('--job'); place(rest[0], rest[1], rest[2], j >= 0 ? rest[j + 1] : null); }
   else if (cmd === 'remotion') remotion(rest[0], Number(rest[1]) || 30);
   else if (cmd === 'peak') peak(rest[0]);
-  else console.log('usage: node studio/sfx.mjs list | place <in> <cues.json> <out> [--job <id>] | remotion <cues.json> [fps] | peak <file>');
+  else if (cmd === 'gen') {
+    const opt = (k) => { const i = rest.indexOf('--' + k); return i >= 0 ? rest[i + 1] : undefined; };
+    gen(rest[0], rest[1], { dur: opt('dur'), apex: opt('apex'), pitch: opt('pitch'), seed: opt('seed'), volume: opt('volume'), use: opt('use') });
+  }
+  else console.log('usage: node studio/sfx.mjs list | place <in> <cues.json> <out> [--job <id>] | remotion <cues.json> [fps] | peak <file> | gen <earshot-id> <cue> [...]');
 } catch (e) { console.error(e.message); process.exit(1); }

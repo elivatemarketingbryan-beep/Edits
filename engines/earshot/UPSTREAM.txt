@@ -1,0 +1,13 @@
+earshot 0.4.0: https://github.com/Leonxlnx/earshot @ 591fa3e (2026-10-22), MIT licence (LICENSE).
+Copied without eval/ and tests/. The package itself is untouched; Video Studio talks to it through studio/sfx.mjs.
+
+Setup (once per computer; ~160 MB, no AI models, no network at render time):
+  uv venv --python 3.11 ~/.cache/earshot-venv
+  uv pip install --python ~/.cache/earshot-venv/Scripts/python.exe numpy scipy soundfile soxr pyloudnorm
+  uv pip install --python ~/.cache/earshot-venv/Scripts/python.exe --no-deps -e engines/earshot
+(macOS/Linux: .../bin/python). Override the interpreter with EARSHOT_PY.
+
+That covers making sounds (sfx render / kit). The listening tools (describe, match, find, timeline, sheet,
+critique, forge) also need torch + transformers and download the CLAP/AST models: install them only when
+needed and ask Bryan first (~1-2 GB with CPU-only torch). The `llm` command uploads audio to Google Gemini:
+never use it without Bryan's explicit yes for that file.
