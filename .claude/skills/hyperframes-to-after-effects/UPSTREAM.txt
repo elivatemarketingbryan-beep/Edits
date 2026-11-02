@@ -1,0 +1,1 @@
+Clipwing skills: https://github.com/Clipwing/skills @ edbefcb (2026-10-21). Scripts MIT, uisfx sounds CC0 (see README).

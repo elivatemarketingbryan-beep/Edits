@@ -1,0 +1,12 @@
+{
+  "libraries": [
+    { "name": "motionix", "path": "../../../assets/sound-effects", "tier": "main" },
+    { "name": "studio", "path": "../../../assets/sfx", "tier": "extra" }
+  ],
+  "uisfx": {
+    "path": "vendor/node_modules/uisfx",
+    "default_pack": "studio"
+  },
+  "skip_dir_names": ["_mister horse previews", "gen"],
+  "index_path": "library_index.json"
+}

@@ -477,6 +477,9 @@ through the five levels in order; each builds on the last.
   ig-/yt- research skills.
 - Legacy editor: clipper, capcut, premiere-pro, davinci-resolve, thumbnail-generator,
   background-music. Where both editors had a skill, the newer root version was kept.
+- Clipwing (github.com/Clipwing/skills, MIT, 2026-11-01): real-sfx (picks real recordings from assets/sound-effects,
+  assets/sfx and 78 CC0 UI sounds for each moment; index not built yet) and hyperframes-to-after-effects (needs
+  After Effects, not installed).
 - earshot and real-sound (github.com/Leonxlnx/earshot, MIT, 2026-11-01): sound made in code + a real-recordings
   soundtrack workflow; package in engines/earshot.
 - Creator packs (Bryan's downloads, 2026-10-31; each SKILL.md has a "Video Studio" block on top):
