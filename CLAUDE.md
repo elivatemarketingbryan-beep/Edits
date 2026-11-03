@@ -19,6 +19,7 @@ jobs/<id>/                one folder per dropped video (the page's state + deliv
 projects/<id>/            the editing work for that job (root pipeline layout, see docs/editor-pipeline.md)
 styles/catalog.json       every style and tool: id, engine, status, ranking cues, recipe
 styles/STYLE-GUIDE.md     what every style looks like, studied frame by frame. READ before building a style
+styles/EDIT-PREFERENCES.md  Bryan's editing taste (e.g. YouTube: don't overdo effects). READ before ideas, edits and revisions; it wins over the guide. Add what he tells you
 styles/brand.json         the user's colours and fonts; every style uses these
 styles/sfx.json           named sound effects (cue -> file, peak, volume, when to use)
 studio/sfx.mjs            places sound effects on a video, peak-aligned; logs them for review
@@ -59,7 +60,8 @@ scripts/transcribe.sh     WhisperX large-v3 word timings on the GPU (CUDA float1
 ## Studio jobs: what to do when the user says "run my studio jobs"
 
 0. `node studio/check.mjs` first (a few seconds). It checks the folder structure,
-   styles, sounds, skills and tools. Fix any FAIL before editing.
+   styles, sounds, skills and tools. Fix any FAIL before editing. Then read
+   `styles/EDIT-PREFERENCES.md`; its rules hold for every job.
 1. `node studio/jobs.mjs pending` lists jobs waiting on Claude. Work them oldest first.
    `node studio/jobs.mjs show <id>` prints one. Each job is `jobs/<id>/job.json` plus
    `formats.json`, `edits.json` and `notes.json` beside it.
@@ -153,7 +155,9 @@ and stores it on a Notion page (schema: that folder's `notion-pipeline.md`; data
 `collection://b25789bb-ffea-8346-8ef9-87d238345cb6`). In the `formats` stage, after transcribing:
 
 1. Query the Notion data source for pages with Status `Scripting` or `Filming` (and an empty
-   **Studio job**). For each, fetch the page and save its body to
+   **Studio job**), and the same in the personal account's pipeline
+   (`collection://2681fcbe-9a1c-4d38-acb3-3bf490293f67`, see `engines/content-os/notion-pipeline.md`);
+   status flips and `Studio job` go to whichever pipeline the matched page is in. For each, fetch the page and save its body to
    `projects/<id>/scripts/<notion-page-id>.md`.
 2. `node studio/script-cues.mjs score projects/<id>/transcript/words.json projects/<id>/scripts/*.md`.
    The highest score at or above 0.6 is this clip's script. Below 0.6 for all: no script;
@@ -209,6 +213,8 @@ stacks its ideas into 2-3 ready-made combos and the pick screen leads with them.
 - Make them different levels: one **max** combo (an effect or punch-in every 2-4 s, 6-10
   ideas, marked `fav` if the footage can take it), one **punchy** (4-6), one **clean** (2-3
   on the biggest beats). Names are 1-3 words; `pitch` sells the whole edit in one line.
+  These levels are for short-form. YouTube / 16:9 follows `styles/EDIT-PREFERENCES.md`
+  (no max combo, effects spaced out).
 - Picking a combo ticks its ideas; the user can add or drop single ideas after.
   `job.json` gets `combo` (the id they started from) and `picked` (the final idea list,
   which is what gets built). Over 4 Video FX effects in one reel: render each on its own

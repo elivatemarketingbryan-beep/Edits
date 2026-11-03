@@ -17,7 +17,7 @@ const section = (t) => console.log(`\n${t}`);
 section('Folders and entry files');
 for (const rel of ['CLAUDE.md', 'START_HERE.md', 'Start Studio.cmd', 'studio/server.mjs', 'studio/jobs.mjs', 'studio/sfx.mjs',
   'studio/public/index.html', 'studio/public/review.html', 'studio/public/studio.css',
-  'styles/catalog.json', 'styles/STYLE-GUIDE.md', 'styles/SOUND-RULES.md', 'styles/sfx.json', 'styles/brand.json',
+  'styles/catalog.json', 'styles/STYLE-GUIDE.md', 'styles/EDIT-PREFERENCES.md', 'styles/SOUND-RULES.md', 'styles/sfx.json', 'styles/brand.json',
   'docs/editor-pipeline.md', 'lib', 'presets', 'workflows', 'assets/sfx', 'assets/sound-effects', '.claude/skills', '.claude/settings.json',
   'engines/split-screen/AGENTS.md', 'engines/split-screen/scripts/editor.mjs', 'engines/split-screen/src/custom/registry.tsx',
   'engines/split-screen/inputs', 'engines/split-screen/docs',

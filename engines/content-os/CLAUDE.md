@@ -131,7 +131,11 @@ The front half is one linear flow. Each step has a dedicated skill (or is the cr
 ### Videos live in Notion: resolve + sync
 
 Every video we work on is a page in the Notion content DB (`notion-pipeline.md` = live schema; flow
-`Idea → Scripting → Filming → Editing → Review → Ready → Posted → Archived`). Two standing rules:
+`Idea → Scripting → Filming → Editing → Review → Ready → Posted → Archived`). There are **two
+pipelines, one per Instagram account**: the Content Database (contractor account) and the Personal
+Content Pipeline (personal account); IDs for both in `notion-pipeline.md`. Pick the account first
+with the topic test in `platforms.md` ("who is it for?"), then read and write only that account's
+pipeline; a personal idea always gets a Pillar. Two standing rules:
 
 1. **Resolve every video reference.** When the user mentions a video by name or description, find its
    page before doing anything with it: `notion-search` with ONE distinctive keyword from the title,
@@ -210,7 +214,8 @@ to paste or export an API token in chat.
   `voice-corpus/` examples, linted). Don't write scripts in chat or invent hook/structure rules.
 - **Every piece of content ties back to one CTA:** the offer in `backbone/offer.md` (comment keyword
   or a direct mention). Nothing in `backbone/offer.md`'s "not sold" list, ever. The skills handle this;
-  just don't drop CTAs by accident.
+  just don't drop CTAs by accident. Exception: the personal Instagram account (`platforms.md`) is
+  audience-building only and has no offer CTA until Bryan launches its course.
 - **Document, don't manufacture.** Authenticity outperforms. Real numbers only, from the backbone.
 - **Never invent; mark the gap.** No statistic, client result, quote, date or story that isn't in a
   transcript, `backbone/` or `voice-corpus/`. If a piece needs a number you don't have, write

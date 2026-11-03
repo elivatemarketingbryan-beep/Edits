@@ -29,10 +29,15 @@ import re
 import cutlist as cutlist_mod
 
 
+def normalize_words(words: list[dict]) -> list[dict]:
+    """scripts/transcribe.sh writes {w, s, e}; the pipeline reads {word, start, end}."""
+    return [w if "word" in w else {"word": w["w"], "start": w["s"], "end": w["e"]} for w in words]
+
+
 def load_words(path: str) -> list[dict]:
     with open(path, encoding="utf-8") as f:
         doc = json.load(f)
-    return doc["words"]
+    return normalize_words(doc["words"])
 
 
 def load_corrections(path: str) -> list[dict]:

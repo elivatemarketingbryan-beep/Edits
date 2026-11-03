@@ -26,6 +26,34 @@ scratch (ID `a14dc4010f6c4b0abb73881483eaa43a`) before this template was noticed
 moved out of it into this one, and that database is now unused — safe to delete once confirmed
 empty, or leave it, the creator's call.
 
+### Second pipeline: the personal account
+
+Bryan's personal Instagram (lifestyle of a marketer, audience-building; see `platforms.md`) has its
+own database so the two accounts never mix. **Everything for the personal account goes here; the
+contractor account stays in the database above.**
+
+| Field | Value |
+|-------|-------|
+| **Database name** | Personal Content Pipeline |
+| **Database ID** | `a5858bbca806476987e2f1070f7094ad` |
+| **Data source ID** | `2681fcbe-9a1c-4d38-acb3-3bf490293f67` (parent for `notion-create-pages`; search scope `collection://2681fcbe-9a1c-4d38-acb3-3bf490293f67`) |
+| **Parent page** | Elivate Marketing Content (`28b789bbffea83a78c1d819cb66c203c`) |
+| **URL** | https://app.notion.com/p/a5858bbca806476987e2f1070f7094ad |
+| **Views** | Board (by Status), Calendar (by Post Date), By pillar |
+
+Same Status flow and the same Title / Post Date / Source URL / Raw Footage / Edited Video / Studio job
+properties as above. Different:
+
+| Name | Type | Notes |
+|------|------|-------|
+| **Pillar** | `select` | The topic, required on every idea: `Building from zero` · `Day in the life` · `Faith & purpose` · `Family & roots` · `Lessons from building` · `Milestones & wins` (what each covers: `platforms.md`) |
+| **Format** | `select` | `Short clip` (under 20 s, little talking) · `Carousel` · `Talking reel` · `Vlog` |
+| **Edit style** | `select` | Only the personal-fit Video Studio formats: Personal reel, Vlog, Natural story, Cinematic type, B-roll and stacked text, Fitted captions, Image cluster, Visual essay, TikTok style, Yap and show |
+| **Script shape** | `select` | `Story` · `Relatable thought` · `Caption-led` · `Explainer` · `Proof` |
+| **Caption** | `text` | Short clips and carousels carry the story in the caption; write it here |
+
+No `Type` or `Status 1`. Icon on create: 🌱.
+
 ### If this database is ever moved/recreated
 
 Re-fetch it with `notion-fetch`, copy the Database ID, Data source ID, and URL into the table above.

@@ -25,6 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[4] / "lib"))
 
 import cutlist as cutlist_mod
+import transcript as transcript_mod
 from filler_detect import build_candidate_spans
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
@@ -61,6 +62,8 @@ def probe_fps(path: Path) -> float:
          "-of", "default=noprint_wrappers=1:nokey=1", str(path)],
         check=True, capture_output=True, text=True,
     ).stdout.strip()
+    # iPhone .mov files list the video stream twice (stream group + stream); keep the first rate
+    out = next((l.strip() for l in out.splitlines() if "/" in l), out.splitlines()[0])
     num, _, den = out.partition("/")
     den = den or "1"
     return float(num) / float(den)
@@ -79,7 +82,7 @@ def main() -> None:
 
     with open(words_path, encoding="utf-8") as f:
         words_doc = json.load(f)
-    words = words_doc["words"]
+    words = transcript_mod.normalize_words(words_doc["words"])
 
     raw_file = find_raw_file(job_dir, words_doc.get("source"))
     fps = probe_fps(raw_file)
