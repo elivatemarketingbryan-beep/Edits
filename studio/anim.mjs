@@ -4,7 +4,8 @@
 //   node studio/anim.mjs new <name> <9x16|16x9> <outDir> [--text "..."] [--duration 6] [--image pic.jpg]
 //        [--screen rec.mp4 --face me.mp4] [--images a.png,b.png] [--times 0.5,1.8] [--side left|right]
 //   (glow-pill = search-bar with no text; motion-background needs --image;
-//    screen-window needs --screen and --face; icon-stack takes --images, --times, --side)
+//    screen-window needs --screen and --face; icon-stack takes --images, --times, --side;
+//    tier-board takes --text "Top | Bottom > Tier, ...", --images, --times name,tier pairs)
 //
 // Fills the template's __TOKENS__ with the format size, the text and styles/brand.json,
 // writes a package.json pinned to the repo's HyperFrames version, and prints the render
@@ -48,10 +49,17 @@ if (cmd === 'list') {
     'level-meter': 'Your level || Beginner 25 | Intermediate 60 | Advanced 90',
     'icon-stack': 'Claude, ChatGPT, Gemini',
     'brand-background': 'circle lines streak', 'shape-transition': 'bounce',
+    'tier-board': 'Google | Reviews > B, Yard | Signs > C, Referral | Program > S, Door | Knocking > D, Facebook | Ads > A',
   });
   const text = opt('text', DEFAULT_TEXT[name] ?? '');
   const DEFAULT_DURATION = { 'search-bar': Math.ceil(text.length * 0.11 + 3), 'glow-pill': 6, counter: 4, 'article-highlight': 7, 'motion-background': 10, 'map-route': 8,
     'chapter-tracker': 4, 'level-meter': 6, 'screen-window': 8, 'icon-stack': 4, 'brand-background': 8, 'shape-transition': 3 };
+  // tier-board: two --times per item (name, tier word); it ends 2 s after the last card lands.
+  if (name === 'tier-board' && !opt('duration')) {
+    const t = (opt('times') || '').split(',').map(Number).filter((n) => !Number.isNaN(n));
+    const n = text.split(',').filter((s) => s.trim()).length;
+    DEFAULT_DURATION['tier-board'] = Math.ceil(Math.max(t.length ? Math.max(...t) : 0, 0.8 + (n - 1) * 3.2 + 1.3) + 2);
+  }
   const duration = Number(opt('duration', DEFAULT_DURATION[name] ?? 6));
 
   // Media for screen-window (--screen, --face) and icon-stack (--images a.png,b.png):
@@ -86,7 +94,7 @@ if (cmd === 'list') {
   // library (assets/logos/<name>.png, e.g. "Claude" -> claude.png). Unknown names fall
   // back to a letter tile in the template.
   const given = (opt('images') || '').split(',').map((s) => s.trim()).filter(Boolean);
-  const icons = template !== 'icon-stack' ? [] : text.split(',').map((s) => s.trim()).filter(Boolean).map((n, i) => {
+  const icons = template === 'tier-board' ? tierCards(copyIn, text, given, (opt('icons') || '').split(',').map((s) => s.trim())) : template !== 'icon-stack' ? [] : text.split(',').map((s) => s.trim()).filter(Boolean).map((n, i) => {
     if (given[i]) return copyIn(given[i], `icon-${i + 1}`);
     const logo = path.join(ROOT, 'assets', 'logos', n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '.png');
     return fs.existsSync(logo) ? copyIn(logo, `icon-${i + 1}`) : null;
@@ -129,7 +137,7 @@ if (cmd === 'list') {
     } else fs.copyFileSync(src, path.join(out, file));
   }
   // Overlays (transparent background) render to WebM so they can sit on top of footage.
-  const overlay = ['icon-stack', 'captions', 'shape-transition'].includes(template);
+  const overlay = ['icon-stack', 'captions', 'shape-transition', 'tier-board'].includes(template);
   const renderCmd = `npx --yes hyperframes@${pin} render --quality high ${overlay ? '--format webm -o out.webm' : '-o out.mp4'}`;
   fs.writeFileSync(path.join(out, 'package.json'), JSON.stringify({ name: `anim-${name}`, private: true, type: 'module',
     scripts: { check: `npx --yes hyperframes@${pin} check`, render: renderCmd } }, null, 2));
@@ -137,6 +145,39 @@ if (cmd === 'list') {
 } else if (cmd !== 'sample') {
   console.log('usage: node studio/anim.mjs list | new <name> <9x16|16x9> <outDir> [--text "..."] [--duration 6]');
 }
+
+// tier-board cards: a picture from --images, otherwise a small 3D icon for what the item is,
+// from the emoji pack (engines/split-screen/public/assets/pack/emoji). --icons names one per
+// item to override ("house,trophy"); otherwise the item's name is matched against ICON_WORDS.
+function tierCards(copyIn, text, given, named) {
+  const pack = path.join(ROOT, 'engines', 'split-screen', 'public', 'assets', 'pack', 'emoji');
+  const files = fs.existsSync(pack) ? fs.readdirSync(pack) : [];
+  const find = (n) => files.find((f) => f.toLowerCase() === `${n.toLowerCase()}.png`);
+  return text.split(',').map((s) => s.trim()).filter(Boolean).map((item, i) => {
+    if (given[i]) return copyIn(given[i], `card-${i + 1}`);
+    const name = item.split('>')[0].toLowerCase();
+    const hit = named[i] ? find(named[i]) : find(iconWords().find(([re]) => re.test(name))?.[1] ?? 'Bar Chart');
+    if (!hit) { console.error(`No icon "${named[i]}" in ${pack}`); process.exit(1); }
+    return { icon: copyIn(path.join(pack, hit), `icon-${i + 1}`) };
+  });
+}
+
+// First match wins, so the specific words come before the broad ones.
+function iconWords() { return [
+  [/review|rating|testimonial|reputation/, 'Thumbs up'], [/referral|word of mouth|network/, 'raising hands'],
+  [/\bads?\b|advert|facebook|instagram|marketing|promo|campaign/, 'Megaphone'], [/google|search|seo|website|online/, 'Globe with Meridians'],
+  [/loss|cost|expense|debt|overhead|waste/, 'Chart Decreasing'], [/profit|margin|growth|revenue|roi/, 'Chart Increasing'],
+  [/bank|balance|cash|money|pay|price|budget|sales|income|invoice/, 'Money with Wings'],
+  [/book|calendar|schedule|appointment|deadline/, 'calendar'], [/time|hour|speed|fast|slow/, 'Hourglass'],
+  [/estimate|bid|quote|report|track|number|kpi|metric|data|stat/, 'clipboard'],
+  [/lead|customer|client|homeowner|crew|hire|employee|team/, 'Bust in Silhouette'],
+  [/job|project|build|construction|contractor|site|remodel|renovat/, 'building construction'],
+  [/sign|flyer|mailer|postcard/, 'red flag'], [/door|knock/, 'key'], [/house|home|roof|yard|kitchen|bath/, 'house'],
+  [/email|newsletter/, 'Email'], [/phone|call|text|sms/, 'phone'], [/truck|material|supplier|deliver/, 'delivery truck'],
+  [/tool|system|process|software|crm/, 'Gear'], [/\bai\b|automat|bot/, 'robot'], [/goal|target|focus/, 'Bullseye'],
+  [/idea|tip|strategy/, 'Light Bulb'], [/video|content|reel|youtube/, 'Movie Camera'], [/social|post|tiktok/, 'Selfie'],
+  [/train|course|learn|school/, 'graduation cap'], [/win|best|award|top/, 'Trophy'], [/fail|mistake|risk|warning/, 'x'],
+]; }
 
 // A demo of every caption mode with even word timings (our own sample lines).
 function sampleCaptions() {

@@ -276,6 +276,12 @@ and tips-breakdown follow `apple-liquid-glass`.
   orange, yellow, green, blue, purple, pink).
 - Each item appears as a **big thumbnail-style card** (bold caps title, image) over the
   board, then **shrinks into its tier row** when the tier is said.
+- **Timing (measured, REFERENCES.md Christian D Moreno):** the card hard-cuts in ~0.1-0.15 s
+  before the item is named (no scale-in), holds, then on the tier letter shrinks and flies into
+  the row in ~0.5 s ease-in-out, landing as a small thumbnail after any cards already there.
+  Card = image + two-line caps title (accent top word, white bottom word, dark outline), ~58% of
+  board width. Template: `tier-board` (ANIMATIONS.md). Cues: `[RANK]`/`[TIER]` on the tier word; the item's name is the card's entry.
+  Board can sit above the head (over the wall) when there's headroom.
 - Caption above the board in white italic caps, active word highlighted yellow.
 
 ### tiktok-style: TikTok style

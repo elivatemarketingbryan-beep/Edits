@@ -302,3 +302,38 @@ What he teaches, and where it went in Video Studio:
 - **Deep Glow look** (CapCut's Glow 2 on a compound clip): don't overuse it.
 - CapCut note for doing these by hand: he uses CapCut 6.4.0; most of these need a
   compound clip first.
+
+---
+
+## Christian D Moreno (@christiandavidm_): contractor numbers tier list
+
+instagram.com/p/DfAxsuskU5C · 0:39 · 9:16 reel · Oct 2026. Same niche as Bryan (contractors).
+Studied frame by frame for the `ranking` style's item pop-up; it's that style's reference.
+
+- **Layout:** one static talking-head shot, no cuts or zooms. A dark tier board (S/A/B/C/D/E/F,
+  pastel row labels red, orange, yellow, green, blue, purple, pink) fills the top ~40% over the
+  wall, above his head. A fixed two-line title in a white box sits at chest ("Ranking numbers
+  CONTRACTORS use to track performance"), with small 2-3 word captions just above it.
+- **The pop-up (the move to copy):** when he names an item, a big card **hard-cuts in** over
+  the middle of the board (no scale or fade), ~0.1-0.15 s *before* the name is said.
+  It's a 16:9 stock-style photo of the thing (a hand on a phone in a truck for "bank balance",
+  a man at a laptop for "net profit") with a two-line caption: first word(s) in **yellow**
+  heavy condensed caps at the top, the rest in **white** caps at the bottom, both with a dark
+  outline. Card ≈ 58% of the board's width, a little right of centre.
+- **The drop:** it holds while he reads the name, then on the tier letter ("C tier") it
+  **shrinks and flies into that row** in ~0.5 s (ease-in-out), landing as a small thumbnail at
+  the left of the row, after any cards already there. Measured: "bank" 4.58 s → card in 4.47 s;
+  "C" 5.82 s → shrink starts ~5.8 s, lands ~6.4 s. "company" 13.45 s → card in ~13.3 s;
+  "A" 14.53 s → lands ~15.0 s.
+- **Rhythm:** a new item every ~6-8 s (name → tier → one-line reason), 5 items in 39 s. The
+  board fills up over the video, so the last frame is the full verdict: a natural screenshot
+  and a reason to watch to the end. Caption: "Be honest, which one do you use?" (comment bait).
+- **Why it works:** the card tells you what's being ranked before your ear catches it, and the
+  shrink-into-row is a tiny payoff every few seconds. The verdicts are contrarian (bookings = F,
+  profit by job = S), so the board itself argues the point.
+- **Built as** the `tier-board` template (styles/ANIMATIONS.md).
+- **For Bryan:** build it in `ranking` with brand purple on the board frame and the yellow title
+  word swapped for the brand accent; cards from real contractor screenshots (his clients' job
+  costing, invoices) beat stock photos. Add a pop SFX on the card cut-in and a soft whoosh into
+  a thud/stamp when it lands in its row (SOUND-RULES); the reference may have none (not checked
+  by ear).
