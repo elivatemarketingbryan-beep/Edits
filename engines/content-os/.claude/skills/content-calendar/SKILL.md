@@ -1,6 +1,6 @@
 ---
 name: content-calendar
-description: Shows and plans the content week: what's going out, what's drafted, what's still empty and what's at risk, across videos (Notion pipeline) and text pieces (drafts/). Triggers: /content-calendar, what's going out this week, what do I still owe, plan next week, plan November, fill the calendar, I posted the reel.
+description: Shows and plans the content week: what's going out, what's drafted, what's still empty and what's at risk, across videos (Notion pipeline) and text pieces (drafts/). Plans daily Story sequences, reels and weekly YouTube per references/content-system.md. Triggers: /content-calendar, plan my stories, what's going out this week, what do I still owe, plan next week, plan November, fill the calendar, I posted the reel.
 ---
 
 # Running the calendar
@@ -31,7 +31,11 @@ succeeding, which also flips Notion to `Posted`). A calendar that lies is worse 
 
 ## Planning ("plan next week", "fill November")
 
-1. **Read the commitments** in `platforms.md` (cadence per platform). That's the floor.
+1. **Read the commitments** in `platforms.md` (cadence per platform). That's the floor. Then read
+   `.claude/skills/content-calendar/references/content-system.md`: **daily Story sequences** (one row
+   per day, platform `IG Story`, following its Mon–Sun calendar with exactly one hard CTA, on Thu),
+   **reels with no direct CTA**, and **one YouTube long-form a week** that Tue's and Sat's Stories point
+   at. `platforms.md` wins wherever the two disagree.
 2. **Find open slots** in the next 14 days.
 3. **Find material:** Notion pages at `Filming`/`Ready` (videos nearly done), unmined long-forms in
    Video Studio `../../projects/`, research in `knowledge/`.
@@ -54,6 +58,8 @@ Notion page to `Posted` + `Post Date` if it's a video and that isn't done yet.
 - A Notion page at `Ready` with no slot (finished and not scheduled)
 - Anything `drafted` for 10+ days and never published (dead, or approval is stuck)
 - Four or more pieces in a row with no CTA to the offer
+- A day with no Story row; no hard Story CTA this week, or more than one; a Tue/Sat Story CTA with
+  no YouTube video to point at; a reel carrying a direct offer CTA; no long-form this week
 
 ## Running unattended
 
