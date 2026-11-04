@@ -1,6 +1,6 @@
 ---
 name: content-calendar
-description: Shows and plans the content week: what's going out, what's drafted, what's still empty and what's at risk, across videos (Notion pipeline) and text pieces (drafts/). Plans daily Story sequences, reels and weekly YouTube per references/content-system.md. Triggers: /content-calendar, plan my stories, what's going out this week, what do I still owe, plan next week, plan November, fill the calendar, I posted the reel.
+description: Shows and plans the content week: what's going out, what's drafted, what's still empty and what's at risk, across videos (Notion pipeline) and text pieces (drafts/). Plans daily Story sequences (references/story-sequences.md) and reels + YouTube (references/reels-youtube.md) as separate rule sets. Triggers: /content-calendar, plan my stories, what's going out this week, what do I still owe, plan next week, plan November, fill the calendar, I posted the reel.
 ---
 
 > **Video Studio:** this skill lives in `engines/content-os` (Content OS, inside this repo). Before running anything from it, `cd engines/content-os` and use that folder's copy (`.claude/skills/content-calendar/`), which has its scripts and reference files. Every path below is relative to that folder. This copy only lets Claude find the skill from the Video Studio folder.
@@ -34,10 +34,13 @@ succeeding, which also flips Notion to `Posted`). A calendar that lies is worse 
 ## Planning ("plan next week", "fill November")
 
 1. **Read the commitments** in `platforms.md` (cadence per platform). That's the floor. Then read
-   `.claude/skills/content-calendar/references/content-system.md`: **daily Story sequences** (one row
-   per day, platform `IG Story`, following its Mon–Sun calendar with exactly one hard CTA, on Thu),
-   **reels with no direct CTA**, and **one YouTube long-form a week** that Tue's and Sat's Stories point
-   at. `platforms.md` wins wherever the two disagree.
+   the two separate rule sets in `.claude/skills/content-calendar/references/`:
+   - `story-sequences.md` for **Stories only**: the Miro board's week, one row per day with platform
+     `IG Story`, the A→D objection rotation on Tuesday, and exactly one hard CTA (Friday).
+   - `reels-youtube.md` for **reels and YouTube only**: no direct offer CTA on reels, the
+     `platforms.md` mix, and the 4 YouTube formats.
+
+   Never apply one set's rules to the other. `platforms.md` wins wherever a file disagrees with it.
 2. **Find open slots** in the next 14 days.
 3. **Find material:** Notion pages at `Filming`/`Ready` (videos nearly done), unmined long-forms in
    Video Studio `../../projects/`, research in `knowledge/`.
@@ -60,8 +63,7 @@ Notion page to `Posted` + `Post Date` if it's a video and that isn't done yet.
 - A Notion page at `Ready` with no slot (finished and not scheduled)
 - Anything `drafted` for 10+ days and never published (dead, or approval is stuck)
 - Four or more pieces in a row with no CTA to the offer
-- A day with no Story row; no hard Story CTA this week, or more than one; a Tue/Sat Story CTA with
-  no YouTube video to point at; a reel carrying a direct offer CTA; no long-form this week
+- The gaps listed at the end of `story-sequences.md` (Stories) and `reels-youtube.md` (reels, YouTube)
 
 ## Running unattended
 

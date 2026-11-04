@@ -8,9 +8,9 @@ defaults and say which cadence they assumed.
 
 - **Reels:** <<REELS_PER_WEEK, e.g. 5>> per week. Edited in Video Studio, posted by `auto-poster`.
 - **Carousels:** <<CAROUSELS_PER_WEEK, e.g. 1-2>> per week, from `carousel-generator`.
-- **Stories:** a sequence **every day** on the Mon–Sun calendar in
-  `.claude/skills/content-calendar/references/content-system.md`. That's 3 CTAs a week (2 soft to
-  YouTube on Tue and Sat, 1 hard on Thu, DM "LEADS"), 5 native edits plus 2 high-quality ones.
+- **Stories:** a sequence **every day** on the Miro board's week in
+  `.claude/skills/content-calendar/references/story-sequences.md` (its own rules, separate from reels).
+  That's 3 CTAs a week (2 soft on Wed and Sat, 1 hard on Fri, DM "LEADS"), 5 native edits plus 2 high-quality ones.
 - **Captions:** hook before "more", short lines, the comment keyword from `backbone/offer.md` as the CTA.
   Shape, length and CTA rules from competitor data: `knowledge/ig-caption-patterns.md`.
 - **Hashtags:** 5-6 on their own line: `#contractors #contractormarketing #googlereviews #homeimprovement #leadgeneration #contractorsofinstagram`, swapping #googlereviews for the video's topic and adding a trade tag when it fits.
