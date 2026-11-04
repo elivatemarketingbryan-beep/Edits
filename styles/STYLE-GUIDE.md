@@ -111,7 +111,7 @@ averaged **about 40 sounds a minute**: half were ticks and pops.
 Style flavours (on top of the rules above):
 - **Dense** (graphics on every beat): business-reel, explainer-panel, glass-explainer,
   split-reel, depth-ui, ranking, top-5-ranking, rapid-list, if-then-grid,
-  this-vs-that, paper-collage, tips-breakdown, educational-youtube, screen-tutorial, youtube-clips,
+  this-vs-that, do-or-dont, paper-collage, tips-breakdown, educational-youtube, screen-tutorial, youtube-clips,
   paper-cut-out, sofa-wall, graph-rise, orbit-spin, phone-frame, news-wall,
   interface-world, tick-list,
   coaching-call-clips, faceless-sprite (its engine places them itself), brand-motion (its
@@ -339,6 +339,21 @@ and tips-breakdown follow `apple-liquid-glass`.
   "Never"), a rule under them and a divider down the middle.
 - Each thing named **drops into its column** as a small chip.
 - Spoken examples appear as an accent quote callout above the head. Chest captions.
+
+### do-or-dont: Do or don't
+- Presenter full frame, seated or standing, a fixed **title pill** above the head (white box,
+  bold dark sans, e.g. "Contractor finances 101").
+- Two **labels at chest height** either side of the body: green "DO IT" left, red "DON'T DO
+  IT" right (white heavy caps on solid colour; rename with "Always | Never").
+- Each tip appears as a **tall picture card** (about 30% of the frame wide, 9:16-ish) over the
+  lap: accent caps setup on top, white caps payoff underneath, a real photo or screenshot
+  between (or the auto icon). It **cuts in hard** as the tip starts.
+- On the verdict word ("Don't." / "Do.") it **glides and shrinks into its side** (~0.8 s,
+  ease in-out), filling 2 across from the outer edge inwards, then the next row down. By the
+  end both sides read as the full verdict.
+- Small white sans captions at chest, 2-3 words, just above the labels.
+- Rhythm: tip, verdict, one-line reason, every ~6 s. Template: `do-dont-board`
+  (ANIMATIONS.md). Cues: `[SIDE]` on the verdict word.
 
 ### rapid-list: Rapid list
 - Accent title pill at the top ("24 viral formats").

@@ -1,0 +1,114 @@
+<!doctype html>
+<!-- Do / don't board: a green "DO IT" label on one side of the speaker and a red "DON'T DO IT"
+     label on the other. As each item is said, a tall picture card hard-cuts in at the centre
+     (two-line caps title: accent top words, white bottom words), holds, then on the verdict
+     glides and shrinks into its side's column, filling 2 across from the outer edge inwards.
+     Transparent background, made to sit over footage (9:16 labels at chest height, cards over
+     the lap; 16:9 columns either side of the speaker). --text is "Top | Bottom > do" or
+     "> dont" per item, comma separated; put "Left label | Right label ||" first to rename the
+     sides ("Always | Never || ..."). --times is two numbers per item from the transcript: when
+     the item starts, when the verdict word starts. --images / --icons as for tier-board.
+     Sounds: "pop" at each window.__pops, "enter" (do) or "glitch" (don't) at window.__lands. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: __W__px; height: __H__px; overflow: hidden; background: transparent; font-family: "Inter", sans-serif; }
+      .side { position: absolute; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900;
+        text-transform: uppercase; letter-spacing: -.01em; white-space: nowrap; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
+      .card { position: absolute; left: 0; top: 0; overflow: hidden; transform-origin: 0 0; opacity: 0;
+        background: linear-gradient(160deg, #2a2438 0%, #121016 100%); box-shadow: 0 12px 34px rgba(0, 0, 0, .5); }
+      .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .card img.icon { inset: auto; left: 50%; top: 50%; width: 46%; height: auto; transform: translate(-50%, -50%); object-fit: contain; filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .55)); }
+      .card .halo { position: absolute; left: 50%; top: 50%; width: 90%; height: 50%; transform: translate(-50%, -50%); background: radial-gradient(closest-side, __ACCENT__55, transparent); }
+      .card .t { position: absolute; left: 4%; right: 4%; text-align: center; font-weight: 900; text-transform: uppercase; line-height: 1.02; letter-spacing: -.01em;
+        -webkit-text-stroke: .045em #000; paint-order: stroke fill; text-shadow: 0 .06em .12em rgba(0, 0, 0, .6); }
+      .card .top { top: 3.5%; color: __ACCENT_LIGHT__; }
+      .card .bot { bottom: 3.5%; color: #fff; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="__W__" data-height="__H__"></div>
+    <script>
+      const W = __W__, H = __H__, TEXT = __TEXT__, DUR = __DURATION__, IMAGES = __IMAGES__, TIMES = __TIMES__;
+      const portrait = H > W;
+      const root = document.getElementById('root');
+      const parts = TEXT.split('||');
+      const [leftName, rightName] = parts.length > 1 ? parts[0].split('|').map((s) => s.trim()) : ["Do it", "Don't do it"];
+      const items = (parts.length > 1 ? parts[1] : parts[0]).split(',').map((s) => s.trim()).filter(Boolean).map((s, i) => {
+        const [name, side = ''] = s.split('>').map((x) => x.trim());
+        const [top, bot = ''] = name.split('|').map((x) => x.trim());
+        const right = /^(r|right|dont|don't|no|never|bad|x)$/i.test(side);
+        const at = TIMES[i * 2] ?? 0.6 + i * 3.4, drop = TIMES[i * 2 + 1] ?? at + 1.6;
+        return { top, bot, right, at, drop };
+      });
+
+      // Layout measured on the 9:16 reference: labels at chest height either side of the
+      // speaker, the big card centred over the lap, thumbnails in a 2-across grid under each label.
+      const L = portrait
+        ? { labelY: H * 0.496, labelH: H * 0.04, leftX: W * 0.118, rightX: W * 0.639, gridTop: H * 0.555, thumbW: W * 0.121, colGap: W * 0.02, rowGap: H * 0.01,
+            edgeL: W * 0.071, edgeR: W * 0.912, cardW: W * 0.3, cardY: H * 0.56 }
+        : { labelY: H * 0.16, labelH: H * 0.075, leftX: W * 0.06, rightX: W * 0.94, gridTop: H * 0.27, thumbW: W * 0.075, colGap: W * 0.012, rowGap: H * 0.02,
+            edgeL: W * 0.05, edgeR: W * 0.95, cardW: W * 0.17, cardY: H * 0.2 };
+      const ASPECT = 1.78;                                   // tall card, height = width * 1.78
+      const cardH = L.cardW * ASPECT, thumbH = L.thumbW * ASPECT, scale = L.thumbW / L.cardW;
+      const cardX = (W - L.cardW) / 2;
+
+      const label = (name, colour, x, alignRight) => {
+        const d = document.createElement('div'); d.className = 'side'; d.textContent = name;
+        Object.assign(d.style, { top: L.labelY + 'px', height: L.labelH + 'px', fontSize: L.labelH * 0.56 + 'px', padding: `0 ${L.labelH * 0.4}px`, background: colour });
+        root.appendChild(d);
+        // 16:9 labels sit against the outer edges; 9:16 at the measured spots.
+        if (alignRight) d.style.left = (portrait ? x : x - d.offsetWidth) + 'px'; else d.style.left = x + 'px';
+        return d;
+      };
+      const left = label(leftName, '#25A525', L.leftX, false), right = label(rightName, '#E0101E', L.rightX, true);
+
+      // Slots fill from the outer edge inwards, 2 across, then the next row down.
+      const count = { l: 0, r: 0 };
+      const slot = (isRight) => {
+        const n = count[isRight ? 'r' : 'l']++, col = n % 2, row = Math.floor(n / 2);
+        const outer = isRight ? L.edgeR - L.thumbW : L.edgeL;
+        const x = isRight ? outer - col * (L.thumbW + L.colGap) : outer + col * (L.thumbW + L.colGap);
+        return { x, y: L.gridTop + row * (thumbH + L.rowGap) };
+      };
+
+      const cards = items.map((it, i) => {
+        const c = document.createElement('div'); c.className = 'card';
+        Object.assign(c.style, { width: L.cardW + 'px', height: cardH + 'px' });
+        const media = IMAGES[i];
+        if (typeof media === 'string') { const img = document.createElement('img'); img.src = media; c.appendChild(img); }
+        else if (media && media.icon) {
+          const halo = document.createElement('div'); halo.className = 'halo';
+          const img = document.createElement('img'); img.className = 'icon'; img.src = media.icon; c.append(halo, img);
+        }
+        const top = document.createElement('div'); top.className = 't top'; top.textContent = it.top;
+        const bot = document.createElement('div'); bot.className = 't bot'; bot.textContent = it.bot;
+        // Titles wrap to two lines; long ones get smaller.
+        [[top, it.top], [bot, it.bot]].forEach(([el, s]) => { el.style.fontSize = Math.min(L.cardW * 0.13, (L.cardW * 1.7) / Math.max(8, s.length * 0.62)) + 'px'; });
+        c.append(top, bot); root.appendChild(c);
+        Object.assign(it, slot(it.right));
+        return c;
+      });
+
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.from([left, right], { opacity: 0, y: -L.labelH * 0.5, duration: 0.35, ease: 'power3.out', stagger: 0.08 }, 0);
+      const pops = [], lands = [];
+      items.forEach((it, i) => {
+        const c = cards[i], inAt = Math.max(0.3, it.at - 0.12), dropAt = Math.max(inAt + 0.4, it.drop - 0.05);
+        tl.set(c, { x: cardX, y: L.cardY, scale: 1, opacity: 1, zIndex: 10 + i }, inAt);   // hard cut in, no ease
+        tl.to(c, { x: it.x, y: it.y, scale, duration: 0.8, ease: 'power3.inOut' }, dropAt);
+        tl.set(c, { zIndex: 1 }, dropAt + 0.8);
+        pops.push(+inAt.toFixed(2)); lands.push({ at: +(dropAt + 0.8).toFixed(2), side: it.right ? 'right' : 'left' });
+      });
+      tl.set({}, {}, DUR);
+      window.__timelines['main'] = tl;
+      window.__pops = pops;      // a "pop" sound at each of these
+      window.__lands = lands;    // "enter" for the left (do) side, "glitch" for the right (don't)
+    </script>
+  </body>
+</html>

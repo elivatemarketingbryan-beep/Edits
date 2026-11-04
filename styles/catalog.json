@@ -762,6 +762,38 @@
       "scriptShape": "comparison"
     },
     {
+      "id": "do-or-dont",
+      "name": "Do or don't",
+      "aspect": "9:16",
+      "group": "short",
+      "kind": "style",
+      "engine": "editor",
+      "status": "draft",
+      "summary": "DO IT and DON'T DO IT labels either side of you; each tip pops up as a tall picture card, then flies into its side.",
+      "bestFor": [
+        "do vs don't",
+        "good vs bad habits",
+        "myths and mistakes",
+        "rapid verdicts on several tips"
+      ],
+      "recipe": [
+        "rough-cut",
+        "template assets/animations/do-dont-board (anim.mjs do-dont-board): green / red labels at chest height either side of the speaker",
+        "each tip: tall card cuts in over the lap as it's said, then glides into its side on the verdict word (word timestamps)",
+        "cards: real picture or screenshot per tip, or the auto icon; accent top words, white bottom words",
+        "small white chest captions, a fixed title pill above the head",
+        "sounds dense: pop on each card, enter (do) / glitch (don't) as it lands"
+      ],
+      "spec": "styles/STYLE-GUIDE.md#do-or-dont",
+      "template": "assets/animations/do-dont-board/index.html",
+      "reference": "styles/REFERENCES.md (Christian D Moreno, contractor finances do/don't)",
+      "needsMatte": false,
+      "scriptShape": "comparison",
+      "alsoScriptShape": [
+        "list"
+      ]
+    },
+    {
       "id": "rapid-list",
       "name": "Rapid list",
       "aspect": "9:16",

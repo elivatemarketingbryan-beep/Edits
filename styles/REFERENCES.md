@@ -337,3 +337,30 @@ Studied frame by frame for the `ranking` style's item pop-up; it's that style's 
   costing, invoices) beat stock photos. Add a pop SFX on the card cut-in and a soft whoosh into
   a thud/stamp when it lands in its row (SOUND-RULES); the reference may have none (not checked
   by ear).
+
+---
+
+## Christian D Moreno (@christiandavidm_): contractor finances do / don't
+
+instagram.com/p/De-M8V1DkBt · 0:31 · 9:16 reel · Oct 2026. Same creator and card look as the
+tier list above, sorted into two sides instead of tiers. Built as the `do-or-dont` style.
+
+- **Layout:** one static seated shot, no cuts. Fixed title pill above the head ("Contractor
+  finances 101" + a worker emoji). A green "DO IT" and a red "DON'T DO IT" label at chest
+  height either side of his body. Small white 2-3 word captions just above the labels.
+- **The card:** tall (≈30% of the width, ~1:1.8), over his lap, a stock-style photo of a
+  contractor in a truck with the claim in two parts: yellow condensed caps on top ("SPENDING
+  FULL CREDIT LIMIT"), white caps at the bottom ("JUST BECAUSE YOU GOT APPROVED"). It
+  hard-cuts in as he starts the tip (0.03 s here).
+- **The sort:** on the verdict ("Don't." at 2.19 s) the card glides toward its side while
+  shrinking, landing ~0.9 s later as a small thumbnail under the label. Each side fills 2
+  across from the outer edge inwards, then a second row. 5 tips in 31 s, one every ~6 s:
+  claim, one-word verdict, one-line reason. Later verdicts are implied ("Dude, put the end
+  date on your calendar") and the card still flies to "do".
+- **Why it works:** the viewer guesses the verdict before he says it (the comment bait is
+  "Did I get any wrong?"), and every few seconds a card lands somewhere. The finished board
+  is a cheat sheet worth screenshotting.
+- **For Bryan:** `do-dont-board` in brand: accent top words, real client screenshots or the
+  auto icon, `enter` for do and `glitch` for don't as they land. Script it in the comparison
+  shape with `[SIDE]` on each verdict so the cards time themselves.
+
