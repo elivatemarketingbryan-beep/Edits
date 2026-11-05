@@ -486,6 +486,11 @@ through the five levels in order; each builds on the last.
 - Offer Master (github.com/Liamrjohnston/offer-master-skill, MIT, 2026-11-05): offer-master (the whole fix) and its
   seven parts offer-diagnosis, offer-levers, offer-included, offer-guarantee, offer-urgency-name-price,
   offer-honesty-check, offer-card. Fixes an offer that isn't selling; not a video tool.
+- Marketing and business-book skills (2026-11-05, all MIT): wondelai/skills (65 skills from business, design and
+  engineering books: hundred-million-offers, storybrand-messaging, mom-test, influence-psychology, one-page-marketing,
+  negotiation, obviously-awesome, jobs-to-be-done, ...), phuryn/pm-skills (69 product-management skills; its
+  marketing-ideas is renamed pm-marketing-ideas), coreyhaines31/marketingskills (53: pricing-strategy, ads, copywriting,
+  cro, seo-audit, churn-prevention, cold-email, ...; its tools/ API clients were not copied).
 - Clipwing (github.com/Clipwing/skills, MIT, 2026-11-01): real-sfx (picks real recordings from assets/sound-effects,
   assets/sfx and 78 CC0 UI sounds for each moment; index not built yet) and hyperframes-to-after-effects (needs
   After Effects, not installed).
