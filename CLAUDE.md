@@ -483,6 +483,9 @@ through the five levels in order; each builds on the last.
   ig-/yt- research skills.
 - Legacy editor: clipper, capcut, premiere-pro, davinci-resolve, thumbnail-generator,
   background-music. Where both editors had a skill, the newer root version was kept.
+- Offer Master (github.com/Liamrjohnston/offer-master-skill, MIT, 2026-11-05): offer-master (the whole fix) and its
+  seven parts offer-diagnosis, offer-levers, offer-included, offer-guarantee, offer-urgency-name-price,
+  offer-honesty-check, offer-card. Fixes an offer that isn't selling; not a video tool.
 - Clipwing (github.com/Clipwing/skills, MIT, 2026-11-01): real-sfx (picks real recordings from assets/sound-effects,
   assets/sfx and 78 CC0 UI sounds for each moment; index not built yet) and hyperframes-to-after-effects (needs
   After Effects, not installed).
