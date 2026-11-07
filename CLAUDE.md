@@ -84,7 +84,7 @@ Stage paths:
 
 | Stage | Who | What Claude does | Writes | Next |
 |---|---|---|---|---|
-| `formats` | Claude | Get the video (`source` in the job folder, or download `url` with yt-dlp into it). Intake into `projects/<id>/` and transcribe once (rough-cut skill). Rank styles (below). Render a ~5s preview of each of the top 3 from the strongest moment. Pitch ideas for its moments (see "Claude's ideas"). Reels mode: find the reels instead (see "Reels mode"). | `formats.json`, `ideas.json`, `previews/<style>.mp4`, `job.json` `transcript` = `transcript.json` (segments `{start,end,text}`), `duration`; reels mode: `clips.json` | `pick` (reels: `clips`) |
+| `formats` | Claude | Get the video (`source` in the job folder, or download `url` with yt-dlp into it). Intake into `projects/<id>/` and transcribe once (rough-cut skill). Rank styles (below). Edit the video in each of the top 3 (see "Full edit of each format"). Pitch ideas for its moments (see "Claude's ideas"). Reels mode: find the reels instead (see "Reels mode"). | `formats.json`, `ideas.json`, `drafts/<style>.mp4`, `job.json` `transcript` = `transcript.json` (segments `{start,end,text}`), `duration`; reels mode: `clips.json` | `pick` (reels: `clips`) |
 | `design` | Claude | Design the motion graphics for the chosen style and picked ideas (reels mode: for every reel in `job.json` `chosen`), take a still of each at its key pose over the real frame, write them to `graphics.json`. On a return from `graphics`, change only the graphics with `status: "changes"`: set `reply` (one line), clear the status to `open`. A tool with no graphics skips straight to `edit`. | `graphics.json`, `graphics/*.jpg` | `graphics` |
 | `edit` | Claude | Build the chosen `style` (or run the chosen tool) per its catalog recipe, STYLE-GUIDE section and brand.json, plus every idea in `job.json` `picked` at its moment (unpicked ideas are skipped). Write the breakdown sheet first (see "Video Breakdown Sheet"; long-form renders one file per scene). Render a draft without sounds, then add sounds (see "Sound effects"), then `sheet.mjs thumbs`. | `sheet.json`, `.nosfx.mp4`, `sfx.json`, `preview.mp4`, `edits.json`, `job.json` `preview` | `review` (tools with no video: put files in `outputs/`, list them in `job.json` `outputs`, go to `done`) |
 | `revise` | Claude | Run `node studio/sheet.mjs md <id>` to see which scenes have open notes. For every note with `status: "open"`: change that scene only, then set its `reply` (one line: what changed) and `status: "done"`. If a note can't be done, say why in `reply` and leave it open. Long-form: re-render only the noted scenes, `assemble`, re-place sounds, `thumbs`. Short-form: re-render the preview. | `notes.json`, `preview.mp4`, `edits.json` | `review` |
@@ -178,10 +178,32 @@ proof or image card (ask the user for the asset if it isn't in the job), `[BROLL
 card / end card. Lines with no time (not said, or cut) are skipped. Write each placed cue
 as an `edits.json` entry (`why` = the script line), so it shows on the review page.
 
-Write `formats.json` as `[{ "style": "<id>", "reason": "<one short line about THIS video>", "preview": "previews/<id>.mp4" }]`,
-best first, exactly 3. Reasons name what's in the video ("you rank 5 tools"), not
+Write `formats.json` as `[{ "style": "<id>", "reason": "<one short line about THIS video>", "draft": "drafts/<id>.mp4", "draftSpan": [0, 42.5] }]`,
+best first, exactly 3, and three different looks (not three caption styles of the same layout). Reasons name what's in the video ("you rank 5 tools"), not
 generic praise. A `draft` style can be suggested; say so in the reason if it will
 need extra time.
+
+### Full edit of each format (Bryan's rule, the `formats` stage)
+
+The pick screen doesn't just name the 3 formats: it shows the video **edited in each one**, so
+Bryan picks by watching, not by imagining. Tapping a format plays its full edit in the phone frame.
+
+1. Write `formats.json` first with `draft: null` on all 3 (the page shows "editing 0 of 3"), then
+   fill in each `draft` as its render finishes, best format first. Move to `pick` only when all 3
+   are in.
+2. Each draft is a real edit of the job's clip in that style: the cut (pauses out), that style's
+   captions and layout, and its main building blocks on the strongest moments, per its catalog recipe,
+   STYLE-GUIDE section and brand.json. Draft quality (`--quality draft`), no sound effects, no
+   `sheet.json` and no `edits.json` yet. Ideas and combos are not built into the drafts.
+3. Length: the whole video when it's 3 minutes or less. Longer: the first ~90 s (hook plus the first
+   section), and say so in `draftSpan` (output seconds covered); the page labels it "first 1:30".
+4. These are style drafts, so the motion-graphics approval rule does not apply to them: nothing in a
+   draft is final. Once Bryan picks, the job still goes `design` → `graphics` → `edit`. Reuse the
+   chosen draft's compositions and cut there instead of starting over; the other two drafts are
+   left in `drafts/` and never touched again.
+5. A tool (no style) or a style whose engine can't render here yet gets `draft: null` and the reason
+   says why; the page falls back to the style's example clip. `faceless-sprite`, `brand-motion` and
+   the creator-pack `skill` styles render through their own engine as usual.
 
 ### Claude's ideas (ideas.json)
 

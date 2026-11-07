@@ -159,11 +159,11 @@ $('#homeLink').addEventListener('click', (ev) => { ev.preventDefault(); open(nul
 const slugOf = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 function styleCard(s, opts = {}) {
   const shape = s.group === 'short' ? 'tall' : s.group === 'long' ? 'wide' : 'tool';
-  const src = opts.preview || previews[slugOf(s.name)];
+  const src = opts.draft || opts.preview || previews[slugOf(s.name)];
   const thumb = src ? `<video src="${src}" muted loop playsinline autoplay preload="metadata"></video>`
     : `<span class="ph-${shape}"><em>${esc(s.name)}</em></span>`;
   return `<button class="sc ${opts.best ? 'best' : ''} ${opts.on ? 'on' : ''}" data-${opts.as || 'style'}="${s.id}">
-    <span class="thumb ${shape}">${thumb}${opts.rank ? `<span class="rank">${opts.rank === 1 ? 'Best fit' : '#' + opts.rank}</span>` : ''}</span>
+    <span class="thumb ${shape}">${thumb}${opts.rank ? `<span class="rank">${opts.rank === 1 ? 'Best fit' : '#' + opts.rank}</span>` : ''}${opts.draft ? '<span class="rank edited">▶ Your video</span>' : ''}</span>
     <span class="sc-head"><b>${esc(s.name)}</b>${s.aspect !== '-' ? `<span class="chip">${esc(s.aspect)}</span>` : ''}<span class="chip ${s.status === 'ready' ? 'ok' : ''}">${s.status === 'ready' ? 'Ready' : 'Designed'}</span></span>
     <span class="muted">${esc(opts.reason || s.summary)}</span>
   </button>`;
@@ -216,12 +216,16 @@ function stepDetail(job, s) {
   if (s.key === 'final') return job.final ? 'MP4' : '';
   return '';
 }
+const draftOf = (job, style) => (job.formats || []).find((f) => f.style === style && f.draft);
 const fmtTime = (s) => { s = Math.round(Number(s) || 0); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
 
 function mediaFor(job) {
   // What the phone frame plays: the final, then the preview, then the raw clip. Reels mode, done: reel 1.
   if (job.mode === 'reels' && job.stage === 'done' && job.reels?.[0]) return { src: fileUrl(job, job.reels[0].file), badge: 'Reel 1' };
   if (job.final && !compareRaw) return { src: fileUrl(job, job.final), badge: 'Edited' };
+  // Pick stage: the phone plays the full edit of the format you tapped (formats.json `draft`).
+  const d = job.stage === 'pick' && !compareRaw && draftOf(job, pick.job === job.id ? pick.style : job.formats?.[0]?.style);
+  if (d) return { src: fileUrl(job, d.draft), badge: `${esc(styleOf(d.style).name)} · ${d.draftSpan && job.duration && d.draftSpan[1] < job.duration - 1 ? 'first ' + fmtTime(d.draftSpan[1]) : 'full edit'}` };
   if (job.preview && !compareRaw && job.stage !== 'done') return { src: fileUrl(job, job.preview), badge: 'Preview' };
   if (job.source) return { src: fileUrl(job, job.source), badge: 'Raw' };
   return { src: null, badge: job.url ? 'Link' : 'Raw' };
@@ -301,12 +305,13 @@ function renderJob(job) {
         <p class="muted">Each still shows the graphic over the real frame at its moment. Approve them, or write what to change. Nothing renders until they're all approved.</p>
         <div class="actions"><a class="button cta" href="#gfx">See the graphics ↓</a></div></div>`;
     } else if (job.stage === 'formats') {
-      card = `<div class="ctx"><p class="label">Next</p><p>Claude is watching the video and picking the best 3 formats.</p>${$('#claudeHint').innerHTML}
+      const fm = job.formats || [], made = fm.filter((f) => f.draft).length;
+      card = `<div class="ctx"><p class="label">Next</p><p>${fm.length ? `Claude picked ${fm.map((f) => '<b>' + esc(styleOf(f.style).name) + '</b>').join(', ')} and is editing your video in each one: <b>${made} of ${fm.length}</b> done.` : 'Claude is watching the video and picking the best 3 formats. Then it edits the video in each one so you can watch them before you choose.'}</p>${$('#claudeHint').innerHTML}
         <p class="muted">Already know what you want? <a href="#gallery">Pick any format below</a> and skip this step.</p></div>`;
     } else if (job.stage === 'pick') {
       const n = (job.ideas || []).length, c = (job.combos || []).length;
       card = `<div class="ctx shout"><p class="label">Your turn</p>
-        <p class="big">${c ? `Claude has <em>${c} combos</em> to make this video very edited.` : n ? `Claude has <em>${n} ideas</em> for this video.` : 'Claude picked <em>3 formats</em> for this video.'}</p>
+        <p class="big">${c ? `Claude has <em>${c} combos</em> to make this video very edited.` : n ? `Claude has <em>${n} ideas</em> for this video.` : (job.formats || []).some((f) => f.draft) ? 'Claude edited this video <em>3 ways</em>.' : 'Claude picked <em>3 formats</em> for this video.'}</p>
         <p class="muted">${c ? 'Pick a combo (or mix your own from the ideas), then hit Start editing.' : n ? 'Pick a base format, tick the ideas you like, then hit Start editing.' : 'Pick one, then hit Start editing.'}</p>
         <div class="actions"><a class="button cta" href="#ideas">${n ? 'See the ideas ↓' : 'See the formats ↓'}</a></div></div>`;
     } else if (job.stage === 'review') {
@@ -448,8 +453,8 @@ function ideasBoard(job) {
     ${ideas.length ? `<p class="label">${combos.length ? '2 · Or mix your own' : '1 · Ideas'} <span class="muted">${pick.ideas.size} of ${ideas.length} picked</span>
         <button class="ghost small" id="ideasAll">${pick.ideas.size === ideas.length ? 'Clear all' : 'Take them all'}</button></p>
       <div class="ideas">${ideas.map(card).join('')}</div>` : ''}
-    <p class="label">${ideas.length ? (combos.length ? '3 · ' : '2 · ') : ''}Base format <span class="muted">pick one; the ideas go on top of it</span></p>
-    <div class="top3 bases">${top.map((f, i) => styleCard(styleOf(f.style), { as: 'base', on: f.style === pick.style, rank: job.formats?.[i]?.style === f.style ? i + 1 : 0, reason: f.reason, preview: f.preview && fileUrl(job, f.preview) })).join('')}</div>
+    <p class="label">${ideas.length ? (combos.length ? '3 · ' : '2 · ') : ''}Base format <span class="muted">${top.some((f) => f.draft) ? 'Claude edited your video in each one. Tap one to watch it in the phone above.' : 'pick one; the ideas go on top of it'}</span></p>
+    <div class="top3 bases">${top.map((f, i) => styleCard(styleOf(f.style), { as: 'base', on: f.style === pick.style, rank: job.formats?.[i]?.style === f.style ? i + 1 : 0, reason: f.reason, preview: f.preview && fileUrl(job, f.preview), draft: f.draft && fileUrl(job, f.draft) })).join('')}</div>
     <p class="muted">Want another base? <a href="#gallery">Every format is below</a>; clicking one picks it here.</p>
     <div class="gobar"><span>${combo ? `<b>${esc(combo.name)}</b>${tweaked ? ' (your tweaks)' : ''} · ` : ''}${base ? `<b>${esc(base.name)}</b>` : 'No base format yet'}${pick.ideas.size ? ` + <b>${pick.ideas.size} ${combo ? 'effect' : 'idea'}${pick.ideas.size > 1 ? 's' : ''}</b>` : ''}</span>
       <button class="cta" id="go" ${base ? '' : 'disabled'}>Start editing →</button></div>
