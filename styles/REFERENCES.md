@@ -234,6 +234,56 @@ seconds by one of the devices below.
 
 ---
 
+## Kallaway: "Give Me 24 Minutes, I'll Give You 10,000 Hours of Content Strategy"
+
+youtu.be/w-RgtfUnYVo · 24:18 · 16:9 · Oct 22 2026 · ~50K views at study time (Nov 7 2026).
+Studied from frames every 6s across the whole video, every 1s through the first 45s, and a
+WhisperX transcript. Bryan sent it as a long-form style reference. **The closest match to
+Bryan's brand we've studied:** purple glow on near-black, white type with purple accent words,
+glass cards, a dark set with one neon strip. Most of it can be built almost as-is.
+
+**Format:** an 8-tip listicle with a chapter per tip (in the description). One seated camera
+angle at a podcast mic; the framing barely changes, and the graphics do all the work. He talks
+fast (~225 words a minute). Every tip runs the same loop: **the popular advice → "the actual
+truth" → why (an analogy) → proof (his own numbers or a student) → a one-line takeaway**.
+
+### What he does, and how we'd use it
+
+| # | Technique | What it looks like | How Video Studio uses it |
+|---|---|---|---|
+| 1 | **3D tip carousel (chapter tracker)** | Frosted-glass cards, one per tip (outline icon, "TIP #7:", bold title), arranged in a ring around a phone that shows an Instagram post ("8 TIPS for growing faster on social media" glowing above it, likes and comments below). It spins through all 8 in the hook, then comes back at every chapter, turning to the current tip, with the post's caption under it holding the tip in one sentence | New template: **tip-carousel**. A 3D version of Iman's chapter tracker in our exact palette. Bryan's handle and avatar on the post |
+| 2 | **Frame word slam** | "all of these are very / **UNPOPULAR**" in big purple-gradient caps over the blurred cards | Kinetic title over the blurred chapter graphic; one per video, in the hook |
+| 3 | **Credibility badges** | Glass pills with his avatar and name next to his head, the number counting up as he says it (2M+ followers, 537M+ views, 18+...) | `counter` in a glass pill, popping in on the word; alternate sides |
+| 4 | **"The Popular Advice" post card** | Each tip opens with the myth as a fake social post in the top-left corner (avatar, "The Popular Advice", the advice typing in, an engagement row); then "the actual truth" appears in purple lower down | New template: **myth-card**. Recurring device that gives every chapter the same opening; pairs with Bryan's "do / don't" scripts |
+| 5 | **Side cards for the key phrase** | Glass card beside his head: the big line in bold white ("the opposite"), the rest small under it ("of what everyone else is saying to do") | Our side-words / floating cards; big + small two-line layout |
+| 6 | **Emphasis captions only** | No running captions. Only key lines get words, low and centred, white with the contrast word in purple ("AI is the input" / "not the output") | Matches Bryan's "loud kinetic captions on the key lines". On his purple wall the accent word needs a white outline or glow (see EDIT-PREFERENCES) |
+| 7 | **Bullet list beside him, frame dimmed** | His side of the frame blurs and darkens; three ▶ bullets on the other side, bold lead with purple keywords, italic grey detail under each | Bullet list in negative space with a blur/dim on the footage half |
+| 8 | **Pyramid that builds over time** | 10 purple levels; a dashed "AVERAGE CONTENT QUALITY" line climbs as he walks through 12 months → now; one level turns red ("you, where you were") and the top one green. It stays on screen ~40s and changes with each sentence | New template: **level-pyramid**. A diagram that changes with the story instead of one static chart; great for "the bar has gone up" |
+| 9 | **Act out the story** | When he says clients "come on calls", he cuts to himself inside a Zoom-style grid with lettered tiles. "Someone selling the same offer" vs "YOU": two dark silhouettes with the shared things listed between them | Exactly Bryan's "paint the scene" rule. Zoom-grid and silhouette-versus as reusable scenes |
+| 10 | **Real proof on phones** | His own Instagram profile, reels grid and posts in phone mockups; an envelope icon with a DM count climbing (34K → 211K → 388K → 566K) over a reel | Show-the-real-thing rule: Bryan's client GBP profiles and lead counts in a phone frame with a climbing `counter` |
+| 11 | **Pop-culture B-roll in a frame** | Friends and Survivor clips in rounded windows on the purple-glow floor, small show label top-left | Rounded-window B-roll on the brand floor. Use media he has rights to, or a stand-in |
+| 12 | **Screen recordings on the glow floor** | A white browser or Claude window, rounded, floating on black with the purple glow under it | Same template for any screen demo |
+| 13 | **Student case study** | His academy logo, then the student's profile card with three bullets, then the student's reels with view counts and the DM counter | "My client" case-study block: logo → client card + bullets → results |
+| 14 | **Hand-swipe transition** | His hand sweeps across the lens and the motion blur hides the cut into the next graphic | Cut into a graphic on a big hand move; add a whoosh |
+| 15 | **Plug and CTA beats** | His paid program pitched at 3:00, right after tip 1; a "CTA as a net-give" card; an IG caption with the comment keyword highlighted purple; a name lower-third ("Kallaway", avatar, purple box) near the end, closing on the program's roadmap page | Bryan's offer plug after the first payoff, not at the end; comment-keyword highlight for lead magnets |
+
+### Pacing notes
+- Hook (0:00-0:45): one line to camera, then the carousel previews all 8 tips, the
+  "UNPOPULAR" slam, the frame line ("do the opposite of what everyone else is saying"), then
+  credibility badges. All 8 promises before the first tip.
+- A graphic beat about every 10s in the first chapters, easing to every 15-25s later; the long
+  graphics (pyramid, case study) hold for 30-40s and change with each sentence instead of cutting away.
+- The carousel at every tip break turns 24 minutes into 8 short episodes.
+- No true silence in the first minute, so a quiet music bed most likely runs underneath.
+
+### For reels (9:16)
+- **Myth card → "the actual truth"** as a reel hook.
+- **Tip carousel** turned flat as a "tip 3 of 8" header on a series.
+- **Credibility badge counting up** in the first 3s.
+- **DM counter over a reel** for proof reels.
+
+---
+
 ## Dan Martell: "Give me 54 Seconds and I'll Make you Dangerously Motivated"
 
 youtu.be/r6zFZQm0hcc · 0:54 · 16:9 · ~7.2M views (Oct 2026). Studied frame by frame for
