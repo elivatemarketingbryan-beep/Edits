@@ -34,6 +34,7 @@ studio/anim.mjs           makes an effect from assets/animations/<name>/ in 9x16
 studio/fx.mjs             footage effects on any time range: lag (FPS lag), wide, fisheye, shade, flash, negative text
 studio/lut.mjs            colour grades (.cube in assets/luts/); apply to footage before graphics
 assets/sfx/               the named sound files; assets/sound-effects/ is the full Motionix pack
+assets/sfx-library/       SFX Library v0.9.0-beta: 1548 cleaned, indexed sounds (1435 CC0); use by ID as a cue (skill sfx-library)
 .claude/skills/           all skills from every kit, merged (see "Where each skill came from")
 lib/ presets/ scripts/ workflows/   root editing pipeline (was "Claude Editor")
 styles/engines.json       render engines switch: HyperFrames always, Remotion optional (off by default)
@@ -270,6 +271,9 @@ this sound down" never needs a full re-render.
    `.nosfx.mp4`. Never place sounds onto a video that already has them.
 
 Cue names, files, peaks and volumes: `styles/sfx.json` (`node studio/sfx.mjs list`).
+A cue can also be an ID from the SFX Library in `assets/sfx-library/` (`"cue": "SFX-0058"`): 1548 sounds
+with sync points and levels, picked by moment with its `sfx.py find` (skill `sfx-library`). Use it to vary the
+whooshes, impacts and glitches across a video; credit-required ones need `"allowCredit": true` and a credit line.
 The files are named copies in `assets/sfx/` from the full Motionix pack in
 `assets/sound-effects/` (74 sounds). To use a pack sound that has no cue yet, copy it
 into `assets/sfx/` with a short name, measure it with `node studio/sfx.mjs peak <file>`,

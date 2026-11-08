@@ -15,6 +15,12 @@
 // `at` is the output-timeline second the sound should HIT; the file starts `peak` earlier.
 // `volume` is optional (defaults from styles/sfx.json). With --job, the cues are also
 // written to jobs/<id>/edits.json as "sfx" edits so the review page shows them.
+//
+// A cue can also be a library ID from assets/sfx-library (the 1548-sound SFX Library, see its AGENT_GUIDE.md):
+// { "cue": "SFX-0058", "at": 133.85 }. Its sync point, clip gain and high-pass come from the library's index;
+// the gain is shifted by the video's own speech loudness (the library assumes -14 LUFS). `volume` there is a
+// multiplier (default 1). Find one with: python assets/sfx-library/sfx.py find --moment <moment> --seed <job>.
+// Credit-required library sounds are refused unless the cue has "allowCredit": true.
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -24,6 +30,21 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LIB = JSON.parse(fs.readFileSync(path.join(ROOT, 'styles', 'sfx.json'), 'utf8')).cues;
 const SFX_DIR = path.join(ROOT, 'assets', 'sfx');
+const SFXLIB_DIR = path.join(ROOT, 'assets', 'sfx-library');
+let SFXLIB = null;
+const sfxlib = () => {
+  if (!SFXLIB) {
+    const raw = JSON.parse(fs.readFileSync(path.join(SFXLIB_DIR, 'index.json'), 'utf8'));
+    SFXLIB = new Map((Array.isArray(raw) ? raw : raw.sounds).map((s) => [s.id, s]));
+  }
+  return SFXLIB;
+};
+// integrated loudness of a file's audio (LUFS), for matching library sounds to this video's speech
+const loudness = (file) => {
+  const r = spawnSync('ffmpeg', ['-hide_banner', '-nostats', '-i', file, '-vn', '-af', 'ebur128', '-f', 'null', '-'], { encoding: 'utf8', maxBuffer: 1 << 28 });
+  const m = [...(r.stderr || '').matchAll(/I:\s+(-?[\d.]+) LUFS/g)].pop();
+  return m ? Number(m[1]) : -14;
+};
 
 const run = (args, opts = {}) => {
   const r = spawnSync('ffmpeg', args, { encoding: opts.binary ? 'buffer' : 'utf8', maxBuffer: 1 << 30 });
@@ -64,6 +85,13 @@ function loadCues(file) {
   const raw = JSON.parse(fs.readFileSync(file, 'utf8'));
   const cues = Array.isArray(raw) ? raw : raw.cues;
   return cues.map((c, i) => {
+    if (/^SFX-\d+$/.test(c.cue)) {
+      const s = sfxlib().get(c.cue);
+      if (!s) throw new Error(`Cue ${i + 1}: ${c.cue} is not in assets/sfx-library/index.json`);
+      if (s.attribution_required && !c.allowCredit) throw new Error(`Cue ${i + 1}: ${c.cue} needs a credit line (${s.credit_line}); add "allowCredit": true only if Bryan said credits are fine`);
+      if (!(c.at >= 0)) throw new Error(`Cue ${i + 1} (${c.cue}): "at" must be a time in seconds`);
+      return { ...c, lib: s, file: path.join(SFXLIB_DIR, s.file), peak: s.sync_point_ms / 1000, highpass: s.suggested_highpass_hz, mult: c.volume ?? 1 };
+    }
     const def = LIB[c.cue];
     if (!def) throw new Error(`Cue ${i + 1}: unknown sound "${c.cue}". Run "node studio/sfx.mjs list", or make it: "node studio/sfx.mjs gen <earshot-id> ${c.cue}".`);
     if (def.earshot && !fs.existsSync(path.join(SFX_DIR, def.file))) earshotRender(def.earshot, path.join(SFX_DIR, def.file));
@@ -74,6 +102,12 @@ function loadCues(file) {
 
 function place(input, cuesFile, output, jobId) {
   const cues = loadCues(cuesFile);
+  if (cues.some((c) => c.lib)) {
+    // library gains assume speech at -14 LUFS; SFX_SPEECH_LUFS overrides the measurement (e.g. on a silent test track)
+    const shift = (process.env.SFX_SPEECH_LUFS ? Number(process.env.SFX_SPEECH_LUFS) : hasAudio(input) ? loudness(input) : -14) + 14;
+    for (const c of cues.filter((x) => x.lib)) c.volume = +(c.mult * 10 ** ((c.lib.clip_gain_db + shift) / 20)).toFixed(4);
+    console.log(`Library sounds matched to speech at ${(shift - 14).toFixed(1)} LUFS`);
+  }
   const files = [...new Set(cues.map((c) => c.file))];
   const args = ['-y', '-v', 'error', '-i', input];
   files.forEach((f) => args.push('-i', f));
@@ -91,7 +125,8 @@ function place(input, cuesFile, output, jobId) {
     const start = Math.max(0, c.at - c.peak);
     const trim = start === 0 && c.at < c.peak ? `atrim=start=${(c.peak - c.at).toFixed(3)},asetpts=PTS-STARTPTS,` : '';
     const ms = Math.round(start * 1000);
-    parts.push(`[f${fi}_${k}]${trim}volume=${c.volume},adelay=${ms}|${ms}[s${i}]`);
+    const hp = c.highpass ? `highpass=f=${c.highpass},` : '';
+    parts.push(`[f${fi}_${k}]${trim}${hp}volume=${c.volume},adelay=${ms}|${ms}[s${i}]`);
   });
   const mixIn = (base ? '[base]' : '[sil]') + cues.map((_, i) => `[s${i}]`).join('');
   if (base) parts.push(`${base}aformat=sample_rates=48000:channel_layouts=stereo[base]`);
@@ -108,14 +143,14 @@ function writeEdits(jobId, cues) {
   const file = path.join(ROOT, 'jobs', path.basename(jobId), 'edits.json');
   const edits = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')).filter((e) => e.type !== 'sfx') : [];
   for (const c of cues) {
-    edits.push({ type: 'sfx', start: +c.at.toFixed(2), end: +(c.at + 0.3).toFixed(2), what: `${c.cue} at ${Math.round(c.volume * 100)}%`, why: c.note || LIB[c.cue].use });
+    edits.push({ type: 'sfx', start: +c.at.toFixed(2), end: +(c.at + 0.3).toFixed(2), what: `${c.cue} at ${Math.round(c.volume * 100)}%`, why: c.note || (c.lib ? c.lib.description : LIB[c.cue].use) });
   }
   fs.writeFileSync(file, JSON.stringify(edits, null, 2));
   console.log(`Logged ${cues.length} sound edits in ${path.relative(ROOT, file)}`);
 }
 
 function remotion(cuesFile, fps = 30) {
-  const effects = loadCues(cuesFile).map((c) => ({ src: `assets/sfx/${path.basename(c.file)}`, atFrame: Math.round((c.at - c.peak) * fps), volume: c.volume }));
+  const effects = loadCues(cuesFile).map((c) => ({ src: path.relative(ROOT, c.file).split(path.sep).join('/'), atFrame: Math.round((c.at - c.peak) * fps), volume: c.volume }));
   console.log(JSON.stringify({ audio: { effects } }, null, 2));
 }
 
