@@ -88,7 +88,7 @@
     "gear-tick": {
       "file": "gear-tick.wav",
       "peak": 0.34,
-      "volume": 0.22,
+      "volume": 0.3,
       "use": "one mechanical step: a dial clicks, a part locks in"
     },
     "data": {
@@ -184,14 +184,14 @@
     "iphone-ding": {
       "file": "iphone-ding.wav",
       "peak": 0.51,
-      "volume": 0.22,
+      "volume": 0.3,
       "use": "a phone notification or text message pops up (SFX 01)"
     },
     "keyboard": {
       "file": "keyboard.wav",
-      "peak": 3.08,
+      "peak": 0.0,
       "volume": 0.16,
-      "use": "typing on screen: a search bar, a message, a prompt being written (SFX 01; start it when typing starts)"
+      "use": "typing on screen: a search bar, a message, a prompt being written (SFX 01; starts on `at`, the moment typing starts; set `dur` to the typing's length)"
     },
     "mouse-click": {
       "file": "mouse-click.wav",
@@ -295,12 +295,96 @@
     "shutter-quick": {
       "file": "gen/shutter-quick.wav",
       "peak": 0.024,
-      "volume": 0.22,
+      "volume": 0.3,
       "use": "a fast camera shutter on a screenshot or proof flash",
       "earshot": {
         "id": "shutter/quick",
         "seed": 1
       }
+    },
+    "ui-glass-shatter": {
+      "file": "ui-glass-shatter.wav",
+      "peak": 0.03,
+      "volume": 0.3,
+      "use": "a UI card, board or screen shatters like glass (crack + falling glassy shards; no explosion). Built 2026-11-07 from CC0 sounds: uisfx glass/snap + glass/delete, SFX Library glassy ticks SFX-0813/SFX-0857 (no crackle: Bryan didn't like the noisy shatter)"
+    },
+    "ui-open": {
+      "file": "ui/studio-open.wav",
+      "peak": 0.01,
+      "volume": 0.24,
+      "use": "a card, panel or graphic appears (uisfx Studio kit, CC0: one matching UI family; Bryan 2026-11-07: UI sounds, not low impact taps, not beeps)"
+    },
+    "ui-select": {
+      "file": "ui/studio-select.wav",
+      "peak": 0.01,
+      "volume": 0.24,
+      "use": "a small word, chip or option appears or is picked (uisfx Studio kit, CC0: one matching UI family; Bryan 2026-11-07: UI sounds, not low impact taps, not beeps)"
+    },
+    "ui-progress-step": {
+      "file": "ui/studio-progress-step.wav",
+      "peak": 0.01,
+      "volume": 0.24,
+      "use": "a list row, step or tracker advances (uisfx Studio kit, CC0: one matching UI family; Bryan 2026-11-07: UI sounds, not low impact taps, not beeps)"
+    },
+    "ui-check": {
+      "file": "ui/studio-check.wav",
+      "peak": 0.06,
+      "volume": 0.24,
+      "use": "a tick, confirm or completed step (uisfx Studio kit, CC0: one matching UI family; Bryan 2026-11-07: UI sounds, not low impact taps, not beeps)"
+    },
+    "ui-press": {
+      "file": "ui/studio-press.wav",
+      "peak": 0.01,
+      "volume": 0.24,
+      "use": "a button press or tap on screen (uisfx Studio kit, CC0: one matching UI family; Bryan 2026-11-07: UI sounds, not low impact taps, not beeps)"
+    },
+    "ui-expand": {
+      "file": "ui/studio-expand.wav",
+      "peak": 0.09,
+      "volume": 0.24,
+      "use": "a big word or panel grows in (uisfx Studio kit, CC0: one matching UI family; Bryan 2026-11-07: UI sounds, not low impact taps, not beeps)"
+    },
+    "ui-swipe": {
+      "file": "ui/studio-swipe.wav",
+      "peak": 0.02,
+      "volume": 0.24,
+      "use": "a full-screen graphic slides in (uisfx Studio kit, CC0: one matching UI family; Bryan 2026-11-07: UI sounds, not low impact taps, not beeps)"
+    },
+    "ui-back": {
+      "file": "ui/studio-back.wav",
+      "peak": 0.01,
+      "volume": 0.24,
+      "use": "the full-screen graphic leaves, back to the speaker (uisfx Studio kit, CC0: one matching UI family; Bryan 2026-11-07: UI sounds, not low impact taps, not beeps)"
+    },
+    "ui-success": {
+      "file": "ui/studio-success.wav",
+      "peak": 0.25,
+      "volume": 0.5,
+      "use": "a goal reached, a deal won (uisfx Studio kit, CC0: one matching UI family; Bryan 2026-11-07: UI sounds, not low impact taps, not beeps)"
+    },
+    "ui-snap": {
+      "file": "ui/studio-snap.wav",
+      "peak": 0.0,
+      "volume": 0.24,
+      "use": "something clicks into place (uisfx Studio kit, CC0)"
+    },
+    "ui-focus": {
+      "file": "ui/studio-focus.wav",
+      "peak": 0.01,
+      "volume": 0.24,
+      "use": "a word or element comes into focus (uisfx Studio kit, CC0)"
+    },
+    "ui-toggle-on": {
+      "file": "ui/studio-toggle-on.wav",
+      "peak": 0.05,
+      "volume": 0.24,
+      "use": "a switch or icon flips to a new state (uisfx Studio kit, CC0)"
+    },
+    "ui-drop": {
+      "file": "ui/studio-drop.wav",
+      "peak": 0.04,
+      "volume": 0.24,
+      "use": "a word or card drops and lands (uisfx Studio kit, CC0)"
     }
   },
   "library": "assets/sound-effects",

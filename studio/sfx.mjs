@@ -13,6 +13,8 @@
 //
 // cues.json: [{ "cue": "pop", "at": 3.2, "volume": 0.2, "note": "tier card lands" }, ...]
 // `at` is the output-timeline second the sound should HIT; the file starts `peak` earlier.
+// `skip` (optional) drops seconds from the front of a long build so it starts later but still peaks on `at`.
+// `dur` (optional) trims the sound to that many seconds with a short fade, e.g. typing that lasts 1.7 s.
 // `volume` is optional (defaults from styles/sfx.json). With --job, the cues are also
 // written to jobs/<id>/edits.json as "sfx" edits so the review page shows them.
 //
@@ -122,10 +124,15 @@ function place(input, cuesFile, output, jobId) {
   cues.forEach((c, i) => {
     const fi = files.indexOf(c.file);
     const k = counters.get(fi) ?? 0; counters.set(fi, k + 1);
-    const start = Math.max(0, c.at - c.peak);
-    const trim = start === 0 && c.at < c.peak ? `atrim=start=${(c.peak - c.at).toFixed(3)},asetpts=PTS-STARTPTS,` : '';
+    // `skip` (optional) drops that many seconds from the front of the sound, so a long build starts later
+    // and still hits its peak on `at` (e.g. a rope stretch that should begin when the anchor starts falling).
+    const lead = Math.max(0, c.peak - (c.skip ?? 0));
+    const start = Math.max(0, c.at - lead);
+    const cut = (c.skip ?? 0) + (start === 0 && c.at < lead ? lead - c.at : 0);
+    const trim = cut > 0 ? `atrim=start=${cut.toFixed(3)},asetpts=PTS-STARTPTS,` : '';
     const ms = Math.round(start * 1000);
-    const hp = c.highpass ? `highpass=f=${c.highpass},` : '';
+    const hp = (c.highpass ? `highpass=f=${c.highpass},` : '') +
+      (c.dur ? `atrim=duration=${c.dur},afade=t=out:st=${Math.max(0, c.dur - 0.15).toFixed(3)}:d=0.15,` : '');
     parts.push(`[f${fi}_${k}]${trim}${hp}volume=${c.volume},adelay=${ms}|${ms}[s${i}]`);
   });
   const mixIn = (base ? '[base]' : '[sil]') + cues.map((_, i) => `[s${i}]`).join('');

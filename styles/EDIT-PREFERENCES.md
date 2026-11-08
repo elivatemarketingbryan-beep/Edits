@@ -10,6 +10,54 @@ it here, newest first, one entry each:
 
 ---
 
+2026-11-07 · every video · UI sounds should sound like UI, from one matching kit: the `ui-*` cues (uisfx Studio
+kit): `ui-open` a card or graphic appears, `ui-select` a small word or option, `ui-expand` a big word, `ui-progress-step`
+a list step, `ui-check` a confirm, `ui-press` a tap, `ui-swipe` / `ui-back` full-screen in / out. Not low impact
+taps (SFX-0814/0802/0912 sounded like "low impact taps"), not beeps. Never two sounds on one beat. (Bryan: "make
+the noises match UI, just not so annoying".) This replaces the low-click palette in the entry below.
+
+2026-11-07 · every video · Keep sound professional: no beeps, dings, chimes or high-pitched UI blips. A low
+"thocky" click when a graphic appears (SFX-0814), a dark rounded tock for list steps and confirms (SFX-0802),
+a low click for real clicks (SFX-0801), quiet synth swells on full-screen transitions. Literal sounds where the
+picture asks for one: cha-ching (`money`) when prices or money land, rope tension (`rubber-stretch`) when a rope
+pulls taut. (Bryan: "I don't like the random beeps and high-pitch UI sounds, I want this to feel
+professional", "rope stretching noise", "cha-ching noise".)
+
+2026-11-07 · every video · Full-screen backgrounds: never a centred round glow over a dome of light (reads as
+the Instagram default profile picture). Use a wide flat glow band along the bottom, soft corner light, faint
+texture. Ropes, chains and strings must attach to the thing they hold and move with it. Don't use the
+"mellow pluck" (SFX-1389): Bryan hears it as a random bonk. (Bryan: "the background looks like the IG default
+profile picture", "fix the anchor rope", "remove the random bonk noise".)
+
+2026-11-07 · every video · Every motion graphic that pops up gets a soft, gentle UI sound (mellow plucks,
+pure tones, warm beeps; SFX Library SFX-1389/1373/1388/1372), never aggressive ones. No harsh whooshes:
+full-screen transitions get a smooth short synth swell in (SFX-1144) and swish out (SFX-1142), or nothing.
+Money on screen gets a money sound (both price tags, not just one). Mute any clap or slate noise before the
+first word. (Bryan: "place UI noises that make sense when any motion graphic pops up but not aggressive
+sounding ones", "the whooshes sound annoying, not smooth", "remove the clap from the beginning".)
+
+2026-11-07 · every video · No booms (impacts, sub drops, braams, rumble risers, the `hit` cue) and no loud
+scratchy glitch noises (library glitches, the `glitch` cue). Clean UI sounds only: soft pops, ticks, glassy
+taps, light whooshes. Typing sounds start exactly when the text starts typing and stop when it stops. (Bryan:
+"remove the random booms", "remove the loud random scratching noise", "the typing noise came too early".)
+
+2026-11-07 · every video · Go light on sound effects, above all in the opening: only the few big beats
+get a sound (about one every 5 s at most in the first 30 s), not every pop, icon and card. Match the sound
+to what's on screen literally: a shattering UI gets a UI glass shatter (`ui-glass-shatter`), never an
+explosion or a stack of hits. Key-line captions don't always need a hit; leave some silent. (Bryan: "too
+many random noises at the beginning", "don't make explosion noise, just UI glass shatter noise", "no
+audio with waste of time".)
+
+
+2026-11-07 · every video · Don't lean on the same effect over and over. Invent new ones as much as
+possible: each beat gets a different *kind* of visual (race, gauge, flowchart, phone form, scale,
+map, kinetic type...), borrowing ideas from the other styles and REFERENCES.md, but built in the
+look the video is being made in. (Bryan: "don't do the same effect a lot, try to create new ones
+as much as you can, use inspo from the other styles but in this format.")
+
+2026-11-07 · every video · When Bryan says to go ahead without approving graphics batches, build
+them all, check each still yourself, and go straight to the review render.
+
 ## YouTube: motion-graphic heavy (2026-10-29, replaces "don't overdo the effects")
 
 2026-10-29 · every 16:9 / YouTube video · Bryan wants a motion-graphic heavy edit: "I want a
