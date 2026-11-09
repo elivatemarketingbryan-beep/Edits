@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 7:22-7:31 full stage: never discount first: cut scope, not price; drop the number and you told them it was padded */
+
+  .tt { position: absolute; left: 130px; top: 130px; font-size: 104px; font-weight: 900; letter-spacing: -0.04em; white-space: nowrap; }
+  .tt i { font-family: var(--serif); font-weight: 700; color: #ff8a8e; padding-right: 8px; }
+  .cd { position: absolute; left: 130px; top: 340px; width: 760px; height: 400px; box-sizing: border-box; padding: 44px; border-radius: 28px; background: linear-gradient(160deg, rgba(60,46,96,0.88), rgba(22,16,38,0.94)); border: 1.5px solid rgba(232,199,122,0.5); }
+  .cd small { font-size: 32px; font-weight: 800; color: rgba(255,255,255,0.72); } .cd b { display: block; font-size: 138px; font-weight: 900; letter-spacing: -0.045em; margin-top: 8px; }
+  .ls { font-size: 36px; font-weight: 800; margin-top: 16px; color: var(--gold); white-space: nowrap; }
+  .rt { position: absolute; left: 980px; top: 350px; width: 810px; }
+  .cut { font-family: var(--serif); font-style: italic; font-weight: 700; font-size: 104px; line-height: 1.14; padding-bottom: 8px; }
+  .dp { font-size: 56px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.16; margin-top: 44px; color: rgba(255,255,255,0.86); }
+  .pd { position: absolute; left: 430px; top: 660px; padding: 12px 34px; border: 6px solid #e5484d; border-radius: 12px; color: #ff8a8e; background: rgba(5,3,8,0.94); font-size: 76px; font-weight: 900; letter-spacing: 0.05em; transform: rotate(-7deg); }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v34-no-discount" data-start="0" data-width="1920" data-height="1080" data-duration="8.75">
+<div class="stage" style="visibility:hidden">
+  <div class="halo"></div><div class="grid"></div><div class="floor"></div>
+
+  <div class="tt">Never <i>discount</i> first.</div>
+  <div class="cd"><small>The price</small><b class="goldt gglow">$29,000</b><div class="ls">Stays the same</div></div>
+  <div class="rt"><div class="cut goldt gglow">Cut scope,<br>not price.</div><div class="dp">Drop your number and you told them it was padded.</div></div>
+  <div class="pd">PADDED</div>
+  <div class="vig"></div><div class="grain"></div>
+</div>
+<div class="wipe"></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 442.0; const g = gfx("v34-no-discount", T0, 8.75); const tl = g.tl, at = g.at;
+
+g.stageIn(442.0);
+tl.set(".cut, .dp, .pd, .ls", {autoAlpha: 0}, 0);
+g.in(".tt", 442.45, {y: 24}); g.in(".cd", 443.3, {y: 30});
+tl.fromTo(".cut", {autoAlpha: 0, y: 26, filter: "blur(10px)"}, {autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power3.out"}, at(445.0));
+g.in(".ls", 446.6, {y: 10, d: 0.3}); g.in(".dp", 447.6, {y: 18, d: 0.42});
+tl.fromTo(".pd", {autoAlpha: 0, scale: 2}, {autoAlpha: 1, scale: 1, duration: 0.22, ease: "power4.in"}, at(449.8));
+g.stageOut(450.4);
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

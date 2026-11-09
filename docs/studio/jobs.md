@@ -33,6 +33,8 @@ Stage paths:
 | `revise` | Claude | Run `node studio/sheet.mjs md <id>` to see which scenes have open notes. For every note with `status: "open"`: change that scene only, then set its `reply` (one line: what changed) and `status: "done"`. If a note can't be done, say why in `reply` and leave it open. Long-form: re-render only the noted scenes, `assemble`, re-place sounds, `thumbs`. Short-form: re-render the preview. | `notes.json`, `preview.mp4`, `edits.json` | `review` |
 | `final` | Claude | Full-quality render of the approved edit. Copy it into the job folder. Run the content step if the user asked for it. | `final.mp4`, `job.json` `final`, `finalDuration` (seconds, for the "ready" screen's runtime stat), `outputs` | `done` |
 
+Motion-graphic edits run the `edit` stage through `studio/edit.mjs` (plan, fit, build, cut, check); see CLAUDE.md "How an edit runs".
+
 If the user picks a style during `formats` (the page allows it), the job is already in
 `design`; skip ranking. The user's moves (`pick`, `clips`, `graphics`, `review`) happen on the
 page; never move a job out of them yourself.

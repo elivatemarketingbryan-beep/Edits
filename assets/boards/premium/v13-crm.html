@@ -1,0 +1,55 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 1:59-2:18 full stage: a lead lands in the CRM, rides every stage on his words, then follow-ups go out by themselves */
+
+  .kk { position: absolute; left: 110px; top: 92px; }
+  .tt { position: absolute; left: 110px; top: 128px; font-size: 76px; font-weight: 900; letter-spacing: -0.04em; white-space: nowrap; }
+  .bd { position: absolute; left: 110px; top: 290px; width: 1700px; height: 430px; }
+  .co { position: absolute; top: 0; width: 264px; height: 430px; box-sizing: border-box; border-radius: 20px; background: linear-gradient(180deg, rgba(60,46,96,0.5), rgba(22,16,38,0.55)); border: 1.5px solid rgba(255,255,255,0.1); }
+  .hd { padding: 20px 22px; font-size: 27px; font-weight: 800; color: rgba(255,255,255,0.65); white-space: nowrap; }
+  .lead { position: absolute; left: 14px; top: 92px; width: 236px; height: 200px; box-sizing: border-box; padding: 20px; border-radius: 16px; background: linear-gradient(160deg, #f3d892, #b8913f); color: #1c1306; box-shadow: 0 24px 50px rgba(0,0,0,0.55), 0 0 50px rgba(232,199,122,0.4); }
+  .lead b { display: block; font-size: 32px; font-weight: 900; white-space: nowrap; } .lead span { display: block; font-size: 22px; font-weight: 700; margin-top: 7px; white-space: nowrap; }
+  .np { position: absolute; left: 1120px; top: 130px; font-size: 40px; font-weight: 800; color: rgba(255,255,255,0.8); white-space: nowrap; }
+  .np s { text-decoration-color: var(--loss); text-decoration-thickness: 5px; }
+  .auto { position: absolute; left: 110px; top: 770px; width: 1700px; display: flex; align-items: center; gap: 22px; }
+  .tg { padding: 16px 28px; border-radius: 14px; background: linear-gradient(160deg, #f3d892, #b8913f); color: #1c1306; font-size: 34px; font-weight: 900; white-space: nowrap; }
+  .m { padding: 16px 28px; border-radius: 18px 18px 18px 4px; background: linear-gradient(160deg, rgba(60,46,96,0.9), rgba(22,16,38,0.95)); border: 1.5px solid rgba(196,181,253,0.35); font-size: 32px; font-weight: 700; white-space: nowrap; }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v13-crm" data-start="0" data-width="1920" data-height="1080" data-duration="19.75">
+<div class="stage" style="visibility:hidden">
+  <div class="halo"></div><div class="grid"></div><div class="floor"></div>
+
+  <div class="kk kick g">The follow-up system</div><div class="tt">Every lead goes in the <span class="goldt">CRM.</span></div>
+  <div class="np">Not <s>just your phone.</s></div>
+  <div class="bd"><div class="co col0" style="left:0px"><div class="hd">New</div></div><div class="co col1" style="left:284px"><div class="hd">Contacted</div></div><div class="co col2" style="left:568px"><div class="hd">Qualified</div></div><div class="co col3" style="left:852px"><div class="hd">Quote sent</div></div><div class="co col4" style="left:1136px"><div class="hd">Followed up</div></div><div class="co col5" style="left:1420px"><div class="hd">Won</div></div><div class="lead" id="ld"><b>Maria Lopez</b><span class="a">(408) 555-0142</span><span class="b">maria@email.com</span></div></div>
+  <div class="auto"><div class="tg">Automatic</div><div class="m m0">Text sent</div><div class="m m1">Email sent</div><div class="m m2">Reminder sent</div></div>
+  <div class="vig"></div><div class="grain"></div>
+</div>
+<div class="wipe"></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 118.85; const g = gfx("v13-crm", T0, 19.75); const tl = g.tl, at = g.at;
+
+g.stageIn(118.85);
+tl.set(".np, .tg, .m, .lead .a, .lead .b", {autoAlpha: 0}, 0);
+g.in(".kk, .tt", 119.4, {y: 20});
+g.in(".co", 120.2, {y: 28, stagger: 0.05, d: 0.4});
+tl.fromTo("#ld", {autoAlpha: 0, y: -90, scale: 0.92}, {autoAlpha: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(1.6)"}, at(122.1));
+tl.fromTo(".lead .a", {autoAlpha: 0}, {autoAlpha: 1, duration: 0.2}, at(123.0));
+tl.fromTo(".lead .b", {autoAlpha: 0}, {autoAlpha: 1, duration: 0.2}, at(123.7));
+g.in(".np", 126.1, {y: 14, d: 0.3});
+[[1, 129.4], [2, 130.1], [3, 130.9], [4, 131.7], [5, 132.4]].forEach(([i, t]) => {
+  tl.to("#ld", {x: i * 284, duration: 0.3, ease: "power3.inOut"}, at(t - 0.22));
+  tl.to(`.col${i}`, {borderColor: "#e8c77a", boxShadow: "0 0 40px rgba(232,199,122,0.28)", duration: 0.18}, at(t));
+  tl.to(`.col${i} .hd`, {color: "#ffffff", duration: 0.18}, at(t));
+});
+tl.to(".col0", {borderColor: "#e8c77a", duration: 0.18}, at(128.9));
+tl.to(".col0 .hd", {color: "#ffffff", duration: 0.18}, at(128.9));
+tl.fromTo(".tg", {autoAlpha: 0, scale: 0.8}, {autoAlpha: 1, scale: 1, duration: 0.3, ease: "back.out(2)"}, at(135.6));
+g.in(".m0", 136.1, {y: 18, d: 0.3}); g.in(".m1", 136.6, {y: 18, d: 0.3}); g.in(".m2", 137.1, {y: 18, d: 0.3});
+g.stageOut(137.9);
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

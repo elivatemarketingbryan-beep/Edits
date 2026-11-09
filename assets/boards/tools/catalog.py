@@ -1,4 +1,4 @@
-"""Build styles/BOARDS.md and the dark gallery from his catalog and index. Usage: python catalog.py <his repo> <studio root>"""
+"""Build assets/boards/CATALOG.md and the dark gallery from his catalog and index. Usage: python catalog.py <his repo> <studio root>"""
 import re
 import sys
 
@@ -29,7 +29,7 @@ for l in cat:
         n += 1
     elif sec and sec.startswith('Two boards') and l.strip():
         out.append(re.sub(r'#[0-9A-Fa-f]{6}', '', l))
-open(S + '/styles/BOARDS.md', 'w', encoding='utf8').write('\n'.join(out).rstrip() + '\n')
+open(S + '/assets/boards/CATALOG.md', 'w', encoding='utf8').write('\n'.join(out).rstrip() + '\n')
 print('catalog entries', n)
 
 h = open(R + '/boards/index.html', encoding='utf8').read()
@@ -37,7 +37,7 @@ h = re.sub(r'https://fonts\.googleapis\.com/css2\?[^"]+', 'https://fonts.googlea
 h = h.replace('--ink:#1F2937;--mut:#6B7280;--line:#E5E7EB;--wash:#F6F7F9;--acc:#2563EB', '--ink:#FFFFFF;--mut:rgba(255,255,255,.62);--line:rgba(196,181,253,.22);--wash:#050308;--acc:#8B5CF6')
 h = h.replace('background:#fff;border:1.5px', 'background:#170A32;border:1.5px').replace('background:#fff;margin-bottom', 'background:#050308;margin-bottom')
 h = h.replace('rgba(17,24,39,.06)', 'rgba(0,0,0,.4)').replace('rgba(17,24,39,.12)', 'rgba(139,92,246,.3)')
-h = re.sub(r'<header>.*?</header>', '<header><h1>Elivate board library</h1><p>74 animated boards in the premium look. Click one to open it live. Under each: when to use it, in the words you\'d say.</p></header>', h, 1, flags=re.S)
+h = re.sub(r'<header>.*?</header>', '<header><h1>Elivate board library</h1><p>111 animated graphics in the premium look: the ones you approved, then the 74 boards. Click one to open it live. Under each: when to use it, in the words you\'d say.</p></header>', h, 1, flags=re.S)
 h = h.replace('"JetBrains Mono",monospace', 'Inter,sans-serif')
 open(S + '/assets/boards/index.html', 'w', encoding='utf8').write(h)
 print('gallery cards', h.count('class="c"'), 'tein' in h.lower())

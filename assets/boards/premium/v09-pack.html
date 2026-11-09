@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 1:30-1:39 full stage: step 3, the quote is wrapped and boxed; how you present the price protects the sale */
+
+  .L { position: absolute; left: 120px; top: 250px; width: 800px; }
+  .kk { font-size: 24px; }
+  .st { font-size: 96px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.04; margin-top: 12px; }
+  .p { font-size: 48px; font-weight: 700; color: rgba(255,255,255,0.75); letter-spacing: -0.02em; line-height: 1.2; margin-top: 40px; }
+  .p b { color: var(--gold); font-weight: 900; }
+  .bx { position: absolute; left: 1090px; top: 450px; width: 640px; height: 400px; border-radius: 16px; background: linear-gradient(160deg, #c39a58, #7d592b); box-shadow: inset 0 3px 0 rgba(255,243,207,0.4), 0 50px 90px rgba(0,0,0,0.65); }
+  .in { position: absolute; left: 1090px; top: 410px; width: 640px; height: 60px; background: #2a1c10; border-radius: 12px; }
+  .fl { position: absolute; top: 410px; width: 320px; height: 70px; background: linear-gradient(180deg, #d3ab69, #a57a3f); transform-origin: 50% 100%; }
+  .fl.a { left: 1090px; transform-origin: 0% 50%; } .fl.b { left: 1410px; transform-origin: 100% 50%; }
+  .doc { position: absolute; left: 1230px; top: 150px; width: 360px; height: 440px; border-radius: 14px; background: #fbf8ef; color: #1c1306; padding: 34px; box-sizing: border-box; box-shadow: 0 30px 60px rgba(0,0,0,0.55); }
+  .doc small { font-size: 22px; font-weight: 800; letter-spacing: 0.2em; color: #8a6a24; }
+  .doc b { display: block; font-size: 74px; font-weight: 900; letter-spacing: -0.04em; margin-top: 10px; }
+  .doc i { display: block; height: 12px; border-radius: 6px; background: #e4dcc8; margin-top: 22px; }
+  .seal { position: absolute; left: 1344px; top: 610px; width: 132px; height: 132px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--gold); color: #1c1306; padding: 34px; box-sizing: border-box; box-shadow: 0 0 60px rgba(232,199,122,0.6); }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v09-pack" data-start="0" data-width="1920" data-height="1080" data-duration="9.05">
+<div class="stage" style="visibility:hidden">
+  <div class="halo"></div><div class="grid"></div><div class="floor"></div>
+
+  <div class="L"><div class="kk kick g">Step 3</div><div class="st">Pack the<br><span class="goldt">offer</span> right.</div><div class="p">How you present the price<br><b>protects the sale.</b></div></div>
+  <div class="in"></div><div class="doc"><small>YOUR QUOTE</small><b>$29,000</b><i></i><i style="width:80%"></i><i style="width:60%"></i></div><div class="bx"></div><div class="fl a"></div><div class="fl b"></div><div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></div>
+  <div class="vig"></div><div class="grain"></div>
+</div>
+<div class="wipe"></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 90.2; const g = gfx("v09-pack", T0, 9.05); const tl = g.tl, at = g.at;
+
+g.stageIn(90.2);
+tl.set(".p, .seal, .fl", {autoAlpha: 0}, 0);
+g.in(".L .kk, .L .st", 90.7, {y: 22});
+g.in(".in, .bx", 91.5, {y: 40}); tl.fromTo(".doc", {autoAlpha: 0, y: -120}, {autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out"}, at(92.9));
+g.in(".p", 94.0, {y: 20});
+tl.to(".doc", {y: 330, duration: 0.7, ease: "power2.inOut"}, at(96.3));
+tl.set(".doc", {autoAlpha: 0}, at(97.05));
+tl.set(".fl", {autoAlpha: 1}, at(96.95));
+tl.fromTo(".fl.a", {rotate: -90}, {rotate: 0, duration: 0.32, ease: "power3.in"}, at(97.0));
+tl.fromTo(".fl.b", {rotate: 90}, {rotate: 0, duration: 0.32, ease: "power3.in"}, at(97.2));
+tl.fromTo(".seal", {autoAlpha: 0, scale: 0.3}, {autoAlpha: 1, scale: 1, duration: 0.35, ease: "back.out(2.4)"}, at(97.8));
+g.stageOut(98.55);
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

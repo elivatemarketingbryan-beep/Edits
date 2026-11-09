@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 6:44-7:01 left panel: a few more levers; value stacks up brick by brick before the price lands on top */
+  .pn { position: absolute; left: 0; top: 0; bottom: 0; width: 860px; background: linear-gradient(90deg, #050308 0%, #050308 84%, rgba(5,3,8,0) 100%); }
+  .pn::after { content: ""; position: absolute; left: 0; right: 120px; bottom: 0; height: 320px; background: radial-gradient(120% 100% at 30% 100%, rgba(139,92,246,0.34), transparent 75%); }
+  .pc { position: absolute; left: 90px; top: 0; bottom: 0; width: 640px; z-index: 2; }
+
+  .kk { position: absolute; left: 0; top: 96px; }
+  .st { position: absolute; left: 0; top: 134px; font-size: 76px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.06; }
+  .st i { font-family: var(--serif); font-weight: 700; color: var(--gold); }
+  .sk { position: absolute; left: 0; top: 410px; width: 640px; height: 500px; }
+  .b { position: absolute; left: 0; width: 620px; height: 78px; box-sizing: border-box; padding: 0 28px; border-radius: 14px; display: flex; align-items: center; font-size: 38px; font-weight: 800; white-space: nowrap; background: linear-gradient(160deg, rgba(76,29,149,0.9), rgba(26,11,56,0.95)); border: 1.5px solid rgba(196,181,253,0.4); }
+  .pr { position: absolute; left: 0; bottom: 366px; width: 620px; height: 124px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 84px; font-weight: 900; letter-spacing: -0.04em; color: #1c1306; background: linear-gradient(160deg, #f3d892, #b8913f); box-shadow: 0 0 70px rgba(232,199,122,0.45); }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v30-stack" data-start="0" data-width="1920" data-height="1080" data-duration="16.3">
+>
+  <div class="pn"></div><div class="pc"><div class="kk kick g">A few more levers</div><div class="st">Stack the value<br><i>before the price.</i></div><div class="sk"><div class="b b0" style="bottom:0px">Warranty</div><div class="b b1" style="bottom:88px">Cleanups</div><div class="b b2" style="bottom:176px">Permits handled</div><div class="b b3" style="bottom:264px">Timeline guarantee</div><div class="pr">$29,000</div></div></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 404.3; const g = gfx("v30-stack", T0, 16.3); const tl = g.tl, at = g.at;
+
+tl.fromTo(".pn", {xPercent: -100}, {xPercent: 0, duration: 0.4, ease: "power3.out"}, 0.02);
+tl.set(".b, .pr, .st", {autoAlpha: 0}, 0);
+g.in(".kk", 406.7, {y: 14});
+tl.fromTo(".st", {autoAlpha: 0, y: 22}, {autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out"}, at(409.6));
+[412.8, 413.6, 414.3, 415.4].forEach((t, i) => tl.fromTo(`.b${i}`, {autoAlpha: 0, y: -160}, {autoAlpha: 1, y: 0, duration: 0.34, ease: "bounce.out"}, at(t)));
+tl.fromTo(".pr", {autoAlpha: 0, y: -240}, {autoAlpha: 1, y: 0, duration: 0.4, ease: "power3.in"}, at(417.45));
+tl.to(".sk", {y: 8, duration: 0.07, yoyo: true, repeat: 1}, at(417.85));
+g.out(".pc", 420.05); tl.to(".pn", {xPercent: -100, duration: 0.36, ease: "power3.in"}, at(420.22));
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

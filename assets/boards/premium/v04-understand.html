@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 0:33-0:36.5 focus: understanding your process */
+
+  .ph { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .a { font-size: 112px; font-weight: 900; letter-spacing: -0.04em; white-space: nowrap; }
+  .b { font-family: var(--serif); font-style: italic; font-weight: 700; font-size: 88px; line-height: 1.2; margin-top: 12px; padding: 0 16px 8px; }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v04-understand" data-start="0" data-width="1920" data-height="1080" data-duration="3.65" data-layout="focus">
+>
+  <div class="ph"><div class="a">Understand your process.</div><div class="b goldt gglow">Every time a customer comes in.</div></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 32.95; const g = gfx("v04-understand", T0, 3.65); const tl = g.tl, at = g.at;
+
+g.in(".a", 33.35, {y: 30});
+tl.fromTo(".b", {autoAlpha: 0, y: 24, filter: "blur(10px)"}, {autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out"}, at(34.65));
+g.out(".ph", 36.25);
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

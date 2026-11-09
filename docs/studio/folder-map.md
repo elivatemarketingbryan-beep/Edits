@@ -9,6 +9,12 @@ Start Studio.cmd          double-click: runs the studio page at http://localhost
 studio/                   the page (server.mjs, public/) and the job store (jobs.mjs)
 jobs/<id>/                one folder per dropped video (the page's state + deliverables)
 projects/<id>/            the editing work for that job (root pipeline layout, see docs/editor-pipeline.md)
+styles/LIBRARY.md         the one library: every graphic, effect and sound, tagged by when to use it (built by studio/library.mjs)
+studio/edit.mjs           the edit flow: plan, fit, build, cut, check
+studio/board-fit.py       puts real words and word timing on a board
+studio/listen.py          hears sounds (earshot) and rejects kazoo, bonk, boom; results in styles/sfx-heard.json
+studio/preflight.mjs      the checklist gate that jobs.mjs runs before review, final and done
+assets/boards/            74 boards, CATALOG.md, premium/ (Bryan's approved graphics), index.html gallery
 styles/catalog.json       every style and tool: id, engine, status, ranking cues, recipe
 styles/STYLE-GUIDE.md     what every style looks like, studied frame by frame. READ before building a style
 styles/EDIT-PREFERENCES.md  Bryan's editing taste (e.g. YouTube: don't overdo effects). READ before ideas, edits and revisions; it wins over the guide. Add what he tells you

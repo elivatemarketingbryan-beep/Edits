@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 0:38-0:52 split: restarting loop on each 'new', then a process lights the same steps */
+
+  .A, .B { position: absolute; left: 90px; top: 0; width: 880px; height: 1080px; }
+  .kk { position: absolute; left: 0; top: 196px; }
+  .t { position: absolute; left: 0; top: 232px; font-size: 92px; font-weight: 900; letter-spacing: -0.04em; white-space: nowrap; }
+  .t i { font-family: var(--serif); font-weight: 700; color: #ff8a8e; }
+  .rw { position: absolute; left: 0; width: 800px; height: 94px; box-sizing: border-box; border-radius: 18px; display: flex; align-items: center; gap: 22px; padding: 0 28px; font-size: 40px; font-weight: 800; white-space: nowrap; background: linear-gradient(160deg, rgba(60,46,96,0.85), rgba(22,16,38,0.92)); border: 1.5px solid rgba(255,255,255,0.14); }
+  .ic { width: 44px; height: 44px; color: #ff8a8e; display: block; }
+  .pb { position: absolute; left: 0; top: 720px; font-size: 42px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+  .pb span { color: #ff8a8e; }
+  .f { position: absolute; left: 0; top: 262px; font-size: 96px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.08; }
+  .tr { position: absolute; left: 20px; top: 590px; width: 800px; height: 60px; }
+  .ln { position: absolute; left: 30px; top: 28px; width: 784px; height: 4px; background: rgba(255,255,255,0.12); }
+  .ln i { position: absolute; inset: 0; background: linear-gradient(90deg, #8b5cf6, #e8c77a); transform-origin: 0 50%; }
+  .d { position: absolute; top: 0; width: 60px; height: 60px; border-radius: 50%; box-sizing: border-box; background: #1a0b38; border: 3px solid rgba(196,181,253,0.4); }
+  .s { position: absolute; left: 0; top: 700px; font-family: var(--serif); font-style: italic; font-weight: 700; font-size: 84px; padding: 0 12px 8px 0; white-space: nowrap; }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v05-starting-over" data-start="0" data-width="1920" data-height="1080" data-duration="14.7" data-layout="portrait">
+
+>
+  <div class="A"><div class="kk kick">Without a process</div><div class="t">Starting over. <i>Again.</i></div><div class="rw w0" style="top:372px"><span class="ic i0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></span>New call</div><div class="rw w1" style="top:484px"><span class="ic i1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></span>New text</div><div class="rw w2" style="top:596px"><span class="ic i2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></span>New guess at what to say</div><div class="pb">Every customer is a <span>brand new problem.</span></div></div>
+  <div class="B"><div class="kk kick g">With one</div><div class="f">A sales process<br>fixes that.</div><div class="tr"><div class="ln"><i></i></div><div class="d" style="left:0px" id="d0"></div><div class="d" style="left:196px" id="d1"></div><div class="d" style="left:392px" id="d2"></div><div class="d" style="left:588px" id="d3"></div><div class="d" style="left:784px" id="d4"></div></div><div class="s goldt gglow">Same steps. Every time.</div></div>
+<div class="winp"></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 37.9; const g = gfx("v05-starting-over", T0, 14.7); const tl = g.tl, at = g.at;
+
+tl.set(".B", {autoAlpha: 0}, 0);
+g.in(".A .kk, .A .t", 38.35, {y: 22});
+[[0, 42.0], [1, 42.6], [2, 43.6]].forEach(([i, t]) => {
+  tl.fromTo(`.w${i}`, {autoAlpha: 0, x: -30}, {autoAlpha: 1, x: 0, duration: 0.35, ease: "power3.out"}, at(t));
+  tl.fromTo(`.i${i}`, {rotate: 0}, {rotate: -360, duration: 0.7, ease: "power2.out"}, at(t));
+});
+g.in(".pb", 45.4, {y: 18});
+tl.to(".A", {autoAlpha: 0, y: -24, filter: "blur(10px)", duration: 0.28, ease: "power2.in"}, at(47.72));
+tl.set(".B", {autoAlpha: 1}, at(47.98));
+g.in(".B .kk", 48.0, {y: 14});
+tl.fromTo(".f", {autoAlpha: 0, y: 26}, {autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out"}, at(48.05));
+tl.fromTo(".d", {autoAlpha: 0, scale: 0.6}, {autoAlpha: 1, scale: 1, duration: 0.3, stagger: 0.05, ease: "back.out(2)"}, at(49.5));
+tl.fromTo(".ln i", {scaleX: 0}, {scaleX: 1, duration: 1.6, ease: "none"}, at(50.15));
+[0, 1, 2, 3, 4].forEach((i) => tl.to(`#d${i}`, {backgroundColor: "#e8c77a", borderColor: "#fff3cf", boxShadow: "0 0 30px rgba(232,199,122,0.7)", duration: 0.18}, at(50.15 + i * 0.4)));
+tl.fromTo(".s", {autoAlpha: 0, y: 22, filter: "blur(10px)"}, {autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power3.out"}, at(50.5));
+g.out(".B", 51.85);
+tl.fromTo(".winp", {autoAlpha: 0}, {autoAlpha: 1, duration: 0.35}, 0.02); tl.to(".winp", {autoAlpha: 0, duration: 0.3}, 14.7 - 0.36);
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

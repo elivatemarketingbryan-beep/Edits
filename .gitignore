@@ -65,3 +65,12 @@ engines/video-fx/engine/models/
 engines/video-fx/engine/.cache/
 engines/video-fx/engine/jobs/
 engines/video-fx/engine/out/
+
+# Local-only folders
+Edits/
+references/
+carousel-generator/
+engines/earshot/uv.lock
+
+# Small footage placeholders the boards need
+!assets/boards/assets/*.mp4

@@ -1,0 +1,76 @@
+/* VSL premium look (Bryan's VSL, 2026-11-07). Brand purple for structure, gold for money and results.
+   Near-black stage with a flat floor glow and corner light (never a centred oval over a dome: EDIT-PREFERENCES),
+   frosted glass cards, film grain, Inter + Playfair Display italic. */
+:root {
+  --bg: #050308;
+  --fg: #ffffff;
+  --muted: rgba(255, 255, 255, 0.6);
+  --accent: #8b5cf6;
+  --accent-light: #c4b5fd;
+  --accent-deep: #4c1d95;
+  --gold: #e8c77a;
+  --gold-deep: #b8913f;
+  --loss: #e5484d;
+  --ok: #22a06b;
+  --sans: "Inter", system-ui, sans-serif;
+  --serif: "Playfair Display", Georgia, serif;
+}
+html, body { margin: 0; background: transparent; }
+body { font-family: var(--sans); color: var(--fg); -webkit-font-smoothing: antialiased; }
+.root { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+
+.stage { position: absolute; inset: 0; background: var(--bg); overflow: hidden; }
+.floor { position: absolute; left: 0; right: 0; bottom: 0; height: 460px;
+  background: radial-gradient(160% 100% at 50% 100%, rgba(139, 92, 246, 0.42), rgba(109, 40, 217, 0.18) 40%, rgba(76, 29, 149, 0.05) 70%, transparent 100%); }
+.floor.gold { background: radial-gradient(160% 100% at 50% 100%, rgba(232, 199, 122, 0.30), rgba(184, 145, 63, 0.12) 40%, rgba(120, 90, 30, 0.04) 70%, transparent 100%); }
+.halo { position: absolute; inset: 0;
+  background: radial-gradient(900px 600px at 0% 0%, rgba(139, 92, 246, 0.15), transparent 70%),
+              radial-gradient(800px 560px at 100% 6%, rgba(196, 181, 253, 0.08), transparent 70%); }
+.grid { position: absolute; inset: 0; opacity: 0.6;
+  background: linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px) 0 0 / 100% 72px,
+              linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px) 0 0 / 72px 100%;
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 40%, #000 30%, transparent 85%); }
+.vig { position: absolute; inset: 0; background: radial-gradient(130% 110% at 50% 45%, transparent 55%, rgba(0,0,0,0.55) 100%); pointer-events: none; }
+.grain { position: absolute; inset: -50%; opacity: 0.07; pointer-events: none; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+.wipe { position: absolute; inset: 0; background: linear-gradient(90deg, #1a0b38, #3b1a75 60%, #1a0b38); }
+
+.grad { background: linear-gradient(180deg, #ffffff 0%, #c4b5fd 55%, #8b5cf6 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.goldt { background: linear-gradient(180deg, #fff3cf 0%, #e8c77a 45%, #b8913f 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.glow { filter: drop-shadow(0 0 26px rgba(139, 92, 246, 0.6)); }
+.gglow { filter: drop-shadow(0 0 28px rgba(232, 199, 122, 0.45)); }
+.serif { font-family: var(--serif); font-style: italic; }
+.kick { font-size: 22px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent-light); }
+.kick.g { color: var(--gold); }
+.rule { height: 2px; background: linear-gradient(90deg, transparent, rgba(232,199,122,0.8), transparent); }
+.num { font-variant-numeric: tabular-nums; }
+
+.glass { position: absolute; box-sizing: border-box; border-radius: 26px;
+  background: linear-gradient(160deg, rgba(60, 46, 96, 0.82), rgba(22, 16, 38, 0.88) 60%, rgba(12, 9, 22, 0.92));
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(139, 92, 246, 0.16); }
+.glass.gold { border-color: rgba(232, 199, 122, 0.45); box-shadow: inset 0 1px 0 rgba(255, 243, 207, 0.25), 0 30px 80px rgba(0,0,0,0.5), 0 0 70px rgba(232, 199, 122, 0.18); }
+.ico { display: block; }
+
+/* Side cards over the talking head: Bryan sits centre-frame, so cards live in the left third (the right third
+   has the mic arm up top; use its lower half only). */
+.side { position: absolute; left: 70px; top: 200px; width: 600px; padding: 34px 36px; }
+.side.r { left: auto; right: 70px; top: 420px; width: 520px; }
+.side .kick { font-size: 19px; }
+.side .h { font-size: 52px; font-weight: 900; letter-spacing: -0.035em; line-height: 1.04; margin-top: 10px; }
+.row { display: flex; align-items: center; gap: 18px; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 34px; font-weight: 800; letter-spacing: -0.015em; }
+.row:last-child { border-bottom: 0; }
+.dot { flex: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900;
+  background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.18); color: var(--muted); }
+.dot.on { background: linear-gradient(160deg, #f3d892, #b8913f); border-color: rgba(255,243,207,0.8); color: #1c1306; box-shadow: 0 0 18px rgba(232,199,122,0.5); }
+
+/* Split layout: the footage is scaled into this window by the render (layouts.py WIN); the window's giant
+   box-shadow paints the stage everywhere else, so the corners stay rounded. */
+.win { position: absolute; left: 1010px; top: 180px; width: 820px; height: 462px; border-radius: 28px;
+  box-shadow: 0 0 0 3000px #050308, 0 0 0 3002px rgba(232,199,122,0.0); outline: 2px solid rgba(232,199,122,0.55); outline-offset: 6px; }
+.win-cap { position: absolute; left: 1010px; top: 668px; width: 820px; font-size: 20px; font-weight: 800; letter-spacing: 0.24em; color: var(--muted); }
+/* Focus layout: big type straight on the blurred footage */
+.big-type { position: absolute; left: 0; right: 0; text-align: center; text-shadow: 0 8px 40px rgba(0,0,0,0.55); }
+
+/* portrait speaker window */
+.winp { position: absolute; left: 1230px; top: 140px; width: 600px; height: 800px; box-sizing: border-box; border-radius: 26px; border: 2px solid rgba(196, 181, 253, 0.42); box-shadow: 0 0 0 34px #050308, 0 0 70px 34px rgba(139, 92, 246, 0.16); }

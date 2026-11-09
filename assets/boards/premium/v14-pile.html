@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 2:18-2:24 portrait: 'pipeline' crossed out; unanswered text messages fall into a pile */
+
+  .w { position: absolute; left: 90px; top: 0; width: 1040px; height: 1080px; }
+  .a { position: absolute; left: 0; top: 150px; font-size: 54px; font-weight: 700; color: rgba(255,255,255,0.72); letter-spacing: -0.02em; white-space: nowrap; }
+  .pl { position: absolute; left: 0; top: 218px; font-size: 118px; font-weight: 900; letter-spacing: -0.04em; }
+  .pl i { position: absolute; left: -10px; right: -10px; top: 56%; height: 11px; border-radius: 6px; background: var(--loss); transform-origin: 0 50%; }
+  .p2 { position: absolute; left: 590px; top: 216px; font-family: var(--serif); font-style: italic; font-weight: 700; font-size: 130px; color: #ff8a8e; white-space: nowrap; }
+  .b { position: absolute; padding: 18px 28px; border-radius: 22px 22px 22px 6px; font-size: 32px; font-weight: 700; white-space: nowrap; background: linear-gradient(160deg, #40356a, #1e1636); border: 1.5px solid rgba(255,255,255,0.18); box-shadow: 0 16px 34px rgba(0,0,0,0.5); }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v14-pile" data-start="0" data-width="1920" data-height="1080" data-duration="5.9" data-layout="portrait">
+>
+  <div class="w"><div class="a">If your lead lives in your texts, it's not a</div><div class="pl">pipeline.<i></i></div><div class="p2">A pile.</div><div class="b b0" style="left:70px;top:500px;transform:rotate(-8deg)">Hey did you get my quote?</div><div class="b b1" style="left:360px;top:560px;transform:rotate(6deg)">What's the address again?</div><div class="b b2" style="left:40px;top:620px;transform:rotate(4deg)">Still interested</div><div class="b b3" style="left:420px;top:660px;transform:rotate(-5deg)">Can you come Tuesday?</div><div class="b b4" style="left:120px;top:730px;transform:rotate(-3deg)">Who is this?</div><div class="b b5" style="left:500px;top:760px;transform:rotate(7deg)">??</div><div class="b b6" style="left:260px;top:800px;transform:rotate(5deg)">Call me back</div></div>
+<div class="winp"></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 138.1; const g = gfx("v14-pile", T0, 5.9); const tl = g.tl, at = g.at;
+
+tl.set(".p2", {autoAlpha: 0}, 0);
+g.in(".a", 138.6, {y: 18}); g.in(".pl", 140.6, {y: 22});
+document.querySelectorAll(".b").forEach((el, i) => tl.fromTo(el, {autoAlpha: 0, y: -440}, {autoAlpha: 1, y: 0, duration: 0.45, ease: "bounce.out"}, at(139.4 + i * 0.22)));
+tl.fromTo(".pl i", {scaleX: 0}, {scaleX: 1, duration: 0.3, ease: "power3.inOut"}, at(141.75));
+tl.to(".pl", {opacity: 0.4, duration: 0.25}, at(142.0));
+tl.fromTo(".p2", {autoAlpha: 0, scale: 1.25, filter: "blur(10px)"}, {autoAlpha: 1, scale: 1, filter: "blur(0px)", duration: 0.35, ease: "power4.out"}, at(142.9));
+g.out(".w", 143.6);
+tl.fromTo(".winp", {autoAlpha: 0}, {autoAlpha: 1, duration: 0.35}, 0.02); tl.to(".winp", {autoAlpha: 0, duration: 0.3}, 5.9 - 0.36);
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 0:08.7-0:15.8 split: written for salespeople struck out; this is for contractors */
+
+  .wr { position: absolute; left: 90px; top: 236px; width: 880px; }
+  .h { font-size: 44px; font-weight: 700; color: rgba(255,255,255,0.7); letter-spacing: -0.02em; }
+  .sp { position: relative; display: inline-block; font-size: 104px; font-weight: 900; letter-spacing: -0.04em; margin-top: 8px; }
+  .sp i { position: absolute; left: -8px; right: -8px; top: 56%; height: 9px; border-radius: 5px; background: var(--loss); transform-origin: 0 50%; }
+  .fr { font-size: 44px; font-weight: 700; color: rgba(255,255,255,0.7); margin-top: 44px; letter-spacing: -0.02em; }
+  .ct { font-family: var(--serif); font-style: italic; font-weight: 700; font-size: 124px; line-height: 1.15; padding: 0 8px 6px 0; }
+  .chips { display: flex; gap: 16px; margin-top: 30px; }
+  .c { padding: 16px 26px; border-radius: 14px; font-size: 30px; font-weight: 800; white-space: nowrap; background: linear-gradient(160deg, rgba(60,46,96,0.85), rgba(22,16,38,0.92)); border: 1.5px solid rgba(255,255,255,0.14); }
+  .c.g { color: var(--gold); border-color: rgba(232,199,122,0.45); }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v02-for-contractors" data-start="0" data-width="1920" data-height="1080" data-duration="7.3" data-layout="portrait">
+>
+  <div class="wr"><div class="h a">Most sales advice is written for</div><div class="sp b">salespeople.<i></i></div>
+  <div class="fr c0">This is for</div><div class="ct goldt gglow c1">contractors.</div>
+  <div class="chips"><div class="c c2">Great at the work</div><div class="c g c3">Never taught to sell it</div></div></div>
+<div class="winp"></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 8.5; const g = gfx("v02-for-contractors", T0, 7.3); const tl = g.tl, at = g.at;
+
+g.in(".a", 8.75, {y: 20}); g.in(".b", 9.75, {y: 26});
+tl.fromTo(".sp i", {scaleX: 0}, {scaleX: 1, duration: 0.35, ease: "power3.inOut"}, at(10.7));
+tl.to(".sp", {opacity: 0.45, duration: 0.3}, at(11.0));
+g.in(".c0", 11.15, {y: 18});
+tl.fromTo(".c1", {autoAlpha: 0, y: 30, filter: "blur(12px)"}, {autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out"}, at(11.65));
+g.in(".c2", 12.95, {y: 16}); g.in(".c3", 14.0, {y: 16});
+g.out(".wr", 15.45);
+tl.fromTo(".winp", {autoAlpha: 0}, {autoAlpha: 1, duration: 0.35}, 0.02); tl.to(".winp", {autoAlpha: 0, duration: 0.3}, 7.3 - 0.36);
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

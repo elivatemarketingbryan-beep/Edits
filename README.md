@@ -16,6 +16,19 @@ Built for **Elivate Marketing** (purple on black, `@elivatemarketing.bryan`). Fi
 
 Full walkthrough: [START_HERE.md](START_HERE.md). Claude's operating manual: [CLAUDE.md](CLAUDE.md).
 
+## How an edit runs
+
+```
+plan  ->  fit  ->  show stills  ->  build  ->  cut  ->  check
+```
+
+`node studio/edit.mjs plan <job>` reads what you said and picks a graphic for each moment from [the library](styles/LIBRARY.md):
+your approved graphics, 74 boards in the same premium look, ready-made effects, Video FX and every sound, 246 items plus the
+1,548-sound SFX Library. Each part lands on the word that names it, new sounds get listened to first, and a checklist of every
+correction blocks anything that breaks a rule. Watch the graphics at [assets/boards/index.html](assets/boards/index.html).
+
+Boards adapted from [sirioberati/YouTube-AI-Motion-Graphics](https://github.com/sirioberati/YouTube-AI-Motion-Graphics) (MIT).
+
 ## The pipeline
 
 ```

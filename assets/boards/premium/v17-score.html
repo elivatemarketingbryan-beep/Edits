@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 2:48-3:12 left panel: a qualified-lead score climbs as each trait is named */
+  .pn { position: absolute; left: 0; top: 0; bottom: 0; width: 860px; background: linear-gradient(90deg, #050308 0%, #050308 84%, rgba(5,3,8,0) 100%); }
+  .pn::after { content: ""; position: absolute; left: 0; right: 120px; bottom: 0; height: 320px; background: radial-gradient(120% 100% at 30% 100%, rgba(139,92,246,0.34), transparent 75%); }
+  .pc { position: absolute; left: 90px; top: 0; bottom: 0; width: 640px; z-index: 2; }
+
+  .kk { position: absolute; left: 0; top: 96px; }
+  .st { position: absolute; left: 0; top: 132px; font-size: 76px; font-weight: 900; letter-spacing: -0.04em; white-space: nowrap; }
+  .ring { position: absolute; left: 0; top: 246px; width: 270px; height: 270px; }
+  .ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+  .sc { position: absolute; left: 0; right: 0; top: 76px; text-align: center; font-size: 100px; font-weight: 900; letter-spacing: -0.04em; }
+  .chips { position: absolute; left: 300px; top: 276px; width: 340px; }
+  .cp { display: inline-block; padding: 10px 20px; margin: 0 8px 10px 0; border-radius: 12px; font-size: 26px; font-weight: 800; white-space: nowrap; background: linear-gradient(160deg, rgba(60,46,96,0.85), rgba(22,16,38,0.92)); border: 1.5px solid rgba(232,199,122,0.4); }
+  .list { position: absolute; left: 0; top: 560px; width: 640px; }
+  .r { position: absolute; left: 0; display: flex; align-items: center; gap: 18px; font-size: 42px; font-weight: 800; white-space: nowrap; } .r span { width: 40px; height: 40px; color: var(--gold); flex: none; }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v17-score" data-start="0" data-width="1920" data-height="1080" data-duration="24.7">
+>
+  <div class="pn"></div><div class="pc"><div class="kk kick g">A qualified lead</div><div class="st">Worth the trip.</div>
+  <div class="ring"><svg viewBox="0 0 270 270" fill="none"><circle cx="135" cy="135" r="118" stroke="rgba(255,255,255,0.1)" stroke-width="18"/><circle id="arc" cx="135" cy="135" r="118" stroke="#e8c77a" stroke-width="18" stroke-linecap="round"/></svg><div class="sc goldt" id="sc">0</div></div>
+  <div class="chips"><span class="cp p0">Kitchen remodel</span><span class="cp p1">Roof</span><span class="cp p2">Full renovation</span></div>
+  <div class="list"><div class="r r0" style="top:0px"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>Can afford the work</div><div class="r r1" style="top:82px"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>A real project</div><div class="r r2" style="top:164px"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>A realistic timeline</div><div class="r r3" style="top:246px"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>Shown interest in you</div><div class="r r4" style="top:328px"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>The right fit</div></div></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 167.6; const g = gfx("v17-score", T0, 24.7); const tl = g.tl, at = g.at;
+
+tl.fromTo(".pn", {xPercent: -100}, {xPercent: 0, duration: 0.4, ease: "power3.out"}, 0.02);
+tl.set(".cp, .r", {autoAlpha: 0}, 0);
+g.in(".kk, .st", 168.0, {y: 18}); g.in(".ring", 168.0, {y: 18});
+const arc = document.querySelector("#arc"), C = 2 * Math.PI * 118; arc.style.strokeDasharray = C; arc.style.strokeDashoffset = C;
+const o = {v: 0}, el = document.querySelector("#sc"); const up = () => { el.textContent = Math.round(o.v); arc.style.strokeDashoffset = C * (1 - o.v / 100); };
+[[20, 168.1], [40, 174.4], [60, 175.8], [80, 178.8], [98, 185.2]].forEach(([v, t], i) => { tl.to(o, {v, duration: 0.6, ease: "power2.out", onUpdate: up}, at(t)); g.in(`.r${i}`, t, {y: 12, d: 0.32}); });
+g.in(".p0", 170.5, {y: 10, d: 0.28}); g.in(".p1", 171.5, {y: 10, d: 0.28}); g.in(".p2", 172.8, {y: 10, d: 0.28});
+tl.to(".cp", {autoAlpha: 0.25, duration: 0.3}, at(174.2));
+g.out(".pc", 191.65); tl.to(".pn", {xPercent: -100, duration: 0.38, ease: "power3.in"}, at(191.85));
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

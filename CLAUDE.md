@@ -26,10 +26,18 @@ approve, get the final. Claude is the editor; the page is the front door.
 - **Where work lives:** his file and deliverables in `jobs/<id>/`, editing work in `projects/<id>/`. Never edit or move the dropped source.
 - **Windows, Git Bash.** Python is `python`. Limit long renders so a hang is seen right away.
 
-## Picking a graphic
+## How an edit runs
 
-Run `node studio/board-ideas.mjs <id>` for board ideas from the transcript (74 boards, `styles/BOARDS.md`), then `python studio/board-fit.py`
-to put real words and timing on one (`--list` shows its parts). Also `styles/ANIMATIONS.md`. Rotate the kind of visual every beat; a board is a starting point.
+Motion-graphic edits go through one command, in this order. Everything comes from one library: `styles/LIBRARY.md` (246 items; watch them at `assets/boards/index.html`).
+
+1. **Plan:** `node studio/edit.mjs plan <id>` reads the transcript and picks a graphic for each moment. Trim it to what earns its place, rotating the kind of visual.
+2. **Fit:** `node studio/edit.mjs fit <id>`, then write each plan's real words and the word each part lands on. No real number means no number.
+3. **Show:** stills to Bryan for approval (`graphics.json`), as always.
+4. **Build:** `node studio/edit.mjs build <id>` fits and renders every plan.
+5. **Cut:** `node studio/edit.mjs cut <id>` puts them over the footage, then add sounds with `studio/sfx.mjs`.
+6. **Check:** `node studio/edit.mjs check <id>` listens to new sounds and runs the gate. Then move the stage.
+
+After adding a graphic or sound, run `node studio/library.mjs`.
 
 ## Hearing sounds and the gate
 

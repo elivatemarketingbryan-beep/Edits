@@ -1,0 +1,40 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 1:46-1:51 left panel: step 5, the contract is signed, the job lands on the calendar, now it's real */
+  .pn { position: absolute; left: 0; top: 0; bottom: 0; width: 860px; background: linear-gradient(90deg, #050308 0%, #050308 84%, rgba(5,3,8,0) 100%); }
+  .pn::after { content: ""; position: absolute; left: 0; right: 120px; bottom: 0; height: 320px; background: radial-gradient(120% 100% at 30% 100%, rgba(139,92,246,0.34), transparent 75%); }
+  .pc { position: absolute; left: 90px; top: 0; bottom: 0; width: 640px; z-index: 2; }
+  .kk { position: absolute; left: 0; top: 190px; font-size: 24px; }
+  .st { position: absolute; left: 0; top: 228px; font-size: 92px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.04; white-space: nowrap; }
+
+  .ct { position: absolute; left: 0; top: 410px; width: 400px; height: 300px; border-radius: 16px; background: #fbf8ef; color: #1c1306; padding: 26px; box-sizing: border-box; box-shadow: 0 30px 60px rgba(0,0,0,0.55); }
+  .ct small { font-size: 20px; font-weight: 800; letter-spacing: 0.2em; color: #8a6a24; } .ct i { display: block; height: 10px; border-radius: 5px; background: #e4dcc8; margin-top: 18px; }
+  .ct svg { position: absolute; left: 34px; top: 180px; width: 330px; height: 90px; }
+  .cal { position: absolute; left: 430px; top: 460px; width: 210px; height: 210px; border-radius: 18px; overflow: hidden; background: linear-gradient(160deg, rgba(60,46,96,0.9), rgba(22,16,38,0.95)); border: 1.5px solid rgba(232,199,122,0.5); text-align: center; }
+  .cal small { display: block; background: var(--gold); color: #1c1306; font-size: 24px; font-weight: 900; letter-spacing: 0.14em; padding: 8px 0; }
+  .cal b { display: block; font-size: 104px; font-weight: 900; letter-spacing: -0.04em; margin-top: 18px; }
+  .q { position: absolute; left: 0; top: 750px; font-family: var(--serif); font-style: italic; font-weight: 700; font-size: 92px; padding: 0 12px 8px 0; white-space: nowrap; }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v11-handoff" data-start="0" data-width="1920" data-height="1080" data-duration="5.7">
+>
+  <div class="pn"></div><div class="pc"><div class="kk kick g">Step 5</div><div class="st">The handoff.</div>
+  <div class="ct"><small>CONTRACT</small><i></i><i style="width:76%"></i><svg viewBox="0 0 330 90" fill="none"><path id="sg" d="M8 62C40 12 58 8 62 34S46 84 70 52 112 16 118 44s14 26 34 6 30-20 42-4 42 12 128-24" stroke="#2b1c60" stroke-width="5" stroke-linecap="round"/></svg></div>
+  <div class="cal"><small>START</small><b>14</b></div><div class="q goldt gglow">Now it's real.</div></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 105.55; const g = gfx("v11-handoff", T0, 5.7); const tl = g.tl, at = g.at;
+
+tl.fromTo(".pn", {xPercent: -100}, {xPercent: 0, duration: 0.4, ease: "power3.out"}, 0.02);
+g.in(".kk, .st", 106.3, {y: 20});
+tl.set(".q", {autoAlpha: 0}, 0);
+g.in(".ct", 107.4, {y: 24, d: 0.4});
+const s = document.querySelector("#sg"), L = s.getTotalLength(); s.style.strokeDasharray = L; s.style.strokeDashoffset = L;
+tl.to(s, {strokeDashoffset: 0, duration: 0.75, ease: "power1.inOut"}, at(107.95));
+tl.fromTo(".cal", {autoAlpha: 0, scale: 0.7, rotate: 6}, {autoAlpha: 1, scale: 1, rotate: 0, duration: 0.4, ease: "back.out(2)"}, at(109.0));
+tl.fromTo(".q", {autoAlpha: 0, y: 24, filter: "blur(10px)"}, {autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.42, ease: "power3.out"}, at(110.05));
+g.out(".pc", 111.0);
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

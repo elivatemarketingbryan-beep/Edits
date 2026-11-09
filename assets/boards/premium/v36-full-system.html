@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 7:48-7:56 focus: the full system behind this; $500,000 a year counts up */
+
+  .a { position: absolute; left: 0; right: 0; top: 280px; text-align: center; font-size: 84px; font-weight: 900; letter-spacing: -0.04em; }
+  .a i { font-family: var(--serif); font-weight: 700; color: var(--accent-light); padding-right: 6px; }
+  .v { position: absolute; left: 0; right: 0; top: 430px; text-align: center; font-size: 220px; font-weight: 900; letter-spacing: -0.05em; }
+  .y { position: absolute; left: 0; right: 0; top: 700px; text-align: center; font-size: 54px; font-weight: 800; color: rgba(255,255,255,0.85); letter-spacing: -0.02em; }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v36-full-system" data-start="0" data-width="1920" data-height="1080" data-duration="7.8" data-layout="focus">
+>
+  <div class="w"><div class="a">The <i>full system</i> behind this.</div><div class="v goldt gglow" id="v">$0</div><div class="y">a year for your contracting business</div></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 468.0; const g = gfx("v36-full-system", T0, 7.8); const tl = g.tl, at = g.at;
+
+tl.set(".y, .v", {autoAlpha: 0}, 0);
+g.in(".a", 469.3, {y: 24});
+tl.set(".v", {autoAlpha: 1}, at(472.6));
+const o = {v: 0}, el = document.querySelector("#v");
+tl.to(o, {v: 500000, duration: 1.9, ease: "power3.out", onUpdate: () => { el.textContent = "$" + (Math.round(o.v / 1000) * 1000).toLocaleString("en-US"); }}, at(472.65));
+g.in(".y", 475.1, {y: 14, d: 0.3});
+g.out(".w", 475.5);
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

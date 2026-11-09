@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 3:20-3:44 portrait: five questions before you drive out, then question 1: pick the project type */
+  .kq { font-size: 26px; font-weight: 800; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); }
+  .hq { font-size: 80px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.06; margin-top: 12px; }
+
+  .A { position: absolute; left: 90px; top: 280px; width: 1040px; }
+  .five { font-size: 330px; font-weight: 900; letter-spacing: -0.05em; line-height: 0.9; }
+  .sb { position: absolute; left: 270px; top: 40px; font-size: 104px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.04; }
+  .sb i { display: block; font-family: var(--serif); font-weight: 700; font-size: 78px; color: var(--gold); margin-top: 8px; padding-bottom: 8px; letter-spacing: -0.01em; }
+  .B { position: absolute; left: 90px; top: 130px; width: 1040px; }
+  .gr { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 44px; width: 1020px; }
+  .o { padding: 24px 34px; border-radius: 18px; font-size: 42px; font-weight: 800; white-space: nowrap; background: linear-gradient(160deg, rgba(60,46,96,0.85), rgba(22,16,38,0.92)); border: 1.5px solid rgba(255,255,255,0.14); }
+  .why { position: absolute; left: 90px; top: 700px; width: 1040px; }
+  .why .h { font-size: 46px; font-weight: 800; letter-spacing: -0.02em; }
+  .rr { display: flex; gap: 34px; margin-top: 20px; }
+  .ck { display: flex; align-items: center; gap: 14px; font-size: 40px; font-weight: 800; white-space: nowrap; } .ck span { width: 38px; height: 38px; color: var(--gold); }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v19-q1-project" data-start="0" data-width="1920" data-height="1080" data-duration="23.8" data-layout="portrait">
+>
+  <div class="A"><div class="five goldt gglow">5</div><div class="sb">questions<i>before you drive out.</i></div></div>
+  <div class="B"><div class="kq">Question 1</div><div class="hq">What type of project?</div><div class="gr"><div class="o o0">Kitchen remodel</div><div class="o o1">Bathroom remodel</div><div class="o o2">Flooring</div><div class="o o3">Roofing</div><div class="o o4">Full home renovation</div></div></div>
+  <div class="why"><div class="h">You know the job before you go.</div><div class="rr"><div class="ck c0"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>Matches your service</div><div class="ck c1"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>Worth pursuing</div></div></div>
+<div class="winp"></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 199.95; const g = gfx("v19-q1-project", T0, 23.8); const tl = g.tl, at = g.at;
+
+tl.set(".B, .o, .why, .ck", {autoAlpha: 0}, 0);
+tl.fromTo(".five", {autoAlpha: 0, scale: 0.7}, {autoAlpha: 1, scale: 1, duration: 0.45, ease: "back.out(1.8)"}, at(201.3));
+g.in(".sb", 201.5, {y: 22, d: 0.4});
+tl.to(".A", {autoAlpha: 0, y: -30, filter: "blur(10px)", duration: 0.25, ease: "power2.in"}, at(202.42));
+tl.set(".B", {autoAlpha: 1}, at(202.6));
+g.in(".B .kq, .B .hq", 202.65, {y: 20, d: 0.45});
+[206.5, 207.9, 209.1, 210.2, 211.2].forEach((t, i) => tl.fromTo(`.o${i}`, {autoAlpha: 0, scale: 0.85}, {autoAlpha: 1, scale: 1, duration: 0.28, ease: "back.out(2.2)"}, at(t)));
+tl.to(".o0", {background: "linear-gradient(160deg, #f3d892, #b8913f)", color: "#1c1306", borderColor: "transparent", boxShadow: "0 0 50px rgba(232,199,122,0.45)", duration: 0.25}, at(216.1));
+tl.set(".why", {autoAlpha: 1}, at(216.3)); g.in(".why .h", 217.2, {y: 16, d: 0.4});
+g.in(".c0", 220.7, {y: 14, d: 0.32}); g.in(".c1", 223.05, {y: 14, d: 0.3});
+tl.to(".B, .why", {autoAlpha: 0, duration: 0.2}, at(223.4));
+tl.fromTo(".winp", {autoAlpha: 0}, {autoAlpha: 1, duration: 0.35}, 0.02); tl.to(".winp", {autoAlpha: 0, duration: 0.3}, 23.8 - 0.36);
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>

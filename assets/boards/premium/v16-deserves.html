@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700;1,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vsl.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="gfx.js"></script>
+<style>
+  /* 2:33-2:48 full stage: real lead vs tire kicker; the tire rolls off and the real lead's checks land */
+
+  .kk { position: absolute; left: 0; right: 0; top: 104px; text-align: center; }
+  .tt { position: absolute; left: 0; right: 0; top: 142px; text-align: center; font-size: 88px; font-weight: 900; letter-spacing: -0.04em; }
+  .cd { position: absolute; top: 310px; width: 720px; height: 520px; box-sizing: border-box; padding: 40px; border-radius: 28px; text-align: center; }
+  .L { left: 200px; background: linear-gradient(160deg, rgba(92,70,28,0.5), rgba(28,20,8,0.9)); border: 2px solid rgba(232,199,122,0.6); box-shadow: 0 0 90px rgba(232,199,122,0.2); }
+  .R { left: 1000px; background: linear-gradient(160deg, rgba(60,46,96,0.6), rgba(22,16,38,0.92)); border: 1.5px solid rgba(255,255,255,0.14); }
+  .ic { width: 180px; height: 180px; margin: 0 auto; } .L .ic { color: var(--gold); } .R .ic { color: #ff8a8e; }
+  .cd h3 { margin: 22px 0 0; font-size: 62px; font-weight: 900; letter-spacing: -0.03em; }
+  .ck { display: flex; align-items: center; justify-content: center; gap: 16px; font-size: 40px; font-weight: 800; margin-top: 16px; white-space: nowrap; } .ck span { width: 38px; height: 38px; color: var(--gold); }
+
+</style></head><body>
+<div class="root" id="root" data-composition-id="v16-deserves" data-start="0" data-width="1920" data-height="1080" data-duration="15.1">
+<div class="stage" style="visibility:hidden">
+  <div class="halo"></div><div class="grid"></div><div class="floor"></div>
+
+  <div class="kk kick">Not everyone who reaches out is a real lead</div><div class="tt">Who actually deserves an <span class="goldt">estimate?</span></div>
+  <div class="cd L"><div class="ic"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"><path d="M10 48 50 12l40 36"/><path d="M22 40v48h56V40"/><path d="M42 88V60h16v28"/></svg></div><h3>Real lead</h3><div class="ck c0"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>Has the budget</div><div class="ck c1"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg></span>Intends to hire</div></div>
+  <div class="cd R"><div class="ic tire"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5"><circle cx="50" cy="50" r="42"/><circle cx="50" cy="50" r="20"/><path d="M50 8v22M50 70v22M8 50h22M70 50h22M20 20l16 16M64 64l16 16M80 20 64 36M36 64 20 80"/></svg></div><h3>Tire kicker</h3></div>
+  <div class="vig"></div><div class="grain"></div>
+</div>
+<div class="wipe"></div>
+</div>
+<script>document.fonts.ready.then(() => { const T0 = 152.7; const g = gfx("v16-deserves", T0, 15.1); const tl = g.tl, at = g.at;
+
+g.stageIn(152.7);
+tl.set(".ck", {autoAlpha: 0}, 0);
+g.in(".tt", 153.5, {y: 24}); g.in(".kk", 155.9, {y: 12});
+tl.fromTo(".L", {autoAlpha: 0, x: -60}, {autoAlpha: 1, x: 0, duration: 0.5, ease: "power3.out"}, at(159.0));
+tl.fromTo(".R", {autoAlpha: 0, x: 60}, {autoAlpha: 1, x: 0, duration: 0.5, ease: "power3.out"}, at(160.25));
+tl.fromTo(".tire", {rotate: 0}, {rotate: 360, duration: 1.1, ease: "power2.out"}, at(160.25));
+tl.to(".R", {autoAlpha: 0.3, scale: 0.94, duration: 0.4}, at(161.6));
+tl.to(".L", {scale: 1.04, duration: 0.5, ease: "power3.inOut"}, at(161.6));
+g.in(".c0", 163.9, {y: 14, d: 0.35}); g.in(".c1", 166.1, {y: 14, d: 0.35});
+g.stageOut(167.45);
+g.done(); });</script><script>window.__timelines=window.__timelines||{};if(location.search.includes('play')){document.documentElement.style.background='#050308';addEventListener('load',function run(){var t=Object.values(window.__timelines||{})[0];if(!t){setTimeout(run,100);return}t.eventCallback('onComplete',function(){setTimeout(function(){t.restart()},900)});t.play()})}</script></body></html>
