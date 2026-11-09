@@ -1,0 +1,1800 @@
+{
+ "stamp": {
+  "mtime": 1792796519,
+  "tags": [
+   [
+    "a camera shutter click",
+    5.0
+   ],
+   [
+    "a power drill",
+    2.8
+   ],
+   [
+    "a printer printing",
+    2.5
+   ],
+   [
+    "a tape stop slowing down",
+    2.5
+   ],
+   [
+    "a phone vibration buzz",
+    2.4
+   ],
+   [
+    "a ratchet clicking",
+    2.3
+   ]
+  ],
+  "reject": null,
+  "summary": "0.42 s short one-shot (attack 19 ms, decays in 330 ms). Sounds most like: a camera shutter click (z +4.9), a power drill (z +2.8), a printer printing (z +2.5) ["
+ },
+ "money": {
+  "mtime": 1792796519,
+  "tags": [
+   [
+    "a triangle hit",
+    3.3
+   ],
+   [
+    "a success chime",
+    3.1
+   ],
+   [
+    "coins dropping",
+    3.1
+   ],
+   [
+    "a cash register",
+    2.7
+   ],
+   [
+    "a notification ding",
+    2.6
+   ],
+   [
+    "a bicycle bell",
+    2.5
+   ]
+  ],
+  "reject": null,
+  "summary": "2.98 s 3 separate events (attack 90 ms, decays in 789 ms). Sounds most like: a triangle hit (z +3.2), a success chime (z +3.1), coins dropping (z +3.1) [clear r"
+ },
+ "money2": {
+  "mtime": 1792796519,
+  "tags": [
+   [
+    "a triangle hit",
+    2.9
+   ],
+   [
+    "an old typewriter",
+    2.7
+   ],
+   [
+    "keys jingling",
+    2.7
+   ],
+   [
+    "a sword being drawn",
+    2.6
+   ],
+   [
+    "coins dropping",
+    2.4
+   ],
+   [
+    "a metal scrape",
+    2.4
+   ]
+  ],
+  "reject": null,
+  "summary": "1.48 s busy, 4.7 onsets/s (attack 109 ms, decays in 540 ms). Sounds most like: a triangle hit (z +2.9), an old typewriter (z +2.6), keys jingling (z +2.6) [plau"
+ },
+ "ui-glass-shatter": {
+  "mtime": 1794101601,
+  "tags": [
+   [
+    "a digital glitch",
+    3.1
+   ],
+   [
+    "a crisp interface click",
+    2.4
+   ],
+   [
+    "an error buzz",
+    2.2
+   ],
+   [
+    "a notification ding",
+    2.2
+   ],
+   [
+    "a microwave beep",
+    2.1
+   ],
+   [
+    "a success chime",
+    2.0
+   ]
+  ],
+  "reject": null,
+  "summary": "0.74 s busy, 6.8 onsets/s (attack 6 ms, decays in 381 ms). Sounds most like: a digital glitch (z +3.0), a crisp interface click (z +2.4), an error buzz (z +2.2)"
+ },
+ "ui-open": {
+  "mtime": 1794104855,
+  "tags": [
+   [
+    "a success chime",
+    2.9
+   ],
+   [
+    "a snare hit",
+    2.7
+   ],
+   [
+    "a kalimba note",
+    2.1
+   ],
+   [
+    "an error buzz",
+    2.1
+   ],
+   [
+    "a box lid closing",
+    1.9
+   ],
+   [
+    "a bubble pop",
+    1.9
+   ]
+  ],
+  "reject": null,
+  "summary": "0.33 s short transient (attack 5 ms, decays in 176 ms). Sounds most like: a success chime (z +2.9), a snare hit (z +2.7), a kalimba note (z +2.1) [plausible rea"
+ },
+ "ui-select": {
+  "mtime": 1794104855,
+  "tags": [
+   [
+    "a success chime",
+    3.3
+   ],
+   [
+    "a kalimba note",
+    2.5
+   ],
+   [
+    "a celesta note",
+    2.1
+   ],
+   [
+    "a snare hit",
+    2.1
+   ],
+   [
+    "a notification ding",
+    2.1
+   ],
+   [
+    "a wooden block hit",
+    1.9
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a wooden block hit\" (z 1.9)",
+  "summary": "0.29 s short transient (attack 4 ms, decays in 81 ms). Sounds most like: a success chime (z +3.3), a kalimba note (z +2.4), a celesta note (z +2.1) [clear readi"
+ },
+ "ui-progress-step": {
+  "mtime": 1794104855,
+  "tags": [
+   [
+    "a success chime",
+    2.9
+   ],
+   [
+    "a snare hit",
+    2.5
+   ],
+   [
+    "a kalimba note",
+    2.2
+   ],
+   [
+    "a punchy impact hit",
+    2.1
+   ],
+   [
+    "a wooden block hit",
+    2.1
+   ],
+   [
+    "a celesta note",
+    2.1
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a wooden block hit\" (z 2.1)",
+  "summary": "0.25 s short transient (attack 4 ms, decays in 116 ms). Sounds most like: a success chime (z +2.9), a snare hit (z +2.5), a kalimba note (z +2.2) [plausible rea"
+ },
+ "ui-check": {
+  "mtime": 1794104855,
+  "tags": [
+   [
+    "a success chime",
+    3.1
+   ],
+   [
+    "a kalimba note",
+    2.8
+   ],
+   [
+    "a chat message pop",
+    2.2
+   ],
+   [
+    "a celesta note",
+    2.2
+   ],
+   [
+    "a notification ding",
+    2.2
+   ],
+   [
+    "a box lid closing",
+    2.2
+   ]
+  ],
+  "reject": null,
+  "summary": "0.29 s short transient (attack 8 ms, decays in 89 ms). Sounds most like: a success chime (z +3.1), a kalimba note (z +2.7), a chat message pop (z +2.2) [clear r"
+ },
+ "ui-press": {
+  "mtime": 1794104855,
+  "tags": [
+   [
+    "a snare hit",
+    4.4
+   ],
+   [
+    "a kick drum",
+    3.1
+   ],
+   [
+    "a box lid closing",
+    2.9
+   ],
+   [
+    "a punchy impact hit",
+    2.9
+   ],
+   [
+    "a bubble pop",
+    2.5
+   ],
+   [
+    "a kalimba note",
+    2.4
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a kick drum\" (z 3.1)",
+  "summary": "0.20 s short transient (attack 4 ms, decays in 67 ms). Sounds most like: a snare hit (z +4.4), a kick drum (z +3.0), a box lid closing (z +2.9) [clear reading]."
+ },
+ "ui-expand": {
+  "mtime": 1794104856,
+  "tags": [
+   [
+    "a success chime",
+    3.0
+   ],
+   [
+    "a snare hit",
+    2.6
+   ],
+   [
+    "a kalimba note",
+    2.3
+   ],
+   [
+    "a celesta note",
+    2.2
+   ],
+   [
+    "a notification ding",
+    1.7
+   ],
+   [
+    "a kick drum",
+    1.6
+   ]
+  ],
+  "reject": null,
+  "summary": "0.37 s short transient (attack 4 ms, decays in 140 ms). Music (AudioSet Music 0.53). Unvalidated hints - genre: cheerful ukulele music (z +3.0); mood (wrong for"
+ },
+ "ui-swipe": {
+  "mtime": 1794104856,
+  "tags": [
+   [
+    "a snare hit",
+    3.3
+   ],
+   [
+    "a kick drum",
+    2.5
+   ],
+   [
+    "a punchy impact hit",
+    2.3
+   ],
+   [
+    "a triangle hit",
+    2.2
+   ],
+   [
+    "a bubble pop",
+    2.2
+   ],
+   [
+    "an error buzz",
+    2.1
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a kick drum\" (z 2.5)",
+  "summary": "0.33 s short transient (attack 5 ms, decays in 149 ms). Sounds most like: a snare hit (z +3.3), a kick drum (z +2.4), a punchy impact hit (z +2.2) [clear readin"
+ },
+ "ui-back": {
+  "mtime": 1794104856,
+  "tags": [
+   [
+    "a snare hit",
+    3.5
+   ],
+   [
+    "a kick drum",
+    2.8
+   ],
+   [
+    "a kalimba note",
+    2.6
+   ],
+   [
+    "a punchy impact hit",
+    2.5
+   ],
+   [
+    "a triangle hit",
+    2.2
+   ],
+   [
+    "a box lid closing",
+    2.1
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a kick drum\" (z 2.8)",
+  "summary": "0.28 s short transient (attack 4 ms, decays in 121 ms). Sounds most like: a snare hit (z +3.5), a kick drum (z +2.8), a kalimba note (z +2.6) [clear reading]. O"
+ },
+ "ui-success": {
+  "mtime": 1794104856,
+  "tags": [
+   [
+    "a success chime",
+    3.5
+   ],
+   [
+    "a kalimba note",
+    2.6
+   ],
+   [
+    "a celesta note",
+    2.4
+   ],
+   [
+    "an error buzz",
+    2.0
+   ],
+   [
+    "a notification ding",
+    2.0
+   ],
+   [
+    "a snare hit",
+    1.6
+   ]
+  ],
+  "reject": null,
+  "summary": "0.59 s short transient (attack 5 ms, decays in 169 ms). Music (AudioSet Music 0.59). Unvalidated hints - genre: cheerful ukulele music (z +2.9); mood (wrong for"
+ },
+ "ui-snap": {
+  "mtime": 1794105031,
+  "tags": [
+   [
+    "a snare hit",
+    3.0
+   ],
+   [
+    "a wooden block hit",
+    2.7
+   ],
+   [
+    "a box lid closing",
+    2.6
+   ],
+   [
+    "a kalimba note",
+    2.6
+   ],
+   [
+    "a cork pop",
+    2.4
+   ],
+   [
+    "a punchy impact hit",
+    2.3
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a wooden block hit\" (z 2.7)",
+  "summary": "0.20 s short transient (attack 4 ms, decays in 69 ms). Sounds most like: a snare hit (z +3.0), a wooden block hit (z +2.7), a box lid closing (z +2.6) [clear re"
+ },
+ "ui-focus": {
+  "mtime": 1794105031,
+  "tags": [
+   [
+    "a snare hit",
+    3.8
+   ],
+   [
+    "a triangle hit",
+    3.0
+   ],
+   [
+    "a success chime",
+    2.5
+   ],
+   [
+    "a kick drum",
+    2.3
+   ],
+   [
+    "a kalimba note",
+    2.2
+   ],
+   [
+    "an error buzz",
+    2.0
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a kick drum\" (z 2.3)",
+  "summary": "0.24 s short transient (attack 4 ms, decays in 82 ms). Sounds most like: a snare hit (z +3.7), a triangle hit (z +2.9), a success chime (z +2.5) [clear reading]"
+ },
+ "ui-toggle-on": {
+  "mtime": 1794105031,
+  "tags": [
+   [
+    "a success chime",
+    2.6
+   ],
+   [
+    "a kalimba note",
+    2.6
+   ],
+   [
+    "a snare hit",
+    2.5
+   ],
+   [
+    "a box lid closing",
+    2.4
+   ],
+   [
+    "a wooden block hit",
+    2.1
+   ],
+   [
+    "a punchy impact hit",
+    2.1
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a wooden block hit\" (z 2.1)",
+  "summary": "0.31 s short one-shot (attack 54 ms, decays in 103 ms). Sounds most like: a success chime (z +2.6), a kalimba note (z +2.6), a snare hit (z +2.5) [plausible rea"
+ },
+ "ui-drop": {
+  "mtime": 1794105032,
+  "tags": [
+   [
+    "a snare hit",
+    4.0
+   ],
+   [
+    "a kick drum",
+    3.0
+   ],
+   [
+    "an error buzz",
+    2.5
+   ],
+   [
+    "a kalimba note",
+    2.5
+   ],
+   [
+    "a box lid closing",
+    2.4
+   ],
+   [
+    "a punchy impact hit",
+    2.3
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a kick drum\" (z 3.0)",
+  "summary": "0.30 s short one-shot (attack 38 ms, decays in 109 ms). Sounds most like: a snare hit (z +4.0), a kick drum (z +2.9), an error buzz (z +2.5) [clear reading]. Ot"
+ },
+ "wh-01": {
+  "mtime": 1794204718,
+  "tags": [
+   [
+    "a fast whoosh",
+    4.5
+   ],
+   [
+    "a swoosh passing by",
+    3.7
+   ],
+   [
+    "a stick swung fast through the air",
+    3.4
+   ],
+   [
+    "a reverse cymbal swell",
+    3.4
+   ],
+   [
+    "a short swish",
+    3.4
+   ],
+   [
+    "a deep cinematic whoosh",
+    3.1
+   ]
+  ],
+  "reject": null,
+  "summary": "2.00 s short swell (attack 261 ms, decays in 648 ms). Sounds most like: a fast whoosh (z +4.4), a swoosh passing by (z +3.7), a stick swung fast through the air"
+ },
+ "wh-02": {
+  "mtime": 1794204718,
+  "tags": [
+   [
+    "a fast whoosh",
+    4.6
+   ],
+   [
+    "a swoosh passing by",
+    3.8
+   ],
+   [
+    "a reverse cymbal swell",
+    3.2
+   ],
+   [
+    "a short swish",
+    3.2
+   ],
+   [
+    "a stick swung fast through the air",
+    2.9
+   ],
+   [
+    "a deep cinematic whoosh",
+    2.9
+   ]
+  ],
+  "reject": null,
+  "summary": "2.62 s busy, 2.3 onsets/s (attack 279 ms, decays in 480 ms). Sounds most like: a fast whoosh (z +4.6), a swoosh passing by (z +3.8), a reverse cymbal swell (z +"
+ },
+ "wh-03": {
+  "mtime": 1794204718,
+  "tags": [
+   [
+    "a fast whoosh",
+    4.7
+   ],
+   [
+    "a swoosh passing by",
+    4.0
+   ],
+   [
+    "a deep cinematic whoosh",
+    3.8
+   ],
+   [
+    "a short swish",
+    3.7
+   ],
+   [
+    "a reverse cymbal swell",
+    3.6
+   ],
+   [
+    "a soft air whoosh",
+    3.5
+   ]
+  ],
+  "reject": null,
+  "summary": "1.75 s busy, 3.4 onsets/s (attack 253 ms, decays in 436 ms). Sounds most like: a fast whoosh (z +4.6), a swoosh passing by (z +4.0), a deep cinematic whoosh (z "
+ },
+ "wh-04": {
+  "mtime": 1794204718,
+  "tags": [
+   [
+    "a fast whoosh",
+    4.6
+   ],
+   [
+    "a deep cinematic whoosh",
+    3.9
+   ],
+   [
+    "a swoosh passing by",
+    3.9
+   ],
+   [
+    "a soft air whoosh",
+    3.8
+   ],
+   [
+    "a gust of wind rushing past",
+    3.2
+   ],
+   [
+    "a short swish",
+    3.2
+   ]
+  ],
+  "reject": null,
+  "summary": "1.53 s busy, 6.5 onsets/s (attack 293 ms, decays in 431 ms). Sounds most like: a fast whoosh (z +4.5), a deep cinematic whoosh (z +3.8), a swoosh passing by (z "
+ },
+ "wh-05": {
+  "mtime": 1794204718,
+  "tags": [
+   [
+    "a short swish",
+    2.9
+   ],
+   [
+    "a reverse cymbal swell",
+    2.9
+   ],
+   [
+    "a fast whoosh",
+    2.8
+   ],
+   [
+    "a swoosh passing by",
+    2.8
+   ],
+   [
+    "a quick swipe",
+    2.6
+   ],
+   [
+    "a deep cinematic whoosh",
+    2.3
+   ]
+  ],
+  "reject": null,
+  "summary": "2.85 s 4 separate events (attack 256 ms, decays in 571 ms). Sounds most like: a short swish (z +2.9), a reverse cymbal swell (z +2.8), a fast whoosh (z +2.8) [p"
+ },
+ "wh-06": {
+  "mtime": 1794204718,
+  "tags": [
+   [
+    "a fast whoosh",
+    4.8
+   ],
+   [
+    "a swoosh passing by",
+    4.2
+   ],
+   [
+    "a soft air whoosh",
+    4.0
+   ],
+   [
+    "a short swish",
+    3.8
+   ],
+   [
+    "a stick swung fast through the air",
+    3.7
+   ],
+   [
+    "a gust of wind rushing past",
+    3.5
+   ]
+  ],
+  "reject": null,
+  "summary": "1.58 s busy, 8.8 onsets/s (attack 282 ms, decays in 577 ms). Sounds most like: a fast whoosh (z +4.7), a swoosh passing by (z +4.1), a soft air whoosh (z +4.0) "
+ },
+ "wh-07": {
+  "mtime": 1794204718,
+  "tags": [
+   [
+    "a fast whoosh",
+    4.7
+   ],
+   [
+    "a swoosh passing by",
+    4.1
+   ],
+   [
+    "a short swish",
+    3.9
+   ],
+   [
+    "a stick swung fast through the air",
+    3.7
+   ],
+   [
+    "a deep cinematic whoosh",
+    3.6
+   ],
+   [
+    "a soft air whoosh",
+    3.6
+   ]
+  ],
+  "reject": null,
+  "summary": "2.34 s short one-shot (attack 105 ms, decays in 475 ms). Sounds most like: a fast whoosh (z +4.6), a swoosh passing by (z +4.0), a short swish (z +3.9) [clear r"
+ },
+ "wh-08": {
+  "mtime": 1794204718,
+  "tags": [
+   [
+    "a fast whoosh",
+    4.8
+   ],
+   [
+    "a swoosh passing by",
+    3.9
+   ],
+   [
+    "a soft air whoosh",
+    3.8
+   ],
+   [
+    "a deep cinematic whoosh",
+    3.6
+   ],
+   [
+    "a short swish",
+    3.1
+   ],
+   [
+    "a gust of wind rushing past",
+    3.0
+   ]
+  ],
+  "reject": null,
+  "summary": "2.39 s busy, 4.2 onsets/s (attack 267 ms, decays in 901 ms). Sounds most like: a fast whoosh (z +4.8), a swoosh passing by (z +3.9), a soft air whoosh (z +3.8) "
+ },
+ "wh-09": {
+  "mtime": 1794204718,
+  "tags": [
+   [
+    "a fast whoosh",
+    4.4
+   ],
+   [
+    "a swoosh passing by",
+    3.9
+   ],
+   [
+    "a deep cinematic whoosh",
+    3.8
+   ],
+   [
+    "a soft air whoosh",
+    3.8
+   ],
+   [
+    "a short swish",
+    3.4
+   ],
+   [
+    "a gust of wind rushing past",
+    3.3
+   ]
+  ],
+  "reject": null,
+  "summary": "2.03 s busy, 3.0 onsets/s (attack 262 ms, decays in 430 ms). Sounds most like: a fast whoosh (z +4.4), a swoosh passing by (z +3.8), a deep cinematic whoosh (z "
+ },
+ "wh-10": {
+  "mtime": 1794204718,
+  "tags": [
+   [
+    "a spray can hissing",
+    3.3
+   ],
+   [
+    "a balloon squeak",
+    3.1
+   ],
+   [
+    "a record scratch",
+    2.2
+   ],
+   [
+    "a fast whoosh",
+    2.2
+   ],
+   [
+    "a rubber stretch",
+    2.0
+   ],
+   [
+    "a swoosh passing by",
+    2.0
+   ]
+  ],
+  "reject": "squeaky or kazoo-like (Bryan: \"sounds like a kazoo\"): heard \"a spray can hissing\"",
+  "summary": "1.20 s short swell (attack 258 ms, decays in 818 ms). Sounds most like: a spray can hissing (z +3.2), a balloon squeak (z +3.0), a record scratch (z +2.2) [clea"
+ },
+ "wh-11": {
+  "mtime": 1794204718,
+  "tags": [
+   [
+    "a spray can hissing",
+    2.5
+   ],
+   [
+    "a waterfall",
+    2.5
+   ],
+   [
+    "a toilet flushing",
+    2.3
+   ],
+   [
+    "bubbles underwater",
+    2.3
+   ],
+   [
+    "a snare hit",
+    2.3
+   ],
+   [
+    "a printer printing",
+    2.1
+   ]
+  ],
+  "reject": "not a whoosh (Bryan: \"supposed to sound like wind blowing woosh\"): heard \"a spray can hissing\"",
+  "summary": "1.20 s short one-shot (attack 45 ms, decays in 845 ms). Sounds most like: a spray can hissing (z +2.4), a waterfall (z +2.4), a toilet flushing (z +2.3) [weak r"
+ },
+ "wht-01": {
+  "mtime": 1794204719,
+  "tags": [
+   [
+    "a fast whoosh",
+    4.9
+   ],
+   [
+    "a stick swung fast through the air",
+    3.9
+   ],
+   [
+    "a swoosh passing by",
+    3.7
+   ],
+   [
+    "a gust of wind rushing past",
+    3.3
+   ],
+   [
+    "a soft air whoosh",
+    3.2
+   ],
+   [
+    "a whip pan transition",
+    3.1
+   ]
+  ],
+  "reject": null,
+  "summary": "0.86 s short swell (attack 160 ms, decays in 447 ms). Sounds most like: a fast whoosh (z +4.9), a stick swung fast through the air (z +3.8), a swoosh passing by"
+ },
+ "wht-02": {
+  "mtime": 1794204719,
+  "tags": [
+   [
+    "a fast whoosh",
+    3.9
+   ],
+   [
+    "a swoosh passing by",
+    3.4
+   ],
+   [
+    "a short swish",
+    3.3
+   ],
+   [
+    "cloth whipping through the air",
+    3.3
+   ],
+   [
+    "a downlifter falling sweep",
+    2.9
+   ],
+   [
+    "a deep cinematic whoosh",
+    2.7
+   ]
+  ],
+  "reject": null,
+  "summary": "1.37 s busy, 3.6 onsets/s (attack 196 ms). Sounds most like: a fast whoosh (z +3.8), a swoosh passing by (z +3.4), a short swish (z +3.2) [clear reading]. Audio"
+ },
+ "wht-03": {
+  "mtime": 1794204719,
+  "tags": [
+   [
+    "a fast whoosh",
+    3.7
+   ],
+   [
+    "an uplifter sweep",
+    3.0
+   ],
+   [
+    "a reverse cymbal swell",
+    2.9
+   ],
+   [
+    "a swoosh passing by",
+    2.8
+   ],
+   [
+    "a downlifter falling sweep",
+    2.8
+   ],
+   [
+    "a short swish",
+    2.8
+   ]
+  ],
+  "reject": null,
+  "summary": "1.37 s busy, 2.9 onsets/s (attack 277 ms, decays in 314 ms). Sounds most like: a fast whoosh (z +3.7), an uplifter sweep (z +3.0), a reverse cymbal swell (z +2."
+ },
+ "wht-04": {
+  "mtime": 1794204719,
+  "tags": [
+   [
+    "a fast whoosh",
+    5.2
+   ],
+   [
+    "a swoosh passing by",
+    4.3
+   ],
+   [
+    "a soft air whoosh",
+    4.0
+   ],
+   [
+    "a short swish",
+    3.7
+   ],
+   [
+    "a stick swung fast through the air",
+    3.4
+   ],
+   [
+    "a deep cinematic whoosh",
+    3.3
+   ]
+  ],
+  "reject": null,
+  "summary": "1.61 s busy, 2.5 onsets/s (attack 209 ms, decays in 410 ms). Sounds most like: a fast whoosh (z +5.1), a swoosh passing by (z +4.2), a soft air whoosh (z +3.9) "
+ },
+ "wht-05": {
+  "mtime": 1794204719,
+  "tags": [
+   [
+    "a fast whoosh",
+    3.2
+   ],
+   [
+    "a deep cinematic whoosh",
+    3.1
+   ],
+   [
+    "a stick swung fast through the air",
+    2.9
+   ],
+   [
+    "a punchy impact hit",
+    2.6
+   ],
+   [
+    "a record scratch",
+    2.5
+   ],
+   [
+    "a soft air whoosh",
+    2.5
+   ]
+  ],
+  "reject": null,
+  "summary": "0.55 s busy, 7.2 onsets/s (attack 29 ms, decays in 205 ms). Sounds most like: a fast whoosh (z +3.2), a deep cinematic whoosh (z +3.0), a stick swung fast throu"
+ },
+ "wht-06": {
+  "mtime": 1794204719,
+  "tags": [
+   [
+    "a fast whoosh",
+    4.7
+   ],
+   [
+    "a short swish",
+    3.6
+   ],
+   [
+    "a stick swung fast through the air",
+    3.5
+   ],
+   [
+    "a swoosh passing by",
+    3.3
+   ],
+   [
+    "a soft air whoosh",
+    3.1
+   ],
+   [
+    "cloth whipping through the air",
+    3.0
+   ]
+  ],
+  "reject": null,
+  "summary": "1.87 s short one-shot (attack 92 ms, decays in 240 ms). Sounds most like: a fast whoosh (z +4.7), a short swish (z +3.6), a stick swung fast through the air (z "
+ },
+ "wht-07": {
+  "mtime": 1794204719,
+  "tags": [
+   [
+    "a snare hit",
+    3.5
+   ],
+   [
+    "an explosion",
+    2.9
+   ],
+   [
+    "a cinematic hit with a long tail",
+    2.9
+   ],
+   [
+    "a big drum hit",
+    2.7
+   ],
+   [
+    "a deep cinematic whoosh",
+    2.5
+   ],
+   [
+    "a deep cinematic boom",
+    2.4
+   ]
+  ],
+  "reject": "a boom (Bryan: \"remove the random booms\"): heard \"a snare hit\"",
+  "summary": "1.20 s short one-shot (attack 48 ms, decays in 709 ms). Sounds most like: a snare hit (z +3.5), an explosion (z +2.8), a cinematic hit with a long tail (z +2.8)"
+ },
+ "mon-01": {
+  "mtime": 1794204719,
+  "tags": [
+   [
+    "coins dropping",
+    3.3
+   ],
+   [
+    "a success chime",
+    3.1
+   ],
+   [
+    "a triangle hit",
+    3.1
+   ],
+   [
+    "a cash register",
+    2.9
+   ],
+   [
+    "a notification ding",
+    2.6
+   ],
+   [
+    "a magic sparkle chime",
+    2.5
+   ]
+  ],
+  "reject": null,
+  "summary": "2.98 s 3 separate events (attack 90 ms, decays in 789 ms). Sounds most like: coins dropping (z +3.2), a success chime (z +3.1), a triangle hit (z +3.0) [clear r"
+ },
+ "mon-02": {
+  "mtime": 1794204719,
+  "tags": [
+   [
+    "a triangle hit",
+    3.0
+   ],
+   [
+    "a sword being drawn",
+    2.8
+   ],
+   [
+    "keys jingling",
+    2.7
+   ],
+   [
+    "an old typewriter",
+    2.6
+   ],
+   [
+    "coins dropping",
+    2.6
+   ],
+   [
+    "a metal scrape",
+    2.5
+   ]
+  ],
+  "reject": null,
+  "summary": "1.48 s busy, 4.7 onsets/s (attack 109 ms, decays in 540 ms). Sounds most like: a triangle hit (z +3.0), a sword being drawn (z +2.7), keys jingling (z +2.7) [cl"
+ },
+ "mon-04": {
+  "mtime": 1794204719,
+  "tags": [
+   [
+    "a bicycle bell",
+    3.9
+   ],
+   [
+    "an old typewriter",
+    3.5
+   ],
+   [
+    "a cash register",
+    3.1
+   ],
+   [
+    "a doorbell",
+    2.9
+   ],
+   [
+    "a triangle hit",
+    2.8
+   ],
+   [
+    "an alarm clock beeping",
+    2.7
+   ]
+  ],
+  "reject": null,
+  "summary": "3.82 s busy, 2.1 onsets/s (attack 4 ms, decays in 164 ms). Sounds most like: a bicycle bell (z +3.8), an old typewriter (z +3.4), a cash register (z +3.1) [clea"
+ },
+ "prm-01": {
+  "mtime": 1794206860,
+  "tags": [
+   [
+    "a wooden block hit",
+    3.8
+   ],
+   [
+    "a snare hit",
+    3.0
+   ],
+   [
+    "a bubble pop",
+    2.4
+   ],
+   [
+    "a cork pop",
+    2.4
+   ],
+   [
+    "a suction cup pop",
+    2.3
+   ],
+   [
+    "a mouth pop",
+    2.2
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a wooden block hit\" (z 3.8)",
+  "summary": "0.60 s short transient (attack 3 ms, decays in 8 ms). Sounds most like: a wooden block hit (z +3.7), a snare hit (z +2.9), a bubble pop (z +2.4) [clear reading]"
+ },
+ "prm-02": {
+  "mtime": 1794206860,
+  "tags": [
+   [
+    "a snare hit",
+    3.1
+   ],
+   [
+    "a wooden block hit",
+    3.0
+   ],
+   [
+    "a scroll wheel tick",
+    2.9
+   ],
+   [
+    "a kick drum",
+    2.6
+   ],
+   [
+    "a clock ticking",
+    2.5
+   ],
+   [
+    "a digital glitch",
+    2.4
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a wooden block hit\" (z 3.0)",
+  "summary": "0.50 s short transient (attack 14 ms, decays in 12 ms). Sounds most like: a snare hit (z +3.1), a wooden block hit (z +2.9), a scroll wheel tick (z +2.8) [clear"
+ },
+ "prm-03": {
+  "mtime": 1794206860,
+  "tags": [
+   [
+    "a mouth pop",
+    4.0
+   ],
+   [
+    "a bubble pop",
+    3.9
+   ],
+   [
+    "a cork pop",
+    3.9
+   ],
+   [
+    "a suction cup pop",
+    3.1
+   ],
+   [
+    "a liquid bloop",
+    2.8
+   ],
+   [
+    "a water drop",
+    2.6
+   ]
+  ],
+  "reject": null,
+  "summary": "0.60 s short transient (attack 4 ms, decays in 41 ms). Sounds most like: a mouth pop (z +3.9), a bubble pop (z +3.9), a cork pop (z +3.9) [clear reading]. Other"
+ },
+ "prm-04": {
+  "mtime": 1794206860,
+  "tags": [
+   [
+    "a mouth pop",
+    4.4
+   ],
+   [
+    "a bubble pop",
+    3.7
+   ],
+   [
+    "a cork pop",
+    3.5
+   ],
+   [
+    "a suction cup pop",
+    3.0
+   ],
+   [
+    "a liquid bloop",
+    2.9
+   ],
+   [
+    "a water drop",
+    2.8
+   ]
+  ],
+  "reject": null,
+  "summary": "0.60 s short transient (attack 4 ms, decays in 48 ms). Sounds most like: a mouth pop (z +4.3), a bubble pop (z +3.6), a cork pop (z +3.5) [clear reading]. Other"
+ },
+ "prm-05": {
+  "mtime": 1794206861,
+  "tags": [
+   [
+    "a bubble pop",
+    3.9
+   ],
+   [
+    "bubbles underwater",
+    3.7
+   ],
+   [
+    "a cork pop",
+    3.6
+   ],
+   [
+    "a mouth pop",
+    3.2
+   ],
+   [
+    "a liquid bloop",
+    2.9
+   ],
+   [
+    "a fast whoosh",
+    2.7
+   ]
+  ],
+  "reject": null,
+  "summary": "0.60 s short transient (attack 10 ms, decays in 19 ms). Sounds most like: a bubble pop (z +3.8), bubbles underwater (z +3.6), a cork pop (z +3.6) [clear reading"
+ },
+ "prm-06": {
+  "mtime": 1794206861,
+  "tags": [
+   [
+    "a mouth pop",
+    2.9
+   ],
+   [
+    "bubbles underwater",
+    2.8
+   ],
+   [
+    "a single mechanical keyboard key press",
+    2.7
+   ],
+   [
+    "a kalimba note",
+    2.5
+   ],
+   [
+    "a wooden block hit",
+    2.4
+   ],
+   [
+    "ice cubes in a glass",
+    2.3
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a wooden block hit\" (z 2.4)",
+  "summary": "0.53 s short transient (attack 3 ms, decays in 16 ms). Sounds most like: a mouth pop (z +2.8), bubbles underwater (z +2.7), a single mechanical keyboard key pre"
+ },
+ "prm-07": {
+  "mtime": 1794206861,
+  "tags": [
+   [
+    "a snare hit",
+    3.2
+   ],
+   [
+    "an error buzz",
+    3.0
+   ],
+   [
+    "a car horn honking",
+    2.4
+   ],
+   [
+    "a digital glitch",
+    2.3
+   ],
+   [
+    "a wooden block hit",
+    2.1
+   ],
+   [
+    "a mouth pop",
+    2.1
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a wooden block hit\" (z 2.1)",
+  "summary": "0.03 s short transient (attack 0 ms, decays in 19 ms). Sounds most like: a snare hit (z +3.2), an error buzz (z +2.9), a car horn honking (z +2.3) [clear readin"
+ },
+ "prm-08": {
+  "mtime": 1794206861,
+  "tags": [
+   [
+    "an error buzz",
+    3.5
+   ],
+   [
+    "an enter key press",
+    2.6
+   ],
+   [
+    "a soft key release click",
+    2.5
+   ],
+   [
+    "a digital glitch",
+    2.3
+   ],
+   [
+    "a crisp interface click",
+    2.1
+   ],
+   [
+    "a toggle switch click",
+    2.1
+   ]
+  ],
+  "reject": null,
+  "summary": "0.02 s short transient (attack 1 ms, decays in 17 ms). Sounds most like: an error buzz (z +3.5), an enter key press (z +2.6), a soft key release click (z +2.5) "
+ },
+ "prm-09": {
+  "mtime": 1794206861,
+  "tags": [
+   [
+    "a snare hit",
+    4.1
+   ],
+   [
+    "a box lid closing",
+    3.1
+   ],
+   [
+    "an error buzz",
+    2.9
+   ],
+   [
+    "a wooden block hit",
+    2.6
+   ],
+   [
+    "a punchy impact hit",
+    2.3
+   ],
+   [
+    "a single mechanical keyboard key press",
+    2.1
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a wooden block hit\" (z 2.6)",
+  "summary": "0.05 s short transient (attack 4 ms, decays in 44 ms). Sounds most like: a snare hit (z +4.1), a box lid closing (z +3.0), an error buzz (z +2.8) [clear reading"
+ },
+ "lst-02": {
+  "mtime": 1794240349,
+  "tags": [
+   [
+    "a crisp interface click",
+    3.3
+   ],
+   [
+    "a quick swipe",
+    2.8
+   ],
+   [
+    "a snare hit",
+    2.6
+   ],
+   [
+    "a soft key release click",
+    2.5
+   ],
+   [
+    "a camera shutter click",
+    2.2
+   ],
+   [
+    "an error buzz",
+    2.1
+   ]
+  ],
+  "reject": null,
+  "summary": "0.22 s short one-shot (attack 37 ms, decays in 101 ms). Sounds most like: a crisp interface click (z +3.3), a quick swipe (z +2.7), a snare hit (z +2.5) [clear "
+ },
+ "lst-03": {
+  "mtime": 1794240349,
+  "tags": [
+   [
+    "an enter key press",
+    3.0
+   ],
+   [
+    "a quick swipe",
+    2.9
+   ],
+   [
+    "a soft key release click",
+    2.6
+   ],
+   [
+    "a camera shutter click",
+    2.4
+   ],
+   [
+    "a crisp interface click",
+    2.3
+   ],
+   [
+    "a single mechanical keyboard key press",
+    2.2
+   ]
+  ],
+  "reject": null,
+  "summary": "0.17 s short transient (attack 4 ms, decays in 143 ms). Sounds most like: an enter key press (z +3.0), a quick swipe (z +2.8), a soft key release click (z +2.6)"
+ },
+ "lst-05": {
+  "mtime": 1794240349,
+  "tags": [
+   [
+    "a kalimba note",
+    2.6
+   ],
+   [
+    "a wooden block hit",
+    2.6
+   ],
+   [
+    "a scroll wheel tick",
+    2.4
+   ],
+   [
+    "a soft key release click",
+    2.3
+   ],
+   [
+    "a chat message pop",
+    2.1
+   ],
+   [
+    "a digital glitch",
+    2.0
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a wooden block hit\" (z 2.6)",
+  "summary": "0.12 s short transient (attack 3 ms, decays in 22 ms). Sounds most like: a kalimba note (z +2.5), a wooden block hit (z +2.5), a scroll wheel tick (z +2.4) [pla"
+ },
+ "lst-06": {
+  "mtime": 1794240350,
+  "tags": [
+   [
+    "a crisp interface click",
+    3.1
+   ],
+   [
+    "bubbles underwater",
+    3.0
+   ],
+   [
+    "a digital glitch",
+    2.4
+   ],
+   [
+    "a squishy wet squelch",
+    2.2
+   ],
+   [
+    "a liquid bloop",
+    1.9
+   ],
+   [
+    "an error buzz",
+    1.9
+   ]
+  ],
+  "reject": null,
+  "summary": "0.27 s short one-shot (attack 20 ms, decays in 113 ms). Sounds most like: a crisp interface click (z +3.1), bubbles underwater (z +3.0), a digital glitch (z +2."
+ },
+ "lst-07": {
+  "mtime": 1794240350,
+  "tags": [
+   [
+    "a crisp interface click",
+    3.3
+   ],
+   [
+    "an error buzz",
+    2.8
+   ],
+   [
+    "a digital glitch",
+    2.5
+   ],
+   [
+    "a soft key release click",
+    2.4
+   ],
+   [
+    "a success chime",
+    2.0
+   ],
+   [
+    "a single mechanical keyboard key press",
+    1.9
+   ]
+  ],
+  "reject": null,
+  "summary": "0.23 s short one-shot (attack 92 ms, decays in 51 ms). Sounds most like: a crisp interface click (z +3.2), an error buzz (z +2.7), a digital glitch (z +2.5) [cl"
+ },
+ "lst-08": {
+  "mtime": 1794240350,
+  "tags": [
+   [
+    "a snare hit",
+    2.9
+   ],
+   [
+    "a triangle hit",
+    2.8
+   ],
+   [
+    "a success chime",
+    2.8
+   ],
+   [
+    "an error buzz",
+    2.4
+   ],
+   [
+    "a box lid closing",
+    2.4
+   ],
+   [
+    "a kick drum",
+    2.0
+   ]
+  ],
+  "reject": "a bonk or thud (Bryan: \"an annoying bonk\"): heard \"a kick drum\" (z 2.0)",
+  "summary": "0.10 s short transient (attack 5 ms, decays in 76 ms). Sounds most like: a snare hit (z +2.9), a triangle hit (z +2.7), a success chime (z +2.7) [plausible read"
+ },
+ "lst-10": {
+  "mtime": 1794240350,
+  "tags": [
+   [
+    "a snare hit",
+    3.2
+   ],
+   [
+    "an error buzz",
+    3.1
+   ],
+   [
+    "a digital glitch",
+    2.9
+   ],
+   [
+    "a crisp interface click",
+    2.5
+   ],
+   [
+    "a box lid closing",
+    2.2
+   ],
+   [
+    "a stutter glitch transition",
+    2.2
+   ]
+  ],
+  "reject": null,
+  "summary": "0.04 s short transient (attack 1 ms, decays in 18 ms). Sounds most like: a snare hit (z +3.2), an error buzz (z +3.1), a digital glitch (z +2.8) [clear reading]"
+ },
+ "lst-11": {
+  "mtime": 1794240350,
+  "tags": [
+   [
+    "a snare hit",
+    4.1
+   ],
+   [
+    "a digital glitch",
+    3.2
+   ],
+   [
+    "an error buzz",
+    3.2
+   ],
+   [
+    "a box lid closing",
+    2.7
+   ],
+   [
+    "a stutter glitch transition",
+    2.4
+   ],
+   [
+    "a punchy impact hit",
+    2.2
+   ]
+  ],
+  "reject": null,
+  "summary": "0.04 s short transient (attack 3 ms, decays in 33 ms). Sounds most like: a snare hit (z +4.0), a digital glitch (z +3.2), an error buzz (z +3.2) [clear reading]"
+ },
+ "lst-12": {
+  "mtime": 1794240350,
+  "tags": [
+   [
+    "a snare hit",
+    3.7
+   ],
+   [
+    "an error buzz",
+    2.9
+   ],
+   [
+    "a digital glitch",
+    2.6
+   ],
+   [
+    "a box lid closing",
+    2.5
+   ],
+   [
+    "a record scratch",
+    2.5
+   ],
+   [
+    "a soft key release click",
+    2.5
+   ]
+  ],
+  "reject": null,
+  "summary": "0.06 s short transient (attack 4 ms, decays in 50 ms). Sounds most like: a snare hit (z +3.7), an error buzz (z +2.8), a digital glitch (z +2.6) [clear reading]"
+ },
+ "wrong-buzz": {
+  "mtime": 1794241597,
+  "tags": [
+   [
+    "an error buzz",
+    4.3
+   ],
+   [
+    "a digital glitch",
+    3.4
+   ],
+   [
+    "a phone vibration buzz",
+    2.5
+   ],
+   [
+    "a punchy impact hit",
+    2.3
+   ],
+   [
+    "a stutter glitch transition",
+    2.3
+   ],
+   [
+    "a rubber stretch",
+    2.1
+   ]
+  ],
+  "reject": null,
+  "summary": "0.33 s short transient, tonal, pitch ~94 Hz (F#2) (attack 9 ms, decays in 316 ms). Sounds most like: an error buzz (z +4.3), a digital glitch (z +3.4), a phone "
+ },
+ "lst-stage": {
+  "mtime": 1794240349,
+  "tags": [
+   [
+    "an enter key press",
+    3.0
+   ],
+   [
+    "a quick swipe",
+    2.9
+   ],
+   [
+    "a soft key release click",
+    2.6
+   ],
+   [
+    "a camera shutter click",
+    2.4
+   ],
+   [
+    "a crisp interface click",
+    2.3
+   ],
+   [
+    "a single mechanical keyboard key press",
+    2.2
+   ]
+  ],
+  "reject": null,
+  "summary": "0.17 s short transient (attack 4 ms, decays in 143 ms). Sounds most like: an enter key press (z +3.0), a quick swipe (z +2.8), a soft key release click (z +2.6)"
+ }
+}

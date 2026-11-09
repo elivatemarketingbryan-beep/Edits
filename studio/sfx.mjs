@@ -139,7 +139,7 @@ function place(input, cuesFile, output, jobId) {
   if (base) parts.push(`${base}aformat=sample_rates=48000:channel_layouts=stereo[base]`);
   else parts.push(`anullsrc=r=48000:cl=stereo,atrim=duration=${duration(input)}[sil]`);
   // normalize=0 keeps speech at its level; the sounds sit under it at their own gain.
-  parts.push(`${mixIn}amix=inputs=${cues.length + 1}:normalize=0:duration=first:dropout_transition=0,alimiter=limit=0.5:level=false[aout]`);
+  parts.push(`${mixIn}amix=inputs=${cues.length + 1}:normalize=0:duration=first:dropout_transition=0,alimiter=limit=${process.env.SFX_LIMIT || 0.5}:level=false[aout]`);
   args.push('-filter_complex', parts.join(';'), '-map', '0:v?', '-map', '[aout]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '256k', output);
   run(args);
   console.log(`Placed ${cues.length} sounds -> ${output}`);

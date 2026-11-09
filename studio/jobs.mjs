@@ -81,6 +81,16 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   } else if (cmd === 'show') {
     console.log(JSON.stringify(readJob(id), null, 2));
   } else if (cmd === 'stage') {
+    // Bryan's checklist gates anything he is about to see. Only skip it if he says so: --override.
+    if (['review', 'final', 'done'].includes(stage) && !process.argv.includes('--override')) {
+      const { preflight } = await import('./preflight.mjs');
+      const { fails } = preflight(id);
+      if (fails.length) {
+        for (const f of fails) console.log('  FAIL ', f);
+        console.log(`Blocked: ${fails.length} problem(s) against the checklist. Job stays in ${readJob(id).stage}.`);
+        process.exit(1);
+      }
+    }
     console.log(`${id} -> ${setStage(id, stage).stage}`);
   } else {
     console.log('usage: node studio/jobs.mjs pending | show <id> | stage <id> <stage>');

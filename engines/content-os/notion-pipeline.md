@@ -68,7 +68,7 @@ Views (Board grouped by Status, Calendar by Post Date) can be added with `notion
 | **Title** | `title` | Page title (the working title of the video) |
 | **Status** | `status` (native) | Pipeline stage, see flow below. Options: Idea, Scripting, Filming, Editing, Review, Ready, Posted, Archived |
 | **Format** | `select` | `Short-form` · `Long-form` |
-| **Edit style** | `select` | The exact Video Studio format (all 32 catalog names, e.g. `Ranking`, `Explainer panel`, `Tips breakdown`). Set by the scriptwriter in Step 1b. |
+| **Edit style** | `select` | The exact Video Studio format (catalog names, e.g. `Ranking`, `Do or don't`, `Explainer panel`, `Tips breakdown`). Set by the scriptwriter in Step 1b. |
 | **Script shape** | `select` | `Explainer` · `List / ranking` · `Comparison` · `Story` · `Proof` · `Caption-led` · `Relatable thought` · `Long form` (Video Studio `styles/SCRIPT-SHAPES.md`). Set by the scriptwriter. |
 | **Studio job** | `text` | Video Studio job id (`jobs/<id>`), written by Video Studio when the filmed clip is matched to this script. |
 | **Status 1** | `select` | Leftover from the template; not used by any skill. |
@@ -115,7 +115,15 @@ a successful post (standing rule in CLAUDE.md, "Videos live in Notion"). There i
 | Ready | Video Studio, when the final is rendered (also sets **Edited Video**) |
 | Posted | the session that ran `auto-poster` |
 
-Views: the default boards plus **By script shape** (board grouped by Script shape, then status).
+Views: the default boards plus **By script shape** (board grouped by Script shape, then status),
+and two boards per format, each grouped by Status:
+
+| View | Shows | View ID |
+|---|---|---|
+| ✅ **Do vs Don't scripts** | Edit style `Do or don't` or `This vs that` | `40e789bb-ffea-8188-9137-000c6983e10f` |
+| 🏆 **Ranking scripts** | Edit style `Ranking` or `Top 5 ranking` | `40e789bb-ffea-81e3-99e0-000c65b4fabc` |
+
+A script lands on these boards by its Edit style, so the scriptwriter must set it.
 
 ---
 

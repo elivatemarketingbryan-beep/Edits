@@ -1,0 +1,33 @@
+{
+ "_readme": "Sounds Bryan has heard in a finished video and approved. Listening can flag these, but his ears win.",
+ "cues": [
+  "lst-12",
+  "lst-stage",
+  "mon-01",
+  "mon-02",
+  "mon-04",
+  "prm-01",
+  "prm-02",
+  "prm-05",
+  "prm-09",
+  "stamp",
+  "wh-01",
+  "wh-02",
+  "wh-03",
+  "wh-04",
+  "wh-05",
+  "wh-06",
+  "wh-07",
+  "wh-08",
+  "wh-09",
+  "wh-11",
+  "wht-01",
+  "wht-02",
+  "wht-03",
+  "wht-04",
+  "wht-05",
+  "wht-06",
+  "wht-07",
+  "wrong-buzz"
+ ]
+}

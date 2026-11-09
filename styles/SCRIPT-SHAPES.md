@@ -62,7 +62,7 @@ Rules: say the verdict out loud on every item (that's when the card moves); rank
 best with 5-8 items; save the surprising verdict for the middle, not the end.
 
 ### 3. Comparison
-Formats: this-vs-that, clone-versus, dual-role-dialogue.
+Formats: this-vs-that, do-or-dont, clone-versus, dual-role-dialogue.
 ```
 Hook: the two sides                                   [HOOK]
 Point for side A                                      [SIDE: A]
@@ -72,6 +72,19 @@ Verdict: which side wins and when                     [CTA]
 ```
 Rules: every line belongs to one side; keep the sides balanced in length; clone-versus and
 dual-role need two takes filmed (one per side, same framing).
+
+**Do or don't** (do-or-dont) is a comparison told tip by tip, not side by side:
+```
+Hook: the topic + "do or don't?"                      [HOOK]
+The tip, said as a claim people believe               (the card pops up here)
+One-word verdict: "Don't." / "Do."                    [SIDE: B] / [SIDE: A]
+One line on why, with a real number                   
+...repeat, 4-6 tips, mixed do and don't
+The cheat sheet / which one surprised you             [CTA]
+```
+Rules: the verdict is its own short sentence (that's when the card flies to its side); mix
+the verdicts so the viewer can't guess; each tip fits a card title (2-6 words + a short
+payoff line). Side A = do, side B = don't.
 
 ### 4. Story
 Formats: personal-reel, natural-story, vlog, cinematic-type.

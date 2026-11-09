@@ -385,6 +385,252 @@
       "peak": 0.04,
       "volume": 0.24,
       "use": "a word or card drops and lands (uisfx Studio kit, CC0)"
+    },
+    "wh-01": {
+      "file": "wh/wh-01.wav",
+      "peak": 0.718,
+      "volume": 0.343,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Cinematic Mediam Whoosh.wav"
+    },
+    "wh-02": {
+      "file": "wh/wh-02.wav",
+      "peak": 0.761,
+      "volume": 0.381,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Fast Whoosh.wav"
+    },
+    "wh-03": {
+      "file": "wh/wh-03.wav",
+      "peak": 0.64,
+      "volume": 0.361,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Smooth And Fast Whoosh.wav"
+    },
+    "wh-04": {
+      "file": "wh/wh-04.wav",
+      "peak": 0.725,
+      "volume": 0.333,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Simple Whoosh.wav"
+    },
+    "wh-05": {
+      "file": "wh/wh-05.wav",
+      "peak": 0.972,
+      "volume": 0.398,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Data_Whoosh.wav"
+    },
+    "wh-06": {
+      "file": "wh/wh-06.wav",
+      "peak": 0.89,
+      "volume": 0.283,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Cinematic Low Whoosh.wav"
+    },
+    "wh-07": {
+      "file": "wh/wh-07.wav",
+      "peak": 0.264,
+      "volume": 0.281,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Whoosh Deep Short.wav"
+    },
+    "wh-08": {
+      "file": "wh/wh-08.wav",
+      "peak": 0.903,
+      "volume": 0.398,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: High And Fast Woosh.wav"
+    },
+    "wh-09": {
+      "file": "wh/wh-09.wav",
+      "peak": 0.55,
+      "volume": 0.34,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Simple Whoosh 2.wav"
+    },
+    "wh-10": {
+      "file": "wh/wh-10.wav",
+      "peak": 0.485,
+      "volume": 0.398,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: DSGNWhsh_Eerie Whoosh 01 Cut_VZ_GN_0014."
+    },
+    "wh-11": {
+      "file": "wh/wh-11.wav",
+      "peak": 0.287,
+      "volume": 0.398,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: DSGNWhsh_Epic Whoosh 02 Cut_VZ_GN_0003.w"
+    },
+    "wht-01": {
+      "file": "wh/wht-01.wav",
+      "peak": 0.311,
+      "volume": 0.208,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Cinematic Fast Normal Whoosh.wav"
+    },
+    "wht-02": {
+      "file": "wh/wht-02.wav",
+      "peak": 0.507,
+      "volume": 0.162,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Cinematic Fast Whoosh.wav"
+    },
+    "wht-03": {
+      "file": "wh/wht-03.wav",
+      "peak": 0.653,
+      "volume": 0.174,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Fast Whoosh (2).wav"
+    },
+    "wht-04": {
+      "file": "wh/wht-04.wav",
+      "peak": 0.474,
+      "volume": 0.163,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: High And Fast Whoosh.wav"
+    },
+    "wht-05": {
+      "file": "wh/wht-05.wav",
+      "peak": 0.208,
+      "volume": 0.15,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: epic-fast-whoosh-345469.mp3"
+    },
+    "wht-06": {
+      "file": "wh/wht-06.wav",
+      "peak": 0.453,
+      "volume": 0.207,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: Flash Whoosh Swoosh 8.mp3"
+    },
+    "wht-07": {
+      "file": "wh/wht-07.wav",
+      "peak": 0.158,
+      "volume": 0.163,
+      "use": "real whoosh, low rumble cut; Bryan 2026-11-08: DSGNWhsh_Eerie Whoosh 02 Cut_VZ_GN_0016."
+    },
+    "mon-01": {
+      "file": "mon/mon-01.wav",
+      "peak": 0.321,
+      "volume": 0.226,
+      "use": "money sound on a price; Cinematic Money 1.wav"
+    },
+    "mon-02": {
+      "file": "mon/mon-02.wav",
+      "peak": 0.171,
+      "volume": 0.133,
+      "use": "money sound on a price; Cinematic Money 2.wav"
+    },
+    "mon-04": {
+      "file": "mon/mon-04.wav",
+      "peak": 0.141,
+      "volume": 0.143,
+      "use": "money sound on a price; Mediam Volume Mone.wav"
+    },
+    "prm-01": {
+      "file": "prm/prm-01.wav",
+      "peak": 0.101,
+      "volume": 0.101,
+      "use": "soft premium pop on a bullet or list item; Bryan 2026-11-08: Premium And Smooth Pop"
+    },
+    "prm-02": {
+      "file": "prm/prm-02.wav",
+      "peak": 0.013,
+      "volume": 0.109,
+      "use": "soft premium pop on a bullet or list item; Bryan 2026-11-08: Smooth Pop"
+    },
+    "prm-03": {
+      "file": "prm/prm-03.wav",
+      "peak": 0.1,
+      "volume": 0.103,
+      "use": "soft premium pop on a bullet or list item; Bryan 2026-11-08: Slow And Smooth Pop"
+    },
+    "prm-04": {
+      "file": "prm/prm-04.wav",
+      "peak": 0.1,
+      "volume": 0.093,
+      "use": "soft premium pop on a bullet or list item; Bryan 2026-11-08: Normal Pop"
+    },
+    "prm-05": {
+      "file": "prm/prm-05.wav",
+      "peak": 0.101,
+      "volume": 0.08,
+      "use": "soft premium pop on a bullet or list item; Bryan 2026-11-08: Meadia Pop"
+    },
+    "prm-06": {
+      "file": "prm/prm-06.wav",
+      "peak": 0.092,
+      "volume": 0.08,
+      "use": "soft premium pop on a bullet or list item; Bryan 2026-11-08: Sweet UI Open"
+    },
+    "prm-07": {
+      "file": "prm/prm-07.wav",
+      "peak": 0.002,
+      "volume": 0.089,
+      "use": "soft premium pop on a bullet or list item; Bryan 2026-11-08: SFX-0811 Warm Digital Click 01"
+    },
+    "prm-08": {
+      "file": "prm/prm-08.wav",
+      "peak": 0.004,
+      "volume": 0.081,
+      "use": "soft premium pop on a bullet or list item; Bryan 2026-11-08: SFX-0812 Warm Digital Click 02"
+    },
+    "prm-09": {
+      "file": "prm/prm-09.wav",
+      "peak": 0.005,
+      "volume": 0.071,
+      "use": "soft premium pop on a bullet or list item; Bryan 2026-11-08: SFX-0833 Warm Digital Click 03"
+    },
+    "lst-02": {
+      "file": "lst/lst-02.wav",
+      "peak": 0.061,
+      "volume": 0.112,
+      "use": "UI click on a bullet or list item; Bryan 2026-11-09: Ui Click Digital 03"
+    },
+    "lst-03": {
+      "file": "lst/lst-03.wav",
+      "peak": 0.017,
+      "volume": 0.112,
+      "use": "UI click on a bullet or list item; Bryan 2026-11-09: Ui Click Digital 04"
+    },
+    "lst-05": {
+      "file": "lst/lst-05.wav",
+      "peak": 0.007,
+      "volume": 0.112,
+      "use": "UI click on a bullet or list item; Bryan 2026-11-09: Ui Type And Delete (2)"
+    },
+    "lst-06": {
+      "file": "lst/lst-06.wav",
+      "peak": 0.041,
+      "volume": 0.112,
+      "use": "UI click on a bullet or list item; Bryan 2026-11-09: Ui button"
+    },
+    "lst-07": {
+      "file": "lst/lst-07.wav",
+      "peak": 0.142,
+      "volume": 0.112,
+      "use": "UI click on a bullet or list item; Bryan 2026-11-09: Ui Granular 2"
+    },
+    "lst-08": {
+      "file": "lst/lst-08.wav",
+      "peak": 0.006,
+      "volume": 0.112,
+      "use": "UI click on a bullet or list item; Bryan 2026-11-09: SFX-1114 Soft Scroll Tick 01"
+    },
+    "lst-10": {
+      "file": "lst/lst-10.wav",
+      "peak": 0.005,
+      "volume": 0.112,
+      "use": "UI click on a bullet or list item; Bryan 2026-11-09: SFX-1116 Soft Scroll Tick 03"
+    },
+    "lst-11": {
+      "file": "lst/lst-11.wav",
+      "peak": 0.007,
+      "volume": 0.112,
+      "use": "UI click on a bullet or list item; Bryan 2026-11-09: SFX-1117 Soft Scroll Tick 04"
+    },
+    "lst-12": {
+      "file": "lst/lst-12.wav",
+      "peak": 0.006,
+      "volume": 0.112,
+      "use": "UI click on a bullet or list item; Bryan 2026-11-09: SFX-1118 Soft Scroll Tick 05"
+    },
+    "wrong-buzz": {
+      "file": "lst/wrong-buzz.wav",
+      "peak": 0.0,
+      "volume": 0.3,
+      "use": "wrong-answer buzz when an X appears or something fails (SFX-1069, CC0); Bryan 2026-11-09"
+    },
+    "lst-stage": {
+      "file": "lst/lst-03.wav",
+      "peak": 0.017,
+      "volume": 0.158,
+      "use": "a process stage lights up: Ui Click Digital 04, a little louder than a list tick; Bryan 2026-11-09"
     }
   },
   "library": "assets/sound-effects",

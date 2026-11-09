@@ -284,6 +284,105 @@ truth" → why (an analogy) → proof (his own numbers or a student) → a one-l
 
 ---
 
+## Skymography: "How To Sound Design ANYTHING"
+
+youtu.be/c0YINYT4Ozw · 26:39 · 16:9 · ~447K views at study time (Nov 8 2026). Studied from a WhisperX
+transcript, timeline frames, and cut and sound-onset measurements on the finished sequence (360p
+YouTube mix at 25 fps, so levels are approximate). Became the skill `sound-placement`.
+
+| Technique | What the edit does | Measured or shown | Why it works | Ours |
+|---|---|---|---|---|
+| **Priority order** | Speech, then music, then effects on a talking scene | Stated | Effects that pull focus lose the message | Effects stay accents |
+| **Attention box** | Picture and sound share one fixed amount of attention | Stated | Forces an ebb and flow | Sparse where the picture is busy |
+| **Spectrum gaps** | Places sounds where the mix is empty, keeps early sections mid/high, adds bass later | Clicks lifted highs ~25 dB, whole mix only ~2 dB | Reads clearly without being loud | Choose by what's empty, not by default |
+| **Clicks on cuts** | Sped-up, muffled mechanical shutters on each fast cut | 0 frames off the cut | Makes cuts feel tactile | `ui-progress-step`; film clicks on b-roll |
+| **Rhythm over sync** | One cut was a frame short, so that click stayed on the even beat | Click 1 frame after the cut | The ear catches uneven spacing, the eye doesn't | Keep run spacing even |
+| **Whoosh leads the cut** | The build runs through the end of the outgoing shot | Starts ~0.9 s before, loudest 0.1-0.4 s before, gone 0.5 s after | Links the two shots | `sfx.mjs` aligns the peak; `ui-swipe` |
+| **Hard-cut build** | Reversed bass drop cut on the last frame before the scene | Mix fell 26 dB within 100 ms | The sudden stop is the impact | `SFX-1516` to `SFX-1518`; no boom |
+| **Riser into whoosh** | A riser builds tension, a whoosh releases it | Shown | Tension needs a release | One soft build, then `ui-swipe` |
+| **Ascending clicks** | Clicks pitched up a semitone each | -4, -3, -2…, 3 frames apart | A riser made from clicks | Pitched `ui-progress-step` copies |
+| **Per-shot variation** | One wind cut per shot, different spot, ±1 semitone | Shown | Each shot feels distinct | Vary across a run |
+| **Sound bites** | A few frames of water, bike or train under each matching Paris shot | Shown | Adds up to the feeling of a city | Literal sounds on live b-roll |
+| **Layering** | Stacks winds, whooshes and impacts for sounds that don't exist | Shown | One sound can't carry a whole world | Bake layers into one cue, as `ui-glass-shatter` |
+| **Shape every sound** | High-cut EQ, trimming, speed and pitch changes | Shown | Sits it into the mix | Prepare copies; `sfx.mjs` has no EQ or pitch |
+| **Non-literal sounds** | Rain jacket for luggage, clock clicks for text | Shown | Viewers hear a result, not a source | B-roll only; Bryan wants literal on graphics |
+| **Mix low first** | Turns nearly every sound down right after placing | Repeated throughout | Loud effects ruin a video | Start low, then compare before and after |
+| **Try and delete** | Dropped a conveyor-belt layer as noise | Shown | Not every idea works | Listen in the full mix |
+
+---
+
+## Film Editing Pro: "How to SOUND DESIGN a Video | Step-By-Step Tutorial"
+
+youtu.be/Wcxw3BPSt3A · 17:06 · 16:9 · ~1.1M views at study time (Nov 8 2026). A first pass of a dark-comedy
+short is critiqued, then rebuilt. Studied from a WhisperX transcript, timeline frames and level measurements
+(360p YouTube mix at 24 fps; narration overlaps some demos, so levels are approximate). Added to the skill
+`sound-placement`.
+
+| Technique | What the edit does | Measured or shown | Why it works | Ours |
+|---|---|---|---|---|
+| **Build order** | Score, then ambience and foley, then creative design | Stated | Effects get judged in context | Music first when there is any |
+| **Cut the music to the edit** | Slices a cue so its hits and dips land on moments | Shown on the staple pull | A cue played straight won't line up | Worth doing when a job has scored music |
+| **Nothing is silent** | Air-conditioner hum in the office, wind on the one exterior | Shown | Dead air sounds wrong | `SFX-1477`, only on silent stretches |
+| **No repeated samples** | Same keystroke every time was a named fault; slices a 10 s typing clip and uses each hit once | Shown | Repeats sound fake | `keyboard`; rotate ticks |
+| **Line up the apex** | Waveforms visible, markers on the peak | Shown | The peak is what the ear syncs to | `sfx.mjs` aligns the peak |
+| **Reverb on one bus** | All foley through one submix with room reverb | Before and after played | Studio-clean sounds feel pasted on | Live b-roll only; UI stays dry |
+| **Sound for what can't be seen** | Hit on a box drop to signal consequences | Shown | Tells the viewer how to feel | Sparingly; Bryan wants literal on graphics |
+| **Find the hidden moments** | Visual movement and lighting changes flag them | Sundown example | Otherwise they're missed | Watch burns and light shifts |
+| **Swell peak on the cut** | Reverse cymbal apex on the cut, bass drop starting on it | Timeline shot | Tension resolves on one frame | One soft build; no boom |
+| **Size the moment** | Bass drop and hit on a soft move were too much; the soft swell alone fit | About 14 dB quieter once the hits came off | If every moment is special, none are | Sizing ladder in the skill |
+| **Layer by similar tone** | Crunches under a staple remover and shredder | Shown | Close frequencies blend | Bake into one cue |
+| **Stay consistent** | Once a style is set, it runs through the piece | Stated | Gaps become obvious | Same density after the opening |
+| **Meter guide** | Nothing over 0; speech about -10 to -12; effects -10 to -30; music -20 to -30 | Chart on screen | Keeps the order of importance | Listed in the skill |
+
+---
+
+## Film Editing Pro: "How Professional Editors Build Suspense" (What Drives the Cut, part 4)
+
+youtu.be/zUwdvfoRmc8 · 7:26 · 16:9 · ~28K views at study time (Nov 8 2026). Studied from a WhisperX
+transcript only. About why to cut, with nothing on sound, so it is not part of the skill `sound-placement`.
+Bryan made it a rule for every video (EDIT-PREFERENCES.md, 2026-11-09).
+
+| Technique | The idea | Why it works | Ours |
+|---|---|---|---|
+| **Questions and answers** | Each shot poses a question, answers one, or both | Questions keep people watching; answers make them enjoy it | Check each b-roll or graphic: what does it ask or answer? |
+| **Withhold, then reveal** | A question comes from what's left out of the frame; an answer from what's in it | The viewer wants the missing piece | Tease the number or result before showing it |
+| **Less to more** | Start close, widen as the scene goes on | Each step adds information | Open a graphic on one detail, then pull out to the whole |
+| **Shot sizes carry different information** | Close-ups: who. Extreme close-ups: feeling. Mediums: doing. Wides: where | Picks the shot by what it needs to tell | Choose b-roll by the information the line needs |
+| **No redundant shots** | Two shots saying the same thing are like repeating a sentence | Repetition bores | No two shots or graphics in a row giving the same information |
+| **One sentence per cut** | Write what each shot adds, one sentence each; a boring list means a boring edit | A quick test of the structure | Use it on `sheet.json`: each scene's `what` should say something new |
+| **Spread and keep open** | More questions early, more answers late, new questions as old ones close, one left open at the end | Keeps tension running into what comes next | Re-hooks mid-video; end on a reason to watch the next one |
+| **Moves can do a cut's job** | A camera move can reveal information the way a cut does | The promise of a reveal builds anticipation | Slow push or slide that uncovers the proof |
+
+---
+
+## Film Editing Pro: "The Editor's Guide to Mono vs Stereo Audio"
+
+youtu.be/4r_oeWymn7k · 25:30 · ~27K views at study time (Nov 8 2026). Studied from a WhisperX transcript. Mostly
+Premiere steps; what carries over is below. The channel check is in the skill `sound-placement`.
+
+- Speech should be heard evenly in both ears; music is meant to differ left and right.
+- A recorder can put a lav on one side and a boom on the other. Split them so a bump on one mic can
+  be faded out, and raise the other mic to cover the gap.
+- Fade a mic out and back in rather than switching it off sharply.
+- Mismatched mono and stereo can change the level on export in Premiere. `sfx.mjs` isn't affected (tested).
+
+---
+
+## Film Editing Pro: "How Pro Colorists Use SCOPES For Better Color Correction"
+
+youtu.be/CMWRjrSnfFQ · 12:31 · ~21K views at study time (Nov 8 2026). Studied from a WhisperX transcript only,
+so the on-screen scope demos were not reviewed. Nothing on sound. Useful when grading with `studio/lut.mjs`.
+
+- Monitors lie: a bright screen leads to grading too dark, and a dim one too bright. Measure instead.
+- A waveform shows brightness by position across the frame. Most shots want a little shadow, a little
+  highlight and spread mid-tones, but a bright or dark room should read that way.
+- Don't push whites past the top or blacks past zero: clipped or crushed areas lose all detail.
+- A vectorscope shows hue by direction and saturation by distance from the centre. A trace leaning one
+  way means a colour cast.
+- Scopes need context: read them against what the shot is meant to look like.
+
+---
+
 ## Dan Martell: "Give me 54 Seconds and I'll Make you Dangerously Motivated"
 
 youtu.be/r6zFZQm0hcc · 0:54 · 16:9 · ~7.2M views (Oct 2026). Studied frame by frame for

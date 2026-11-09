@@ -11,5 +11,57 @@
   "fontSans": "Inter",
   "fontAccentSerif": "Playfair Display",
   "handle": "",
-  "logo": ""
+  "logo": "",
+  "company": "Elivate Marketing",
+  "palette": {
+    "_readme": "The company colours, from the VSL. Use these names everywhere (captions, reels, graphics, thumbnails, carousels). Rules: styles/PALETTE.md. Picture: styles/brand-palette.png",
+    "purple": {
+      "ink": "#050308",
+      "midnight": "#1A0B38",
+      "royal": "#3B1A75",
+      "deep": "#4C1D95",
+      "violet": "#6D28D9",
+      "core": "#8B5CF6",
+      "light": "#C4B5FD",
+      "mist": "#EDE9FE"
+    },
+    "gold": {
+      "highlight": "#FFF3CF",
+      "gold": "#E8C77A",
+      "deep": "#B8913F"
+    },
+    "neutral": {
+      "white": "#FFFFFF",
+      "muted": "rgba(255,255,255,0.6)",
+      "black": "#000000"
+    },
+    "signal": {
+      "success": "#22A06B",
+      "loss": "#E5484D"
+    },
+    "gradients": {
+      "purpleText": "linear-gradient(180deg,#FFFFFF 0%,#C4B5FD 55%,#8B5CF6 100%)",
+      "goldText": "linear-gradient(180deg,#FFF3CF 0%,#E8C77A 45%,#B8913F 100%)",
+      "wipe": "linear-gradient(90deg,#1A0B38,#3B1A75 60%,#1A0B38)"
+    }
+  },
+  "captions": {
+    "_readme": "Pick by what is behind the words. On Bryan's purple-lit set, purple key words disappear, so use gold.",
+    "text": "#FFFFFF",
+    "keyWordOnDark": "#C4B5FD",
+    "keyWordOnPurpleSet": "#E8C77A",
+    "moneyAndResults": "#E8C77A",
+    "shadow": "0 3px 14px rgba(5,3,8,0.75)",
+    "pill": "rgba(5,3,8,0.72)"
+  },
+  "reels": {
+    "_readme": "Theme for 9:16 reels.",
+    "stage": "#050308",
+    "floorGlow": "#6D28D9",
+    "hookText": "#FFFFFF",
+    "hookKeyWord": "purpleText",
+    "ctaBackground": "#8B5CF6",
+    "ctaText": "#FFFFFF",
+    "progress": "#C4B5FD"
+  }
 }

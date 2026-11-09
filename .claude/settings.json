@@ -16,5 +16,18 @@
       "Bash(node studio/anim.mjs:*)",
       "Bash(node studio/lut.mjs:*)"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat \"$CLAUDE_PROJECT_DIR/styles/EDIT-PREFERENCES.md\"",
+            "statusMessage": "Loading Bryan's checklist"
+          }
+        ]
+      }
+    ]
   }
 }
