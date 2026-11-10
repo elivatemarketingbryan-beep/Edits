@@ -389,3 +389,92 @@ button.small { font-size: 12px; padding: 3px 10px; margin-left: auto; }
 .reelcard .actions button.small { margin-left: 0; }
 .reelcard .button.small { font-size: 12px; padding: 3px 10px; }
 .caption { margin: 0; white-space: pre-wrap; font: 12.5px/1.45 var(--sans); color: var(--muted); max-height: 140px; overflow: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+/* previews of the real video on combo and format cards */
+.combo-thumb { position: relative; display: block; overflow: hidden; border-radius: 12px; background: #000; border: 1px solid var(--line); width: min(100%, 240px); justify-self: center; }
+.thumb .watch { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); white-space: nowrap; padding: 6px 12px; border-radius: 99px; background: rgba(5,3,8,.82); border: 1px solid var(--accent); color: #fff; font-size: 12px; font-weight: 800; cursor: pointer; }
+.thumb .watch:hover { background: var(--accent); }
+
+/* ---------- Simpler screens (2026-11-10): one step at a time, folds for the rest, a pinned approve bar ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.bar-top .status { grid-column: 3; }
+.steppill { grid-column: 2; justify-self: center; font-size: 12.5px; padding: 4px 12px; border-radius: 99px; background: var(--accent-soft); color: var(--accent-hi); border: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.steppill.you { color: var(--you); border-color: rgba(245, 179, 66, .35); background: rgba(245, 179, 66, .08); }
+
+/* home: "Your videos" and "Every format" as tabs instead of two long sections */
+.hometabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: -32px; }
+.hometabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--muted); padding: 10px 14px; font-weight: 600; }
+.hometabs button.on { color: var(--text); border-bottom-color: var(--accent); }
+.hometabs button span { font: 11px var(--mono); color: var(--accent-hi); margin-left: 4px; }
+.foldbtn { justify-self: start; font-weight: 700; font-size: 16px; }
+.foldbtn::before { content: "▸ "; color: var(--accent-hi); }
+.foldbtn[aria-expanded="true"]::before { content: "▾ "; }
+.gallery.collapsed > :not(.sec-head), .gallery.collapsed .sec-head > :not(.foldbtn) { display: none; }
+
+/* folded sections: progress, details, files, captions, the Claude tip */
+details.fold { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 0 14px; }
+details.fold > summary { cursor: pointer; list-style: none; padding: 10px 0; font-size: 13px; font-weight: 600; color: var(--text); display: flex; gap: 8px; align-items: baseline; }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "▸"; color: var(--accent-hi); }
+details.fold[open] > summary::before { content: "▾"; }
+details.fold[open] { padding-bottom: 12px; }
+details.fold[open] > :not(summary) + :not(summary) { margin-top: 10px; }
+details.fold.small { border: 0; background: none; padding: 0; }
+details.fold.small > summary { padding: 4px 0; font-weight: 500; color: var(--muted); }
+details.fold .hint { margin: 6px 0 0; }
+
+/* the pinned toolbar */
+body.has-bar { padding-bottom: 96px; }
+.actionbar { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 20; width: min(1080px, calc(100% - 24px));
+  display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; padding: 10px 10px 10px 16px; border-radius: 16px;
+  background: color-mix(in srgb, var(--panel) 92%, transparent); backdrop-filter: blur(12px); border: 1px solid var(--accent-soft);
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, .25), 0 18px 40px -14px rgba(0, 0, 0, .8); }
+.actionbar .bar-sum { font-size: 13.5px; color: var(--muted); }
+.actionbar .bar-sum b { color: var(--text); }
+.actionbar b.bad, .igline.err, .err { color: var(--err); }
+.actionbar .msg { margin: 0; flex: 1; min-width: 0; }
+.actionbar .bar-btns { display: flex; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+.actionbar .bar-btns > * { padding: 9px 16px; border-radius: 10px; }
+.bar-note { flex: 1 1 320px; display: flex; }
+.bar-note textarea { flex: 1; resize: none; min-height: 40px; max-height: 120px; field-sizing: content; border-radius: 10px; background: var(--bg); }
+.bar-note textarea:focus { outline: none; border-color: var(--accent); }
+button.reject { color: var(--err); border-color: rgba(240, 107, 107, .45); background: transparent; font-weight: 600; }
+button.reject:hover { background: rgba(240, 107, 107, .1); border-color: var(--err); }
+.gobar { display: none; }
+
+/* per-item notes and approve / reject */
+.notes { display: grid; gap: 4px; }
+.notes > span { font-size: 11.5px; color: var(--muted); }
+.notes textarea, .reelcard textarea { width: 100%; box-sizing: border-box; resize: vertical; font: inherit; font-size: 13px; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; }
+.notes textarea:focus { outline: none; border-color: var(--accent); }
+.decide { display: flex; gap: 6px; }
+.decide button.small { margin: 0; flex: 1; }
+.decide .approve { color: var(--ok); border-color: rgba(52, 211, 153, .35); background: transparent; }
+.decide .approve.on { background: var(--ok); border-color: var(--ok); color: #062b1d; }
+.decide .reject.on { background: var(--err); border-color: var(--err); color: #fff; }
+.gfx.rej, .reelcard.rej { border-color: rgba(240, 107, 107, .6); }
+.gfx.yes, .reelcard.yes { border-color: rgba(52, 211, 153, .5); }
+.chip.warn { color: var(--you); border-color: rgba(245, 179, 66, .4); }
+
+/* finished reels: tabs + Instagram */
+.reeltabs { padding: 0; border: 0; gap: 6px; flex-wrap: wrap; }
+.reeltabs button { border-radius: 10px; color: var(--muted); }
+.reeltabs button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.reeltabs button span { font: 11px var(--mono); opacity: .8; margin-left: 4px; }
+.reelcard .actions { margin-top: 2px; }
+.reelcard .button.small.ghost { border-color: var(--line); color: var(--muted); }
+button.cta.small { font-size: 12.5px; padding: 6px 12px; margin: 0; }
+.igline { margin: 0; font-size: 12.5px; color: var(--muted); }
+.igline.ok { color: #a7f3d0; }
+.igline a { color: var(--accent-hi); }
+.igline.busy i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 6px; animation: pulse 1.4s ease-in-out infinite; }
+
+/* review page: buttons live in the bottom bar now */
+.rv { height: calc(100vh - 53px - 76px); }
+.rv-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 12px 16px;
+  background: color-mix(in srgb, var(--panel) 94%, transparent); backdrop-filter: blur(12px); border-top: 1px solid var(--accent-soft); }
+.rv-bar .msg { margin: 0; }
+@media (max-width: 760px) { .rv { height: auto; } body.rv-page { padding-bottom: 150px; } }
+@media (prefers-reduced-motion: reduce) { .igline.busy i, .status.busy i, .steps li.now.claude i { animation: none; } }
+@media (max-width: 860px) { .steppill { grid-column: 1 / -1; grid-row: 2; } .bar-top .status { grid-column: 2; } .actionbar .bar-btns { margin-left: 0; width: 100%; } .actionbar .bar-btns > * { flex: 1; text-align: center; } }
+.rv-bar .bar-btns { display: flex; gap: 8px; margin-left: auto; }
+.rv-bar .bar-btns > * { padding: 9px 16px; border-radius: 10px; }

@@ -4,6 +4,9 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, JOBS, jobDir, newId, readJob, writeJob, listJobs, setStage } from './jobs.mjs';
+import { igConfigured } from './instagram.mjs';
+import { sheetsConfigured } from './sheets.mjs';
+import { startPost, refreshStats, refreshIfDue, statsState } from './ig-stats.mjs';
 
 const PORT = Number(process.env.PORT) || 4747;
 const PUBLIC = path.join(ROOT, 'studio', 'public');
@@ -26,6 +29,15 @@ function intake(mode, reels = {}) {
   return { mode: 'reels', reelOpts: { count, length } };   // not `reels`: that's reels.json, the finished reels
 }
 const json = (file, fallback) => (fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : fallback);
+
+// The toolbar's notes box: a note on the whole video, not a second of it. `kind: "approve"` = left while approving.
+function addGeneralNote(id, text, kind = 'change') {
+  if (!String(text || '').trim()) return;
+  const file = path.join(jobDir(id), 'notes.json');
+  const notes = json(file, []);
+  notes.push({ id: Date.now().toString(36), t: 0, text: String(text).trim(), general: true, kind, edit: null, scene: null, status: 'open', reply: null, created: new Date().toISOString() });
+  fs.writeFileSync(file, JSON.stringify(notes, null, 2));
+}
 
 const readBody = (req) => new Promise((ok, fail) => {
   let data = '';
@@ -168,8 +180,48 @@ const routes = [
     send(res, 200, readJob(id));
   }],
 
-  ['POST', /^\/api\/jobs\/([\w-]+)\/request-changes$/, (req, res, [id]) => send(res, 200, setStage(id, 'revise'))],
-  ['POST', /^\/api\/jobs\/([\w-]+)\/approve$/, (req, res, [id]) => send(res, 200, setStage(id, 'final'))],
+  // One edit: approve or reject from the always-on toolbar. An optional overall note (not tied to a second) rides along.
+  ['POST', /^\/api\/jobs\/([\w-]+)\/request-changes$/, async (req, res, [id]) => {
+    const { note } = await readBody(req);
+    addGeneralNote(id, note);
+    if (!(readJob(id).notes || []).some((n) => n.status === 'open')) return send(res, 400, { error: 'Write what should change first, in the notes box or as a note on the timeline.' });
+    send(res, 200, setStage(id, 'revise'));
+  }],
+  ['POST', /^\/api\/jobs\/([\w-]+)\/approve$/, async (req, res, [id]) => {
+    const { note } = await readBody(req);
+    addGeneralNote(id, note, 'approve');
+    send(res, 200, setStage(id, 'final'));
+  }],
+
+  // Reels review: { decisions: { <reel id>: { status: "approved"|"changes", note } } }.
+  // Any rejected reel sends the job to `revise`; every reel approved finishes it.
+  ['POST', /^\/api\/jobs\/([\w-]+)\/reel-review$/, async (req, res, [id]) => {
+    const { decisions = {} } = await readBody(req);
+    const job = readJob(id);
+    if (job?.mode !== 'reels' || !['review', 'done'].includes(job.stage)) return send(res, 400, { error: 'These reels aren\'t waiting for review' });
+    for (const [rid, d] of Object.entries(decisions)) {
+      if (d.status === 'changes' && !String(d.note || '').trim()) return send(res, 400, { error: 'Add a note to every reel you reject, so Claude knows what to fix.' });
+    }
+    const file = path.join(jobDir(id), 'reels.json');
+    const list = json(file, []).map((r) => {
+      const d = decisions[r.id];
+      if (!d || r.ig?.status === 'posted') return r;
+      const note = String(d.note ?? '').trim() || null;
+      if (d.status === 'changes') return { ...r, status: 'changes', note, reply: null };
+      if (d.status === 'approved') return { ...r, status: 'approved', note };
+      return { ...r, note };
+    });
+    fs.writeFileSync(file, JSON.stringify(list, null, 2));
+    const next = list.some((r) => r.status === 'changes') ? 'revise' : list.length && list.every((r) => r.status === 'approved') ? 'done' : null;
+    send(res, 200, next && next !== job.stage ? setStage(id, next) : writeJob(readJob(id)));
+  }],
+
+  // Post an approved reel to Instagram. Returns at once; progress shows on the reel (reels.json `ig`).
+  ['POST', /^\/api\/jobs\/([\w-]+)\/reels\/([\w-]+)\/instagram$/, async (req, res, [id, rid]) => send(res, 200, startPost(id, rid, (await readBody(req)).caption))],
+  // A finished single edit (a one-off reel) posts the same way, with the caption typed on the page.
+  ['POST', /^\/api\/jobs\/([\w-]+)\/instagram$/, async (req, res, [id]) => send(res, 200, startPost(id, null, (await readBody(req)).caption))],
+  ['GET', /^\/api\/integrations$/, (req, res) => send(res, 200, { instagram: igConfigured(), sheets: sheetsConfigured(), stats: statsState() })],
+  ['POST', /^\/api\/stats\/refresh$/, async (req, res) => send(res, 200, await refreshStats())],
 
   // Job media and outputs.
   ['GET', /^\/files\/([\w-]+)\/(.+)$/, (req, res, [id, rel]) => {
@@ -194,3 +246,8 @@ http.createServer(async (req, res) => {
   }
   send(res, 404, { error: 'Not found' });
 }).listen(PORT, '127.0.0.1', () => console.log(`Video Studio is open at http://localhost:${PORT}`));
+
+// Weekly stats refresh, as a catch-up for the scheduled task: on start, then every 6 hours while running.
+const statsTick = () => refreshIfDue().then((r) => r && console.log(`Instagram stats refreshed for ${r.updated} reel(s).`)).catch((e) => console.log(`Stats refresh failed: ${e.message}`));
+statsTick();
+setInterval(statsTick, 6 * 3600 * 1000).unref();

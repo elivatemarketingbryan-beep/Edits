@@ -9,7 +9,8 @@ export const JOBS = path.join(ROOT, 'jobs');
 
 // Stages in order. `who` says whose move it is.
 // mode "video" (one edit):  formats -> pick  -> design -> graphics -> edit -> review <-> revise -> final -> done
-// mode "reels" (cut a long video into reels): formats -> clips -> design -> graphics -> final -> done
+// mode "reels" (cut a long video into reels): formats -> clips -> design -> graphics -> final -> review <-> revise -> done
+//   (reels review: Bryan approves or rejects each reel in reels.json; approved reels can be posted to Instagram)
 export const STAGES = {
   formats: { who: 'claude', label: 'Finding the best 3 formats' },
   pick:    { who: 'you',    label: 'Pick a format and ideas' },
@@ -23,7 +24,7 @@ export const STAGES = {
   done:    { who: 'nobody', label: 'Done' },
 };
 // Where the reels flow words a stage differently.
-const REELS_LABELS = { formats: 'Finding the best reels', final: 'Rendering your reels' };
+const REELS_LABELS = { formats: 'Finding the best reels', final: 'Rendering your reels', review: 'Review your reels', revise: 'Fixing the reels you rejected' };
 // Extra files read into the job: Claude writes them, the page shows them.
 // clips.json = reels Claude found (reels mode), graphics.json = graphic stills to approve, reels.json = finished reels.
 const EXTRAS = ['formats', 'ideas', 'combos', 'edits', 'notes', 'sheet', 'clips', 'graphics', 'reels'];

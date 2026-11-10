@@ -37,6 +37,8 @@ Motion-graphic edits go through one command, in this order. Everything comes fro
 5. **Cut:** `node studio/edit.mjs cut <id>` puts them over the footage, then add sounds with `studio/sfx.mjs`.
 6. **Check:** `node studio/edit.mjs check <id>` listens to new sounds and runs the gate. Then move the stage.
 
+**Stories and scenarios** get a scene acted out by a faceless figure (`assets/boards/story/`, the Moonshot Motion breakdown in `styles/REFERENCES.md`); plan flags them as "a story or scenario". Write a new scene per story.
+
 After adding a graphic or sound, run `node studio/library.mjs`.
 
 ## Hearing sounds and the gate
@@ -66,6 +68,7 @@ After adding a graphic or sound, run `node studio/library.mjs`.
 | Settled conflicts between kits | Rules that override the engines | `docs/studio/engine-overrides.md` |
 | Where each skill came from | Where each skill came from | `docs/studio/skill-sources.md` |
 | This computer's tools and GPU | Setup notes | `docs/studio/setup.md` |
+| Posting to Instagram, the retention-by-design sheet | Instagram and Sheets | `docs/studio/instagram-and-sheets.md` |
 
 Taste and look: `styles/EDIT-PREFERENCES.md` (checks), `styles/STYLE-GUIDE.md`, `styles/SOUND-RULES.md`, `styles/REFERENCES.md`.
 Before this file was shortened: `docs/history/CLAUDE-2026-11-09.md`.
