@@ -47,6 +47,11 @@
   .msg.ok { color: var(--ok); }
   .waiting { background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; display: flex; gap: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
   .waiting code { background: var(--bg); border-radius: 6px; padding: 2px 8px; }
+  .sheetbar { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+  .sheetbar .actions { padding-bottom: 6px; }
+  .sheetbar .sheet-tabs { border-bottom: 0; }
+  .editor { width: 100%; min-height: 520px; font: 14px/1.6 var(--mono); background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 14px; resize: vertical; }
+  .edhint { font-size: 12.5px; color: var(--muted); margin: 0 0 8px; }
   .sheet-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); }
   .sheet-tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--muted); padding: 8px 12px; font-weight: 600; }
   .sheet-tabs button.on { color: var(--text); border-bottom-color: var(--accent); }
@@ -118,7 +123,15 @@
           <p class="muted" style="margin:0">Buttons queue the work. Then say <b>run my studio jobs</b> in Claude Code, the same as for edits. This page updates by itself when it's done.</p>
         </div>
         <div style="display:grid;gap:10px;min-width:0">
-          <div class="sheet-tabs" role="tablist"><button role="tab" data-tab="script">Script</button><button role="tab" data-tab="outline">Outline</button></div>
+          <div class="sheetbar">
+            <div class="sheet-tabs" role="tablist"><button role="tab" data-tab="script">Script</button><button role="tab" data-tab="outline">Outline</button></div>
+            <div class="actions" id="editBtns">
+              <button type="button" id="editBtn">✎ Edit</button>
+              <button type="button" class="primary" id="saveBtn" hidden>Save script</button>
+              <button type="button" class="ghost" id="cancelBtn" hidden>Cancel</button>
+              <span class="msg" id="saveMsg"></span>
+            </div>
+          </div>
           <article class="sheet" id="sheet"></article>
         </div>
       </div>
@@ -204,18 +217,56 @@ function show(p) {
     w.append(line, cancel);
   } else w.hidden = true;
   document.querySelectorAll('#askBtns button[data-ask], #reviseBtn').forEach((b) => (b.disabled = !!p.request));
-  if (!same) tab = p.script ? 'script' : p.outline ? 'outline' : 'script';
+  if (!same) { tab = p.script ? 'script' : p.outline ? 'outline' : 'script'; editing = null; }
   renderSheet();
 }
+
+// Editing the script or outline by hand: the text box replaces the view until Save or Cancel.
+// The page refreshes itself while Claude works; an open editor is left alone so nothing typed is lost.
+let editing = null;   // null | 'script' | 'outline'
+function startEdit() {
+  editing = tab; renderSheet();
+  const t = $('editor'); t.focus(); t.setSelectionRange(0, 0);
+}
+function stopEdit() { editing = null; renderSheet(); }
+$('editBtn').onclick = startEdit;
+$('cancelBtn').onclick = stopEdit;
+$('saveBtn').onclick = async () => {
+  const text = $('editor').value, what = editing;
+  $('saveBtn').disabled = true;
+  try {
+    show(await api('/api/plans/' + current.id, { [what]: text }));
+    editing = null; renderSheet(); load();   // reload the list so its "Scripted" label updates
+    $('saveMsg').className = 'msg ok'; $('saveMsg').textContent = `${what === 'script' ? 'Script' : 'Outline'} saved.`;
+    setTimeout(() => { $('saveMsg').textContent = ''; }, 4000);
+  } catch (err) { $('saveMsg').className = 'msg err'; $('saveMsg').textContent = err.message; }
+  finally { $('saveBtn').disabled = false; }
+};
+const TEMPLATE = (p) => `# ${chosenTitle(p) || p.title}\n## INTRO\n\n## ACT 1 — \n\n## ACT 2 — \n\n## ACT 3 — \n\n## RECAP\n\n## CTA\n`;
 
 // Script / outline: # title, ## section, ### beat, plain = spoken; [TAGS] become chips, placeholders in gold.
 function renderSheet() {
   document.querySelectorAll('.sheet-tabs button').forEach((b) => { const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  const word = tab === 'script' ? 'script' : 'outline';
+  $('editBtn').hidden = !!editing; $('saveBtn').hidden = $('cancelBtn').hidden = !editing;
+  $('saveBtn').textContent = `Save ${word}`;
+  $('editBtn').textContent = (tab === 'script' ? current.script : current.outline)?.trim() ? `✎ Edit ${word}` : `✎ Write your own ${word}`;
+  const sheet = $('sheet');
+  if (editing) {
+    if ($('editor') && $('editor').dataset.what === editing) return;   // already open: keep the text and cursor
+    sheet.replaceChildren();
+    const hint = el('p', 'edhint', '# title · ## section heading · ### sub-section · one spoken line per line · cue tags like [HOOK] or [NUMBER: $30/day] at the end of a line.');
+    const ta = Object.assign(el('textarea', 'editor'), { id: 'editor', value: (editing === 'script' ? current.script : current.outline) || (editing === 'script' ? TEMPLATE(current) : '') });
+    ta.dataset.what = editing; ta.setAttribute('aria-label', `Edit the ${word}`);
+    ta.onkeydown = (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); $('saveBtn').click(); } };
+    sheet.append(hint, ta);
+    return;
+  }
+  sheet.replaceChildren();
   const md = (tab === 'script' ? current.script : current.outline) || '';
-  const sheet = $('sheet'); sheet.replaceChildren();
   if (!md.trim()) {
     sheet.append(el('p', 'none', tab === 'script'
-      ? 'No script yet. "1. Outline & check" tests the points first; "2. Write script" goes straight to the script.'
+      ? 'No script yet. "1. Outline & check" tests the points first; "2. Write script" has Claude write it; "✎ Write your own script" lets you type or paste it yourself.'
       : 'No outline yet. "1. Outline & check" plans the sections and marks each point NEW or COMMON before any script is written.'));
     return;
   }
@@ -235,7 +286,18 @@ function renderSheet() {
     sheet.append(node);
   }
 }
-document.querySelectorAll('.sheet-tabs button').forEach((b) => (b.onclick = () => { tab = b.dataset.tab; renderSheet(); }));
+document.querySelectorAll('.sheet-tabs button').forEach((b) => (b.onclick = () => {
+  if (editing && $('editor')?.value !== ((editing === 'script' ? current.script : current.outline) || '') && !confirmLeave()) return;
+  tab = b.dataset.tab; editing = null; renderSheet();
+}));
+// Switching away from an unsaved edit: the first click warns, the second goes.
+let leaveArmed = false;
+function confirmLeave() {
+  if (leaveArmed) { leaveArmed = false; return true; }
+  leaveArmed = true; $('saveMsg').className = 'msg err'; $('saveMsg').textContent = 'Unsaved changes. Save first, or click again to discard.';
+  setTimeout(() => { leaveArmed = false; }, 4000);
+  return false;
+}
 
 const brief = () => ({ notes: $('eNotes').value, cta: $('eCta').value, acts: $('eActs').value });
 $('briefForm').onsubmit = async (e) => {

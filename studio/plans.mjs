@@ -191,7 +191,14 @@ export function planRoutes({ send, readBody, serveFile, inside }) {
         next.titles = titles;
       }
       if ('thumb' in body) next.thumb = plan.assets?.some((a) => a.kind === 'thumb' && a.name === body.thumb) || !body.thumb ? body.thumb || null : plan.thumb;
-      if (typeof body.script === 'string') fs.writeFileSync(path.join(planDir(id), 'script.md'), body.script.slice(0, 200000));
+      // Bryan's own edits on the Script tab (Save script / Save outline). An empty save removes the file.
+      for (const k of ['script', 'outline']) {
+        if (typeof body[k] !== 'string') continue;
+        const f = path.join(planDir(id), `${k}.md`);
+        if (body[k].trim()) fs.writeFileSync(f, body[k].replace(/\r\n/g, '\n').slice(0, 200000));
+        else if (fs.existsSync(f)) fs.rmSync(f);
+      }
+      if (typeof body.script === 'string' && body.script.trim() && STATUSES.indexOf(next.status) < STATUSES.indexOf('scripted')) next.status = 'scripted';
       if (!next.title) return send(res, 400, { error: 'A plan needs a title.' });
       send(res, 200, writePlan(next));
     }],

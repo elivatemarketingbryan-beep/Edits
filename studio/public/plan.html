@@ -98,6 +98,14 @@
   .vbar a.button { font-size: 12px; padding: 4px 9px; }
   .vitem { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; position: relative; }
   .tm { position: relative; display: inline-block; }
+  .trowc { display: flex; gap: 8px; align-items: flex-start; }
+  .pen { flex: none; font-size: 12px; padding: 3px 9px; color: var(--muted); background: transparent; }
+  .pen:hover { color: var(--text); }
+  .tedit { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tedit input { flex: 1; min-width: 180px; font-size: 14px; font-weight: 600; }
+  .trow input.txt { width: 100%; background: transparent; border: 1px solid transparent; padding: 5px 8px; font: inherit; color: var(--text); border-radius: 6px; }
+  .trow input.txt:hover { border-color: var(--line); }
+  .trow input.txt:focus { border-color: var(--accent); background: var(--bg); outline: none; }
   details.arch { border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.015); }
   details.arch > summary { cursor: pointer; padding: 12px 14px; font-size: 13.5px; list-style: none; display: flex; align-items: baseline; gap: 2px; }
   details.arch > summary::-webkit-details-marker { display: none; }
@@ -294,7 +302,8 @@ function setStatus() {
 function stPill(p) { return p.request ? el('span', 'st q', p.requestLabel + ' · queued') : el('span', 'st st-' + p.status, LABEL[p.status] || p.status); }
 
 // ---- Year plan: 12 collapsible months, 4 video cards each (filled cards, or an inline "New video" form).
-const drafts = {}, exDrafts = {};
+const drafts = {}, exDrafts = {}, titleEdits = {};
+let justOpened = null;   // the card whose ✎ was just clicked: its title box takes the cursor once
 let focusKey = null, styles = [];
 let openMonths = null;
 try { const o = JSON.parse(localStorage.getItem('plan-open') || 'null'); if (Array.isArray(o)) openMonths = new Set(o); } catch {}
@@ -353,10 +362,31 @@ function videoCard(p, n) {
   sel.onchange = async () => { await api('/api/plans/' + p.id, { style: sel.value }); load(); };
   typeCol.append(sel);
   const titleCol = el('div'); titleCol.append(el('div', 'lbl', 'Title'));
-  const tb = el('button', 'vtitle', chosenTitle(p) || p.title); tb.type = 'button'; tb.onclick = () => openTab(p.id, 'pack');
-  if (chosenTitle(p) && chosenTitle(p) !== p.title) tb.append(el('small', null, 'Working title: ' + p.title));
-  else if (!p.titles?.length) tb.append(el('small', null, 'Add title options'));
-  titleCol.append(tb);
+  // The title shown is the chosen title option, else the working title. ✎ edits that same text right here.
+  const shown = chosenTitle(p) || p.title;
+  if (titleEdits[p.id] !== undefined) {
+    const f = el('form', 'tedit');
+    const ti = Object.assign(el('input'), { type: 'text', id: 'ttl-' + p.id, value: titleEdits[p.id] }); ti.setAttribute('aria-label', 'Title');
+    ti.oninput = () => { titleEdits[p.id] = ti.value; };
+    ti.onkeydown = (e) => { if (e.key === 'Escape') { delete titleEdits[p.id]; renderYear(); } };
+    const cancel = el('button', 'ghost', 'Cancel'); cancel.type = 'button'; cancel.onclick = () => { delete titleEdits[p.id]; renderYear(); };
+    f.append(ti, Object.assign(el('button', 'primary', 'Save'), { type: 'submit' }), cancel);
+    f.onsubmit = async (e) => {
+      e.preventDefault(); const v = ti.value.trim(); if (!v) { ti.focus(); return; }
+      const body = chosenTitle(p) ? { titles: p.titles.map((t) => (t.chosen ? { ...t, text: v } : t)) } : { title: v };
+      try { await api('/api/plans/' + p.id, body); delete titleEdits[p.id]; load(); } catch (err) { alertLine(f, err.message); }
+    };
+    titleCol.append(f);
+    if (justOpened === p.id) { justOpened = null; setTimeout(() => { ti.focus(); ti.select(); }); }
+  } else {
+    const row = el('div', 'trowc');
+    const tb = el('button', 'vtitle', shown); tb.type = 'button'; tb.onclick = () => openTab(p.id, 'pack'); tb.title = 'Title options';
+    if (chosenTitle(p) && chosenTitle(p) !== p.title) tb.append(el('small', null, 'Working title: ' + p.title));
+    else if (!p.titles?.length) tb.append(el('small', null, 'Add title options'));
+    const pen = el('button', 'pen', '✎ Edit'); pen.type = 'button'; pen.title = 'Edit this title'; pen.setAttribute('aria-label', 'Edit this title');
+    pen.onclick = () => { titleEdits[p.id] = shown; justOpened = p.id; renderYear(); };
+    row.append(tb, pen); titleCol.append(row);
+  }
   const dueCol = el('div'); dueCol.append(el('div', 'lbl', 'Due'), el('div', null, p.due ? dateStr(p.due) : '—'));
   meta.append(typeCol, titleCol, dueCol);
 
@@ -643,9 +673,16 @@ function renderTabs() {
     const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on);
     b.querySelector('i')?.remove(); if (counts[b.dataset.tab]) b.append(Object.assign(el('i'), { textContent: counts[b.dataset.tab] }));
   });
+  // The page refreshes itself while Claude works: keep whatever is being typed in the tab (focus and caret).
+  const act = document.activeElement, keep = act?.id && act.closest?.('#sheet') ? { id: act.id, s: act.selectionStart, e: act.selectionEnd } : null;
   const sheet = $('sheet'); sheet.replaceChildren();
   ({ pack: renderPack, notes: renderNotes, assets: renderAssets }[tab] || renderPack)(sheet);
+  if (keep) { const f = document.getElementById(keep.id); if (f) { f.focus(); try { if (keep.s != null) f.setSelectionRange(keep.s, keep.e); } catch {} } }
 }
+// Unsaved text in the tabs, per plan, so a refresh never wipes it: new title option, edited title options, new note.
+const sheetDrafts = {};
+const draft = (k, v) => (v === undefined ? sheetDrafts[current.id + k] : (sheetDrafts[current.id + k] = v));
+const clearDraft = (k) => { delete sheetDrafts[current.id + k]; };
 document.querySelectorAll('#tabs button').forEach((b) => (b.onclick = () => { tab = b.dataset.tab; renderTabs(); }));
 
 // Titles & thumbnails
@@ -653,16 +690,25 @@ async function saveTitles(titles) { showDetail(await api('/api/plans/' + current
 function renderPack(sheet) {
   const ts = el('div', 'sec'); ts.append(el('h3', null, 'Title options'), el('p', 'muted', 'Write a few, then pick the one you\'ll publish. The chosen title shows on the year plan.'));
   for (const t of current.titles) {
-    const row = el('label', 'trow' + (t.chosen ? ' chosen' : ''));
-    const r = Object.assign(el('input'), { type: 'radio', name: 'chosenTitle', checked: t.chosen });
+    const row = el('div', 'trow' + (t.chosen ? ' chosen' : ''));
+    const r = Object.assign(el('input'), { type: 'radio', name: 'chosenTitle', checked: t.chosen, title: 'Use this title' });
+    r.setAttribute('aria-label', 'Use this title');
     r.onchange = () => saveTitles(current.titles.map((x) => ({ ...x, chosen: x.id === t.id })));
+    // Each title is editable in place: type, then Enter or click away to save.
+    const txt = Object.assign(el('input', 'txt'), { type: 'text', id: 'topt-' + t.id, value: draft('o' + t.id) ?? t.text });
+    txt.setAttribute('aria-label', 'Title option');
+    txt.oninput = () => draft('o' + t.id, txt.value);
+    const save = () => { const v = txt.value.trim(); clearDraft('o' + t.id); if (v && v !== t.text) saveTitles(current.titles.map((x) => (x.id === t.id ? { ...x, text: v } : x))); };
+    txt.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); txt.blur(); } if (e.key === 'Escape') { clearDraft('o' + t.id); txt.value = t.text; txt.blur(); } };
+    txt.onchange = save;
     const del = el('button', 'ghost', 'Remove'); del.type = 'button';
     del.onclick = (e) => { e.preventDefault(); saveTitles(current.titles.filter((x) => x.id !== t.id)); };
-    row.append(r, el('span', 'txt', t.text), del); ts.append(row);
+    row.append(r, txt, del); ts.append(row);
   }
-  const add = el('form', 'row'); const inp = Object.assign(el('input'), { type: 'text', placeholder: 'Add a title option', id: 'newTitleOpt' });
+  const add = el('form', 'row'); const inp = Object.assign(el('input'), { type: 'text', placeholder: 'Add a title option', id: 'newTitleOpt', value: draft('new') || '' });
+  inp.oninput = () => draft('new', inp.value);
   add.append(inp, Object.assign(el('button', null, 'Add'), { type: 'submit' }));
-  add.onsubmit = (e) => { e.preventDefault(); const v = inp.value.trim(); if (!v) return; saveTitles([...current.titles, { text: v, chosen: !current.titles.length }]); };
+  add.onsubmit = (e) => { e.preventDefault(); const v = inp.value.trim(); if (!v) return; clearDraft('new'); saveTitles([...current.titles, { text: v, chosen: !current.titles.length }]); };
   ts.append(add); sheet.append(ts);
 
   const th = el('div', 'sec'); th.append(el('h3', null, 'Thumbnail options'), el('p', 'muted', 'Upload your drafts and pick one. PNG, JPG or WEBP, 1280×720 is the YouTube size.'));
@@ -687,10 +733,11 @@ function renderNotes(sheet) {
   const sec = el('div', 'sec');
   sec.append(el('h3', null, 'Production notes'), el('p', 'muted', 'Shot ideas, thumbnail ideas, things to say, feedback. Newest first.'));
   const f = el('form'); f.style.cssText = 'display:grid;gap:8px';
-  const ta = Object.assign(el('textarea'), { id: 'newNote', placeholder: 'Film the CRM screen-share in Act 3. Thumbnail: me pointing at a 5-star review…' });
+  const ta = Object.assign(el('textarea'), { id: 'newNote', value: draft('note') || '', placeholder: 'Film the CRM screen-share in Act 3. Thumbnail: me pointing at a 5-star review…' });
+  ta.oninput = () => draft('note', ta.value);
   f.append(ta, Object.assign(el('button', 'primary', 'Add note'), { type: 'submit' }));
   f.querySelector('button').style.justifySelf = 'start';
-  f.onsubmit = async (e) => { e.preventDefault(); if (!ta.value.trim()) return; showDetail(await api(`/api/plans/${current.id}/notes`, { text: ta.value })); };
+  f.onsubmit = async (e) => { e.preventDefault(); if (!ta.value.trim()) return; const text = ta.value; clearDraft('note'); showDetail(await api(`/api/plans/${current.id}/notes`, { text })); };
   sec.append(f);
   if (!current.notesLog.length) sec.append(el('p', 'none', 'No notes yet.'));
   for (const n of current.notesLog) {
