@@ -271,7 +271,8 @@ document.querySelectorAll('#askBtns button').forEach((b) => (b.onclick = () => a
 $('reviseBtn').onclick = () => { ask('revise', $('reviseNote').value); $('reviseNote').value = ''; };
 document.querySelectorAll('.sheet-tabs button').forEach((b) => (b.onclick = () => { tab = b.dataset.tab; renderSheet(); }));
 $('copyBtn').onclick = async () => {
-  const text = (current.script || '').replace(/^#{1,3}\s+/gm, '');
+  // Teleprompter copy: headings without #, cue tags (for the edit) removed, placeholders and stage notes kept.
+  const text = (current.script || '').replace(/^#{1,3}\s+/gm, '').replace(/\s*\[(?!PLACEHOLDER)[A-Z]+(?::[^\]]*)?\]/g, '');
   if (!text.trim()) { $('editMsg').textContent = 'No script to copy yet.'; return; }
   try { await navigator.clipboard.writeText(text); $('editMsg').className = 'msg ok'; $('editMsg').textContent = 'Script copied.'; }
   catch { $('editMsg').className = 'msg err'; $('editMsg').textContent = 'Copy was blocked. Select the script and press Ctrl+C.'; }

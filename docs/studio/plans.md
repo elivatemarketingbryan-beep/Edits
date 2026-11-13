@@ -9,6 +9,7 @@ gitignored (the repo is public; the blueprint and scripts are personal).
 
 ```
 plans/blueprint.md            the business, offer, story, audience (copied from AmplifyViews; editable on the page)
+plans/examples/*.md           Bryan's finished long-form scripts: the model every script matches
 plans/<id>/plan.json          title, notes, cta, acts, status (board column), request, job
 plans/<id>/outline.md         written by Claude for "Outline & check"
 plans/<id>/script.md          written by Claude for "Write script", "Story-lock pass" and "Revise"
@@ -22,11 +23,12 @@ Board columns: idea → outlined → scripted → filming → editing → ready 
 `node studio/jobs.mjs pending` mentions plan requests; list them with `node studio/plans.mjs pending`.
 For each, oldest first:
 
-1. `node studio/plans.mjs show <id>`. Read `plans/blueprint.md`, `engines/content-os/voice-dna.md`
-   and `styles/LONGFORM-SCRIPT.md` (the format, Kallaway's rules, story locks, cue tags).
+1. `node studio/plans.mjs show <id>`. Read `styles/LONGFORM-SCRIPT.md` first and follow its reading
+   list: Bryan's finished scripts in `plans/examples/` (the model to match), the blueprint, voice-dna,
+   and Joe Aquino's transcripts for his speaking pattern only.
 2. Do the request:
    - **outline**: write `plans/<id>/outline.md` in the outline format.
-   - **script**: write `plans/<id>/script.md` in Bryan's format with cue tags. If `outline.md`
+   - **script**: write `plans/<id>/script.md` in the format of `plans/examples/` with cue tags. If `outline.md`
      exists, follow its points and order and sharpen anything marked COMMON.
    - **lock**: rewrite `script.md` with a story-lock pass (or the outline, if there is no script).
    - **revise**: apply `request.note` to the script (or the outline if there is no script), keeping what works.

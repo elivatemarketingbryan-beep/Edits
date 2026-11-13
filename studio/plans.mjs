@@ -75,8 +75,9 @@ export function syncFromJob(job) {
 export function spokenScript(md) {
   const lines = md.split(/\r?\n/);
   const start = lines.findIndex((l) => /^##\s+Intro\b/i.test(l.trim()));
-  return lines.slice(start < 0 ? 0 : start).map((l) => l.trim())
-    .filter((l) => l && !l.startsWith('#')).join('\n') + '\n';
+  return lines.slice(start < 0 ? 0 : start).map((l) => l.trim().replace(/^[*-]\s+/, ''))
+    .filter((l) => l && !l.startsWith('#') && !/^\[[^\]A-Z]*[a-z][^\]]*\]$/.test(l))   // drop headings and stage notes like [5 sec pause]
+    .join('\n') + '\n';
 }
 
 // ---- YouTube: the channel's public feed (latest ~15 videos with views and likes), cached 30 min.
