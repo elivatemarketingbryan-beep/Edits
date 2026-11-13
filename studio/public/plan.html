@@ -96,7 +96,14 @@
   @media (max-width: 760px) { .vsplit { grid-template-columns: 1fr; } }
   .vgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; align-items: start; }
   .vbar a.button { font-size: 12px; padding: 4px 9px; }
-  .vitem { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .vitem { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; position: relative; }
+  .tm { position: relative; display: inline-block; }
+  .xdel { position: absolute; top: 8px; right: 8px; z-index: 3; min-width: 28px; height: 28px; padding: 0 8px; border-radius: 99px; display: grid; place-items: center;
+          font-size: 17px; line-height: 1; background: rgba(5,3,8,.82); color: #fff; border: 1px solid rgba(255,255,255,.22); }
+  .xdel:hover { background: var(--err); border-color: var(--err); }
+  .xdel.armed { background: var(--err); border-color: var(--err); font-size: 12px; font-weight: 600; }
+  .xdel.sm { top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; font-size: 13px; }
+  .xdel.sm.armed { font-size: 10.5px; }
   .vitem video { width: 100%; aspect-ratio: 16/9; background: #000; display: block; }
   .vbar { display: flex; align-items: center; gap: 6px; padding: 6px 8px; font-size: 12px; }
   .vbar span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
@@ -343,7 +350,7 @@ function videoCard(p, n) {
   const t = thumbOf(p);
   const tbox = el('label', 'tbox' + (t ? '' : ' empty')); tbox.tabIndex = 0;
   const inp = Object.assign(el('input'), { type: 'file', accept: 'image/png,image/jpeg,image/webp,image/gif', hidden: true });
-  if (t) { tbox.style.backgroundImage = `url("${fileUrl(p, t)}")`; tbox.append(el('span', 'swap', 'Upload another')); }
+  if (t) { tbox.style.backgroundImage = `url("${fileUrl(p, t)}")`; tbox.append(el('span', 'swap', 'Upload another'), xDelete(p, t, 'this thumbnail')); }
   else { const h = el('span', 'hint2'); h.innerHTML = ICON_IMG; h.append(el('span', null, 'Drop a thumbnail here, or click to upload')); tbox.append(h); }
   tbox.append(inp);
   const upload = async (files) => {
@@ -367,7 +374,8 @@ function videoCard(p, n) {
     b.style.backgroundImage = `url("${fileUrl(p, a)}")`; b.title = a.name === p.thumb ? `${a.name} (chosen)` : `Use ${a.name}`;
     b.setAttribute('aria-label', b.title);
     b.onclick = async () => { await api('/api/plans/' + p.id, { thumb: a.name }); load(); };
-    strip.append(b);
+    const wrap = el('span', 'tm'); wrap.append(b, xDelete(p, a, a.name, true));
+    strip.append(wrap);
   }
   const plus = el('button', 'tmini add', '+'); plus.type = 'button'; plus.title = 'Upload thumbnails'; plus.setAttribute('aria-label', 'Upload thumbnails');
   plus.onclick = () => { inp.multiple = true; inp.click(); };
@@ -440,7 +448,7 @@ function videoSection(p, kind, label, dropLabel) {
     const del = el('button', 'ghost', 'Delete'); del.type = 'button';
     del.onclick = async () => { if (!confirmTwice(del)) return; await api(`/api/plans/${p.id}/files/delete`, { path: a.path }); load(); };
     bar.append(del);
-    v.append(player, bar); vgrid.append(v);
+    v.append(player, bar, xDelete(p, a, a.name)); vgrid.append(v);
   }
   vgrid.append(dropZone(p.id, kind, 'video/*', dropLabel));
   sec.append(vgrid);
@@ -471,6 +479,23 @@ function dropZone(planId, kind, accept, label) {
 }
 function sentNote(box, job) { const m = el('p', 'msg ok', ''); m.style.margin = '6px 0 0'; m.append('Sent to the editor as ', Object.assign(el('a', null, job), { href: '/?job=' + job })); box.after(m); }
 // Two clicks to delete a file: the first arms the button for 4 seconds.
+// The × in the corner of a thumbnail or video: first click turns it into a red "Delete?", second click deletes.
+function xDelete(p, a, what, small) {
+  const x = el('button', 'xdel' + (small ? ' sm' : ''), '×'); x.type = 'button';
+  x.title = `Delete ${what}`; x.setAttribute('aria-label', `Delete ${what}`);
+  x.onclick = async (e) => {
+    e.preventDefault(); e.stopPropagation();   // inside the thumbnail box (a label): don't open the file picker
+    if (!x.dataset.armed) {
+      x.dataset.armed = '1'; x.classList.add('armed'); x.textContent = small ? 'Delete?' : 'Delete?';
+      setTimeout(() => { if (x.isConnected) { delete x.dataset.armed; x.classList.remove('armed'); x.textContent = '×'; } }, 4000);
+      return;
+    }
+    x.disabled = true;
+    try { await api(`/api/plans/${p.id}/files/delete`, { path: a.path }); load(); }
+    catch (err) { x.disabled = false; alertLine(x.parentElement, err.message); }
+  };
+  return x;
+}
 function confirmTwice(btn) {
   if (btn.dataset.armed) return true;
   btn.dataset.armed = '1'; const t = btn.textContent; btn.textContent = 'Click again';

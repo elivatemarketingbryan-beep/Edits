@@ -243,7 +243,8 @@ export function planRoutes({ send, readBody, serveFile, inside }) {
       if (!file || !fs.existsSync(file)) return send(res, 404, { error: 'No such file' });
       fs.rmSync(file);
       const plan = readPlan(id, { files: false });
-      if (plan.thumb && rel === `assets/thumbnails/${plan.thumb}`) writePlan({ ...plan, thumb: null });
+      // Deleted the chosen thumbnail: the newest remaining one takes its place (or none).
+      if (plan.thumb && rel === `assets/thumbnails/${plan.thumb}`) writePlan({ ...plan, thumb: plan.assets.find((a) => a.kind === 'thumb' && a.path !== rel)?.name || null });
       send(res, 200, readPlan(id));
     }],
     // Send an uploaded video to the editor: a new studio job with this plan linked, as if it were dropped on Edit.
