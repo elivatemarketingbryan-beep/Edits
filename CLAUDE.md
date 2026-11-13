@@ -69,6 +69,7 @@ After adding a graphic or sound, run `node studio/library.mjs`.
 | Settled conflicts between kits | Rules that override the engines | `docs/studio/engine-overrides.md` |
 | Where each skill came from | Where each skill came from | `docs/studio/skill-sources.md` |
 | This computer's tools and GPU | Setup notes | `docs/studio/setup.md` |
+| Bryan's cloned voice for a missing or cut-off line (VoiceStudio) | Bryan's cloned voice | `docs/studio/voice.md` |
 | Writing the post caption under each video | Post captions | `styles/POST-CAPTIONS.md` |
 | Posting to Instagram, the retention-by-design sheet | Instagram and Sheets | `docs/studio/instagram-and-sheets.md` |
 
