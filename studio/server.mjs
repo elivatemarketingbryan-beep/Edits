@@ -7,6 +7,7 @@ import { ROOT, JOBS, jobDir, newId, readJob, writeJob, listJobs, setStage } from
 import { igConfigured } from './instagram.mjs';
 import { sheetsConfigured } from './sheets.mjs';
 import { startPost, refreshStats, refreshIfDue, statsState } from './ig-stats.mjs';
+import { planRoutes } from './plans.mjs';
 
 const PORT = Number(process.env.PORT) || 4747;
 const PUBLIC = path.join(ROOT, 'studio', 'public');
@@ -235,7 +236,9 @@ const routes = [
     const file = inside(jobDir(id), rel);
     file ? serveFile(req, res, file) : send(res, 403, { error: 'Forbidden' });
   }],
-  ['GET', /^\/(review|sheet)?$/, (req, res, [page]) => serveFile(req, res, path.join(PUBLIC, (page || 'index') + '.html'))],
+  // The Plan page (long-form planning and scripts): studio/plans.mjs, docs/studio/plans.md.
+  ...planRoutes({ send, readBody }),
+  ['GET', /^\/(review|sheet|plan)?$/, (req, res, [page]) => serveFile(req, res, path.join(PUBLIC, (page || 'index') + '.html'))],
   ['GET', /^\/(.+)$/, (req, res, [rel]) => {
     const file = inside(PUBLIC, rel);
     file ? serveFile(req, res, file) : send(res, 403, { error: 'Forbidden' });

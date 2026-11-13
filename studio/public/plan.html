@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan · Video Studio</title>
+<link rel="stylesheet" href="/studio.css">
+<style>
+  /* Plan page: board of long-form videos from idea to ready, the script sheet, the channel. Purple is structure, gold is results. */
+  :root { --gold: #e8c77a; --loop: #e8c77a; }
+  .navseg { justify-self: center; display: inline-flex; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 3px; gap: 2px; }
+  .navseg a { color: var(--muted); font-size: 12.5px; padding: 4px 14px; border-radius: 7px; text-decoration: none; font-weight: 600; }
+  .navseg a.on { background: var(--card); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+  .plan-wrap { max-width: 1240px; margin: 0 auto; padding: 28px 20px 80px; display: grid; gap: 26px; }
+  .plan-wrap > * { min-width: 0; }   /* the wide board scrolls inside its own box instead of widening the page */
+  .plan-hero h1 { margin: 0; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; font-size: clamp(30px, 4.6vw, 46px); }
+  .plan-hero h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--accent-hi); }
+  .plan-hero .lede { margin: 12px 0 0; }
+  .toprow { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .panel h2 { margin: 0; font-size: 15px; }
+  .field { display: grid; gap: 4px; }
+  .field > span { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .field input, .field textarea, .field select { width: 100%; }
+  textarea { resize: vertical; min-height: 70px; }
+  .two { display: grid; grid-template-columns: 1fr 120px; gap: 10px; }
+  .msg.ok { color: var(--ok); }
+
+  .chan-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .stat b { display: block; font: 700 20px var(--mono); font-variant-numeric: tabular-nums; }
+  .stat small { color: var(--muted); font-size: 12px; }
+  .vids { display: grid; gap: 6px; }
+  .vid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: baseline; font-size: 13px; text-decoration: none; padding: 6px 8px; border-radius: 8px; }
+  .vid:hover { background: var(--card); }
+  .vid span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .vid span:last-child { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
+
+  .board-wrap { overflow-x: auto; padding-bottom: 6px; }
+  .board { display: grid; grid-template-columns: repeat(7, minmax(170px, 1fr)); gap: 10px; min-width: 1240px; }
+  .col { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: grid; gap: 8px; align-content: start; min-height: 140px; }
+  .col h3 { margin: 0 2px 2px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; }
+  .col h3 i { font: normal 11px var(--mono); color: var(--accent-hi); }
+  .pcard { text-align: left; display: grid; gap: 6px; padding: 10px; border-radius: 10px; background: var(--card); border: 1px solid var(--line); font-size: 13px; }
+  .pcard b { font-weight: 600; line-height: 1.3; }
+  .pcard.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .pcard .pill { justify-self: start; }
+  .col .empty { color: var(--muted); font-size: 12px; padding: 4px 2px; }
+
+  .detail { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 16px; align-items: start; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .waiting { background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; display: grid; gap: 6px; }
+  .waiting code { background: var(--bg); border-radius: 6px; padding: 2px 8px; }
+  .sheet-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+  .sheet-tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--muted); padding: 8px 12px; font-weight: 600; }
+  .sheet-tabs button.on { color: var(--text); border-bottom-color: var(--accent); }
+  .sheet { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px clamp(16px, 3vw, 36px); min-height: 360px; }
+  .sheet .t { font-size: 22px; font-weight: 800; letter-spacing: -.02em; margin: 0 0 4px; text-wrap: balance; }
+  .sheet h4 { font-size: 15px; font-weight: 800; margin: 24px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--accent); text-wrap: balance; }
+  .sheet h5 { font: 600 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; margin: 16px 0 6px; color: var(--accent-hi); display: flex; gap: 8px; align-items: center; }
+  .sheet h5.loop { color: var(--loop); }
+  .sheet h5.loop::before { content: ""; width: 7px; height: 7px; border-radius: 50%; border: 2px solid var(--loop); }
+  .sheet h5.pay::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+  .sheet p { margin: 0 0 7px; max-width: 70ch; }
+  .cue { font: 600 10.5px var(--mono); padding: 1px 6px; border-radius: 5px; background: var(--accent-soft); color: var(--accent-hi); margin-left: 6px; white-space: nowrap; }
+  .cue.ph { background: #3a2a10; color: var(--gold); }
+  .sheet .none { color: var(--muted); }
+  details.bp summary { cursor: pointer; font-weight: 600; }
+  details.bp textarea { min-height: 260px; width: 100%; margin-top: 10px; font-size: 13px; }
+  @media (max-width: 900px) { .toprow, .detail { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="top bar-top">
+  <a class="brand" href="/"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.5v11l9-5.5z" fill="currentColor"/></svg></span>Video Studio</a>
+  <nav class="navseg" aria-label="Studio"><a href="/plan" class="on" aria-current="page">Plan</a><a href="/">Edit</a></nav>
+  <span class="status" id="status"><i></i><span>Ready</span></span>
+</header>
+
+<main class="plan-wrap">
+  <section class="plan-hero">
+    <p class="eyebrow">Plan · long form</p>
+    <h1>Script it here. <em>Edit it</em> next door.</h1>
+    <p class="lede">Every long-form video from idea to ready. Claude outlines and writes the script from your blueprint, with cue tags, so when you drop the footage on Edit the graphics land on the lines you planned.</p>
+  </section>
+
+  <section class="toprow">
+    <form class="panel" id="newForm">
+      <h2>New video</h2>
+      <label class="field"><span>Working title</span><input type="text" id="nTitle" placeholder="e.g. Contractors, your follow-up is costing you $20K a month" required></label>
+      <label class="field"><span>Angle, stories and real proof (optional)</span><textarea id="nNotes" placeholder="Real numbers, client stories, screenshots you have. Anything missing becomes a placeholder, never a made-up number."></textarea></label>
+      <div class="row"><button class="primary" type="submit">Add to Idea</button><span class="msg" id="newMsg"></span></div>
+    </form>
+    <section class="panel" id="chan" aria-live="polite">
+      <div class="row" style="justify-content:space-between"><h2 id="chanName">Your YouTube channel</h2><button type="button" id="ytRefresh">Refresh</button></div>
+      <div class="chan-stats">
+        <div class="stat"><b id="ytCount">—</b><small>Recent videos</small></div>
+        <div class="stat"><b id="ytViews">—</b><small>Views on them</small></div>
+        <div class="stat"><b id="ytLikes">—</b><small>Likes on them</small></div>
+      </div>
+      <div class="vids" id="ytList"><span class="muted">Loading your latest uploads…</span></div>
+      <span class="muted" id="ytNote"></span>
+    </section>
+  </section>
+
+  <section>
+    <div class="board-wrap"><div class="board" id="board"></div></div>
+  </section>
+
+  <section class="detail" id="detail" hidden>
+    <form class="panel" id="editForm">
+      <div class="row" style="justify-content:space-between"><h2>Plan</h2><select id="eStatus" aria-label="Column"></select></div>
+      <label class="field"><span>Title</span><input type="text" id="eTitle" required></label>
+      <label class="field"><span>Angle, stories and real proof</span><textarea id="eNotes"></textarea></label>
+      <div class="two">
+        <label class="field"><span>Call to action</span><input type="text" id="eCta" placeholder="Book a call below"></label>
+        <label class="field"><span>Acts</span><select id="eActs"><option>2</option><option>3</option><option>4</option></select></label>
+      </div>
+      <div class="row"><button type="submit">Save</button><span class="msg" id="editMsg"></span></div>
+      <div id="waiting" class="waiting" hidden></div>
+      <div class="actions" id="askBtns">
+        <button type="button" data-ask="outline">1. Outline &amp; check</button>
+        <button type="button" class="primary" data-ask="script">2. Write script</button>
+        <button type="button" data-ask="lock">Story-lock pass</button>
+      </div>
+      <label class="field"><span>Change something</span><div class="row"><input type="text" id="reviseNote" placeholder="Punchier hook, add a myth-bust in Act 2…"><button type="button" id="reviseBtn">Revise</button></div></label>
+      <p class="muted" style="margin:0">Buttons queue the work. Then say <b>run my studio jobs</b> in Claude Code, the same as for edits.</p>
+      <div class="row" style="justify-content:space-between"><button type="button" class="ghost" id="copyBtn">Copy script</button><button type="button" class="ghost" id="delBtn">Delete plan</button></div>
+    </form>
+    <div style="display:grid;gap:10px;min-width:0">
+      <div class="sheet-tabs" role="tablist"><button role="tab" data-tab="script" class="on" aria-selected="true">Script</button><button role="tab" data-tab="outline" aria-selected="false">Outline</button></div>
+      <article class="sheet" id="sheet"></article>
+    </div>
+  </section>
+
+  <section class="panel">
+    <details class="bp" id="bp">
+      <summary>Your blueprint <span class="muted">· what every script is written from</span></summary>
+      <textarea id="bpText" aria-label="Blueprint"></textarea>
+      <div class="row" style="margin-top:8px"><button type="button" id="bpSave">Save blueprint</button><span class="msg" id="bpMsg">Private: kept in plans/blueprint.md, never committed.</span></div>
+    </details>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const LABEL = { idea: 'Idea', outlined: 'Outlined', scripted: 'Scripted', filming: 'Filming', editing: 'Editing', ready: 'Ready', posted: 'Posted' };
+let plans = [], statuses = Object.keys(LABEL), current = null, tab = 'script', poll = null;
+
+const api = async (url, body) => {
+  const r = await fetch(url, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || 'Something went wrong');
+  return j;
+};
+const fmt = (n) => Number(n || 0).toLocaleString();
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+
+function setStatus() {
+  const busy = plans.some((p) => p.request);
+  const s = $('status'); s.className = 'status' + (busy ? ' busy' : '');
+  s.lastElementChild.textContent = busy ? 'Waiting on Claude' : 'Ready';
+}
+
+function renderBoard() {
+  const board = $('board'); board.replaceChildren();
+  for (const st of statuses) {
+    const col = el('div', 'col');
+    const items = plans.filter((p) => p.status === st);
+    const h = el('h3'); h.append(LABEL[st] || st, Object.assign(el('i'), { textContent: items.length || '' })); col.append(h);
+    if (!items.length) col.append(el('div', 'empty', st === 'idea' ? 'Add a video above.' : '—'));
+    for (const p of items) {
+      const b = el('button', 'pcard' + (current?.id === p.id ? ' on' : '')); b.type = 'button';
+      b.append(el('b', null, p.title));
+      if (p.request) b.append(el('span', 'pill claude', p.requestLabel + ' · queued'));
+      else if (p.job) b.append(el('span', 'pill', 'Studio job linked'));
+      b.onclick = () => open(p.id);
+      col.append(b);
+    }
+    board.append(col);
+  }
+  setStatus();
+}
+
+async function load() {
+  const j = await api('/api/plans');
+  plans = j.plans; statuses = j.statuses;
+  renderBoard();
+  if (current) { const fresh = await api('/api/plans/' + current.id).catch(() => null); if (fresh) showDetail(fresh); else closeDetail(); }
+  clearInterval(poll);
+  if (plans.some((p) => p.request)) poll = setInterval(load, 5000);
+}
+
+function closeDetail() { current = null; $('detail').hidden = true; renderBoard(); }
+async function open(id) { showDetail(await api('/api/plans/' + id)); renderBoard(); $('detail').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); }
+
+function showDetail(p) {
+  const same = current?.id === p.id; current = p; $('detail').hidden = false;
+  if (!same || document.activeElement?.closest('#editForm') == null) {
+    $('eTitle').value = p.title; $('eNotes').value = p.notes || ''; $('eCta').value = p.cta || ''; $('eActs').value = String(p.acts || 3);
+  }
+  const sel = $('eStatus'); sel.replaceChildren(...statuses.map((s) => Object.assign(el('option', null, LABEL[s] || s), { value: s })));
+  sel.value = p.status;
+  const w = $('waiting');
+  if (p.request) {
+    w.hidden = false; w.replaceChildren();
+    const line = el('div'); line.append(el('b', null, p.requestLabel + ' is queued. '), 'Say ', el('code', null, 'run my studio jobs'), ' in Claude Code.');
+    const cancel = el('button', 'ghost', 'Cancel request'); cancel.type = 'button';
+    cancel.onclick = async () => { await api(`/api/plans/${p.id}/cancel`, {}); load(); };
+    w.append(line, cancel);
+  } else w.hidden = true;
+  document.querySelectorAll('#askBtns button, #reviseBtn').forEach((b) => (b.disabled = !!p.request));
+  if (!same) tab = p.script ? 'script' : p.outline ? 'outline' : 'script';
+  renderSheet();
+}
+
+// Script/outline markup: # title, ## section, ### beat, plain = spoken; [TAGS] become chips.
+function renderSheet() {
+  document.querySelectorAll('.sheet-tabs button').forEach((b) => { const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  const md = (tab === 'script' ? current.script : current.outline) || '';
+  const sheet = $('sheet'); sheet.replaceChildren();
+  if (!md.trim()) {
+    sheet.append(el('p', 'none', tab === 'script'
+      ? 'No script yet. Click "1. Outline & check" to test the points first, or "2. Write script" to go straight to the script.'
+      : 'No outline yet. "1. Outline & check" plans the points and marks each one NEW or COMMON before any script is written.'));
+    return;
+  }
+  for (const raw of md.split(/\r?\n/)) {
+    const line = raw.trim(); if (!line) continue;
+    let node;
+    if (line.startsWith('### ')) {
+      const t = line.slice(4); node = el('h5', /^open loop/i.test(t) ? 'loop' : /^payoff/i.test(t) ? 'pay' : null, t);
+    } else if (line.startsWith('## ')) node = el('h4', null, line.slice(3));
+    else if (line.startsWith('# ')) node = el('p', 't', line.slice(2));
+    else {
+      node = el('p');
+      for (const part of line.split(/(\[[A-Z]+(?::[^\]]*)?\])/)) {
+        if (/^\[[A-Z]+(?::[^\]]*)?\]$/.test(part)) node.append(el('span', 'cue' + (/^\[PLACEHOLDER/.test(part) ? ' ph' : ''), part.slice(1, -1)));
+        else if (part) node.append(part);
+      }
+    }
+    sheet.append(node);
+  }
+}
+
+$('newForm').onsubmit = async (e) => {
+  e.preventDefault(); $('newMsg').className = 'msg'; $('newMsg').textContent = '';
+  try {
+    const p = await api('/api/plans', { title: $('nTitle').value, notes: $('nNotes').value, cta: 'Point to a related video, then: book a call below.', acts: 3 });
+    $('nTitle').value = ''; $('nNotes').value = '';
+    await load(); open(p.id);
+  } catch (err) { $('newMsg').className = 'msg err'; $('newMsg').textContent = err.message; }
+};
+$('editForm').onsubmit = async (e) => {
+  e.preventDefault();
+  try {
+    showDetail(await api('/api/plans/' + current.id, { title: $('eTitle').value, notes: $('eNotes').value, cta: $('eCta').value, acts: $('eActs').value }));
+    $('editMsg').className = 'msg ok'; $('editMsg').textContent = 'Saved.'; load();
+  } catch (err) { $('editMsg').className = 'msg err'; $('editMsg').textContent = err.message; }
+};
+$('eStatus').onchange = async () => { await api('/api/plans/' + current.id, { status: $('eStatus').value }); load(); };
+async function ask(kind, note) {
+  try {
+    await api('/api/plans/' + current.id, { title: $('eTitle').value, notes: $('eNotes').value, cta: $('eCta').value, acts: $('eActs').value });
+    await api(`/api/plans/${current.id}/request`, { kind, note });
+    $('editMsg').className = 'msg'; $('editMsg').textContent = '';
+    load();
+  } catch (err) { $('editMsg').className = 'msg err'; $('editMsg').textContent = err.message; }
+}
+document.querySelectorAll('#askBtns button').forEach((b) => (b.onclick = () => ask(b.dataset.ask)));
+$('reviseBtn').onclick = () => { ask('revise', $('reviseNote').value); $('reviseNote').value = ''; };
+document.querySelectorAll('.sheet-tabs button').forEach((b) => (b.onclick = () => { tab = b.dataset.tab; renderSheet(); }));
+$('copyBtn').onclick = async () => {
+  const text = (current.script || '').replace(/^#{1,3}\s+/gm, '');
+  if (!text.trim()) { $('editMsg').textContent = 'No script to copy yet.'; return; }
+  try { await navigator.clipboard.writeText(text); $('editMsg').className = 'msg ok'; $('editMsg').textContent = 'Script copied.'; }
+  catch { $('editMsg').className = 'msg err'; $('editMsg').textContent = 'Copy was blocked. Select the script and press Ctrl+C.'; }
+};
+let delArmed = false;
+$('delBtn').onclick = async () => {
+  if (!delArmed) { delArmed = true; $('delBtn').textContent = 'Click again to delete'; setTimeout(() => { delArmed = false; $('delBtn').textContent = 'Delete plan'; }, 4000); return; }
+  await api(`/api/plans/${current.id}/delete`, {}); delArmed = false; $('delBtn').textContent = 'Delete plan'; closeDetail(); load();
+};
+
+// Channel
+async function loadYT(refresh) {
+  $('ytRefresh').disabled = true; $('ytRefresh').textContent = 'Loading…';
+  try {
+    const d = await api('/api/youtube' + (refresh ? '?refresh' : ''));
+    if (d.error && !d.videos) { $('ytList').replaceChildren(el('span', 'muted', d.error)); return; }
+    if (d.channel) $('chanName').textContent = d.channel;
+    $('ytCount').textContent = fmt(d.videos.length);
+    $('ytViews').textContent = fmt(d.videos.reduce((a, v) => a + v.views, 0));
+    $('ytLikes').textContent = fmt(d.videos.reduce((a, v) => a + v.likes, 0));
+    $('ytList').replaceChildren(...d.videos.slice(0, 5).map((v) => {
+      const a = el('a', 'vid'); a.href = 'https://www.youtube.com/watch?v=' + v.id; a.target = '_blank'; a.rel = 'noopener';
+      a.append(el('span', null, v.title), el('span', null, `${fmt(v.views)} views · ${new Date(v.published).toLocaleDateString([], { month: 'short', day: 'numeric' })}`));
+      return a;
+    }));
+    $('ytNote').textContent = `Updated ${new Date(d.at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}${d.stale ? ' (YouTube didn\'t answer, showing the last copy)' : ''}. From your public feed: latest uploads only, no subscriber count.`;
+  } catch (err) { $('ytList').replaceChildren(el('span', 'muted', err.message)); }
+  finally { $('ytRefresh').disabled = false; $('ytRefresh').textContent = 'Refresh'; }
+}
+$('ytRefresh').onclick = () => loadYT(true);
+
+// Blueprint
+$('bp').addEventListener('toggle', async () => { if ($('bp').open && !$('bpText').dataset.loaded) { $('bpText').value = (await api('/api/blueprint')).text; $('bpText').dataset.loaded = '1'; } });
+$('bpSave').onclick = async () => { await api('/api/blueprint', { text: $('bpText').value }); $('bpMsg').className = 'msg ok'; $('bpMsg').textContent = 'Saved. The next script uses it.'; };
+
+load().then(() => { const id = new URLSearchParams(location.search).get('plan'); if (id) open(id).catch(() => {}); });
+loadYT(false);
+</script>
+</body>
+</html>

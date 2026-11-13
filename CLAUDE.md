@@ -56,6 +56,7 @@ After adding a graphic or sound, run `node studio/library.mjs`.
 | Cutting a long video into reels | Reels mode | `docs/studio/jobs.md` |
 | Scoring the top 3 formats | Ranking the top 3 formats | `docs/studio/formats-and-ideas.md` |
 | Finding the Notion script for a clip | Matching the clip to its Content OS script | `docs/studio/formats-and-ideas.md` |
+| Plan page requests: outlines and long-form scripts | Answering requests | `docs/studio/plans.md` |
 | `ideas.json` and combos | Claude's ideas | `docs/studio/formats-and-ideas.md` |
 | `edits.json` for the review page | edits.json | `docs/studio/edits-and-sheet.md` |
 | `sheet.json`, per-scene renders | Video Breakdown Sheet | `docs/studio/edits-and-sheet.md` |
