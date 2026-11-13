@@ -11,8 +11,12 @@ gitignored (the repo is public; the blueprint and scripts are personal).
 plans/blueprint.md            the business, offer, story, audience (copied from AmplifyViews; editable on the page)
 plans/examples/*.md           Bryan's finished long-form scripts: the model every script matches
 plans/<id>/plan.json          title, notes, cta, acts, month (1-12 of the year plan), due, status, request, job,
-                              titles (options, one chosen), thumb (chosen thumbnail file), notesLog (production notes)
+                              titles (options, one chosen), thumb (chosen thumbnail file), notesLog (production notes),
+                              style ("Video type": a long-form style id from styles/catalog.json), example (a reference video link)
 plans/<id>/assets/thumbnails/ thumbnail options Bryan uploads
+plans/<id>/assets/raw-footage/ what was filmed; "Send to editor" copies a clip into a new studio job
+                              (stage formats, `job.plan` set), so the formats stage already knows the plan
+plans/<id>/assets/finished/   the final edited video; uploading one moves the plan to Ready
 plans/<id>/assets/files/      b-roll, screenshots, logos, proof, documents for this video
 plans/<id>/outline.md         written by Claude for "Outline & check"
 plans/<id>/script.md          written by Claude for "Write script", "Story-lock pass" and "Revise"
@@ -56,6 +60,10 @@ to its Content OS script":
    plan moves to Editing), write `job.json` `script` as usual with `"plan": "<plan id>"` instead of
    `notion`, and save the timed cues from the exported file. Long-form scripts use the Long form shape
    (`[CHAPTER]` on each act), so pick a long-form style first.
+
+If the plan has a `style` (its Video type), that style goes first in `formats.json` with the reason
+"Planned as <style name> on the Plan page". If it has an `example` link, study it the way
+`docs/studio/learning-styles.md` describes before designing graphics.
 
 In the edit, look in `plans/<plan>/assets/files/` for `[PROOF]`, `[IMAGE]` and `[BROLL]` cues before
 asking Bryan for anything, and use the chosen title and thumbnail for the end card and the YouTube upload.

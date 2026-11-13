@@ -41,6 +41,10 @@ export function readPlan(id, { files = true } = {}) {
     plan.outline = read(path.join(planDir(id), 'outline.md'));
     plan.script = read(path.join(planDir(id), 'script.md'));
   }
+  // A few spoken lines for the month cards, without loading whole scripts into the list.
+  const sf = path.join(planDir(id), 'script.md');
+  plan.scriptPreview = fs.existsSync(sf) ? spokenScript(fs.readFileSync(sf, 'utf8')).replace(/\s*\[[A-Z]+(?::[^\]]*)?\]/g, '').trim().split('\n').slice(0, 3).join('\n') : '';
+  plan.hasOutline = fs.existsSync(path.join(planDir(id), 'outline.md'));
   plan.assets = listAssets(id);
   plan.titles ||= []; plan.notesLog ||= [];
   plan.waitingOn = plan.request ? 'claude' : 'you';
@@ -50,16 +54,18 @@ export function readPlan(id, { files = true } = {}) {
 
 export function writePlan(plan) {
   const rest = { ...plan };
-  for (const k of ['outline', 'script', 'waitingOn', 'requestLabel', 'assets']) delete rest[k];
+  for (const k of ['outline', 'script', 'waitingOn', 'requestLabel', 'assets', 'scriptPreview', 'hasOutline']) delete rest[k];
   fs.mkdirSync(planDir(plan.id), { recursive: true });
   rest.updated = new Date().toISOString();
   fs.writeFileSync(path.join(planDir(plan.id), 'plan.json'), JSON.stringify(rest, null, 2));
   return readPlan(plan.id);
 }
 
-// Uploaded files per plan: plans/<id>/assets/thumbnails/ (thumbnail options) and assets/files/ (b-roll,
-// screenshots, logos, docs). The edit uses them for [PROOF]/[IMAGE]/[BROLL] cues before asking for anything.
-const ASSET_KINDS = { thumb: 'thumbnails', file: 'files' };
+// Uploaded files per plan, in plans/<id>/assets/: thumbnails/ (thumbnail options), raw-footage/ (what was filmed;
+// any clip can be sent to the editor as a studio job), finished/ (the final edited video), and files/ (b-roll,
+// screenshots, logos, docs; the edit uses them for [PROOF]/[IMAGE]/[BROLL] cues before asking for anything).
+const ASSET_KINDS = { thumb: 'thumbnails', raw: 'raw-footage', final: 'finished', file: 'files' };
+const VIDEO_KINDS = new Set(['raw', 'final']);
 const IMG = /\.(png|jpe?g|webp|gif)$/i, VID = /\.(mp4|mov|m4v|webm)$/i;
 export function listAssets(id) {
   const out = [];
@@ -79,6 +85,7 @@ function saveUpload(id, kind, filename, req) {
     const sub = ASSET_KINDS[kind];
     if (!sub) return fail(new Error('Unknown upload kind'));
     if (kind === 'thumb' && !IMG.test(filename)) return fail(new Error('Thumbnails must be PNG, JPG, WEBP or GIF.'));
+    if (VIDEO_KINDS.has(kind) && !/\.(mp4|mov|m4v|webm|mkv)$/i.test(filename)) return fail(new Error('Videos must be MP4, MOV, M4V, WEBM or MKV.'));
     const dir = path.join(planDir(id), 'assets', sub);
     fs.mkdirSync(dir, { recursive: true });
     const base = path.basename(filename).replace(/[^\w.() -]+/g, '_').slice(-120) || 'file';
@@ -158,6 +165,8 @@ export function planRoutes({ send, readBody, serveFile, inside }) {
     cta: String(b.cta ?? '').slice(0, 500),
     acts: [2, 3, 4].includes(Number(b.acts)) ? Number(b.acts) : 3,
     month: Math.min(12, Math.max(1, Math.round(Number(b.month) || 1))),   // Month 1-12 of the year plan
+    style: /^[a-z0-9-]{1,60}$/.test(b.style || '') ? b.style : null,      // "Video type": a long-form style id from styles/catalog.json
+    example: /^https?:\/\/\S{1,500}$/.test(String(b.example || '').trim()) ? String(b.example).trim() : null,   // a reference video link
   });
   return [
     ['GET', /^\/api\/plans$/, (req, res) => send(res, 200, { plans: listPlans(), statuses: STATUSES })],
@@ -220,18 +229,39 @@ export function planRoutes({ send, readBody, serveFile, inside }) {
       if (!readPlan(id, { files: false })) return send(res, 404, { error: 'No such plan' });
       const kind = new URL(req.url, 'http://x').searchParams.get('kind') || 'file';
       try {
-        await saveUpload(id, kind, decodeURIComponent(req.headers['x-filename'] || 'file'), req);
+        const name = await saveUpload(id, kind, decodeURIComponent(req.headers['x-filename'] || 'file'), req);
+        const plan = readPlan(id, { files: false });
+        if (kind === 'thumb' && !plan.thumb) writePlan({ ...plan, thumb: name });   // the first thumbnail is chosen until another is picked
+        // A finished edit means the video is ready to post (unless it already went out).
+        if (kind === 'final' && !['ready', 'posted'].includes(plan.status)) writePlan({ ...plan, status: 'ready' });
         send(res, 200, readPlan(id));
       } catch (e) { send(res, 400, { error: e.message }); }
     }],
     ['POST', /^\/api\/plans\/([\w-]+)\/files\/delete$/, async (req, res, [id]) => {
       const { path: rel } = await readBody(req);
-      const file = /^assets\/(thumbnails|files)\/[^/\\]+$/.test(rel || '') && inside(planDir(id), rel);
+      const file = /^assets\/(thumbnails|raw-footage|finished|files)\/[^/\\]+$/.test(rel || '') && inside(planDir(id), rel);
       if (!file || !fs.existsSync(file)) return send(res, 404, { error: 'No such file' });
       fs.rmSync(file);
       const plan = readPlan(id, { files: false });
       if (plan.thumb && rel === `assets/thumbnails/${plan.thumb}`) writePlan({ ...plan, thumb: null });
       send(res, 200, readPlan(id));
+    }],
+    // Send an uploaded video to the editor: a new studio job with this plan linked, as if it were dropped on Edit.
+    ['POST', /^\/api\/plans\/([\w-]+)\/to-edit$/, async (req, res, [id]) => {
+      const plan = readPlan(id, { files: false });
+      if (!plan) return send(res, 404, { error: 'No such plan' });
+      const { path: rel, mode } = await readBody(req);
+      const src = /^assets\/raw-footage\/[^/\\]+$/.test(rel || '') && inside(planDir(id), rel);
+      if (!src || !fs.existsSync(src)) return send(res, 404, { error: 'No such video' });
+      const { newId, jobDir, writeJob } = await import('./jobs.mjs');   // runtime import: jobs.mjs imports this file
+      const jobId = newId(plan.title);
+      fs.mkdirSync(jobDir(jobId), { recursive: true });
+      const source = 'source' + path.extname(src).toLowerCase();
+      await fs.promises.copyFile(src, path.join(jobDir(jobId), source));   // a copy: the plan keeps its file, the job gets its own
+      const job = writeJob({ id: jobId, title: path.basename(src), source, created: new Date().toISOString(), stage: 'formats', plan: id,
+        ...(mode === 'reels' ? { mode: 'reels', reelOpts: { count: 'auto', length: '30-60' } } : { mode: 'video' }) });
+      writePlan({ ...plan, job: jobId, status: 'editing' });
+      send(res, 200, { job: job.id, plan: readPlan(id) });
     }],
     ['GET', /^\/plan-files\/([\w-]+)\/(assets\/.+)$/, (req, res, [id, rel]) => {
       const file = inside(planDir(id), rel);
