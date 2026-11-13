@@ -8,6 +8,18 @@ Bryan asked for this and chose to keep his voice files in this repo (`assets/voi
 (2026-11-13). Never use his voice for anything he didn't ask for, and never make it say a number, result or claim he
 didn't give (CLAUDE.md "Never invent").
 
+## The two uses Bryan approved (2026-11-13)
+
+1. **Fixing his edits:** a word or line that got cut off, or that he said wrong, in footage he recorded. Splice it in
+   as in "Making a line" below, covered by a graphic.
+2. **Animated story reels:** the voiceover for a cartoon story reel, acted out by the faceless figure
+   (`assets/boards/story/`, CLAUDE.md "Stories and scenarios"). Write the story in his voice
+   (`engines/content-os/voice-dna.md`), get his OK on every word, generate it in short pieces (a sentence or two each,
+   checked like any take), join them, then drop the joined voiceover into the studio: an audio-only drop ranks the
+   faceless styles first.
+
+Nothing else: no full talking-head videos voiced without him, and no lines he hasn't approved word for word.
+
 ## What's here
 
 | File | What |
