@@ -1,6 +1,11 @@
 <!-- Part of the Video Studio manual. Index: CLAUDE.md -->
 
-# Plan page: long-form planning and scripts
+# Plan and Script pages: long-form planning and scripts
+
+Two tabs at the top of the studio, next to Edit: **Plan** (`/plan`: the year, the video cards, titles,
+thumbnails, notes, raw footage and finished edits) and **Script** (`/script`: pick a planned video, then
+Outline & check, Write script, Story-lock pass, Revise, Copy script, and the blueprint). Both read and
+write the same plans; the request flow below is the same whichever page queued it.
 
 `/plan` (link at the top of the studio) is where long-form videos are planned before they are
 filmed. Bryan adds a video, then clicks a button; the button queues a **request** on the plan and

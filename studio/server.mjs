@@ -238,7 +238,7 @@ const routes = [
   }],
   // The Plan page (long-form planning and scripts): studio/plans.mjs, docs/studio/plans.md.
   ...planRoutes({ send, readBody, serveFile, inside }),
-  ['GET', /^\/(review|sheet|plan)?$/, (req, res, [page]) => serveFile(req, res, path.join(PUBLIC, (page || 'index') + '.html'))],
+  ['GET', /^\/(review|sheet|plan|script)?$/, (req, res, [page]) => serveFile(req, res, path.join(PUBLIC, (page || 'index') + '.html'))],
   ['GET', /^\/(.+)$/, (req, res, [rel]) => {
     const file = inside(PUBLIC, rel);
     file ? serveFile(req, res, file) : send(res, 403, { error: 'Forbidden' });
