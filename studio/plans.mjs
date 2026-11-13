@@ -41,6 +41,8 @@ export function readPlan(id, { files = true } = {}) {
     plan.outline = read(path.join(planDir(id), 'outline.md'));
     plan.script = read(path.join(planDir(id), 'script.md'));
   }
+  plan.assets = listAssets(id);
+  plan.titles ||= []; plan.notesLog ||= [];
   plan.waitingOn = plan.request ? 'claude' : 'you';
   plan.requestLabel = plan.request ? REQUEST_LABEL[plan.request.kind] : null;
   return plan;
@@ -48,12 +50,48 @@ export function readPlan(id, { files = true } = {}) {
 
 export function writePlan(plan) {
   const rest = { ...plan };
-  for (const k of ['outline', 'script', 'waitingOn', 'requestLabel']) delete rest[k];
+  for (const k of ['outline', 'script', 'waitingOn', 'requestLabel', 'assets']) delete rest[k];
   fs.mkdirSync(planDir(plan.id), { recursive: true });
   rest.updated = new Date().toISOString();
   fs.writeFileSync(path.join(planDir(plan.id), 'plan.json'), JSON.stringify(rest, null, 2));
   return readPlan(plan.id);
 }
+
+// Uploaded files per plan: plans/<id>/assets/thumbnails/ (thumbnail options) and assets/files/ (b-roll,
+// screenshots, logos, docs). The edit uses them for [PROOF]/[IMAGE]/[BROLL] cues before asking for anything.
+const ASSET_KINDS = { thumb: 'thumbnails', file: 'files' };
+const IMG = /\.(png|jpe?g|webp|gif)$/i, VID = /\.(mp4|mov|m4v|webm)$/i;
+export function listAssets(id) {
+  const out = [];
+  for (const [kind, sub] of Object.entries(ASSET_KINDS)) {
+    const dir = path.join(planDir(id), 'assets', sub);
+    if (!fs.existsSync(dir)) continue;
+    for (const name of fs.readdirSync(dir)) {
+      const st = fs.statSync(path.join(dir, name));
+      if (!st.isFile()) continue;
+      out.push({ kind, name, path: `assets/${sub}/${name}`, size: st.size, type: IMG.test(name) ? 'image' : VID.test(name) ? 'video' : 'file', added: st.mtime.toISOString() });
+    }
+  }
+  return out.sort((a, b) => b.added.localeCompare(a.added));
+}
+function saveUpload(id, kind, filename, req) {
+  return new Promise((ok, fail) => {
+    const sub = ASSET_KINDS[kind];
+    if (!sub) return fail(new Error('Unknown upload kind'));
+    if (kind === 'thumb' && !IMG.test(filename)) return fail(new Error('Thumbnails must be PNG, JPG, WEBP or GIF.'));
+    const dir = path.join(planDir(id), 'assets', sub);
+    fs.mkdirSync(dir, { recursive: true });
+    const base = path.basename(filename).replace(/[^\w.() -]+/g, '_').slice(-120) || 'file';
+    let name = base, n = 2;
+    while (fs.existsSync(path.join(dir, name))) name = base.replace(/(\.[^.]*)?$/, (ext) => ` (${n++})${ext}`);
+    const out = fs.createWriteStream(path.join(dir, name));
+    req.pipe(out);
+    out.on('finish', () => ok(name));
+    out.on('error', fail);
+  });
+}
+const clip = (s, n) => String(s ?? '').trim().slice(0, n);
+const shortId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
 
 export function listPlans() {
   if (!fs.existsSync(PLANS)) return [];
@@ -113,12 +151,13 @@ export async function youtube({ force = false } = {}) {
 }
 
 // ---- HTTP routes, mounted by server.mjs.
-export function planRoutes({ send, readBody }) {
+export function planRoutes({ send, readBody, serveFile, inside }) {
   const clean = (b) => ({
     title: String(b.title ?? '').trim().slice(0, 200),
     notes: String(b.notes ?? '').slice(0, 20000),
     cta: String(b.cta ?? '').slice(0, 500),
     acts: [2, 3, 4].includes(Number(b.acts)) ? Number(b.acts) : 3,
+    month: Math.min(12, Math.max(1, Math.round(Number(b.month) || 1))),   // Month 1-12 of the year plan
   });
   return [
     ['GET', /^\/api\/plans$/, (req, res) => send(res, 200, { plans: listPlans(), statuses: STATUSES })],
@@ -134,6 +173,13 @@ export function planRoutes({ send, readBody }) {
       const body = await readBody(req);
       const next = { ...plan, ...clean({ ...plan, ...body }) };
       if (body.status && STATUSES.includes(body.status)) next.status = body.status;
+      if ('due' in body) next.due = /^\d{4}-\d{2}-\d{2}$/.test(body.due) ? body.due : null;
+      if (Array.isArray(body.titles)) {
+        const titles = body.titles.slice(0, 30).map((t) => ({ id: clip(t.id, 20) || shortId(), text: clip(t.text, 200), chosen: !!t.chosen })).filter((t) => t.text);
+        let seen = false; for (const t of titles) { if (t.chosen && seen) t.chosen = false; seen ||= t.chosen; }   // one chosen title
+        next.titles = titles;
+      }
+      if ('thumb' in body) next.thumb = plan.assets?.some((a) => a.kind === 'thumb' && a.name === body.thumb) || !body.thumb ? body.thumb || null : plan.thumb;
       if (typeof body.script === 'string') fs.writeFileSync(path.join(planDir(id), 'script.md'), body.script.slice(0, 200000));
       if (!next.title) return send(res, 400, { error: 'A plan needs a title.' });
       send(res, 200, writePlan(next));
@@ -157,6 +203,39 @@ export function planRoutes({ send, readBody }) {
       if (!fs.existsSync(path.join(dir, 'plan.json'))) return send(res, 404, { error: 'No such plan' });
       fs.rmSync(dir, { recursive: true, force: true });
       send(res, 200, { ok: true });
+    }],
+    // Notes log (production notes, thumbnail ideas, anything): add one, or remove one by id.
+    ['POST', /^\/api\/plans\/([\w-]+)\/notes$/, async (req, res, [id]) => {
+      const plan = readPlan(id, { files: false });
+      if (!plan) return send(res, 404, { error: 'No such plan' });
+      const { text, remove } = await readBody(req);
+      let log = plan.notesLog || [];
+      if (remove) log = log.filter((n) => n.id !== remove);
+      else if (clip(text, 4000)) log = [{ id: shortId(), text: clip(text, 4000), at: new Date().toISOString() }, ...log];
+      else return send(res, 400, { error: 'Write a note first.' });
+      send(res, 200, writePlan({ ...plan, notesLog: log }));
+    }],
+    // Upload a thumbnail option (?kind=thumb) or any asset (?kind=file): raw body, filename in a header.
+    ['POST', /^\/api\/plans\/([\w-]+)\/upload$/, async (req, res, [id]) => {
+      if (!readPlan(id, { files: false })) return send(res, 404, { error: 'No such plan' });
+      const kind = new URL(req.url, 'http://x').searchParams.get('kind') || 'file';
+      try {
+        await saveUpload(id, kind, decodeURIComponent(req.headers['x-filename'] || 'file'), req);
+        send(res, 200, readPlan(id));
+      } catch (e) { send(res, 400, { error: e.message }); }
+    }],
+    ['POST', /^\/api\/plans\/([\w-]+)\/files\/delete$/, async (req, res, [id]) => {
+      const { path: rel } = await readBody(req);
+      const file = /^assets\/(thumbnails|files)\/[^/\\]+$/.test(rel || '') && inside(planDir(id), rel);
+      if (!file || !fs.existsSync(file)) return send(res, 404, { error: 'No such file' });
+      fs.rmSync(file);
+      const plan = readPlan(id, { files: false });
+      if (plan.thumb && rel === `assets/thumbnails/${plan.thumb}`) writePlan({ ...plan, thumb: null });
+      send(res, 200, readPlan(id));
+    }],
+    ['GET', /^\/plan-files\/([\w-]+)\/(assets\/.+)$/, (req, res, [id, rel]) => {
+      const file = inside(planDir(id), rel);
+      file ? serveFile(req, res, file) : send(res, 403, { error: 'Forbidden' });
     }],
     ['GET', /^\/api\/blueprint$/, (req, res) => send(res, 200, { text: read(BLUEPRINT) })],
     ['POST', /^\/api\/blueprint$/, async (req, res) => {

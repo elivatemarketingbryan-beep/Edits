@@ -10,13 +10,21 @@ gitignored (the repo is public; the blueprint and scripts are personal).
 ```
 plans/blueprint.md            the business, offer, story, audience (copied from AmplifyViews; editable on the page)
 plans/examples/*.md           Bryan's finished long-form scripts: the model every script matches
-plans/<id>/plan.json          title, notes, cta, acts, status (board column), request, job
+plans/<id>/plan.json          title, notes, cta, acts, month (1-12 of the year plan), due, status, request, job,
+                              titles (options, one chosen), thumb (chosen thumbnail file), notesLog (production notes)
+plans/<id>/assets/thumbnails/ thumbnail options Bryan uploads
+plans/<id>/assets/files/      b-roll, screenshots, logos, proof, documents for this video
 plans/<id>/outline.md         written by Claude for "Outline & check"
 plans/<id>/script.md          written by Claude for "Write script", "Story-lock pass" and "Revise"
 plans/youtube.json            cached channel feed (styles/brand.json youtubeChannelId)
 ```
 
-Board columns: idea → outlined → scripted → filming → editing → ready → posted.
+The page shows a **year plan** (Month 1 to 12, four videos a month) or the same videos **by stage**:
+idea → outlined → scripted → filming → editing → ready → posted. Each video has tabs for its script,
+outline, titles and thumbnails (pick one of each), production notes, and assets.
+
+When writing a script, read the plan's `notesLog` too: it often holds the angle, shots and thumbnail ideas.
+If a title is chosen, write the intro to confirm that title's promise.
 
 ## Answering requests
 
@@ -48,6 +56,9 @@ to its Content OS script":
    plan moves to Editing), write `job.json` `script` as usual with `"plan": "<plan id>"` instead of
    `notion`, and save the timed cues from the exported file. Long-form scripts use the Long form shape
    (`[CHAPTER]` on each act), so pick a long-form style first.
+
+In the edit, look in `plans/<plan>/assets/files/` for `[PROOF]`, `[IMAGE]` and `[BROLL]` cues before
+asking Bryan for anything, and use the chosen title and thumbnail for the end card and the YouTube upload.
 
 After that, `jobs.mjs setStage` keeps the plan's column in step: any stage → Editing, `done` → Ready.
 Bryan moves it to Posted himself (or the Instagram/YouTube posting flow does).

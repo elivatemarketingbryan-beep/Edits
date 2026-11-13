@@ -6,24 +6,25 @@
 <title>Plan · Video Studio</title>
 <link rel="stylesheet" href="/studio.css">
 <style>
-  /* Plan page: board of long-form videos from idea to ready, the script sheet, the channel. Purple is structure, gold is results. */
+  /* Plan page: a year of long-form videos (Month 1-12, 4 a month), each with its script, titles, thumbnails, notes and assets.
+     Purple is structure, gold is results and the chosen title/thumbnail. */
   :root { --gold: #e8c77a; --loop: #e8c77a; }
   .navseg { justify-self: center; display: inline-flex; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 3px; gap: 2px; }
   .navseg a { color: var(--muted); font-size: 12.5px; padding: 4px 14px; border-radius: 7px; text-decoration: none; font-weight: 600; }
   .navseg a.on { background: var(--card); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
   .plan-wrap { max-width: 1240px; margin: 0 auto; padding: 28px 20px 80px; display: grid; gap: 26px; }
-  .plan-wrap > * { min-width: 0; }   /* the wide board scrolls inside its own box instead of widening the page */
+  .plan-wrap > * { min-width: 0; }   /* wide parts scroll inside their own box instead of widening the page */
   .plan-hero h1 { margin: 0; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; font-size: clamp(30px, 4.6vw, 46px); }
   .plan-hero h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--accent-hi); }
   .plan-hero .lede { margin: 12px 0 0; }
   .toprow { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; }
   .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
   .panel h2 { margin: 0; font-size: 15px; }
-  .field { display: grid; gap: 4px; }
+  .field { display: grid; gap: 4px; min-width: 0; }
   .field > span { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
   .field input, .field textarea, .field select { width: 100%; }
   textarea { resize: vertical; min-height: 70px; }
-  .two { display: grid; grid-template-columns: 1fr 120px; gap: 10px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .msg.ok { color: var(--ok); }
 
   .chan-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -36,6 +37,46 @@
   .vid span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .vid span:last-child { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
 
+  /* views: year plan / board */
+  .viewbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .viewbar h2 { margin: 0; font-size: 17px; }
+  .viewbar .sub { color: var(--muted); font-size: 13px; }
+  .seg2 { display: inline-flex; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 3px; gap: 2px; }
+  .seg2 button { border: 0; background: transparent; color: var(--muted); font-size: 12.5px; padding: 4px 12px; border-radius: 7px; font-weight: 600; }
+  .seg2 button[aria-selected="true"] { background: var(--card); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+  .chanpanel { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); column-gap: 20px; }
+  .chanpanel > .row, .chanpanel > .muted { grid-column: 1 / -1; }
+  @media (max-width: 900px) { .chanpanel { grid-template-columns: 1fr; } }
+  .year { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 12px; }
+  .slot { border: 1.5px dashed var(--line); border-radius: 10px; padding: 10px; display: grid; gap: 6px; }
+  .slot:focus-within { border-color: var(--accent); border-style: solid; }
+  .slot .slothead { font: 600 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  input[type=date] { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color-scheme: dark; }
+  .slot input, .slot textarea { width: 100%; font-size: 13px; }
+  .slot textarea { min-height: 54px; }
+  .slot .row { gap: 6px; }
+  .slot .row input { flex: 1; }
+  .slot .msg { margin: 0; }
+  .month { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 8px; align-content: start; }
+  .month.full { border-color: var(--accent-lo); }
+  .month header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .month header b { font-size: 14px; }
+  .month header span { font: 12px var(--mono); color: var(--muted); }
+  .month header span.done { color: var(--accent-hi); }
+  .mbar { height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
+  .mbar i { display: block; height: 100%; background: var(--accent); }
+  .mrow { text-align: left; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 6px 8px; font-size: 13px; border-radius: 8px; }
+  .mrow.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .mrow .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mrow .st { justify-self: end; }
+  .mrow .thumbmini { width: 34px; aspect-ratio: 16/9; border-radius: 3px; background: var(--line) center/cover; }
+  .addslot { justify-self: start; font-size: 12.5px; color: var(--muted); background: transparent; border-style: dashed; }
+  .st { font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--line); color: var(--muted); white-space: nowrap; }
+  .st.scripted, .st.filming { background: var(--accent-soft); color: var(--accent-hi); }
+  .st.editing { background: #1c2b45; color: #8db6ff; }
+  .st.ready, .st.posted { background: #163326; color: #6fd6a4; }
+  .st.q { background: var(--accent-soft); color: var(--accent); }
+
   .board-wrap { overflow-x: auto; padding-bottom: 6px; }
   .board { display: grid; grid-template-columns: repeat(7, minmax(170px, 1fr)); gap: 10px; min-width: 1240px; }
   .col { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: grid; gap: 8px; align-content: start; min-height: 140px; }
@@ -44,17 +85,22 @@
   .pcard { text-align: left; display: grid; gap: 6px; padding: 10px; border-radius: 10px; background: var(--card); border: 1px solid var(--line); font-size: 13px; }
   .pcard b { font-weight: 600; line-height: 1.3; }
   .pcard.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-  .pcard .pill { justify-self: start; }
+  .pcard small { color: var(--muted); font-size: 11.5px; }
   .col .empty { color: var(--muted); font-size: 12px; padding: 4px 2px; }
 
+  /* the open plan */
   .detail { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 16px; align-items: start; }
   .actions { display: flex; flex-wrap: wrap; gap: 8px; }
   .waiting { background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; display: grid; gap: 6px; }
   .waiting code { background: var(--bg); border-radius: 6px; padding: 2px 8px; }
-  .sheet-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
-  .sheet-tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--muted); padding: 8px 12px; font-weight: 600; }
+  .info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .info div { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font-size: 11.5px; color: var(--muted); }
+  .info b { display: block; color: var(--text); font: 600 14px var(--mono); }
+  .sheet-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+  .sheet-tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--muted); padding: 8px 12px; font-weight: 600; white-space: nowrap; }
   .sheet-tabs button.on { color: var(--text); border-bottom-color: var(--accent); }
-  .sheet { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px clamp(16px, 3vw, 36px); min-height: 360px; }
+  .sheet-tabs button i { font: normal 11px var(--mono); color: var(--accent-hi); margin-left: 4px; }
+  .sheet { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px clamp(16px, 3vw, 36px); min-height: 360px; min-width: 0; }
   .sheet .t { font-size: 22px; font-weight: 800; letter-spacing: -.02em; margin: 0 0 4px; text-wrap: balance; }
   .sheet h4 { font-size: 15px; font-weight: 800; margin: 24px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--accent); text-wrap: balance; }
   .sheet h5 { font: 600 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; margin: 16px 0 6px; color: var(--accent-hi); display: flex; gap: 8px; align-items: center; }
@@ -65,6 +111,30 @@
   .cue { font: 600 10.5px var(--mono); padding: 1px 6px; border-radius: 5px; background: var(--accent-soft); color: var(--accent-hi); margin-left: 6px; white-space: nowrap; }
   .cue.ph { background: #3a2a10; color: var(--gold); }
   .sheet .none { color: var(--muted); }
+  .sec { display: grid; gap: 10px; margin-bottom: 26px; }
+  .sec > h3 { margin: 0; font-size: 14px; }
+  .sec > p.muted { margin: -4px 0 0; }
+  .trow { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+  .trow.chosen { border-color: var(--gold); }
+  .trow .txt { overflow-wrap: anywhere; }
+  .trow input[type=radio] { accent-color: var(--gold); }
+  .thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+  .thumb { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: grid; }
+  .thumb.chosen { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+  .thumb img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: #000; }
+  .thumb .bar2 { display: flex; justify-content: space-between; gap: 6px; padding: 6px 8px; font-size: 12px; align-items: center; }
+  .thumb .bar2 span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+  .chosen-tag { font-size: 11px; padding: 1px 7px; border-radius: 99px; background: #3a2a10; color: var(--gold); }
+  .upl { border: 1.5px dashed var(--line); border-radius: 10px; padding: 14px; text-align: center; color: var(--muted); font-size: 13px; cursor: pointer; }
+  .upl.over { border-color: var(--accent); background: var(--accent-soft); color: var(--text); }
+  .note { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 4px; }
+  .note p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .note div { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+  .note button { padding: 0 6px; font-size: 12px; background: none; border: 0; color: var(--muted); }
+  .arow { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto auto; gap: 10px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; font-size: 13px; }
+  .arow .ic { width: 56px; aspect-ratio: 16/10; border-radius: 6px; background: var(--line) center/cover; display: grid; place-items: center; font: 600 10px var(--mono); color: var(--muted); }
+  .arow a { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: none; }
+  .arow small { color: var(--muted); font: 11.5px var(--mono); white-space: nowrap; }
   details.bp summary { cursor: pointer; font-weight: 600; }
   details.bp textarea { min-height: 260px; width: 100%; margin-top: 10px; font-size: 13px; }
   @media (max-width: 900px) { .toprow, .detail { grid-template-columns: 1fr; } }
@@ -81,17 +151,11 @@
   <section class="plan-hero">
     <p class="eyebrow">Plan · long form</p>
     <h1>Script it here. <em>Edit it</em> next door.</h1>
-    <p class="lede">Every long-form video from idea to ready. Claude outlines and writes the script from your blueprint, with cue tags, so when you drop the footage on Edit the graphics land on the lines you planned.</p>
+    <p class="lede">A year of long-form videos, four a month. Claude outlines and writes each script from your blueprint with cue tags, and every video keeps its titles, thumbnails, notes and assets in one place.</p>
   </section>
 
-  <section class="toprow">
-    <form class="panel" id="newForm">
-      <h2>New video</h2>
-      <label class="field"><span>Working title</span><input type="text" id="nTitle" placeholder="e.g. Contractors, your follow-up is costing you $20K a month" required></label>
-      <label class="field"><span>Angle, stories and real proof (optional)</span><textarea id="nNotes" placeholder="Real numbers, client stories, screenshots you have. Anything missing becomes a placeholder, never a made-up number."></textarea></label>
-      <div class="row"><button class="primary" type="submit">Add to Idea</button><span class="msg" id="newMsg"></span></div>
-    </form>
-    <section class="panel" id="chan" aria-live="polite">
+  <section>
+    <section class="panel chanpanel" id="chan" aria-live="polite">
       <div class="row" style="justify-content:space-between"><h2 id="chanName">Your YouTube channel</h2><button type="button" id="ytRefresh">Refresh</button></div>
       <div class="chan-stats">
         <div class="stat"><b id="ytCount">—</b><small>Recent videos</small></div>
@@ -104,19 +168,29 @@
   </section>
 
   <section>
-    <div class="board-wrap"><div class="board" id="board"></div></div>
+    <div class="viewbar">
+      <div><h2 id="viewTitle">Your year</h2><span class="sub" id="yearSum"></span></div>
+      <div class="seg2" role="tablist" aria-label="View"><button role="tab" data-view="year" aria-selected="true">Year plan</button><button role="tab" data-view="board" aria-selected="false">By stage</button></div>
+    </div>
+    <div class="year" id="year"></div>
+    <div class="board-wrap" id="boardWrap" hidden><div class="board" id="board"></div></div>
   </section>
 
   <section class="detail" id="detail" hidden>
     <form class="panel" id="editForm">
-      <div class="row" style="justify-content:space-between"><h2>Plan</h2><select id="eStatus" aria-label="Column"></select></div>
-      <label class="field"><span>Title</span><input type="text" id="eTitle" required></label>
+      <div class="row" style="justify-content:space-between"><h2 id="dHead">Video</h2><select id="eStatus" aria-label="Stage"></select></div>
+      <label class="field"><span>Working title</span><input type="text" id="eTitle" required></label>
+      <div class="two">
+        <label class="field"><span>Month</span><select id="eMonth"></select></label>
+        <label class="field"><span>Due date</span><input type="date" id="eDue"></label>
+      </div>
       <label class="field"><span>Angle, stories and real proof</span><textarea id="eNotes"></textarea></label>
       <div class="two">
         <label class="field"><span>Call to action</span><input type="text" id="eCta" placeholder="Book a call below"></label>
         <label class="field"><span>Acts</span><select id="eActs"><option>2</option><option>3</option><option>4</option></select></label>
       </div>
       <div class="row"><button type="submit">Save</button><span class="msg" id="editMsg"></span></div>
+      <div class="info" id="info"></div>
       <div id="waiting" class="waiting" hidden></div>
       <div class="actions" id="askBtns">
         <button type="button" data-ask="outline">1. Outline &amp; check</button>
@@ -125,10 +199,16 @@
       </div>
       <label class="field"><span>Change something</span><div class="row"><input type="text" id="reviseNote" placeholder="Punchier hook, add a myth-bust in Act 2…"><button type="button" id="reviseBtn">Revise</button></div></label>
       <p class="muted" style="margin:0">Buttons queue the work. Then say <b>run my studio jobs</b> in Claude Code, the same as for edits.</p>
-      <div class="row" style="justify-content:space-between"><button type="button" class="ghost" id="copyBtn">Copy script</button><button type="button" class="ghost" id="delBtn">Delete plan</button></div>
+      <div class="row" style="justify-content:space-between"><button type="button" class="ghost" id="copyBtn">Copy script</button><button type="button" class="ghost" id="delBtn">Delete video</button></div>
     </form>
     <div style="display:grid;gap:10px;min-width:0">
-      <div class="sheet-tabs" role="tablist"><button role="tab" data-tab="script" class="on" aria-selected="true">Script</button><button role="tab" data-tab="outline" aria-selected="false">Outline</button></div>
+      <div class="sheet-tabs" role="tablist" id="tabs">
+        <button role="tab" data-tab="script">Script</button>
+        <button role="tab" data-tab="outline">Outline</button>
+        <button role="tab" data-tab="pack">Titles &amp; thumbnails</button>
+        <button role="tab" data-tab="notes">Notes</button>
+        <button role="tab" data-tab="assets">Assets</button>
+      </div>
       <article class="sheet" id="sheet"></article>
     </div>
   </section>
@@ -145,7 +225,9 @@
 <script>
 const $ = (id) => document.getElementById(id);
 const LABEL = { idea: 'Idea', outlined: 'Outlined', scripted: 'Scripted', filming: 'Filming', editing: 'Editing', ready: 'Ready', posted: 'Posted' };
-let plans = [], statuses = Object.keys(LABEL), current = null, tab = 'script', poll = null;
+const PER_MONTH = 4;
+let plans = [], statuses = Object.keys(LABEL), current = null, tab = 'script', view = 'year', poll = null;
+try { view = localStorage.getItem('plan-view') || 'year'; } catch {}
 
 const api = async (url, body) => {
   const r = await fetch(url, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -155,11 +237,77 @@ const api = async (url, body) => {
 };
 const fmt = (n) => Number(n || 0).toLocaleString();
 const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const fileUrl = (p, a) => `/plan-files/${p.id}/${a.path.split('/').map(encodeURIComponent).join('/')}`;
+const thumbOf = (p) => p.thumb && p.assets?.find((a) => a.kind === 'thumb' && a.name === p.thumb);
+const chosenTitle = (p) => p.titles?.find((t) => t.chosen)?.text;
+const size = (b) => b > 1e9 ? (b / 1e9).toFixed(1) + ' GB' : b > 1e6 ? (b / 1e6).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1e3)) + ' KB';
+const dateStr = (d) => d ? new Date(d + (d.length === 10 ? 'T12:00' : '')).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '—';
+for (const sel of [$('eMonth')]) for (let m = 1; m <= 12; m++) sel.append(Object.assign(el('option', null, 'Month ' + m), { value: m }));
 
 function setStatus() {
   const busy = plans.some((p) => p.request);
   const s = $('status'); s.className = 'status' + (busy ? ' busy' : '');
   s.lastElementChild.textContent = busy ? 'Waiting on Claude' : 'Ready';
+}
+function stPill(p) { return p.request ? el('span', 'st q', p.requestLabel + ' · queued') : el('span', 'st ' + p.status, LABEL[p.status] || p.status); }
+
+// An empty slot in a month: the "New video" form, inline. Drafts survive re-renders until added.
+const drafts = {};
+let focusKey = null;
+function slotForm(m, n) {
+  const key = `m${m}s${n}`, d = (drafts[key] ||= { title: '', due: '', notes: '' });
+  const f = el('form', 'slot'); f.noValidate = true;
+  const title = Object.assign(el('input'), { type: 'text', id: key + 't', value: d.title, placeholder: 'Working title' });
+  title.setAttribute('aria-label', `Month ${m}, video ${n}: working title`);
+  const due = Object.assign(el('input'), { type: 'date', id: key + 'd', value: d.due }); due.setAttribute('aria-label', 'Due date (optional)'); due.title = 'Due date (optional)';
+  const notes = Object.assign(el('textarea'), { id: key + 'n', value: d.notes, placeholder: 'Angle, stories and real proof (optional). Anything missing becomes a placeholder, never a made-up number.' });
+  notes.setAttribute('aria-label', 'Angle, stories and real proof (optional)');
+  const msg = el('p', 'msg');
+  for (const [inp, k] of [[title, 'title'], [due, 'due'], [notes, 'notes']]) inp.oninput = () => { d[k] = inp.value; };
+  const add = Object.assign(el('button', 'primary', 'Add'), { type: 'submit' });
+  const row = el('div', 'row'); row.append(due, add);
+  f.append(el('span', 'slothead', `Video ${n}`), title, row, notes, msg);
+  f.onsubmit = async (e) => {
+    e.preventDefault();
+    if (!d.title.trim()) { msg.className = 'msg err'; msg.textContent = 'Give it a working title first.'; title.focus(); return; }
+    add.disabled = true;
+    try {
+      const p = await api('/api/plans', { title: d.title, notes: d.notes, month: m, cta: 'Point to a related video, then: book a call below.', acts: 3 });
+      if (d.due) await api('/api/plans/' + p.id, { due: d.due });
+      delete drafts[key]; focusKey = null;
+      await load(); open(p.id);
+    } catch (err) { msg.className = 'msg err'; msg.textContent = err.message; add.disabled = false; }
+  };
+  return f;
+}
+
+function renderYear() {
+  const act = document.activeElement;
+  if (act?.closest?.('.slot')) { try { focusKey = { id: act.id, s: act.selectionStart, e: act.selectionEnd }; } catch { focusKey = { id: act.id }; } }
+  else focusKey = null;
+  const wrap = $('year'); wrap.replaceChildren();
+  for (let m = 1; m <= 12; m++) {
+    const items = plans.filter((p) => (p.month || 1) === m).sort((a, b) => (a.due || '9').localeCompare(b.due || '9') || a.created.localeCompare(b.created));
+    const done = items.filter((p) => ['ready', 'posted'].includes(p.status)).length;
+    const box = el('section', 'month' + (items.length >= PER_MONTH ? ' full' : ''));
+    const head = el('header'); head.append(el('b', null, 'Month ' + m), el('span', items.length >= PER_MONTH ? 'done' : null, `${items.length}/${PER_MONTH} planned · ${done} done`));
+    const bar = el('div', 'mbar'); const fill = el('i'); fill.style.width = Math.min(100, items.length / PER_MONTH * 100) + '%'; bar.append(fill);
+    box.append(head, bar);
+    for (const p of items) {
+      const b = el('button', 'mrow' + (current?.id === p.id ? ' on' : '')); b.type = 'button';
+      const mini = el('span', 'thumbmini'); const t = thumbOf(p); if (t) mini.style.backgroundImage = `url("${fileUrl(p, t)}")`;
+      b.append(mini, el('span', 't', chosenTitle(p) || p.title), stPill(p));
+      b.title = (chosenTitle(p) || p.title) + (p.due ? ' · due ' + dateStr(p.due) : '');
+      b.onclick = () => open(p.id);
+      box.append(b);
+    }
+    for (let i = items.length; i < PER_MONTH; i++) box.append(slotForm(m, i + 1));
+    wrap.append(box);
+  }
+  // Re-rendering (polling, saves) must not lose what's being typed into a slot: restore focus and caret.
+  if (focusKey) { const f = document.getElementById(focusKey.id); if (f) { f.focus(); try { if (focusKey.s != null) f.setSelectionRange(focusKey.s, focusKey.e); } catch {} } }
+  const total = plans.length, posted = plans.filter((p) => ['ready', 'posted'].includes(p.status)).length;
+  $('yearSum').textContent = ` · ${total} of ${PER_MONTH * 12} videos planned, ${posted} done`;
 }
 
 function renderBoard() {
@@ -168,39 +316,51 @@ function renderBoard() {
     const col = el('div', 'col');
     const items = plans.filter((p) => p.status === st);
     const h = el('h3'); h.append(LABEL[st] || st, Object.assign(el('i'), { textContent: items.length || '' })); col.append(h);
-    if (!items.length) col.append(el('div', 'empty', st === 'idea' ? 'Add a video above.' : '—'));
+    if (!items.length) col.append(el('div', 'empty', '—'));
     for (const p of items) {
       const b = el('button', 'pcard' + (current?.id === p.id ? ' on' : '')); b.type = 'button';
-      b.append(el('b', null, p.title));
-      if (p.request) b.append(el('span', 'pill claude', p.requestLabel + ' · queued'));
-      else if (p.job) b.append(el('span', 'pill', 'Studio job linked'));
+      b.append(el('b', null, chosenTitle(p) || p.title), el('small', null, `Month ${p.month || 1}${p.due ? ' · due ' + dateStr(p.due) : ''}`));
+      if (p.request) b.append(stPill(p));
       b.onclick = () => open(p.id);
       col.append(b);
     }
     board.append(col);
   }
-  setStatus();
 }
+
+function renderViews() {
+  document.querySelectorAll('.seg2 button').forEach((b) => b.setAttribute('aria-selected', b.dataset.view === view));
+  $('year').hidden = view !== 'year'; $('boardWrap').hidden = view !== 'board';
+  $('viewTitle').textContent = view === 'year' ? 'Your year' : 'By stage';
+  renderYear(); renderBoard(); setStatus();
+}
+document.querySelectorAll('.seg2 button').forEach((b) => (b.onclick = () => { view = b.dataset.view; try { localStorage.setItem('plan-view', view); } catch {} renderViews(); }));
 
 async function load() {
   const j = await api('/api/plans');
   plans = j.plans; statuses = j.statuses;
-  renderBoard();
   if (current) { const fresh = await api('/api/plans/' + current.id).catch(() => null); if (fresh) showDetail(fresh); else closeDetail(); }
+  renderViews();
   clearInterval(poll);
   if (plans.some((p) => p.request)) poll = setInterval(load, 5000);
 }
-
-function closeDetail() { current = null; $('detail').hidden = true; renderBoard(); }
-async function open(id) { showDetail(await api('/api/plans/' + id)); renderBoard(); $('detail').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); }
+function closeDetail() { current = null; $('detail').hidden = true; renderViews(); }
+async function open(id) {
+  showDetail(await api('/api/plans/' + id)); renderViews();
+  $('detail').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  try { history.replaceState(null, '', '?plan=' + id); } catch {}
+}
 
 function showDetail(p) {
   const same = current?.id === p.id; current = p; $('detail').hidden = false;
-  if (!same || document.activeElement?.closest('#editForm') == null) {
+  if (!same || !document.activeElement?.closest('#editForm')) {
     $('eTitle').value = p.title; $('eNotes').value = p.notes || ''; $('eCta').value = p.cta || ''; $('eActs').value = String(p.acts || 3);
+    $('eMonth').value = String(p.month || 1); $('eDue').value = p.due || '';
   }
-  const sel = $('eStatus'); sel.replaceChildren(...statuses.map((s) => Object.assign(el('option', null, LABEL[s] || s), { value: s })));
-  sel.value = p.status;
+  $('dHead').textContent = `Month ${p.month || 1} video`;
+  const sel = $('eStatus'); sel.replaceChildren(...statuses.map((s) => Object.assign(el('option', null, LABEL[s] || s), { value: s }))); sel.value = p.status;
+  const info = $('info'); info.replaceChildren();
+  for (const [k, v] of [['Due', dateStr(p.due)], ['Files', p.assets.length], ['Notes', p.notesLog.length]]) { const d = el('div'); d.append(el('b', null, String(v)), k); info.append(d); }
   const w = $('waiting');
   if (p.request) {
     w.hidden = false; w.replaceChildren();
@@ -211,14 +371,23 @@ function showDetail(p) {
   } else w.hidden = true;
   document.querySelectorAll('#askBtns button, #reviseBtn').forEach((b) => (b.disabled = !!p.request));
   if (!same) tab = p.script ? 'script' : p.outline ? 'outline' : 'script';
-  renderSheet();
+  renderTabs();
 }
 
-// Script/outline markup: # title, ## section, ### beat, plain = spoken; [TAGS] become chips.
-function renderSheet() {
-  document.querySelectorAll('.sheet-tabs button').forEach((b) => { const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-  const md = (tab === 'script' ? current.script : current.outline) || '';
+function renderTabs() {
+  const counts = { pack: (current.titles.length + current.assets.filter((a) => a.kind === 'thumb').length) || '', notes: current.notesLog.length || '', assets: current.assets.filter((a) => a.kind === 'file').length || '' };
+  document.querySelectorAll('#tabs button').forEach((b) => {
+    const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on);
+    b.querySelector('i')?.remove(); if (counts[b.dataset.tab]) b.append(Object.assign(el('i'), { textContent: counts[b.dataset.tab] }));
+  });
   const sheet = $('sheet'); sheet.replaceChildren();
+  ({ script: renderDoc, outline: renderDoc, pack: renderPack, notes: renderNotes, assets: renderAssets })[tab](sheet);
+}
+document.querySelectorAll('#tabs button').forEach((b) => (b.onclick = () => { tab = b.dataset.tab; renderTabs(); }));
+
+// Script / outline: # title, ## section, ### beat, plain = spoken; [TAGS] become chips.
+function renderDoc(sheet) {
+  const md = (tab === 'script' ? current.script : current.outline) || '';
   if (!md.trim()) {
     sheet.append(el('p', 'none', tab === 'script'
       ? 'No script yet. Click "1. Outline & check" to test the points first, or "2. Write script" to go straight to the script.'
@@ -228,9 +397,8 @@ function renderSheet() {
   for (const raw of md.split(/\r?\n/)) {
     const line = raw.trim(); if (!line) continue;
     let node;
-    if (line.startsWith('### ')) {
-      const t = line.slice(4); node = el('h5', /^open loop/i.test(t) ? 'loop' : /^payoff/i.test(t) ? 'pay' : null, t);
-    } else if (line.startsWith('## ')) node = el('h4', null, line.slice(3));
+    if (line.startsWith('### ')) { const t = line.slice(4); node = el('h5', /^open loop/i.test(t) ? 'loop' : /^payoff/i.test(t) ? 'pay' : null, t); }
+    else if (line.startsWith('## ')) node = el('h4', null, line.slice(3));
     else if (line.startsWith('# ')) node = el('p', 't', line.slice(2));
     else {
       node = el('p');
@@ -243,25 +411,112 @@ function renderSheet() {
   }
 }
 
-$('newForm').onsubmit = async (e) => {
-  e.preventDefault(); $('newMsg').className = 'msg'; $('newMsg').textContent = '';
-  try {
-    const p = await api('/api/plans', { title: $('nTitle').value, notes: $('nNotes').value, cta: 'Point to a related video, then: book a call below.', acts: 3 });
-    $('nTitle').value = ''; $('nNotes').value = '';
-    await load(); open(p.id);
-  } catch (err) { $('newMsg').className = 'msg err'; $('newMsg').textContent = err.message; }
-};
+// Titles & thumbnails
+async function saveTitles(titles) { showDetail(await api('/api/plans/' + current.id, { titles })); renderViews(); }
+function renderPack(sheet) {
+  const ts = el('div', 'sec'); ts.append(el('h3', null, 'Title options'), el('p', 'muted', 'Write a few, then pick the one you\'ll publish. The chosen title shows on the year plan.'));
+  for (const t of current.titles) {
+    const row = el('label', 'trow' + (t.chosen ? ' chosen' : ''));
+    const r = Object.assign(el('input'), { type: 'radio', name: 'chosenTitle', checked: t.chosen });
+    r.onchange = () => saveTitles(current.titles.map((x) => ({ ...x, chosen: x.id === t.id })));
+    const del = el('button', 'ghost', 'Remove'); del.type = 'button';
+    del.onclick = (e) => { e.preventDefault(); saveTitles(current.titles.filter((x) => x.id !== t.id)); };
+    row.append(r, el('span', 'txt', t.text), del); ts.append(row);
+  }
+  const add = el('form', 'row'); const inp = Object.assign(el('input'), { type: 'text', placeholder: 'Add a title option', id: 'newTitleOpt' });
+  add.append(inp, Object.assign(el('button', null, 'Add'), { type: 'submit' }));
+  add.onsubmit = (e) => { e.preventDefault(); const v = inp.value.trim(); if (!v) return; saveTitles([...current.titles, { text: v, chosen: !current.titles.length }]); };
+  ts.append(add); sheet.append(ts);
+
+  const th = el('div', 'sec'); th.append(el('h3', null, 'Thumbnail options'), el('p', 'muted', 'Upload your drafts and pick one. PNG, JPG or WEBP, 1280×720 is the YouTube size.'));
+  const grid = el('div', 'thumbs');
+  for (const a of current.assets.filter((x) => x.kind === 'thumb')) {
+    const chosen = current.thumb === a.name;
+    const card = el('div', 'thumb' + (chosen ? ' chosen' : ''));
+    const img = Object.assign(el('img'), { src: fileUrl(current, a), alt: a.name, loading: 'lazy' });
+    const bar = el('div', 'bar2');
+    const pick = el('button', chosen ? 'ghost' : null, chosen ? 'Chosen' : 'Use this'); pick.type = 'button';
+    pick.onclick = async () => { showDetail(await api('/api/plans/' + current.id, { thumb: chosen ? null : a.name })); renderViews(); };
+    const del = el('button', 'ghost', 'Delete'); del.type = 'button';
+    del.onclick = () => removeFile(a);
+    bar.append(chosen ? el('span', 'chosen-tag', 'Chosen') : el('span', null, a.name), pick, del);
+    card.append(img, bar); grid.append(card);
+  }
+  th.append(grid, uploader('thumb', 'image/png,image/jpeg,image/webp,image/gif', 'Drop thumbnail images here, or click to choose')); sheet.append(th);
+}
+
+// Notes
+function renderNotes(sheet) {
+  const sec = el('div', 'sec');
+  sec.append(el('h3', null, 'Production notes'), el('p', 'muted', 'Shot ideas, thumbnail ideas, things to say, feedback. Newest first.'));
+  const f = el('form'); f.style.cssText = 'display:grid;gap:8px';
+  const ta = Object.assign(el('textarea'), { id: 'newNote', placeholder: 'Film the CRM screen-share in Act 3. Thumbnail: me pointing at a 5-star review…' });
+  f.append(ta, Object.assign(el('button', 'primary', 'Add note'), { type: 'submit' }));
+  f.querySelector('button').style.justifySelf = 'start';
+  f.onsubmit = async (e) => { e.preventDefault(); if (!ta.value.trim()) return; showDetail(await api(`/api/plans/${current.id}/notes`, { text: ta.value })); };
+  sec.append(f);
+  if (!current.notesLog.length) sec.append(el('p', 'none', 'No notes yet.'));
+  for (const n of current.notesLog) {
+    const card = el('div', 'note'); const meta = el('div');
+    const del = el('button', null, 'Delete'); del.type = 'button';
+    del.onclick = async () => showDetail(await api(`/api/plans/${current.id}/notes`, { remove: n.id }));
+    meta.append(el('span', null, new Date(n.at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })), del);
+    card.append(el('p', null, n.text), meta); sec.append(card);
+  }
+  sheet.append(sec);
+}
+
+// Assets
+function renderAssets(sheet) {
+  const sec = el('div', 'sec');
+  sec.append(el('h3', null, 'Files & assets'), el('p', 'muted', 'B-roll, screenshots, logos, proof, documents. When this video is edited, Claude uses these for proof and image moments before asking you for anything.'));
+  const files = current.assets.filter((a) => a.kind === 'file');
+  if (!files.length) sec.append(el('p', 'none', 'No files yet.'));
+  for (const a of files) {
+    const row = el('div', 'arow'); const ic = el('span', 'ic', a.type === 'image' ? '' : a.type === 'video' ? 'VIDEO' : (a.name.split('.').pop() || 'FILE').toUpperCase().slice(0, 4));
+    if (a.type === 'image') ic.style.backgroundImage = `url("${fileUrl(current, a)}")`;
+    const link = Object.assign(el('a', null, a.name), { href: fileUrl(current, a), target: '_blank', rel: 'noopener' });
+    const del = el('button', 'ghost', 'Delete'); del.type = 'button'; del.onclick = () => removeFile(a);
+    row.append(ic, link, el('small', null, size(a.size)), del); sec.append(row);
+  }
+  sec.append(uploader('file', '', 'Drop files here, or click to choose (any type, several at once)'));
+  sheet.append(sec);
+}
+
+function uploader(kind, accept, label) {
+  const box = el('label', 'upl'); box.tabIndex = 0;
+  const input = Object.assign(el('input'), { type: 'file', multiple: true, hidden: true }); if (accept) input.accept = accept;
+  const txt = el('span', null, label); box.append(input, txt);
+  const send = async (files) => {
+    for (const [i, f] of [...files].entries()) {
+      txt.textContent = `Uploading ${i + 1} of ${files.length}: ${f.name}…`;
+      const r = await fetch(`/api/plans/${current.id}/upload?kind=${kind}`, { method: 'POST', headers: { 'x-filename': encodeURIComponent(f.name) }, body: f });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) { txt.textContent = j.error || 'Upload failed.'; return; }
+      current = j;
+    }
+    showDetail(current); renderViews();
+  };
+  input.onchange = () => input.files.length && send(input.files);
+  box.ondragover = (e) => { e.preventDefault(); box.classList.add('over'); };
+  box.ondragleave = () => box.classList.remove('over');
+  box.ondrop = (e) => { e.preventDefault(); box.classList.remove('over'); if (e.dataTransfer.files.length) send(e.dataTransfer.files); };
+  box.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } };
+  return box;
+}
+async function removeFile(a) { showDetail(await api(`/api/plans/${current.id}/files/delete`, { path: a.path })); renderViews(); }
+
+// Forms
+const formBody = () => ({ title: $('eTitle').value, notes: $('eNotes').value, cta: $('eCta').value, acts: $('eActs').value, month: $('eMonth').value, due: $('eDue').value });
 $('editForm').onsubmit = async (e) => {
   e.preventDefault();
-  try {
-    showDetail(await api('/api/plans/' + current.id, { title: $('eTitle').value, notes: $('eNotes').value, cta: $('eCta').value, acts: $('eActs').value }));
-    $('editMsg').className = 'msg ok'; $('editMsg').textContent = 'Saved.'; load();
-  } catch (err) { $('editMsg').className = 'msg err'; $('editMsg').textContent = err.message; }
+  try { showDetail(await api('/api/plans/' + current.id, formBody())); $('editMsg').className = 'msg ok'; $('editMsg').textContent = 'Saved.'; load(); }
+  catch (err) { $('editMsg').className = 'msg err'; $('editMsg').textContent = err.message; }
 };
 $('eStatus').onchange = async () => { await api('/api/plans/' + current.id, { status: $('eStatus').value }); load(); };
 async function ask(kind, note) {
   try {
-    await api('/api/plans/' + current.id, { title: $('eTitle').value, notes: $('eNotes').value, cta: $('eCta').value, acts: $('eActs').value });
+    await api('/api/plans/' + current.id, formBody());
     await api(`/api/plans/${current.id}/request`, { kind, note });
     $('editMsg').className = 'msg'; $('editMsg').textContent = '';
     load();
@@ -269,7 +524,6 @@ async function ask(kind, note) {
 }
 document.querySelectorAll('#askBtns button').forEach((b) => (b.onclick = () => ask(b.dataset.ask)));
 $('reviseBtn').onclick = () => { ask('revise', $('reviseNote').value); $('reviseNote').value = ''; };
-document.querySelectorAll('.sheet-tabs button').forEach((b) => (b.onclick = () => { tab = b.dataset.tab; renderSheet(); }));
 $('copyBtn').onclick = async () => {
   // Teleprompter copy: headings without #, cue tags (for the edit) removed, placeholders and stage notes kept.
   const text = (current.script || '').replace(/^#{1,3}\s+/gm, '').replace(/\s*\[(?!PLACEHOLDER)[A-Z]+(?::[^\]]*)?\]/g, '');
@@ -279,8 +533,10 @@ $('copyBtn').onclick = async () => {
 };
 let delArmed = false;
 $('delBtn').onclick = async () => {
-  if (!delArmed) { delArmed = true; $('delBtn').textContent = 'Click again to delete'; setTimeout(() => { delArmed = false; $('delBtn').textContent = 'Delete plan'; }, 4000); return; }
-  await api(`/api/plans/${current.id}/delete`, {}); delArmed = false; $('delBtn').textContent = 'Delete plan'; closeDetail(); load();
+  if (!delArmed) { delArmed = true; $('delBtn').textContent = 'Click again to delete (files too)'; setTimeout(() => { delArmed = false; $('delBtn').textContent = 'Delete video'; }, 4000); return; }
+  await api(`/api/plans/${current.id}/delete`, {}); delArmed = false; $('delBtn').textContent = 'Delete video';
+  try { history.replaceState(null, '', '/plan'); } catch {}
+  closeDetail(); load();
 };
 
 // Channel
