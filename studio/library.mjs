@@ -19,6 +19,10 @@ for (const l of rd('assets/boards/CATALOG.md').split('\n')) {
 const premium = path.join(ROOT, 'assets/boards/premium');
 const meta = fs.existsSync(path.join(premium, 'index.json')) ? JSON.parse(fs.readFileSync(path.join(premium, 'index.json'), 'utf8')) : [];
 for (const g of meta) items.push({ id: g.id, kind: 'premium', group: g.layout, name: g.name, use: g.name, say: g.line ?? '', file: `assets/boards/premium/${g.file}`, how: 'copy into the job, edit its words and at() times', from: g.from });
+// 2b. story scenes (styles/REFERENCES.md "Moonshot Motion"): a faceless figure acts out a story or scenario
+const storyDir = path.join(ROOT, 'assets/boards/story');
+const stories = fs.existsSync(path.join(storyDir, 'index.json')) ? JSON.parse(fs.readFileSync(path.join(storyDir, 'index.json'), 'utf8')) : [];
+for (const g of stories) items.push({ id: g.id, kind: 'story', group: g.layout, name: g.name, use: g.name, say: g.line ?? '', file: `assets/boards/story/${g.file}`, how: 'write a new scene for this story with assets/boards/story/kit.js, starting from this one' });
 // 3. ready-made effects
 for (const m of rd('styles/ANIMATIONS.md').matchAll(/^\| `([\w-]+)` \| (.+?) \| (.*?) \| (.+?) \| .*\|$/gm)) {
   items.push({ id: m[1], kind: 'effect', group: 'Ready-made effects', name: m[1], use: m[2].slice(0, 150), say: m[4].slice(0, 150), file: `assets/animations/${m[1]}/`, how: `node studio/anim.mjs new ${m[1]}` });
@@ -38,12 +42,13 @@ const out = ['# The library', '', 'Everything the studio can put in an edit, in 
   '`node studio/edit.mjs plan <job>` searches this for you from the transcript. Watch the graphics: `assets/boards/index.html`.', '',
   `| Kind | Count | Use it by |`, `|---|---|---|`,
   `| Your approved graphics | ${count('premium')} | copy into the job, change the words and times |`,
+  `| Story scenes | ${count('story')} | a new scene per story with \`assets/boards/story/kit.js\` |`,
   `| Boards (premium look) | ${count('board')} | \`studio/board-fit.py\` |`,
   `| Ready-made effects | ${count('effect')} | \`node studio/anim.mjs new <name>\` |`,
   `| Video FX (9:16) | ${count('fx')} | skill \`fx-<name>\` |`,
   `| Named sounds | ${count('sound')} | a cue in \`sfx.json\` |`,
   `| SFX Library | 1548 | \`"cue": "SFX-####"\`, skill \`sfx-library\` |`, ''];
-for (const [k, title] of [['premium', 'Your approved graphics'], ['board', 'Boards'], ['effect', 'Ready-made effects'], ['fx', 'Video FX (9:16)']]) {
+for (const [k, title] of [['premium', 'Your approved graphics'], ['story', 'Story scenes'], ['board', 'Boards'], ['effect', 'Ready-made effects'], ['fx', 'Video FX (9:16)']]) {
   out.push(`## ${title}`, '');
   for (const i of items.filter((x) => x.kind === k)) out.push(`- \`${i.id}\` **${i.name.slice(0, 90)}**${k === 'premium' ? ` (${i.group})` : ''}${i.say ? `. Say it when: ${i.say.slice(0, 130)}` : i.use ? `: ${i.use.slice(0, 130)}` : ''}`);
   out.push('');
@@ -57,6 +62,7 @@ fs.writeFileSync(path.join(ROOT, 'styles/LIBRARY.md'), out.join('\n'));
 const gal = path.join(ROOT, 'assets/boards/index.html');
 let h = fs.readFileSync(gal, 'utf8').replace(/<!--premium-->[\s\S]*?<!--\/premium-->/, '');
 const cards = meta.map((g) => `<a class="c" href="premium/${g.file}?play=1"><div class="f"><iframe src="premium/${g.file}?play=1" loading="lazy" tabindex="-1"></iframe></div><b>${g.name.slice(0, 60)}</b><span>${g.layout}</span></a>`).join('');
-h = h.replace('</header>', `</header><!--premium--><h2>Your approved graphics <em>${meta.length}</em></h2><div class="g">${cards}</div><!--/premium-->`);
+const scards = stories.map((g) => `<a class="c" href="story/${g.file}?play=1"><div class="f"><iframe src="story/${g.file}?play=1" loading="lazy" tabindex="-1"></iframe></div><b>${g.name.slice(0, 60)}</b><span>story: ${g.layout}</span></a>`).join('');
+h = h.replace('</header>', `</header><!--premium--><h2>Story scenes <em>${stories.length}</em></h2><div class="g">${scards}</div><h2>Your approved graphics <em>${meta.length}</em></h2><div class="g">${cards}</div><!--/premium-->`);
 fs.writeFileSync(gal, h);
-console.log(`library: ${items.length} items (${count('premium')} approved, ${count('board')} boards, ${count('effect')} effects, ${count('fx')} fx, ${count('sound')} sounds)`);
+console.log(`library: ${items.length} items (${count('story')} story, ${count('premium')} approved, ${count('board')} boards, ${count('effect')} effects, ${count('fx')} fx, ${count('sound')} sounds)`);

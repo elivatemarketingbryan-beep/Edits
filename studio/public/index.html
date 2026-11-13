@@ -233,6 +233,9 @@ function mediaFor(job) {
   if (job.mode === 'reels' && ['review', 'revise', 'done'].includes(job.stage) && job.reels?.[0]) return { src: fileUrl(job, job.reels[0].file), badge: 'Reel 1' };
   if (job.final && !compareRaw) return { src: fileUrl(job, job.final), badge: 'Edited' };
   if (job.preview && !compareRaw && job.stage !== 'done') return { src: fileUrl(job, job.preview), badge: 'Preview' };
+  // While Claude works: a light 720p copy of the latest cut (rough cut, then drafts), so the edit in progress is always watchable.
+  // The raw upload is often 4K HEVC .mov, which the browser can't play.
+  if (job.progress && !compareRaw) return { src: fileUrl(job, job.progress), badge: 'Edit so far' };
   if (job.source) return { src: fileUrl(job, job.source), badge: 'Raw' };
   return { src: null, badge: job.url ? 'Link' : 'Raw' };
 }
@@ -307,7 +310,7 @@ function renderJob(job) {
         <div class="actions"><a class="button cta" href="#reelpick">See the reels ↓</a></div></div>`;
     } else if (job.stage === 'design') {
       const fixes = gfx.filter((g) => g.status === 'changes').length;
-      card = `<div class="ctx"><p class="label">Now</p><p>${fixes ? `Claude is changing the ${fixes} graphic${fixes > 1 ? 's' : ''} you noted.` : `Claude is designing the motion graphics${job.mode === 'reels' ? ` for your ${(job.chosen || []).length} reels` : ''}.`} You'll see stills of each one to approve before anything renders.</p>${$('#claudeHint').innerHTML}</div>`;
+      card = `<div class="ctx"><p class="label">Now</p><p>${fixes ? `Claude is changing the ${fixes} graphic${fixes > 1 ? 's' : ''} you noted.` : `Claude is designing the motion graphics${job.mode === 'reels' ? ` for your ${(job.chosen || []).length} reels` : ''}.`} You'll see stills of each one to approve before anything renders.</p>${gfx.length ? `<div class="actions"><a class="button" href="#gfx">See the graphics so far ↓</a></div>` : ''}${$('#claudeHint').innerHTML}</div>`;
     } else if (job.stage === 'graphics') {
       const left = gfx.filter((g) => g.status !== 'approved').length;
       card = `<div class="ctx shout"><p class="label">Your turn</p>
@@ -341,8 +344,10 @@ function renderJob(job) {
         <ol class="steps">${steps}</ol></details>`;
   }
   const board = job.stage === 'pick' ? ideasBoard(job) : job.stage === 'clips' ? reelsBoard(job)
-    : job.stage === 'graphics' ? graphicsBoard(job) : job.mode === 'reels' && (job.reels || []).length && ['review', 'revise', 'done'].includes(job.stage) ? reelGrid(job) : '';
-  return `<button class="back ghost" id="back">← All videos</button><div class="jobgrid">${phone}<div class="side">${side}</div></div>${board}`;
+    : job.stage === 'graphics' ? graphicsBoard(job)
+    // While Claude works on them (or edits with them), the graphics stay on the page to look at, read-only.
+    : ['design', 'edit', 'revise', 'final'].includes(job.stage) && (job.graphics || []).length ? graphicsBoard(job, true) : job.mode === 'reels' && (job.reels || []).length && ['review', 'revise', 'done'].includes(job.stage) ? reelGrid(job) : '';
+  return `<button class="back ghost" id="back">← All videos</button><div class="jobgrid${wide ? ' wide' : ''}"><div class="playcol">${phone}${captionCard(job)}</div><div class="side">${side}</div></div>${board}`;
 }
 
 // ---------- the pinned toolbar: the step's approve / reject, always on screen ----------
@@ -410,26 +415,34 @@ function reelsBoard(job) {
 }
 
 // ---------- every job: approve the motion graphics (graphics.json) before rendering ----------
-function graphicsBoard(job) {
+// readOnly: Claude is working on them (design) or editing with them, so they show with where each stands and no buttons.
+function graphicsBoard(job, readOnly = false) {
   const gfx = job.graphics || [];
   const groups = [...new Set(gfx.map((g) => g.reel ?? ''))];
   const titleOf = (r) => (job.clips || []).find((c) => c.id === r)?.title;
+  const where = (g) => g.status === 'approved' ? '<span class="chip ok">Approved</span>'
+    : g.status === 'changes' ? '<span class="chip busy">Being changed</span>' : '<span class="chip">Waiting on you</span>';
   const card = (g) => {
-    const ok = g.status === 'approved', rej = !ok && gfxRejected(g.id), yes = !ok && gfxDecision[g.id] === 'approve';
+    const ok = g.status === 'approved', rej = !readOnly && !ok && gfxRejected(g.id), yes = !readOnly && !ok && gfxDecision[g.id] === 'approve';
     return `<div class="gfx ${ok ? 'ok' : ''} ${rej ? 'rej' : ''} ${yes ? 'yes' : ''}" id="gfx-${esc(g.id)}">
       <span class="gfx-img">${g.still ? `<img src="${fileUrl(job, g.still)}" alt="${esc(g.label || 'Graphic')} at ${fmtTime(g.t)}" loading="lazy">` : '<span class="ph-tall"><em>No still</em></span>'}</span>
       <span class="gfx-body">
-        <span class="sc-head"><span class="when">${fmtTime(g.t)}</span><b>${esc(g.label || 'Graphic')}</b>${ok ? '<span class="chip ok">Approved</span>' : ''}</span>
+        <span class="sc-head"><span class="when">${fmtTime(g.t)}</span><b>${esc(g.label || 'Graphic')}</b>${readOnly ? where(g) : ok ? '<span class="chip ok">Approved</span>' : ''}</span>
         ${g.line ? `<q>${esc(g.line)}</q>` : ''}
+        ${readOnly && g.status === 'changes' && g.note ? `<span class="muted">Your note: ${esc(g.note)}</span>` : ''}
         ${g.reply ? `<span class="muted">Changed: ${esc(g.reply)}</span>` : ''}
-        ${ok ? '' : `<label class="notes"><span>Notes</span><textarea data-gnote="${esc(g.id)}" rows="2" placeholder="What should change?">${esc(gfxNotes[g.id] ?? '')}</textarea></label>
+        ${ok || readOnly ? '' : `<label class="notes"><span>Notes</span><textarea data-gnote="${esc(g.id)}" rows="2" placeholder="What should change?">${esc(gfxNotes[g.id] ?? '')}</textarea></label>
           ${decideBtns('gdec', g.id, yes, rej)}`}
       </span>
     </div>`;
   };
+  const done = gfx.filter((g) => g.status === 'approved').length;
   return `<section class="board" id="gfx">
-    <div class="board-head"><h2 class="shout-h">Approve the <em>motion graphics</em></h2>
-      <p class="muted">Each still shows the graphic over the real frame, with the line it's timed to. Reject one with a note to send it back.</p></div>
+    <div class="board-head">${readOnly
+      ? `<h2 class="shout-h">The <em>motion graphics</em> so far</h2>
+      <p class="muted">${done} of ${gfx.length} approved. ${job.stage === 'design' ? 'Claude is working on the ones marked Being changed; they come back here to approve.' : 'These are going into the edit.'}</p>`
+      : `<h2 class="shout-h">Approve the <em>motion graphics</em></h2>
+      <p class="muted">Each still shows the graphic over the real frame, with the line it's timed to. Reject one with a note to send it back.</p>`}</div>
     ${groups.map((r) => `${r ? `<p class="label">${esc(titleOf(r) || r)}</p>` : ''}<div class="gfxgrid">${gfx.filter((g) => (g.reel ?? '') === r).map(card).join('')}</div>`).join('')}
   </section>`;
 }
@@ -445,13 +458,22 @@ function igLine(ig = {}) {
   if (ig.status === 'posted') return `<p class="igline ok">Posted ${esc((ig.postedAt || '').slice(0, 10))}${ig.permalink ? ` · <a href="${esc(ig.permalink)}" target="_blank" rel="noopener">View on Instagram</a>` : ''}${ig.sheet ? ' · in the retention sheet' : ig.sheetError ? ` · <span class="err">not in the sheet yet: ${esc(ig.sheetError)}</span>` : ''}</p>`;
   return '';
 }
-// A finished single edit: its caption and the Post to Instagram button.
+// The post caption, under the video whenever it's open (written to styles/POST-CAPTIONS.md). Edit it in place; it saves when you click away.
+function captionCard(job) {
+  if (job.mode === 'reels') return '';
+  const text = videoCaption ?? job.caption ?? '';
+  if (!text && !job.final && !job.preview) return '';
+  return `<div class="capcard"><div class="capcard-head"><p class="label">Caption</p>${text ? `<button class="small ghost" data-copy="${esc(text)}">Copy</button>` : ''}</div>
+    <textarea id="videoCaption" maxlength="2200" rows="${Math.min(16, Math.max(3, text.split('\n').reduce((n, l) => n + Math.max(1, Math.ceil(l.length / 32)), 0)))}" placeholder="Claude writes the caption with the edit. You can type one here.">${esc(text)}</textarea>
+    <small class="muted" id="capSaved">${text.length} / 2200</small></div>`;
+}
+// A finished single edit: the Post to Instagram button.
 function videoPostBlock(job) {
   const ig = job.ig || {};
   if (ig.status === 'posted' || ig.status === 'posting') return `<div class="ctx">${igLine(ig)}</div>`;
   return `<div class="ctx"><p class="label">Instagram</p>
     ${!integrations.instagram ? '<p class="muted">Instagram isn\'t connected yet. Fill in the Instagram lines in <code>.env</code> (see <code>.env.example</code>) and restart the studio.</p>' : ''}
-    <label class="notes"><span>Caption</span><textarea id="videoCaption" rows="4" maxlength="2200" placeholder="Caption for the post">${esc(videoCaption ?? job.caption ?? '')}</textarea></label>
+    <p class="muted">Posts with the caption under the video.</p>
     ${igLine(ig)}
     <div class="actions"><button class="cta small ig" id="videoPost">${ig.status === 'error' ? 'Try posting again' : 'Post to Instagram'}</button></div></div>`;
 }
@@ -471,7 +493,7 @@ function reelGrid(job) {
       <div class="reelcard-body">
         <span class="sc-head"><span class="num">${i + 1}</span><b>${esc(r.title || 'Reel ' + (i + 1))}</b>${r.status === 'changes' ? '<span class="chip warn">Sent back</span>' : ''}</span>
         ${r.reply ? `<span class="muted">Changed: ${esc(r.reply)}</span>` : ''}
-        ${r.caption ? `<details class="fold small"><summary>Caption</summary><pre class="caption">${esc(r.caption)}</pre><button class="small" data-copy="${esc(r.caption)}">Copy caption</button></details>` : ''}
+        ${r.caption ? `<div class="capcard small"><div class="capcard-head"><p class="label">Caption</p><button class="small ghost" data-copy="${esc(r.caption)}">Copy</button></div><pre class="caption">${esc(r.caption)}</pre></div>` : ''}
         ${b === 'posted' ? (r.note ? `<p class="muted">Your note: ${esc(r.note)}</p>` : '')
           : `<label class="notes"><span>Notes</span><textarea data-rnote="${esc(r.id)}" rows="2" placeholder="Feedback or revision notes">${esc(reelNotes[r.id] ?? r.note ?? '')}</textarea></label>`}
         ${b === 'review' && job.stage !== 'revise' ? decideBtns('rdec', r.id, yes, rej) : ''}
@@ -668,7 +690,7 @@ document.addEventListener('click', async (ev) => {
     return;
   }
   if (t.id === 'videoPost') {
-    const caption = $('#videoCaption')?.value ?? '';
+    const caption = $('#videoCaption')?.value ?? job?.caption ?? '';
     if (!confirm(`Post "${job?.title || 'this video'}" to Instagram now${caption.trim() ? ', with this caption' : ' with no caption'}?`)) return;
     t.disabled = true;
     try { await post(`/api/jobs/${current}/instagram`, { caption }); videoCaption = null; await refresh(); }
@@ -743,12 +765,21 @@ document.addEventListener('click', async (ev) => {
   }
 });
 
+// The caption saves when you leave the box.
+document.addEventListener('focusout', async (ev) => {
+  if (ev.target.id !== 'videoCaption' || videoCaption === null) return;
+  const job = jobs.find((j) => j.id === current);
+  if (!job || videoCaption === (job.caption ?? '')) { videoCaption = null; return; }
+  try { const j = await post(`/api/jobs/${current}/caption`, { caption: videoCaption }); Object.assign(job, j); videoCaption = null; const s = $('#capSaved'); if (s) s.textContent = 'Saved'; }
+  catch (e) { alert(e.message); }
+});
+
 // Typing a graphic note: keep it across refreshes and update the button without re-rendering (keeps focus).
 // Typing a note: keep it across refreshes and update the toolbar without re-rendering the board (keeps focus).
 document.addEventListener('input', (ev) => {
   const ds = ev.target.dataset || {};
   if (ev.target.id === 'videoNote') { videoNote = ev.target.value; return; }
-  if (ev.target.id === 'videoCaption') { videoCaption = ev.target.value; return; }
+  if (ev.target.id === 'videoCaption') { videoCaption = ev.target.value; const s = $('#capSaved'); if (s) s.textContent = `${videoCaption.length} / 2200`; return; }
   if (ds.gnote) gfxNotes[ds.gnote] = ev.target.value;
   else if (ds.rnote) reelNotes[ds.rnote] = ev.target.value;
   else return;

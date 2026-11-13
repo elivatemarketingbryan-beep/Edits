@@ -1,0 +1,212 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1080, height=1130">
+<title>S02 first back: the form at 2, the callback at 7, already booked</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="kit.js"></script>
+<style>
+  /* Story scene, process/timeline shape (styles/REFERENCES.md "Moonshot Motion"), 1080x1130 for the top of a 9:16 reel.
+     Made for tof-08 "You're losing the race, not leads" (Bryan 2026-11-10: "use the animations we worked on").
+     A form comes in at 2 PM while he's up on a job, the phone's in the truck; at 7 PM he calls back to nothing;
+     another contractor is already at the door with the signed job. Gold only on the booked job and "first". */
+  html, body { margin: 0; background: #050308; }
+  .root { position: relative; width: 1080px; height: 1130px; overflow: hidden; background: #050308; font-family: Inter, sans-serif; }
+  .floorglow { position: absolute; left: 0; right: 0; bottom: 0; height: 420px; background: linear-gradient(transparent, rgba(109,40,217,.16) 55%, rgba(139,92,246,.30)); }
+  .halo { position: absolute; inset: 0; background: radial-gradient(700px 500px at 0% 0%, rgba(139,92,246,.13), transparent 70%); }
+  .night { position: absolute; inset: 0; background: linear-gradient(#0a0420, rgba(10,4,32,.35)); opacity: 0; }
+  .vig { position: absolute; inset: 0; background: radial-gradient(130% 110% at 50% 45%, transparent 55%, rgba(0,0,0,.55) 100%); }
+  .grain { position: absolute; inset: -50%; opacity: .07; mix-blend-mode: overlay; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  #world { position: absolute; left: 0; top: 0; width: 1080px; height: 1130px; }
+  #world svg { position: absolute; inset: 0; }
+  .cap { position: absolute; left: 40px; right: 40px; top: 96px; text-align: center; font: 800 62px/1.1 Inter, sans-serif; letter-spacing: -.035em; color: #fff; visibility: hidden; }
+  .cap .k { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; letter-spacing: -.01em; }
+  .cap .p { color: #C4B5FD; } .cap .r { color: #FF8A8E; }
+  .gold { background: linear-gradient(180deg, #fff3cf, #e8c77a 45%, #b8913f); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 26px rgba(232,199,122,.45)); }
+  .clock { position: absolute; left: 50%; top: 230px; transform: translateX(-50%); padding: 14px 34px; border-radius: 99px; background: rgba(26,11,56,.85);
+    border: 2px solid rgba(196,181,253,.55); font: 900 52px/1 Inter; letter-spacing: .02em; color: #fff; white-space: nowrap; display: flex; gap: 16px; align-items: center; }
+  .clock i { width: 34px; height: 34px; border-radius: 50%; border: 4px solid #C4B5FD; position: relative; flex: none; }
+  .clock i::before, .clock i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; border-radius: 2px; background: #C4B5FD; transform-origin: 50% 0; }
+  .clock i::before { height: 11px; transform: translate(-50%, 0) rotate(var(--h, 120deg)); }
+  .clock i::after { height: 14px; transform: translate(-50%, 0) rotate(var(--m, 180deg)); }
+  .hammer { position: absolute; left: -10px; top: 34px; width: 32px; height: 14px; border-radius: 4px; background: #9a90b8; }
+  svg text { font-family: Inter, sans-serif; }
+</style></head><body>
+<div class="root" id="root" data-composition-id="S02-first-back" data-start="0" data-width="1080" data-height="1130" data-duration="15.2">
+  <div class="halo"></div><div class="floorglow"></div><div class="night" id="night"></div>
+  <div id="world">
+    <svg viewBox="0 0 1080 1130" width="1080" height="1130">
+      <defs><filter id="glow"><feGaussianBlur stdDeviation="10"/></filter></defs>
+      <line x1="-200" y1="980" x2="1280" y2="980" stroke="rgba(196,181,253,.35)" stroke-width="2.5"/>
+      <!-- the homeowner's house -->
+      <g id="house">
+        <path d="M50 980 V790 L185 660 L320 790 V980 Z" fill="#170A32" stroke="rgba(196,181,253,.5)" stroke-width="2.5"/>
+        <rect id="win" x="88" y="820" width="70" height="56" rx="6" fill="#2a1a4a" stroke="rgba(196,181,253,.45)" stroke-width="2"/>
+        <rect x="222" y="880" width="58" height="100" rx="5" fill="#0d061c" stroke="rgba(196,181,253,.45)" stroke-width="2"/>
+      </g>
+      <!-- the form leaving the house -->
+      <g id="form" opacity="0"><rect x="-38" y="-26" width="76" height="52" rx="8" fill="#EDE9FE"/><line x1="-24" y1="-10" x2="24" y2="-10" stroke="#6D28D9" stroke-width="5" stroke-linecap="round"/><line x1="-24" y1="6" x2="12" y2="6" stroke="#6D28D9" stroke-width="5" stroke-linecap="round"/></g>
+      <!-- the truck, phone in the cab -->
+      <g id="truck">
+        <rect x="370" y="880" width="150" height="74" rx="8" fill="#170A32" stroke="rgba(196,181,253,.5)" stroke-width="2.5"/>
+        <path d="M520 954 V846 H572 L606 892 V954 Z" fill="#170A32" stroke="rgba(196,181,253,.5)" stroke-width="2.5"/>
+        <path d="M530 856 H566 L592 890 H530 Z" fill="#0d061c" stroke="rgba(196,181,253,.35)" stroke-width="2"/>
+        <circle cx="410" cy="958" r="22" fill="#0d061c" stroke="rgba(196,181,253,.55)" stroke-width="3"/>
+        <circle cx="568" cy="958" r="22" fill="#0d061c" stroke="rgba(196,181,253,.55)" stroke-width="3"/>
+      </g>
+      <!-- the job: a deck on posts, a ladder up -->
+      <g id="job">
+        <rect x="700" y="800" width="340" height="16" rx="4" fill="#3B1A75" stroke="rgba(196,181,253,.5)" stroke-width="2"/>
+        <rect x="720" y="816" width="12" height="164" fill="#26124f"/><rect x="1008" y="816" width="12" height="164" fill="#26124f"/>
+        <g stroke="rgba(196,181,253,.5)" stroke-width="5" stroke-linecap="round"><line x1="664" y1="980" x2="690" y2="796"/><line x1="696" y1="980" x2="722" y2="796"/>
+          <line x1="670" y1="940" x2="702" y2="940"/><line x1="676" y1="896" x2="708" y2="896"/><line x1="682" y1="852" x2="714" y2="852"/></g>
+        <g id="nails" opacity="0"><line x1="800" y1="800" x2="800" y2="786" stroke="#C4B5FD" stroke-width="4"/></g>
+      </g>
+      <!-- the booked job, over the door -->
+      <g id="deal" transform="translate(175 640)" opacity="0">
+        <rect x="-62" y="-82" width="124" height="150" rx="12" fill="#E8C77A" filter="url(#glow)" opacity=".55"/>
+        <rect x="-56" y="-76" width="112" height="138" rx="12" fill="#170A32" stroke="#E8C77A" stroke-width="4"/>
+        <line x1="-34" y1="-44" x2="34" y2="-44" stroke="rgba(255,255,255,.4)" stroke-width="6" stroke-linecap="round"/>
+        <line x1="-34" y1="-20" x2="20" y2="-20" stroke="rgba(255,255,255,.4)" stroke-width="6" stroke-linecap="round"/>
+        <path id="sig" d="M-32 22 q12 -22 22 0 t22 -4 t18 -6" fill="none" stroke="#E8C77A" stroke-width="5" stroke-linecap="round"/>
+        <text x="0" y="104" text-anchor="middle" fill="#E8C77A" font-size="30" font-weight="900" letter-spacing="6">BOOKED</text>
+      </g>
+    </svg>
+    <div id="figslot"></div><div id="figslot2"></div>
+    <svg viewBox="0 0 1080 1130" width="1080" height="1130" style="pointer-events:none">
+      <g id="phone" transform="translate(556 870)">
+        <rect id="phGlow" x="-20" y="-30" width="40" height="60" rx="10" fill="#8B5CF6" filter="url(#glow)" opacity="0"/>
+        <rect x="-14" y="-24" width="28" height="48" rx="6" fill="#2a1a4a" stroke="#C4B5FD" stroke-width="2.5"/>
+        <rect id="phScreen" x="-10" y="-18" width="20" height="34" rx="3" fill="#3B1A75"/>
+        <g id="badge" opacity="0"><circle cx="14" cy="-24" r="12" fill="#E5484D"/><text x="14" y="-18" text-anchor="middle" fill="#fff" font-size="16" font-weight="900">1</text></g>
+      </g>
+      <g id="rings" opacity="0" stroke="#C4B5FD" stroke-width="4" fill="none" stroke-linecap="round">
+        <path class="rw" d="M0 -18 a22 22 0 0 1 0 36"/><path class="rw" d="M10 -32 a38 38 0 0 1 0 64"/><path class="rw" d="M20 -46 a54 54 0 0 1 0 92"/></g>
+      <text id="noans" x="0" y="0" text-anchor="middle" fill="#FF8A8E" font-size="30" font-weight="900" letter-spacing="5" opacity="0">NO ANSWER</text>
+    </svg>
+  </div>
+  <div class="clock" id="clock"><i id="dial"></i><span id="tm">2:00 PM</span></div>
+  <div class="cap" id="c1"><span class="k p">2 PM.</span> A form comes in.</div>
+  <div class="cap" id="c2">You're up on a job.</div>
+  <div class="cap" id="c3">Your phone's in the truck.</div>
+  <div class="cap" id="c4"><span class="k p">7 PM.</span> You finally see it.</div>
+  <div class="cap" id="c5">You call back...</div>
+  <div class="cap" id="c6"><span class="k r">Nothing.</span></div>
+  <div class="cap" id="c7">They booked <span class="k gold">someone else.</span></div>
+  <div class="cap" id="c8">Not better work.</div>
+  <div class="cap" id="c9">He got there <span class="k gold">first.</span></div>
+  <div class="vig"></div><div class="grain"></div>
+</div>
+<script>
+document.head.insertAdjacentHTML('beforeend', `<style>${STORY.css}
+  #fig2 .torso,#fig2 .head,#fig2 .leg.L .thigh,#fig2 .leg.L .shin,#fig2 .arm.L .upper,#fig2 .arm.L .fore{background:#bdb3db}
+  #fig2 .leg.R .thigh,#fig2 .leg.R .shin,#fig2 .arm.R .upper,#fig2 .arm.R .fore{background:#9a90b8}</style>`);
+document.getElementById('figslot').outerHTML = STORY.figure('fig');
+document.getElementById('figslot2').outerHTML = STORY.figure('fig2');
+document.querySelector('#fig .arm.R .fore').insertAdjacentHTML('beforeend', '<div class="hammer" id="hammer"></div>');
+document.fonts.ready.then(() => {
+  const tl = gsap.timeline({ paused: true });
+  const F = '#fig', G = '#fig2', W = '#world';
+  // the surface under x: the deck from 700 to 1040, the ground everywhere else
+  const floor = (x) => (x >= 700 && x <= 1040 ? 800 : 980);
+  STORY.init(tl, F, 0, 760, floor);   // working near the edge of the deck, by the ladder
+  STORY.init(tl, G, 0, -120, floor);
+  window.__story = { id: 'S02-first-back', fig: F, world: W, floor, origin: [540, 760] };   // for studio/story-contact.mjs
+  const cam = (t, s, x, y, d = 0.9) => tl.to(W, { scale: s, x, y, duration: d, ease: 'power2.inOut', transformOrigin: '540px 760px' }, t);
+  tl.set(W, { scale: 1.3, x: 330, y: -40, transformOrigin: '540px 760px' }, 0);   // opens on the house
+  tl.set('#rings', { x: 0, y: 0 }, 0);
+  const sig = document.getElementById('sig'), SL = sig.getTotalLength();
+  tl.set(sig, { strokeDasharray: SL, strokeDashoffset: SL }, 0);
+  const setClock = (t, txt, h, m, d = 0.9) => {
+    tl.to('#dial', { '--h': h, '--m': m, duration: d, ease: 'power2.inOut' }, t);
+    tl.set('#tm', { textContent: txt }, t + d * 0.6);
+    tl.fromTo('#clock', { scale: 1 }, { scale: 1.12, duration: 0.15, yoyo: true, repeat: 1 }, t + d * 0.6);
+  };
+  // steps along the ground: legs swing, body moves, height solved each frame
+  const walk = (Fs, t, x, step = 0.2) => {
+    const x0 = STORY.st[Fs].x, n = Math.max(2, Math.round(Math.abs(x - x0) / 46));
+    for (let i = 1; i <= n; i++) {
+      const a = i % 2 ? { thL: -24, shL: 14, thR: 22, shR: 8, uaL: -20, uaR: 18 } : { thL: 22, shL: 8, thR: -24, shR: 14, uaL: 18, uaR: -20 };
+      STORY.pose(tl, Fs, t + (i - 1) * step, a, step, 'sine.inOut', { x: x0 + (x - x0) * i / n });
+    }
+    STORY.pose(tl, Fs, t + n * step, 'stand', 0.16, 'power2.out');
+    return t + n * step + 0.16;
+  };
+  // hammering on the deck
+  const hammer = (t, n) => { for (let i = 0; i < n; i++) {
+    STORY.limbs(tl, F, t + i * 0.32, { uaR: -150, faR: -40 }, 0.14, 'power2.out');
+    STORY.limbs(tl, F, t + i * 0.32 + 0.14, { uaR: -40, faR: -60 }, 0.1, 'power3.in');
+    tl.fromTo('#nails', { opacity: 1, y: 0 }, { y: 4, duration: 0.08 }, t + i * 0.32 + 0.24);
+  } };
+  STORY.pose(tl, F, 0, { tor: 18, head: 12, thL: -30, shL: 40, thR: -10, shR: 30 }, 0.01);   // bent over the work from the start
+
+  // 0.0 "Here's what's happening": the house, a quiet afternoon
+  // 1.3 "A homeowner fills out your form at like 2": the form leaves the window and flies to the truck
+  STORY.line(tl, 1.25, '#c1');
+  tl.fromTo('#clock', { autoAlpha: 0, y: -20 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 1.3);
+  tl.to('#win', { fill: '#C4B5FD', duration: 0.3 }, 1.4);
+  tl.fromTo('#form', { opacity: 1, x: 123, y: 848, scale: 0.4 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' }, 2.2);
+  cam(2.4, 1.0, 0, 0, 1.0);
+  tl.to('#form', { x: 556, y: 870, scale: 0.3, duration: 0.8, ease: 'power2.inOut' }, 2.6);
+  tl.to('#form', { opacity: 0, duration: 0.1 }, 3.4);
+  tl.to('#phGlow', { opacity: 0.9, duration: 0.12, yoyo: true, repeat: 7 }, 3.4);
+  tl.to('#phScreen', { fill: '#C4B5FD', duration: 0.1 }, 3.4);
+  tl.fromTo('#badge', { opacity: 0, scale: 0.4, transformOrigin: '14px -24px' }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(3)' }, 3.5);
+  // 4.6 "You're on a job": up on the deck, hammering, back to the truck
+  STORY.line(tl, 4.6, '#c2', '#c1');
+  cam(4.4, 1.35, -300, 40, 0.8);
+  hammer(4.7, 3);
+  // 5.6 "Your phone's in the truck": it buzzes, unseen
+  STORY.line(tl, 5.6, '#c3', '#c2');
+  cam(5.6, 1.3, 80, 60, 0.7);
+  tl.to('#phGlow', { opacity: 0.9, duration: 0.12, yoyo: true, repeat: 5 }, 5.9);
+  // 6.7 "You see it at 7 at night": the clock spins, night falls, he climbs down and walks to the truck
+  STORY.line(tl, 6.65, '#c4', '#c3');
+  cam(6.6, 1.0, 0, 0, 0.8);
+  setClock(6.7, '7:00 PM', '330deg', '1980deg', 0.9);
+  tl.to('#night', { opacity: 1, duration: 0.8 }, 6.8);
+  STORY.pose(tl, F, 6.8, 'stand', 0.2, 'power2.out');
+  tl.to('#hammer', { opacity: 0, duration: 0.1 }, 6.9);
+  const down = STORY.hop(tl, F, 6.85, 630);         // off the deck, clear of its edge
+  STORY.settle(tl, F, down + 0.05);
+  const atTruck = walk(F, down + 0.15, 610, 0.12);
+  // he picks the phone up out of the cab and holds it to his head
+  tl.to('#badge', { opacity: 0, duration: 0.1 }, atTruck);
+  STORY.limbs(tl, F, atTruck, { uaL: -150, faL: -120 }, 0.2, 'power2.out');
+  const head = () => [610 + 26, STORY.rest(F, STORY.st[F].p, 0, 610) - 160];
+  tl.to('#phone', { x: head()[0], y: head()[1], rotation: -18, duration: 0.25, ease: 'power2.out' }, atTruck);
+  // 8.0 "You call back": it rings
+  STORY.line(tl, 8.0, '#c5', '#c4');
+  cam(Math.max(8.0, atTruck), 1.4, -60, 80, 0.6);
+  tl.set('#rings', { x: head()[0] + 30, y: head()[1] }, 8.0);
+  tl.fromTo('#rings', { opacity: 0 }, { opacity: 1, duration: 0.15 }, 8.1);
+  tl.fromTo('#rings .rw', { opacity: 0.2 }, { opacity: 1, duration: 0.18, stagger: 0.12, yoyo: true, repeat: 3 }, 8.1);
+  // 8.87 "Nothing."
+  STORY.line(tl, 8.85, '#c6', '#c5');
+  tl.to('#rings', { opacity: 0, duration: 0.15 }, 8.85);
+  tl.set('#noans', { x: head()[0], y: head()[1] - 90 }, 8.85);
+  tl.fromTo('#noans', { opacity: 0, scale: 0.6, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(2)' }, 8.9);
+  tl.to(F + ' .head', { rotation: 14, duration: 0.4, ease: 'sine.inOut' }, 9.0);
+  // 9.65 "They already booked someone else": another contractor is already at their door, the job signs and goes gold
+  STORY.line(tl, 9.6, '#c7', '#c6');
+  tl.to('#noans', { opacity: 0, duration: 0.2 }, 9.5);
+  cam(9.4, 1.35, 300, 20, 0.8);
+  tl.set(G, { x: 160 }, 9.3); STORY.st[G].x = 160;
+  STORY.pose(tl, G, 9.3, 'stand', 0.01);
+  tl.fromTo(G, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 9.4);
+  tl.fromTo('#deal', { opacity: 0, scale: 0.6, transformOrigin: '175px 640px' }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(2)' }, 9.9);
+  tl.to(sig, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.out' }, 10.15);
+  tl.to('#win', { fill: '#E8C77A', duration: 0.3 }, 10.2);
+  STORY.cheer(tl, G, 10.3);
+  // 11.17 "Not because that guy does better work"
+  STORY.line(tl, 11.15, '#c8', '#c7');
+  tl.to(F + ' .head', { rotation: -6, duration: 0.3 }, 11.2);
+  STORY.limbs(tl, F, 11.2, 'stand', 0.3, 'power2.out');
+  tl.to('#phone', { x: 640, y: 950, rotation: 0, duration: 0.3, ease: 'power2.in' }, 11.2);
+  // 13.5 "but because he got to them first": pull back to the whole street
+  STORY.line(tl, 13.4, '#c9', '#c8');
+  cam(12.4, 0.92, 0, 40, 2.2);
+  tl.to({}, { duration: 0.01 }, 15.19);
+  window.__timelines = window.__timelines || {};
+  window.__timelines['S02-first-back'] = tl;
+  if (location.search.includes('play')) { tl.eventCallback('onComplete', () => setTimeout(() => tl.restart(), 900)); tl.play(); }
+});
+</script></body></html>

@@ -123,6 +123,7 @@ input[type=url], input[type=text], textarea, select { font: inherit; color: var(
 .sc-head b { font-size: 14.5px; margin-right: 2px; }
 .chip { font-size: 11px; padding: 1px 7px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
 .chip.ok { background: #163326; border-color: transparent; color: #6fd6a4; }
+.chip.busy { background: #2a1f4a; border-color: rgba(196,181,253,0.5); color: #c4b5fd; }
 .sc .muted { font-size: 12.5px; line-height: 1.4; }
 
 /* ---------- Home and job view (styled after the AI short-form editor reference) ---------- */
@@ -478,3 +479,26 @@ button.cta.small { font-size: 12.5px; padding: 6px 12px; margin: 0; }
 @media (max-width: 860px) { .steppill { grid-column: 1 / -1; grid-row: 2; } .bar-top .status { grid-column: 2; } .actionbar .bar-btns { margin-left: 0; width: 100%; } .actionbar .bar-btns > * { flex: 1; text-align: center; } }
 .rv-bar .bar-btns { display: flex; gap: 8px; margin-left: auto; }
 .rv-bar .bar-btns > * { padding: 9px 16px; border-radius: 10px; }
+
+/* Post caption under the open video */
+.playcol { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.capcard { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.capcard-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.capcard-head .label { margin: 0; }
+.capcard textarea { width: 100%; box-sizing: border-box; resize: vertical; font: 14px/1.5 var(--sans); color: inherit; background: transparent; border: 0; padding: 0; outline: none; }
+.capcard small { align-self: flex-end; font-size: 11px; }
+.capcard.small { padding: 10px 12px; border-radius: 10px; }
+.capcard.small .caption { background: none; border: 0; padding: 0; max-height: 180px; }
+@media (max-width: 860px) {
+  .playcol { align-items: center; }
+  .playcol .capcard { align-self: stretch; }
+}
+/* The video in the left column: stretch to the column (a centred flex child collapses to zero width). 16:9 edits get a wider
+   column so the edit is big enough to watch; phones (9:16) keep their size. */
+.playcol > .phone { align-self: stretch; width: 100%; }
+.playcol > .phone:not(.wide) { align-self: center; width: min(330px, 100%); }
+.jobgrid.wide { grid-template-columns: minmax(0, 1.35fr) minmax(320px, 1fr); }
+@media (max-width: 860px) {
+  .jobgrid.wide { grid-template-columns: 1fr; }
+  .playcol > .phone:not(.wide) { width: min(320px, 100%); }
+}

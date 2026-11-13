@@ -39,6 +39,15 @@ If the user picks a style during `formats` (the page allows it), the job is alre
 `design`; skip ranking. The user's moves (`pick`, `clips`, `graphics`, `review`) happen on the
 page; never move a job out of them yourself.
 
+### The edit so far (job.json `progress`, every video job)
+
+Bryan should be able to open a job at any stage and watch where the edit is. The raw upload is often 4K HEVC `.mov`,
+which the browser can't play, so whenever there is a new cut (the rough cut, then each draft), write a light copy to
+`jobs/<id>/progress.mp4` and set `job.json` `progress: "progress.mp4"`:
+`ffmpeg -i <latest cut> -vf scale=1280:-2 -c:v libx264 -preset veryfast -crf 26 -c:a aac -b:a 128k -movflags +faststart jobs/<id>/progress.mp4`.
+The page plays it as "Edit so far" until there's a `preview` or `final`. During `design`, `edit`, `revise` and `final`
+the page also keeps the graphics board up, read-only, so the stills never disappear while Claude works.
+
 ### Graphics approval (graphics.json, every job)
 
 Before anything renders, the page shows the user a still of every graphic. Write

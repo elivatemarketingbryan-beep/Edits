@@ -187,6 +187,13 @@ const routes = [
     if (!(readJob(id).notes || []).some((n) => n.status === 'open')) return send(res, 400, { error: 'Write what should change first, in the notes box or as a note on the timeline.' });
     send(res, 200, setStage(id, 'revise'));
   }],
+  // The post caption shown under the video (styles/POST-CAPTIONS.md). Saved as you edit it; Post to Instagram uses it.
+  ['POST', /^\/api\/jobs\/([\w-]+)\/caption$/, async (req, res, [id]) => {
+    const { caption = '' } = await readBody(req);
+    const job = readJob(id);
+    if (!job) return send(res, 404, { error: 'No such job' });
+    send(res, 200, writeJob({ ...job, caption: String(caption).slice(0, 2200) }));
+  }],
   ['POST', /^\/api\/jobs\/([\w-]+)\/approve$/, async (req, res, [id]) => {
     const { note } = await readBody(req);
     addGeneralNote(id, note, 'approve');
