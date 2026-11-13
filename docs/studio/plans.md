@@ -22,6 +22,8 @@ plans/<id>/assets/thumbnails/ thumbnail options Bryan uploads
 plans/<id>/assets/raw-footage/ what was filmed; "Send to editor" copies a clip into a new studio job
                               (stage formats, `job.plan` set), so the formats stage already knows the plan
 plans/<id>/assets/finished/   the final edited video; uploading one moves the plan to Ready
+plans/<id>/assets/archive/    raw/ and edited/: storage only, kept "in case it's needed later" (any file type).
+                              Never send these to the editor or use them in an edit unless Bryan asks.
 plans/<id>/assets/files/      b-roll, screenshots, logos, proof, documents for this video
 plans/<id>/outline.md         written by Claude for "Outline & check"
 plans/<id>/script.md          written by Claude for "Write script", "Story-lock pass" and "Revise"

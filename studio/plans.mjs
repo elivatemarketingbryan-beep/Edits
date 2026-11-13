@@ -64,7 +64,9 @@ export function writePlan(plan) {
 // Uploaded files per plan, in plans/<id>/assets/: thumbnails/ (thumbnail options), raw-footage/ (what was filmed;
 // any clip can be sent to the editor as a studio job), finished/ (the final edited video), and files/ (b-roll,
 // screenshots, logos, docs; the edit uses them for [PROOF]/[IMAGE]/[BROLL] cues before asking for anything).
-const ASSET_KINDS = { thumb: 'thumbnails', raw: 'raw-footage', final: 'finished', file: 'files' };
+// archive/raw and archive/edited are storage only ("in case it's needed later"): any file type, never sent
+// to the editor, never change the video's stage.
+const ASSET_KINDS = { thumb: 'thumbnails', raw: 'raw-footage', final: 'finished', file: 'files', archraw: 'archive/raw', archedit: 'archive/edited' };
 const VIDEO_KINDS = new Set(['raw', 'final']);
 const IMG = /\.(png|jpe?g|webp|gif)$/i, VID = /\.(mp4|mov|m4v|webm)$/i;
 export function listAssets(id) {
@@ -239,7 +241,7 @@ export function planRoutes({ send, readBody, serveFile, inside }) {
     }],
     ['POST', /^\/api\/plans\/([\w-]+)\/files\/delete$/, async (req, res, [id]) => {
       const { path: rel } = await readBody(req);
-      const file = /^assets\/(thumbnails|raw-footage|finished|files)\/[^/\\]+$/.test(rel || '') && inside(planDir(id), rel);
+      const file = /^assets\/(thumbnails|raw-footage|finished|files|archive\/raw|archive\/edited)\/[^/\\]+$/.test(rel || '') && inside(planDir(id), rel);
       if (!file || !fs.existsSync(file)) return send(res, 404, { error: 'No such file' });
       fs.rmSync(file);
       const plan = readPlan(id, { files: false });

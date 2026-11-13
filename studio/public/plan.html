@@ -98,6 +98,22 @@
   .vbar a.button { font-size: 12px; padding: 4px 9px; }
   .vitem { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; position: relative; }
   .tm { position: relative; display: inline-block; }
+  details.arch { border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.015); }
+  details.arch > summary { cursor: pointer; padding: 12px 14px; font-size: 13.5px; list-style: none; display: flex; align-items: baseline; gap: 2px; }
+  details.arch > summary::-webkit-details-marker { display: none; }
+  details.arch > summary::before { content: "▸"; color: var(--muted); margin-right: 8px; transition: transform .15s; display: inline-block; }
+  details.arch[open] > summary::before { transform: rotate(90deg); }
+  details.arch .archt { font-weight: 600; }
+  details.arch > .vsplit, details.arch > p { margin: 0 14px 14px; }
+  .alist { display: grid; gap: 6px; }
+  .arow2 { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr) auto auto; gap: 8px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 30px 6px 8px; font-size: 12.5px; }
+  .arow2 .aic { font: 600 9.5px var(--mono); color: var(--muted); background: var(--line); border-radius: 4px; padding: 3px 0; text-align: center; }
+  .arow2 > a:not(.button) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: none; }
+  .arow2 small { color: var(--muted); font: 11px var(--mono); white-space: nowrap; }
+  .arow2 .button { font-size: 11.5px; padding: 3px 8px; }
+  .arow2 .xdel.sm { top: 50%; right: 6px; transform: translateY(-50%); }
+  .alist .upl { padding: 12px; }
+  @media (max-width: 600px) { .arow2 { grid-template-columns: 40px minmax(0, 1fr) auto; } .arow2 small { display: none; } }
   .xdel { position: absolute; top: 8px; right: 8px; z-index: 3; min-width: 28px; height: 28px; padding: 0 8px; border-radius: 99px; display: grid; place-items: center;
           font-size: 17px; line-height: 1; background: rgba(5,3,8,.82); color: #fff; border: 1px solid rgba(255,255,255,.22); }
   .xdel:hover { background: var(--err); border-color: var(--err); }
@@ -421,8 +437,37 @@ function videoCard(p, n) {
   if (p.scriptPreview) { sb.append(el('p', null, p.scriptPreview + '…'), toScript); sb.onclick = (e) => { if (e.target === sb || e.target.tagName === 'P') location.href = toScript.href; }; }
   else sb.append(el('span', null, p.request ? `${p.requestLabel} is queued. Say "run my studio jobs".` : p.hasOutline ? 'Outlined, no script yet' : 'No script added yet'), toScript);
   sCol.append(sl, sb);
-  card.append(top, meta, media, vCol, sCol);
+  card.append(top, meta, media, vCol, sCol, archiveSection(p));
   return card;
+}
+
+// Archive: storage only, for raw files and edited videos to keep for later. Any file type; nothing here is
+// sent to the editor or changes the video's stage. Collapsed unless opened (remembered while the page is open).
+const archOpen = new Set();
+function archiveSection(p) {
+  const raw = p.assets.filter((a) => a.kind === 'archraw'), edited = p.assets.filter((a) => a.kind === 'archedit');
+  const total = raw.length + edited.length, bytes = [...raw, ...edited].reduce((s, a) => s + a.size, 0);
+  const d = el('details', 'arch'); d.open = archOpen.has(p.id);
+  d.ontoggle = () => { d.open ? archOpen.add(p.id) : archOpen.delete(p.id); };
+  const sum = el('summary'); sum.append(el('span', 'archt', 'Archive'), el('span', 'muted', total ? ` · ${total} file${total > 1 ? 's' : ''}, ${size(bytes)} · kept for later` : ' · keep raw files and edited videos here for later'));
+  d.append(sum);
+  const cols = el('div', 'vsplit');
+  for (const [kind, label, files, hint] of [['archraw', 'Raw files', raw, 'Drop raw files to keep (any type: MP4, MOV, BRAW, MXF, audio…)'], ['archedit', 'Edited videos', edited, 'Drop edited videos to keep (old cuts, alternate versions, exports)']]) {
+    const col = el('div', 'vsec'); col.append(el('div', 'lbl', label));
+    const list = el('div', 'alist');
+    for (const a of files) {
+      const row = el('div', 'arow2');
+      const name = Object.assign(el('a', null, a.name), { href: fileUrl(p, a), target: '_blank', rel: 'noopener', title: 'Open' });
+      row.append(el('span', 'aic', a.type === 'video' ? 'VID' : a.type === 'image' ? 'IMG' : (a.name.split('.').pop() || 'FILE').toUpperCase().slice(0, 4)), name,
+        el('small', null, `${size(a.size)} · ${new Date(a.added).toLocaleDateString([], { month: 'short', day: 'numeric' })}`),
+        Object.assign(el('a', 'button', 'Download'), { href: fileUrl(p, a), download: a.name }), xDelete(p, a, a.name, true));
+      list.append(row);
+    }
+    list.append(dropZone(p.id, kind, '', hint));
+    col.append(list); cols.append(col);
+  }
+  d.append(cols, el('p', 'muted', 'Stored privately in this video\'s folder (plans/). Nothing here is sent to the editor or posted.'));
+  return d;
 }
 // One video section of a card: its players, and a drop box. Raw clips can go to the editor; a finished edit marks the video Ready.
 function videoSection(p, kind, label, dropLabel) {
