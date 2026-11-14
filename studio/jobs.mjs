@@ -3,13 +3,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { syncFromJob, listPlans } from './plans.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const JOBS = path.join(ROOT, 'jobs');
 
 // Stages in order. `who` says whose move it is.
 // mode "video" (one edit):  formats -> pick  -> design -> graphics -> edit -> review <-> revise -> final -> done
-// mode "reels" (cut a long video into reels): formats -> clips -> design -> graphics -> final -> done
+// mode "reels" (cut a long video into reels): formats -> clips -> design -> graphics -> final -> review <-> revise -> done
+//   (reels review: Bryan approves or rejects each reel in reels.json; approved reels can be posted to Instagram)
 export const STAGES = {
   formats: { who: 'claude', label: 'Finding the best 3 formats' },
   pick:    { who: 'you',    label: 'Pick a format and ideas' },
@@ -23,7 +25,7 @@ export const STAGES = {
   done:    { who: 'nobody', label: 'Done' },
 };
 // Where the reels flow words a stage differently.
-const REELS_LABELS = { formats: 'Finding the best reels', final: 'Rendering your reels' };
+const REELS_LABELS = { formats: 'Finding the best reels', final: 'Rendering your reels', review: 'Review your reels', revise: 'Fixing the reels you rejected' };
 // Extra files read into the job: Claude writes them, the page shows them.
 // clips.json = reels Claude found (reels mode), graphics.json = graphic stills to approve, reels.json = finished reels.
 const EXTRAS = ['formats', 'ideas', 'combos', 'edits', 'notes', 'sheet', 'clips', 'graphics', 'reels'];
@@ -68,7 +70,9 @@ export function setStage(id, stage, extra = {}) {
   const job = readJob(id);
   if (!job) throw new Error(`No job ${id}`);
   if (!STAGES[stage]) throw new Error(`Unknown stage ${stage}`);
-  return writeJob({ ...job, ...extra, stage });
+  const saved = writeJob({ ...job, ...extra, stage });
+  syncFromJob(saved);   // a job made from a planned video moves that plan's card on the Plan page
+  return saved;
 }
 
 // CLI for Claude: node studio/jobs.mjs pending | show <id> | stage <id> <stage>
@@ -78,6 +82,8 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const todo = listJobs().filter((j) => j.waitingOn === 'claude');
     if (!todo.length) console.log('No jobs waiting on Claude.');
     for (const j of todo) console.log(`${j.id}  mode=${j.mode}  stage=${j.stage}  style=${j.style ?? '-'}  source=${j.source ?? j.url}`);
+    const plans = listPlans().filter((p) => p.request);
+    if (plans.length) console.log(`\n${plans.length} plan request(s) from the Plan page: node studio/plans.mjs pending (docs/studio/plans.md).`);
   } else if (cmd === 'show') {
     console.log(JSON.stringify(readJob(id), null, 2));
   } else if (cmd === 'stage') {

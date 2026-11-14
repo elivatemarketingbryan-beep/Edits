@@ -1,0 +1,156 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<title>S01 climb: starting over without follow-up</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="kit.js"></script>
+<style>
+  /* Story scene, metaphor-machine shape: every lead climbs the steps; with no follow-up it gets knocked back; a system holds it. */
+  html, body { margin: 0; background: #050308; }
+  .root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #050308; font-family: Inter, sans-serif; }
+  .floorglow { position: absolute; left: 0; right: 0; bottom: 0; height: 420px; background: radial-gradient(160% 100% at 50% 100%, rgba(139,92,246,.34), rgba(109,40,217,.12) 45%, transparent 100%); }
+  .halo { position: absolute; inset: 0; background: radial-gradient(900px 600px at 0% 0%, rgba(139,92,246,.13), transparent 70%); }
+  .vig { position: absolute; inset: 0; background: radial-gradient(130% 110% at 50% 45%, transparent 55%, rgba(0,0,0,.55) 100%); }
+  .grain { position: absolute; inset: -50%; opacity: .07; mix-blend-mode: overlay; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  #world { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  #world svg { position: absolute; inset: 0; }
+  .cap { position: absolute; left: 0; width: 1920px; top: 110px; text-align: center; font: 800 58px/1.1 Inter, sans-serif; letter-spacing: -.035em; color: #fff; visibility: hidden; }
+  .cap .k { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; letter-spacing: -.01em; }
+  .cap .p { color: #C4B5FD; } .cap .r { color: #FF8A8E; }
+  .gold { background: linear-gradient(180deg, #fff3cf, #e8c77a 45%, #b8913f); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 26px rgba(232,199,122,.45)); }
+  svg text { font-family: Inter, sans-serif; }
+</style></head><body>
+<div class="root" id="root" data-composition-id="S01-climb" data-start="0" data-width="1920" data-height="1080" data-duration="15">
+  <div class="halo"></div><div class="floorglow"></div>
+  <div id="world">
+    <svg viewBox="0 0 1920 1080" width="1920" height="1080">
+      <defs>
+        <linearGradient id="refl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <mask id="fade"><rect x="0" y="860" width="1920" height="220" fill="url(#refl)"/></mask>
+        <filter id="glow"><feGaussianBlur stdDeviation="12"/></filter>
+        <linearGradient id="trailg" x1="0" x2="1"><stop offset="0" stop-color="#E5484D" stop-opacity=".9"/><stop offset="1" stop-color="#E5484D" stop-opacity="0"/></linearGradient>
+      </defs>
+      <g id="stairs">
+        <path d="M520 860 H700 V770 H880 V680 H1060 V590 H1240 V500 H1540 V860 Z" fill="#170A32" stroke="rgba(196,181,253,.45)" stroke-width="2.5"/>
+        <path id="top" d="M1240 500 H1540" stroke="#E8C77A" stroke-width="6" stroke-linecap="round" opacity=".35"/>
+        <text x="610" y="830" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="22" font-weight="700" letter-spacing="3">NEW</text>
+        <text x="790" y="740" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="22" font-weight="700" letter-spacing="3">CALLED</text>
+        <text x="970" y="650" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="22" font-weight="700" letter-spacing="3">QUOTED</text>
+        <text x="1150" y="560" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="22" font-weight="700" letter-spacing="3">FOLLOWED UP</text>
+      </g>
+      <use href="#stairs" transform="translate(0 1720) scale(1 -1)" mask="url(#fade)"/>
+      <line x1="200" y1="860" x2="1720" y2="860" stroke="rgba(196,181,253,.3)" stroke-width="2"/>
+      <g id="goal" transform="translate(1450 500)">
+        <rect id="goalGlow" x="-52" y="-150" width="104" height="132" rx="10" fill="#E8C77A" filter="url(#glow)" opacity="0"/>
+        <rect id="doc" x="-48" y="-146" width="96" height="124" rx="10" fill="#170A32" stroke="rgba(196,181,253,.5)" stroke-width="3"/>
+        <line x1="-28" y1="-114" x2="28" y2="-114" stroke="rgba(255,255,255,.35)" stroke-width="6" stroke-linecap="round"/>
+        <line x1="-28" y1="-92" x2="18" y2="-92" stroke="rgba(255,255,255,.35)" stroke-width="6" stroke-linecap="round"/>
+        <path id="sig" d="M-28 -54 q12 -22 22 0 t22 -4 t16 -6" fill="none" stroke="#E8C77A" stroke-width="5" stroke-linecap="round"/>
+      </g>
+      <path id="rail" d="M520 790 L700 790 L700 700 L880 700 L880 610 L1060 610 L1060 520 L1240 520 L1240 430" fill="none" stroke="#8B5CF6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 14px rgba(139,92,246,.8))"/>
+      <g id="sys" transform="translate(700 914)" opacity="0"><rect x="-150" y="-26" width="300" height="52" rx="26" fill="#8B5CF6"/><text x="0" y="9" text-anchor="middle" fill="#fff" font-size="24" font-weight="800" letter-spacing="1">FOLLOW-UP SYSTEM</text></g>
+      <text id="again" x="440" y="922" text-anchor="middle" fill="#C4B5FD" font-size="22" font-weight="700" letter-spacing="6" opacity="0">START OVER</text>
+    </svg>
+    <div id="figslot"></div>
+    <svg viewBox="0 0 1920 1080" width="1920" height="1080" style="pointer-events:none">
+      <g class="dart" id="d1" opacity="0"><rect class="trail" x="80" y="-10" width="240" height="20" rx="10" fill="url(#trailg)"/><rect x="-80" y="-24" width="160" height="48" rx="24" fill="#E5484D"/><text x="0" y="9" text-anchor="middle" fill="#fff" font-size="22" font-weight="800" letter-spacing="2">GHOSTED</text></g>
+      <g class="dart" id="d2" opacity="0"><rect class="trail" x="80" y="-10" width="240" height="20" rx="10" fill="url(#trailg)"/><rect x="-80" y="-24" width="160" height="48" rx="24" fill="#E5484D"/><text x="0" y="9" text-anchor="middle" fill="#fff" font-size="22" font-weight="800" letter-spacing="2">NO REPLY</text></g>
+      <g class="dart" id="d3" opacity="0"><rect class="trail" x="80" y="-10" width="240" height="20" rx="10" fill="url(#trailg)"/><rect x="-80" y="-24" width="160" height="48" rx="24" fill="#E5484D"/><text x="0" y="9" text-anchor="middle" fill="#fff" font-size="22" font-weight="800" letter-spacing="2">GHOSTED</text></g>
+      <g class="spark" id="k1" opacity="0"><line x1="0" y1="0" x2="34" y2="-30" stroke="#FFF3CF" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="44" y2="4" stroke="#FFF3CF" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="28" y2="34" stroke="#FFF3CF" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="-8" y2="-42" stroke="#FFF3CF" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="-6" y2="40" stroke="#FFF3CF" stroke-width="5" stroke-linecap="round"/></g>
+      <g class="spark" id="k2" opacity="0"><line x1="0" y1="0" x2="34" y2="-30" stroke="#FFF3CF" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="44" y2="4" stroke="#FFF3CF" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="28" y2="34" stroke="#FFF3CF" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="-8" y2="-42" stroke="#FFF3CF" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="-6" y2="40" stroke="#FFF3CF" stroke-width="5" stroke-linecap="round"/></g>
+      <g class="spark" id="k3" opacity="0"><line x1="0" y1="0" x2="34" y2="-30" stroke="#C4B5FD" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="44" y2="4" stroke="#C4B5FD" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="28" y2="34" stroke="#C4B5FD" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="-8" y2="-42" stroke="#C4B5FD" stroke-width="5" stroke-linecap="round"/><line x1="0" y1="0" x2="-6" y2="40" stroke="#C4B5FD" stroke-width="5" stroke-linecap="round"/></g>
+    </svg>
+  </div>
+  <div class="cap" id="c1">Every lead starts at the <span class="k p">bottom.</span></div>
+  <div class="cap" id="c2">No follow-up? <span class="k r">Back to the start.</span></div>
+  <div class="cap" id="c3">A <span class="k p">system</span> catches every one.</div>
+  <div class="cap" id="c4"><span class="k gold" style="font-size:96px">Signed.</span></div>
+  <div class="vig"></div><div class="grain"></div>
+</div>
+<script>
+document.head.insertAdjacentHTML('beforeend', `<style>${STORY.css}</style>`);
+document.getElementById('figslot').outerHTML = STORY.figure('fig');
+document.fonts.ready.then(() => {
+  const tl = gsap.timeline({ paused: true });
+  const F = '#fig', W = '#world';
+  // where the feet stand: floor, then the tops of the steps
+  const S = [[440, 860], [610, 860], [790, 770], [970, 680], [1150, 590], [1310, 500]];
+  // the surface under any x: floor, then the top of each step
+  const floor = (x) => (x < 700 ? 860 : x < 880 ? 770 : x < 1060 ? 680 : x < 1240 ? 590 : x < 1540 ? 500 : 860);
+  STORY.init(tl, F, 0, S[0][0], floor);
+  window.__story = { id: 'S01-climb', fig: F, world: W, floor, origin: [960, 640] };   // for studio/story-contact.mjs
+  tl.set(W, { scale: 1.16, x: 30, y: -10, transformOrigin: '960px 640px' }, 0);
+  tl.set('.dart', { x: 2200, y: 640 }, 0);
+  tl.set('.spark', { opacity: 0 }, 0);
+  const rail = document.getElementById('rail'), L = rail.getTotalLength();
+  tl.set(rail, { strokeDasharray: L, strokeDashoffset: L }, 0);
+  const sig = document.getElementById('sig'), SL = sig.getTotalLength();
+  tl.set(sig, { strokeDasharray: SL, strokeDashoffset: SL }, 0);
+
+  // 1. every lead starts at the bottom and climbs
+  STORY.line(tl, 0.3, '#c1');
+  tl.to(F + ' .head', { rotation: -16, duration: 0.4, ease: 'sine.inOut', yoyo: true, repeat: 1 }, 0.2);   // looks up the steps first
+  const l1 = STORY.climb(tl, F, 0.95, [S[1][0], S[2][0], S[3][0]]);
+  tl.to(W, { y: 40, x: -20, duration: 1.4, ease: 'sine.inOut' }, 1.2);   // camera rises with it
+
+  // 2. ghosted: knocked all the way back down
+  STORY.line(tl, l1 + 0.35, '#c2', '#c1');
+  const h1 = l1 + 0.55;
+  STORY.fly(tl, '#d1', h1 - 0.42, [2200, S[3][1] - 105], [S[3][0] + 70, S[3][1] - 105]);
+  tl.set('#k1', { x: S[3][0] + 0, y: S[3][1] - 105 }, h1);
+  STORY.sparks(tl, '#k1', h1);
+  STORY.drop(tl, '#d1', h1 + 0.02, [S[3][0] + 260, 900], 140);
+  const u1 = STORY.knockdown(tl, F, h1, S[0][0], W);
+  tl.to(W, { y: 0, x: 30, duration: 0.9, ease: 'sine.inOut' }, h1 + 0.2);
+  tl.fromTo('#again', { opacity: 0 }, { opacity: 1, duration: 0.3 }, h1 + 1.1);
+  tl.to('#again', { opacity: 0, duration: 0.3 }, u1 + 0.5);
+
+  // 3. tries again, knocked off sooner
+  const l2 = STORY.climb(tl, F, u1 + 0.1, [S[1][0], S[2][0]]);
+  const h2 = l2 + 0.4;
+  STORY.fly(tl, '#d2', h2 - 0.38, [2200, S[2][1] - 105], [S[2][0] + 70, S[2][1] - 105], 0.38);
+  tl.set('#k2', { x: S[2][0], y: S[2][1] - 105 }, h2);
+  STORY.sparks(tl, '#k2', h2);
+  STORY.drop(tl, '#d2', h2 + 0.02, [S[2][0] + 240, 900], -150);
+  const u2 = STORY.knockdown(tl, F, h2, S[0][0], W);
+
+  // 4. the system: a rail draws up the steps; it watches it go up
+  STORY.line(tl, u2 + 0.1, '#c3', '#c2');
+  STORY.pose(tl, F, u2 + 0.2, 'look', 0.4, 'sine.inOut');
+  tl.to(rail, { strokeDashoffset: 0, duration: 1.0, ease: 'power2.inOut' }, u2 + 0.25);
+  tl.to(F + ' .head', { rotation: -30, duration: 0.9, ease: 'sine.inOut' }, u2 + 0.3);
+  tl.fromTo('#sys', { opacity: 0, scale: 0.6, transformOrigin: '50% 50%' }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(2)' }, u2 + 0.9);
+  tl.to(F + ' .head', { rotation: 0, duration: 0.2, ease: 'power2.out' }, u2 + 1.0);
+  STORY.pose(tl, F, u2 + 1.0, 'stand', 0.2, 'power2.out');
+
+  // 5. climbs again; this time the rail stops the dart
+  const c3 = u2 + 1.2;
+  const l3a = STORY.hop(tl, F, c3, S[1][0]);
+  const l3b = STORY.hop(tl, F, l3a + 0.1, S[2][0], true);
+  const block = l3b + 0.1;
+  STORY.fly(tl, '#d3', block - 0.4, [2200, 560], [1146, 560], 0.4);   // stopped by the rail's riser at x 1060
+  tl.set('#k3', { x: 1066, y: 560 }, block);
+  STORY.sparks(tl, '#k3', block);
+  tl.to(rail, { strokeWidth: 14, duration: 0.08, yoyo: true, repeat: 1, ease: 'power2.out' }, block);
+  STORY.drop(tl, '#d3', block + 0.02, [1330, 940], 220);
+  tl.to(W, { y: 70, x: -60, duration: 2.0, ease: 'sine.inOut' }, l3a);
+  const l3c = STORY.hop(tl, F, block + 0.12, S[3][0], true);
+  const l3d = STORY.hop(tl, F, l3c + 0.1, S[4][0], true);
+  const top = STORY.hop(tl, F, l3d + 0.1, S[5][0], true);
+  STORY.settle(tl, F, top + 0.1);
+
+  // 6. the payoff: the contract signs itself and goes gold
+  tl.to('#doc', { stroke: '#E8C77A', duration: 0.3 }, top + 0.35);
+  tl.to(sig, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.out' }, top + 0.4);
+  tl.to('#goalGlow', { opacity: 0.55, duration: 0.5 }, top + 0.45);
+  tl.to('#top', { opacity: 1, duration: 0.4 }, top + 0.45);
+  STORY.cheer(tl, F, top + 0.45);
+  STORY.line(tl, top + 0.55, '#c4', '#c3');
+  // pull back to the whole picture
+  tl.to(W, { scale: 1.0, x: 0, y: 30, duration: 1.7, ease: 'power2.inOut' }, top + 0.7);
+  tl.to({}, { duration: 0.01 }, 14.99);
+  window.__timelines = window.__timelines || {};
+  window.__timelines['S01-climb'] = tl;
+  window.__storyEnd = top + 2.4;
+  if (location.search.includes('play')) { tl.eventCallback('onComplete', () => setTimeout(() => tl.restart(), 900)); tl.play(); }
+});
+</script></body></html>

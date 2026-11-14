@@ -513,3 +513,34 @@ tier list above, sorted into two sides instead of tiers. Built as the `do-or-don
   auto icon, `enter` for do and `glitch` for don't as they land. Script it in the comparison
   shape with `[SIDE]` on each verdict so the cards time themselves.
 
+
+## Moonshot Motion (@moonshotmotion): one sentence acted out as a scene
+
+instagram.com/moonshotmotion · four reels studied (Nov 2026), 9:16, 14-19 s each, music only. The strongest by far is
+"Discipline > Motivation" (13k likes vs a few hundred for the rest). Bryan wants this for any time he tells a story or a scenario.
+
+- **The look:** near-black stage, one floor line with a faint reflection, a single faceless white mannequin (round head, no
+  features), a few props drawn in white or dark grey. Gold is the only colour, and only on the thing wanted or won (the trophy,
+  the "SPORTS CAR" word, "It's forging you."). Red and green appear only as signals (a stop light, "61 days left").
+- **The text:** one short line at a time, centred at the top, in a monospace typewriter face, sometimes typed on letter by
+  letter. The key word in the line turns gold. The last line, the moral, is all gold.
+- **Four scene shapes:**
+  1. *Metaphor machine* ("Discipline > Motivation"): abstract words become labelled objects. The figure rides a lift up a pole
+     toward a gold trophy; a "DISCIPLINE" pill pushes him up; "BAD HABITS" darts knock him down; "TRY AGAIN" appears; he finally
+     reaches the top and the title glows. The struggle repeats 3-4 times before the win.
+  2. *Process* ("It's forging you"): an action loops while the captions explain it (hammer, sparks, back into the fire), then
+     one change of state pays it off (steam, the blade lifts, a star glint).
+  3. *Data with a body* (the year dial): a number counts while the figure rides the thing being counted; it zooms out to show
+     the whole, and a green countdown lands with a typed line.
+  4. *Chain comparison* ("I wish I had..."): each figure looks at the next one up along a dashed gold sight line, what they
+     want outlined in gold; the camera pulls back to reveal the whole chain, and the moral lands.
+- **Pacing:** 14 s, a new beat every 1.5-2 s, nothing still. The reveal is a pull-back to the wide shot in the last 3 s.
+- **Sound:** a busy, light music bed (the ear test hears chiptune or glitch-hop, chimes, a music box); hits are soft and
+  musical, no booms.
+- **Why it works:** the viewer recognises themselves in the figure before the moral is said. Abstract advice becomes a thing you
+  can watch fail and succeed, and the gold tells you where to look.
+- **For Bryan:** use it whenever he tells a story or a scenario ("imagine...", "a client of mine...", "let's say..."). Rebuild it
+  in his look: purple structure and floor glow, gold for the goal or result, Inter for the line with the key word in gold Playfair.
+  Contractor props instead of trophies: a phone that won't ring, a pile of texts, a calendar, a signed contract. Start from
+  `assets/boards/story/` and the four shapes above; write a new scene for each story rather than reusing one.
+  The kit solves ground contact; check every scene with `node studio/story-contact.mjs <scene>` (0 frames into the surface).

@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Script · Video Studio</title>
+<link rel="stylesheet" href="/studio.css">
+<style>
+  /* Script page: pick a planned video on the left, outline and write its script on the right. Purple is structure, gold is placeholders. */
+  :root { --gold: #e8c77a; --loop: #e8c77a; }
+  .navseg { justify-self: center; display: inline-flex; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 3px; gap: 2px; }
+  .navseg a { color: var(--muted); font-size: 12.5px; padding: 4px 14px; border-radius: 7px; text-decoration: none; font-weight: 600; }
+  .navseg a.on { background: var(--card); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+  .sc-wrap { max-width: 1320px; margin: 0 auto; padding: 24px 20px 80px; display: grid; gap: 22px; }
+  .sc-wrap > * { min-width: 0; }
+  .sc-hero h1 { margin: 0; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; font-size: clamp(28px, 4vw, 40px); }
+  .sc-hero h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--accent-hi); }
+  .sc-hero .lede { margin: 10px 0 0; }
+  .sc { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 18px; align-items: start; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .panel h2 { margin: 0; font-size: 15px; }
+
+  /* video picker */
+  .picker { position: sticky; top: 70px; max-height: calc(100vh - 90px); overflow: auto; }
+  .picker .mgroup { display: grid; gap: 4px; }
+  .picker .mname { font: 600 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 8px 2px 2px; }
+  .pick { text-align: left; display: grid; gap: 3px; padding: 8px 10px; border-radius: 9px; background: var(--card); border: 1px solid var(--line); font-size: 13px; }
+  .pick b { font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+  .pick.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .sst { justify-self: start; font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--line); color: var(--muted); }
+  .sst.out { background: #2a2140; color: var(--accent-hi); }
+  .sst.done { background: #163326; color: #6fd6a4; }
+  .sst.q { background: var(--accent-soft); color: var(--accent); }
+  .picker .empty { color: var(--muted); font-size: 13px; }
+  .picker .mname { display: flex; justify-content: space-between; gap: 8px; }
+  .picker .mname i { font-style: normal; letter-spacing: 0; }
+  .addv { display: flex; gap: 6px; }
+  .addv input { flex: 1; min-width: 0; font-size: 13px; padding: 6px 8px; }
+  .addv button { font-size: 12px; padding: 6px 10px; white-space: nowrap; }
+  .addv-msg { font-size: 12px; color: #f08a8a; margin: 0 2px; }
+
+  /* pre-write gate check */
+  .gate { display: grid; gap: 14px; }
+  .gate h3 { margin: 0; font-size: 17px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .gate .gstate { font: 600 11px var(--mono); padding: 2px 8px; border-radius: 99px; background: var(--accent-soft); color: var(--accent-hi); }
+  .gate .gstate.ok { background: #163326; color: #6fd6a4; }
+  .checks { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .checks li { display: grid; grid-template-columns: 22px 150px minmax(0, 1fr); gap: 8px; font-size: 13.5px; align-items: baseline; }
+  .checks li b { color: var(--muted); font-weight: 600; }
+  .checks li small { display: block; color: var(--gold); font-size: 12px; }
+  .gsec { display: grid; gap: 8px; }
+  .gsec > h4 { margin: 6px 0 0; font: 600 11.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent-hi); }
+  .gopt { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); cursor: pointer; }
+  .gopt:has(input:checked) { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .gopt input[type=radio] { margin-top: 3px; accent-color: var(--accent); }
+  .gopt b { font-weight: 600; }
+  .gopt .star { color: var(--gold); margin-right: 4px; }
+  .gopt p { margin: 3px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+  .gopt .needs { margin-top: 8px; display: grid; gap: 4px; }
+  .gopt .needs span { font-size: 12px; color: var(--gold); }
+  .gopt .needs textarea { min-height: 54px; font-size: 13px; }
+  @media (max-width: 640px) { .checks li { grid-template-columns: 22px minmax(0, 1fr); } .checks li > span:last-child { grid-column: 2; } }
+
+  /* the writing desk */
+  .desk { display: grid; gap: 14px; min-width: 0; }
+  .deskhead { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+  .deskhead h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; text-wrap: balance; }
+  .deskhead .muted a { color: var(--accent-hi); }
+  .field { display: grid; gap: 4px; min-width: 0; }
+  .field > span { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .field input, .field textarea, .field select { width: 100%; }
+  textarea { resize: vertical; min-height: 70px; }
+  .brief { display: grid; grid-template-columns: minmax(0, 1fr) 260px 110px; gap: 12px; align-items: start; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .msg.ok { color: var(--ok); }
+  .waiting { background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; display: flex; gap: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+  .waiting code { background: var(--bg); border-radius: 6px; padding: 2px 8px; }
+  .sheetbar { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+  .sheetbar .actions { padding-bottom: 6px; }
+  .sheetbar .sheet-tabs { border-bottom: 0; }
+  .editor { width: 100%; min-height: 520px; font: 14px/1.6 var(--mono); background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 14px; resize: vertical; }
+  .edhint { font-size: 12.5px; color: var(--muted); margin: 0 0 8px; }
+  .sheet-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); }
+  .sheet-tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--muted); padding: 8px 12px; font-weight: 600; }
+  .sheet-tabs button.on { color: var(--text); border-bottom-color: var(--accent); }
+  .sheet { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 24px clamp(16px, 3vw, 40px); min-height: 420px; }
+  .sheet .t { font-size: 22px; font-weight: 800; letter-spacing: -.02em; margin: 0 0 4px; text-wrap: balance; }
+  .sheet h4 { font-size: 15px; font-weight: 800; margin: 24px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--accent); text-wrap: balance; }
+  .sheet h5 { font: 600 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; margin: 16px 0 6px; color: var(--accent-hi); display: flex; gap: 8px; align-items: center; }
+  .sheet h5.loop { color: var(--loop); }
+  .sheet h5.loop::before { content: ""; width: 7px; height: 7px; border-radius: 50%; border: 2px solid var(--loop); }
+  .sheet h5.pay::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+  .sheet p { margin: 0 0 7px; max-width: 70ch; }
+  .cue { font: 600 10.5px var(--mono); padding: 1px 6px; border-radius: 5px; background: var(--accent-soft); color: var(--accent-hi); margin-left: 6px; white-space: nowrap; }
+  .cue.ph { background: #3a2a10; color: var(--gold); }
+  .sheet .none { color: var(--muted); }
+  .how { font-size: 13px; color: var(--muted); display: grid; gap: 4px; }
+  .how b { color: var(--text); font-weight: 600; }
+  details.bp summary { cursor: pointer; font-weight: 600; }
+  details.bp textarea { min-height: 260px; width: 100%; margin-top: 10px; font-size: 13px; }
+  .nopick { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .nopick a { color: var(--accent-hi); }
+  @media (max-width: 960px) { .sc { grid-template-columns: 1fr; } .picker { position: static; max-height: none; } .brief { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="top bar-top">
+  <a class="brand" href="/"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.5v11l9-5.5z" fill="currentColor"/></svg></span>Video Studio</a>
+  <nav class="navseg" aria-label="Studio"><a href="/plan">Plan</a><a href="/script" class="on" aria-current="page">Script</a><a href="/">Edit</a></nav>
+  <span class="status" id="status"><i></i><span>Ready</span></span>
+</header>
+
+<main class="sc-wrap">
+  <section class="sc-hero">
+    <p class="eyebrow">Script · long form</p>
+    <h1>Write it <em>your way</em>, then film it.</h1>
+    <p class="lede">Pick a video from your plan. Claude outlines and writes it in the style of your finished scripts, with Joe Aquino's speaking pattern and cue tags for the edit.</p>
+  </section>
+
+  <section class="sc">
+    <aside class="panel picker" aria-label="Your planned videos">
+      <h2>Your videos</h2>
+      <div id="picker"><span class="empty">Loading…</span></div>
+    </aside>
+
+    <div class="desk" id="desk">
+      <div class="panel nopick" id="nopick">Pick a video on the left to write its script.<br>No videos yet? Add them on the <a href="/plan">Plan</a> tab, four a month.</div>
+      <div id="work" hidden style="display:grid;gap:14px;min-width:0">
+        <div class="panel">
+          <div class="deskhead">
+            <div><h2 id="wTitle"></h2><span class="muted" id="wMeta"></span></div>
+            <a class="button ghost" id="toPlan" href="/plan">Open in Plan</a>
+          </div>
+          <form id="briefForm" style="display:grid;gap:12px">
+            <div class="brief">
+              <label class="field"><span>Angle, stories and real proof</span><textarea id="eNotes" placeholder="Real numbers, client stories, screenshots you have. Anything missing becomes a placeholder, never a made-up number."></textarea></label>
+              <label class="field"><span>Call to action</span><input type="text" id="eCta" placeholder="Book a call below"></label>
+              <label class="field"><span>Acts</span><select id="eActs"><option>2</option><option>3</option><option>4</option></select></label>
+            </div>
+            <div class="actions"><button type="submit">Save brief</button><span class="msg" id="briefMsg"></span></div>
+          </form>
+          <div id="waiting" class="waiting" hidden></div>
+          <div class="actions" id="askBtns">
+            <button type="button" data-ask="outline">1. Outline &amp; check</button>
+            <button type="button" class="primary" data-ask="script">2. Write script</button>
+            <button type="button" data-ask="lock">Story-lock pass</button>
+            <span style="flex:1"></span>
+            <button type="button" class="ghost" id="copyBtn">Copy script</button>
+          </div>
+          <div class="actions"><input type="text" id="reviseNote" style="flex:1;min-width:200px" placeholder="Change something: punchier hook, add a myth-bust in Act 2…" aria-label="What to change"><button type="button" id="reviseBtn">Revise</button></div>
+          <p class="muted" style="margin:0">Buttons queue the work. Then say <b>run my studio jobs</b> in Claude Code, the same as for edits. This page updates by itself when it's done. <b>Write script</b> runs the pre-write gate check first: you pick the proof for each section, then it writes.</p>
+        </div>
+        <div class="panel gate" id="gatePanel" hidden></div>
+        <div style="display:grid;gap:10px;min-width:0">
+          <div class="sheetbar">
+            <div class="sheet-tabs" role="tablist"><button role="tab" data-tab="script">Script</button><button role="tab" data-tab="outline">Outline</button></div>
+            <div class="actions" id="editBtns">
+              <button type="button" id="editBtn">✎ Edit</button>
+              <button type="button" class="primary" id="saveBtn" hidden>Save script</button>
+              <button type="button" class="ghost" id="cancelBtn" hidden>Cancel</button>
+              <span class="msg" id="saveMsg"></span>
+            </div>
+          </div>
+          <article class="sheet" id="sheet"></article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="how">
+      <span><b>How scripts are written:</b> your three finished scripts are the model (format, rhythm, faith, CTA), Joe Aquino's speaking pattern sets how lines sound, and Kallaway's rules handle retention. Rules: <code>styles/LONGFORM-SCRIPT.md</code>.</span>
+      <span>Real proof only: anything you don't give becomes a gold placeholder, never a made-up number.</span>
+    </div>
+    <details class="bp" id="bp">
+      <summary>Your blueprint <span class="muted">· what every script is written from</span></summary>
+      <textarea id="bpText" aria-label="Blueprint"></textarea>
+      <div class="row" style="margin-top:8px"><button type="button" id="bpSave">Save blueprint</button><span class="msg" id="bpMsg">Private: kept in plans/blueprint.md, never committed.</span></div>
+    </details>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const REQ = { outline: 'Outline & check', gate: 'Pre-write gate check', script: 'Write the script', lock: 'Story-lock pass', revise: 'Revise' };
+let plans = [], current = null, tab = 'script', poll = null;
+
+const api = async (url, body) => {
+  const r = await fetch(url, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || 'Something went wrong');
+  return j;
+};
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const chosenTitle = (p) => p.titles?.find((t) => t.chosen)?.text;
+// The same stage the Plan page shows. Past scripting (Filming → Posted) shows that stage, script or not.
+const STAGE = { idea: 'Idea', outlined: 'Outlined', scripted: 'Scripted', filming: 'Filming', editing: 'Editing', ready: 'Ready', posted: 'Posted' };
+const ORDER = Object.keys(STAGE);
+const scriptState = (p) => p.request ? ['q', REQ[p.request.kind] + ' · queued']
+  : ORDER.indexOf(p.status) > ORDER.indexOf('scripted') ? ['done', STAGE[p.status] + (p.scriptPreview ? '' : ' · no script saved')]
+  : p.scriptPreview ? ['done', 'Scripted'] : p.hasOutline ? ['out', 'Outlined'] : ['', 'No script'];
+
+// Every month is listed, so any month can be scripted ahead (no need to post the one before).
+// A month with an open slot gets a one-line "add a video" box; the new video opens here, ready to script.
+const PER_MONTH = 4, addDrafts = {};
+function addRow(m) {
+  const id = 'add' + m, f = el('form', 'addv'); f.noValidate = true;
+  const inp = Object.assign(el('input'), { type: 'text', id, value: addDrafts[m] || '', placeholder: 'Working title' });
+  inp.setAttribute('aria-label', `Month ${m}: working title of a new video`);
+  inp.oninput = () => { addDrafts[m] = inp.value; };
+  const btn = Object.assign(el('button', 'ghost', 'Add'), { type: 'submit' });
+  f.append(inp, btn);
+  f.onsubmit = async (e) => {
+    e.preventDefault();
+    const title = (addDrafts[m] || '').trim();
+    f.parentElement.querySelector('.addv-msg')?.remove();
+    if (!title) { f.after(el('p', 'addv-msg', 'Give it a working title first.')); inp.focus(); return; }
+    btn.disabled = true;
+    try {
+      const p = await api('/api/plans', { title, month: m, cta: 'Point to a related video, then: book a call below.', acts: 3 });
+      delete addDrafts[m];
+      await load(); await pick(p.id);
+    } catch (err) { btn.disabled = false; f.after(el('p', 'addv-msg', err.message)); }
+  };
+  return f;
+}
+function renderPicker() {
+  const box = $('picker');
+  const act = document.activeElement, keep = act?.id && box.contains(act) ? { id: act.id, s: act.selectionStart, e: act.selectionEnd } : null;
+  box.replaceChildren();
+  for (let m = 1; m <= 12; m++) {
+    const items = plans.filter((p) => (p.month || 1) === m).sort((a, b) => (a.due || '9').localeCompare(b.due || '9') || a.created.localeCompare(b.created));
+    const g = el('div', 'mgroup'), name = el('div', 'mname', 'Month ' + m);
+    name.append(el('i', null, `${items.length}/${PER_MONTH}`));
+    g.append(name);
+    for (const p of items) {
+      const b = el('button', 'pick' + (current?.id === p.id ? ' on' : '')); b.type = 'button';
+      const [cls, txt] = scriptState(p);
+      b.append(el('b', null, chosenTitle(p) || p.title), el('span', 'sst ' + cls, txt));
+      b.onclick = () => pick(p.id);
+      g.append(b);
+    }
+    if (items.length < PER_MONTH) g.append(addRow(m));
+    box.append(g);
+  }
+  // Polling re-renders the list: don't lose a title being typed.
+  if (keep) { const f = document.getElementById(keep.id); if (f) { f.focus(); try { f.setSelectionRange(keep.s, keep.e); } catch {} } }
+}
+function setStatus() {
+  const busy = plans.some((p) => p.request);
+  const s = $('status'); s.className = 'status' + (busy ? ' busy' : '');
+  s.lastElementChild.textContent = busy ? 'Waiting on Claude' : 'Ready';
+}
+
+async function load() {
+  plans = (await api('/api/plans')).plans;
+  if (current) { const fresh = await api('/api/plans/' + current.id).catch(() => null); fresh ? show(fresh) : (current = null); }
+  renderPicker(); setStatus();
+  if (!current) { $('nopick').hidden = false; $('work').hidden = true; }
+  clearInterval(poll);
+  if (plans.some((p) => p.request)) poll = setInterval(load, 5000);
+}
+async function pick(id) {
+  show(await api('/api/plans/' + id)); renderPicker();
+  try { history.replaceState(null, '', '?plan=' + id); } catch {}
+}
+function show(p) {
+  const same = current?.id === p.id; current = p;
+  $('nopick').hidden = true; $('work').hidden = false;
+  $('wTitle').textContent = chosenTitle(p) || p.title;
+  $('wMeta').textContent = `Month ${p.month || 1} · ${STAGE[p.status] || p.status}${p.due ? ' · due ' + new Date(p.due + 'T12:00').toLocaleDateString([], { month: 'short', day: 'numeric' }) : ''}${chosenTitle(p) && chosenTitle(p) !== p.title ? ' · working title: ' + p.title : ''}`;
+  $('toPlan').href = '/plan?plan=' + p.id;
+  if (!same || !document.activeElement?.closest('#briefForm')) { $('eNotes').value = p.notes || ''; $('eCta').value = p.cta || ''; $('eActs').value = String(p.acts || 3); }
+  const w = $('waiting');
+  if (p.request) {
+    w.hidden = false; w.replaceChildren();
+    const line = el('div'); line.append(el('b', null, REQ[p.request.kind] + ' is queued. '), 'Say ', el('code', null, 'run my studio jobs'), ' in Claude Code.');
+    const cancel = el('button', 'ghost', 'Cancel'); cancel.type = 'button';
+    cancel.onclick = async () => { await api(`/api/plans/${p.id}/cancel`, {}); load(); };
+    w.append(line, cancel);
+  } else w.hidden = true;
+  document.querySelectorAll('#askBtns button[data-ask], #reviseBtn').forEach((b) => (b.disabled = !!p.request));
+  if (!same) { tab = p.script ? 'script' : p.outline ? 'outline' : 'script'; editing = null; }
+  renderGate(p);
+  renderSheet();
+}
+
+// Editing the script or outline by hand: the text box replaces the view until Save or Cancel.
+// The page refreshes itself while Claude works; an open editor is left alone so nothing typed is lost.
+let editing = null;   // null | 'script' | 'outline'
+function startEdit() {
+  editing = tab; renderSheet();
+  const t = $('editor'); t.focus(); t.setSelectionRange(0, 0);
+}
+function stopEdit() { editing = null; renderSheet(); }
+$('editBtn').onclick = startEdit;
+$('cancelBtn').onclick = stopEdit;
+$('saveBtn').onclick = async () => {
+  const text = $('editor').value, what = editing;
+  $('saveBtn').disabled = true;
+  try {
+    show(await api('/api/plans/' + current.id, { [what]: text }));
+    editing = null; renderSheet(); load();   // reload the list so its "Scripted" label updates
+    $('saveMsg').className = 'msg ok'; $('saveMsg').textContent = `${what === 'script' ? 'Script' : 'Outline'} saved.`;
+    setTimeout(() => { $('saveMsg').textContent = ''; }, 4000);
+  } catch (err) { $('saveMsg').className = 'msg err'; $('saveMsg').textContent = err.message; }
+  finally { $('saveBtn').disabled = false; }
+};
+const TEMPLATE = (p) => `# ${chosenTitle(p) || p.title}\n## INTRO\n\n## ACT 1 — \n\n## ACT 2 — \n\n## ACT 3 — \n\n## RECAP\n\n## CTA\n`;
+
+// Script / outline: # title, ## section, ### beat, plain = spoken; [TAGS] become chips, placeholders in gold.
+function renderSheet() {
+  document.querySelectorAll('.sheet-tabs button').forEach((b) => { const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  const word = tab === 'script' ? 'script' : 'outline';
+  $('editBtn').hidden = !!editing; $('saveBtn').hidden = $('cancelBtn').hidden = !editing;
+  $('saveBtn').textContent = `Save ${word}`;
+  $('editBtn').textContent = (tab === 'script' ? current.script : current.outline)?.trim() ? `✎ Edit ${word}` : `✎ Write your own ${word}`;
+  const sheet = $('sheet');
+  if (editing) {
+    if ($('editor') && $('editor').dataset.what === editing) return;   // already open: keep the text and cursor
+    sheet.replaceChildren();
+    const hint = el('p', 'edhint', '# title · ## section heading · ### sub-section · one spoken line per line · cue tags like [HOOK] or [NUMBER: $30/day] at the end of a line.');
+    const ta = Object.assign(el('textarea', 'editor'), { id: 'editor', value: (editing === 'script' ? current.script : current.outline) || (editing === 'script' ? TEMPLATE(current) : '') });
+    ta.dataset.what = editing; ta.setAttribute('aria-label', `Edit the ${word}`);
+    ta.onkeydown = (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); $('saveBtn').click(); } };
+    sheet.append(hint, ta);
+    return;
+  }
+  sheet.replaceChildren();
+  const md = (tab === 'script' ? current.script : current.outline) || '';
+  if (!md.trim()) {
+    sheet.append(el('p', 'none', tab === 'script'
+      ? 'No script yet. "1. Outline & check" tests the points first; "2. Write script" has Claude write it; "✎ Write your own script" lets you type or paste it yourself.'
+      : 'No outline yet. "1. Outline & check" plans the sections and marks each point NEW or COMMON before any script is written.'));
+    return;
+  }
+  for (const raw of md.split(/\r?\n/)) {
+    const line = raw.trim(); if (!line) continue;
+    let node;
+    if (line.startsWith('### ')) { const t = line.slice(4); node = el('h5', /^open loop/i.test(t) ? 'loop' : /^payoff/i.test(t) ? 'pay' : null, t); }
+    else if (line.startsWith('## ')) node = el('h4', null, line.slice(3));
+    else if (line.startsWith('# ')) node = el('p', 't', line.slice(2));
+    else {
+      node = el('p');
+      for (const part of line.split(/(\[[A-Z]+(?::[^\]]*)?\])/)) {
+        if (/^\[[A-Z]+(?::[^\]]*)?\]$/.test(part)) node.append(el('span', 'cue' + (/^\[PLACEHOLDER/.test(part) ? ' ph' : ''), part.slice(1, -1)));
+        else if (part) node.append(part);
+      }
+    }
+    sheet.append(node);
+  }
+}
+document.querySelectorAll('.sheet-tabs button').forEach((b) => (b.onclick = () => {
+  if (editing && $('editor')?.value !== ((editing === 'script' ? current.script : current.outline) || '') && !confirmLeave()) return;
+  tab = b.dataset.tab; editing = null; renderSheet();
+}));
+// Switching away from an unsaved edit: the first click warns, the second goes.
+let leaveArmed = false;
+function confirmLeave() {
+  if (leaveArmed) { leaveArmed = false; return true; }
+  leaveArmed = true; $('saveMsg').className = 'msg err'; $('saveMsg').textContent = 'Unsaved changes. Save first, or click again to discard.';
+  setTimeout(() => { leaveArmed = false; }, 4000);
+  return false;
+}
+
+const brief = () => ({ notes: $('eNotes').value, cta: $('eCta').value, acts: $('eActs').value });
+$('briefForm').onsubmit = async (e) => {
+  e.preventDefault();
+  try { show(await api('/api/plans/' + current.id, brief())); $('briefMsg').className = 'msg ok'; $('briefMsg').textContent = 'Saved.'; }
+  catch (err) { $('briefMsg').className = 'msg err'; $('briefMsg').textContent = err.message; }
+};
+async function ask(kind, note) {
+  try {
+    await api('/api/plans/' + current.id, brief());
+    await api(`/api/plans/${current.id}/request`, { kind, note });
+    $('briefMsg').textContent = ''; load();
+  } catch (err) { $('briefMsg').className = 'msg err'; $('briefMsg').textContent = err.message; }
+}
+// "Write script" goes through the pre-write gate first; once the gate is confirmed, the gate panel's button writes it.
+document.querySelectorAll('#askBtns button[data-ask]').forEach((b) => (b.onclick = () => {
+  if (b.dataset.ask === 'script' && !current.gate?.confirmed) return ask('gate');
+  ask(b.dataset.ask);
+}));
+
+// ---- Pre-write gate check: Claude's checks + one proof option per section; Bryan picks, then it writes.
+const gateDrafts = {};   // plan id -> { section id: { option, fact } }, so polling never loses a pick or typed fact
+function renderGate(p) {
+  const box = $('gatePanel'), g = p.gate;
+  if (!g?.sections?.length) { box.hidden = true; box.replaceChildren(); return; }
+  const act = document.activeElement, keep = act?.id && box.contains(act) ? { id: act.id, s: act.selectionStart, e: act.selectionEnd } : null;
+  const d = (gateDrafts[p.id] ||= structuredClone(g.picks || {}));
+  for (const sec of g.sections) d[sec.id] ||= { option: (sec.options.find((o) => o.star) || sec.options[0])?.id };
+  box.hidden = false; box.replaceChildren();
+
+  const h = el('h3', null, 'Pre-write gate check');
+  h.append(el('span', 'gstate' + (g.confirmed ? ' ok' : ''), g.confirmed ? 'Confirmed ' + new Date(g.confirmed).toLocaleDateString([], { month: 'short', day: 'numeric' }) : 'Pick the proof for each section'));
+  box.append(h);
+  if (g.checks?.length) {
+    const ul = el('ul', 'checks');
+    for (const c of g.checks) {
+      const li = el('li'); li.append(el('span', null, c.ok ? '✅' : '⚠️'), el('b', null, c.label));
+      const v = el('span', null, c.value || ''); if (c.note) v.append(el('small', null, c.note));
+      li.append(v); ul.append(li);
+    }
+    box.append(ul);
+  }
+  for (const sec of g.sections) {
+    const s = el('fieldset', 'gsec'); s.style.cssText = 'border:0;margin:0;padding:0;min-width:0';
+    s.append(Object.assign(el('legend'), { hidden: true, textContent: sec.name }), el('h4', null, sec.name));
+    for (const o of sec.options) {
+      const lab = el('label', 'gopt');
+      const r = Object.assign(el('input'), { type: 'radio', name: 'g-' + sec.id, value: o.id, checked: d[sec.id].option === o.id, id: `g-${sec.id}-${o.id}` });
+      r.onchange = () => { d[sec.id].option = o.id; renderGate(current); };
+      const body = el('div'); const t = el('b');
+      if (o.star) t.append(el('span', 'star', '⭐'));
+      t.append(o.label); body.append(t);
+      if (o.detail) body.append(el('p', null, o.detail));
+      if (o.needs && d[sec.id].option === o.id) {
+        const n = el('div', 'needs'); n.append(el('span', null, o.needs + ' Leave it blank and it stays a gold placeholder, never a made-up number.'));
+        const ta = Object.assign(el('textarea'), { id: `gf-${sec.id}`, value: d[sec.id].fact || '', placeholder: 'The real fact, in your words' });
+        ta.setAttribute('aria-label', `${sec.name}: ${o.needs}`);
+        ta.oninput = () => { d[sec.id].fact = ta.value; };
+        n.append(ta); body.append(n);
+      }
+      lab.append(r, body); s.append(lab);
+    }
+    box.append(s);
+  }
+  const row = el('div', 'actions'), msg = el('span', 'msg');
+  const go = Object.assign(el('button', 'primary', g.confirmed ? 'Update picks and rewrite' : 'Confirm and write script'), { type: 'button', disabled: !!p.request });
+  go.onclick = async () => {
+    go.disabled = true;
+    try { await api('/api/plans/' + p.id, brief()); show(await api(`/api/plans/${p.id}/gate`, { picks: d })); delete gateDrafts[p.id]; load(); }
+    catch (err) { go.disabled = false; msg.className = 'msg err'; msg.textContent = err.message; }
+  };
+  const redo = Object.assign(el('button', 'ghost', 'Redo gate check'), { type: 'button', disabled: !!p.request });
+  redo.onclick = () => { delete gateDrafts[p.id]; ask('gate'); };
+  row.append(go, redo, msg); box.append(row);
+  if (keep) { const f = document.getElementById(keep.id); if (f) { f.focus(); try { f.setSelectionRange(keep.s, keep.e); } catch {} } }
+}
+$('reviseBtn').onclick = () => { ask('revise', $('reviseNote').value); $('reviseNote').value = ''; };
+$('copyBtn').onclick = async () => {
+  // Teleprompter copy: headings without #, cue tags (for the edit) removed, placeholders and stage notes kept.
+  const text = (current.script || '').replace(/^#{1,3}\s+/gm, '').replace(/\s*\[(?!PLACEHOLDER)[A-Z]+(?::[^\]]*)?\]/g, '');
+  if (!text.trim()) { $('briefMsg').className = 'msg'; $('briefMsg').textContent = 'No script to copy yet.'; return; }
+  try { await navigator.clipboard.writeText(text); $('briefMsg').className = 'msg ok'; $('briefMsg').textContent = 'Script copied.'; }
+  catch { $('briefMsg').className = 'msg err'; $('briefMsg').textContent = 'Copy was blocked. Select the script and press Ctrl+C.'; }
+};
+
+$('bp').addEventListener('toggle', async () => { if ($('bp').open && !$('bpText').dataset.loaded) { $('bpText').value = (await api('/api/blueprint')).text; $('bpText').dataset.loaded = '1'; } });
+$('bpSave').onclick = async () => { await api('/api/blueprint', { text: $('bpText').value }); $('bpMsg').className = 'msg ok'; $('bpMsg').textContent = 'Saved. The next script uses it.'; };
+
+load().then(() => { const id = new URLSearchParams(location.search).get('plan'); if (id) pick(id).catch(() => {}); });
+</script>
+</body>
+</html>

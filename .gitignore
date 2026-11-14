@@ -7,6 +7,8 @@ __pycache__/
 # Footage, renders and per-job work: big, personal, regenerable
 projects/
 jobs/
+# Planning (Plan page): blueprint, outlines and scripts are personal
+plans/
 raw/*
 !raw/.gitkeep
 transcript/*

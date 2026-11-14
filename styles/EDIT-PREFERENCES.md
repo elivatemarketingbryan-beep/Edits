@@ -12,6 +12,8 @@ Older wording and replaced rules: `docs/history/EDIT-PREFERENCES-2026-11-09.md`.
 ## Graphics: look
 
 - DO: use purple for structure and gold only for money, results or the one key idea (`styles/PALETTE.md`).
+- DO: put the payoff phrase of a title in gold ("Four parts. **One system.**"). (Bryan: "make the word one system gold"; 2026-11-11; 80-20 strategy g3)
+- DO: put chapter-card titles in gold ("Targeting.", "Budget."). (Bryan: "title gold"; 2026-11-11; 80-20 strategy g11)
 - DON'T: put a centred round glow over a dome of light on a full-screen background. Use a wide flat glow along the bottom, soft corner light, faint texture. (Bryan: "the background looks like the IG default profile picture"; 2026-11-07)
 - DO: keep the premium look when borrowing from anyone. Take the layout and the idea, then rebuild it in our style. (Bryan: "i want to keep that premium design we have still", "turn his boards into our style too"; 2026-11-09)
 - DO: attach ropes, chains and strings to the thing they hold, and move them with it. (Bryan: "fix the anchor rope"; 2026-11-07)
@@ -24,7 +26,9 @@ Older wording and replaced rules: `docs/history/EDIT-PREFERENCES-2026-11-09.md`.
 - DON'T: use side glass cards with a checklist twice in a row, or for more than about one graphic in five. (same note)
 - DO: invent new effects as much as possible, borrowing ideas from other styles but building them in the current look. (Bryan: "don't do the same effect a lot, try to create new ones as much as you can, use inspo from the other styles but in this format."; 2026-11-07)
 - DON'T: use the same effect twice in a row. Every graphic needs a reason in what he is saying. (2026-10-29)
+- DO: show the Meta top-5% targeting as Ads Manager > ad set > detailed targeting, then typing "top 5% income" in the search box. No Demographics > Financial menu steps. (Bryan: "its just ads manager ad set and then detailed targeting then u type top 5% income"; 2026-11-12; 80-20 strategy g15)
 - DO: show the real thing over an abstract chart: Google profiles, a map with calls coming in, a ranking list moving. Line graphs only when the shape is the point. (Bryan: "a graph isn't the best way to show this"; 2026-10-29)
+- DO: give every ranking or tier-list video the default ranking board: the `tier-board` template with its coloured S-F row labels (red, orange, yellow, green, blue, purple, pink), in previews, combos and the edit. Don't restyle it into purple and gold. (Bryan: "ranking videos should always use default ranking board design with colors"; 2026-11-10)
 - DO: open layouts centered, then slide aside to make room for text. (Bryan: "I want it centered at the beginning and it slides to the left and makes space for the text to appear"; 2026-11-08; re-edits)
 - DO: ask before removing an original animation with real interaction on a re-edit. He may want it rebuilt in the new style. (Bryan: "keep the hexagon animation where mouse clicks at each circle but make it match the newer style"; 2026-11-08)
 - DO: alternate pop banners left and right and vary their height. (Bryan: "all the popups keep going on the right, move them around."; 2026-10-29)
@@ -34,17 +38,28 @@ Older wording and replaced rules: `docs/history/EDIT-PREFERENCES-2026-11-09.md`.
 ## Pacing and story
 
 - DO: make YouTube edits motion-graphic heavy, with something moving almost all the time: a big graphic scene about every 30-40 s, punch-ins on talking stretches (wide/close every other sentence), loud kinetic captions on key lines, floating cards between. (Bryan: "I want a lot more motion graphic heavy type of video."; 2026-10-29; 16:9)
-- DO: act stories out with motion graphics timed to the words. (Bryan: "add motion graphics that paint the scene of what I'm talking about."; 2026-10-29; 16:9)
+- DO: act stories and scenarios out with motion graphics timed to the words, in the Moonshot Motion way: a faceless figure, a few props, one caption line at a time, gold on the payoff, a pull-back at the end. Write a new scene per story with `assets/boards/story/kit.js`. (Bryan: "add motion graphics that paint the scene of what I'm talking about."; 2026-10-29. "whenever I'm telling a story or scenario it can animate it"; 2026-11-09)
+- DO: check every short-form script for a scenario (a lead, a client, a timeline like "2 PM form, 7 PM you see it") and act it out with the Moonshot story scenes on any format, not only story styles. (Bryan: "use the animations we worked on", "the animation style we stole from instagram"; 2026-11-10; tof-08 glass-explainer missed it)
 - DO: give every b-roll shot, graphic and scene a question to raise or answer. If it does neither, cut it. (Film Editing Pro, approved by Bryan; 2026-11-09)
 - DO: tease a number or result before showing it, and open a graphic on one detail before pulling out to the whole. (2026-11-09)
 - DON'T: run two shots or graphics in a row that give the same information. A graphic acting out the line he is saying is fine. (2026-11-09)
 - DO: pose new questions as old ones close, leave one open at the end, and read `sheet.json` top to bottom before rendering. Each scene's `what` should add something new. (2026-11-09)
 - DO: feel free to go heavy on short-form (9:16); combos are welcome there. (2026-10-28)
+- DON'T: use the do-or-dont board for "Boosting a post isn't running ads"; any other format. (Bryan: "not this format", "any format but the one u used for tof 9"; 2026-11-10; tof-09)
+
+- DO: keep a story figure's feet, back and hands on the surface it stands, lands or lies on, and never let it pass through a step or object. Build scenes with `assets/boards/story/kit.js` (it solves contact) and run `node studio/story-contact.mjs <scene>` before showing; it must report 0 frames into the surface. (Bryan: "figure out a way where the feet land on the line not go through objects"; 2026-11-09)
+
+- DO: open with something that grabs attention in the first seconds, a pattern break (a full-screen moment, a pile-up, a punch), not just a card sliding in beside him. (Bryan: "i want something more attention grabbing to happen"; 2026-11-11; 80-20 strategy hook)
+- DON'T: open on a glass card (box) beside him. Put the opening words big on the wall beside him, tucked behind him (person matte on top), so it's eye-catching. (Bryan: "I don't like the square at the beginning, experiment with placing the words on the left of me behind me, something eye catching"; 2026-11-11)
 
 ## Captions
 
 - DO: make the opening's captions fancier than the running ones: big stacked words, the key phrase in the accent serif, icons popping in around them. (Bryan: "more fancier style captions at the beginning, add icons and things around."; 2026-10-29; 16:9)
 - DON'T: run captions while a text card (quote, verse) is on screen. (Bryan: "when the card pops up don't do the captions for that sentence."; 2026-10-29)
+
+## Post captions
+
+- DO: write a post caption for every video, formatted like Joe Aquino's (`styles/POST-CAPTIONS.md`): line one is the point, then 1-2 short paragraphs with blank lines, no emojis, and the same hashtag block one blank line below the last paragraph (#contractors #contractormarketing #googlereviews #homeimprovement #leadgeneration #contractorsofinstagram). It shows under the video in the studio. (Bryan: "add a caption under each one", "go through joe aquino's captions to figure out how to format", "add these hashtags at the bottom all the same distance apart from the bottom text"; 2026-11-10)
 
 ## Footage and cuts
 
@@ -73,6 +88,9 @@ Older wording and replaced rules: `docs/history/EDIT-PREFERENCES-2026-11-09.md`.
 - DO: start typing sounds exactly when the text starts typing and stop when it stops. (Bryan: "the typing noise came too early"; 2026-11-07)
 
 ## How we work
+
+- DO: when Bryan sends a screen recording of a tool, rebuild those screens in our look from it: the same buttons, labels, menu order and results, the cursor following his clicks. Never invent a UI or show the raw recording. Leave out account names, spend and audience sizes. (Bryan: "should I drop a screen recording and you re-render it in our animation style following the UI"; 2026-11-12)
+- DO: change only the part of a graphic his note is about. Keep everything else exactly as it was. (Bryan: "everything past the beginning should've stayed how it was before"; 2026-11-11; 80-20 strategy hook)
 
 - DO: listen to any new sound with `studio/listen.py` before using it, and run `studio/preflight.mjs` before showing work. (Bryan: "fix this use github to hear if needed"; 2026-11-09)
 - DO: when he says to go ahead without approving graphics batches, build them all, check each still yourself, and go straight to the review render. (2026-11-07)

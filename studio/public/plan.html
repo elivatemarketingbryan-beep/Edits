@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan · Video Studio</title>
+<link rel="stylesheet" href="/studio.css">
+<style>
+  /* Plan page: a year of long-form videos (Month 1-12, 4 a month), each with its script, titles, thumbnails, notes and assets.
+     Purple is structure, gold is results and the chosen title/thumbnail. */
+  :root { --gold: #e8c77a; --loop: #e8c77a; }
+  .navseg { justify-self: center; display: inline-flex; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 3px; gap: 2px; }
+  .navseg a { color: var(--muted); font-size: 12.5px; padding: 4px 14px; border-radius: 7px; text-decoration: none; font-weight: 600; }
+  .navseg a.on { background: var(--card); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+  .plan-wrap { max-width: 1240px; margin: 0 auto; padding: 28px 20px 80px; display: grid; gap: 26px; }
+  .plan-wrap > * { min-width: 0; }   /* wide parts scroll inside their own box instead of widening the page */
+  .plan-hero h1 { margin: 0; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; font-size: clamp(30px, 4.6vw, 46px); }
+  .plan-hero h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--accent-hi); }
+  .plan-hero .lede { margin: 12px 0 0; }
+  .toprow { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .panel h2 { margin: 0; font-size: 15px; }
+  .field { display: grid; gap: 4px; min-width: 0; }
+  .field > span { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .field input, .field textarea, .field select { width: 100%; }
+  textarea { resize: vertical; min-height: 70px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .msg.ok { color: var(--ok); }
+
+  .chan-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .stat b { display: block; font: 700 20px var(--mono); font-variant-numeric: tabular-nums; }
+  .stat small { color: var(--muted); font-size: 12px; }
+  .vids { display: grid; gap: 6px; }
+  .vid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: baseline; font-size: 13px; text-decoration: none; padding: 6px 8px; border-radius: 8px; }
+  .vid:hover { background: var(--card); }
+  .vid span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .vid span:last-child { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
+
+  /* views: year plan / board */
+  .viewbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .viewbar h2 { margin: 0; font-size: 17px; }
+  .viewbar .sub { color: var(--muted); font-size: 13px; }
+  .seg2 { display: inline-flex; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 3px; gap: 2px; }
+  .seg2 button { border: 0; background: transparent; color: var(--muted); font-size: 12.5px; padding: 4px 12px; border-radius: 7px; font-weight: 600; }
+  .seg2 button[aria-selected="true"] { background: var(--card); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+  .chanpanel { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); column-gap: 20px; }
+  .chanpanel > .row, .chanpanel > .muted { grid-column: 1 / -1; }
+  @media (max-width: 900px) { .chanpanel { grid-template-columns: 1fr; } }
+  input[type=date] { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color-scheme: dark; }
+  /* months: collapsible rows like the AmplifyViews content plan; open one to see its 4 video cards */
+  .year { display: grid; gap: 12px; }
+  .macc { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .macc.current { border-color: var(--accent-lo); background: linear-gradient(180deg, var(--accent-soft), var(--panel) 90px); }
+  .mhead { width: 100%; display: flex; align-items: center; gap: 12px; padding: 16px 20px; border: 0; border-radius: 0; background: transparent; text-align: left; }
+  .mhead:hover { background: rgba(255,255,255,.02); }
+  .mhead .chev { width: 16px; height: 16px; color: var(--muted); transition: transform .15s; flex: none; }
+  .macc.open .mhead .chev { transform: rotate(90deg); }
+  .mhead b { font-size: 17px; font-weight: 600; }
+  .curpill { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 99px; background: var(--accent); color: #fff; }
+  .mhead .count { margin-left: auto; font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
+  .mhead .count.full { color: var(--accent-hi); }
+  .mbody { border-top: 1px solid var(--line); }
+  .vcard { padding: 20px; display: grid; gap: 16px; }
+  .vcard + .vcard { border-top: 1px solid var(--line); }
+  .vtop { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .vtop h3 { margin: 0; font-size: 15px; font-weight: 600; white-space: nowrap; }
+  .vtop { cursor: pointer; }
+  .vhead { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+  .foldbtn { width: 26px; height: 26px; padding: 0; display: grid; place-items: center; background: transparent; border-color: transparent; flex: none; }
+  .foldbtn:hover { border-color: var(--line); }
+  .foldbtn::before, .foldbtn::after { content: none !important; }   /* studio.css adds a ▾ to expandable buttons; this one has its own arrow */
+  .foldbtn .chev { width: 15px; height: 15px; color: var(--muted); transform: rotate(90deg); transition: transform .15s; }
+  .vcard.folded .foldbtn .chev { transform: rotate(0deg); }
+  .vcard.folded { padding-block: 12px; }
+  .vmini { width: 48px; aspect-ratio: 16/9; border-radius: 4px; background: var(--card) center/cover no-repeat; border: 1px solid var(--line); flex: none; }
+  .vfoldtitle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; min-width: 0; }
+  .vtop .row { gap: 8px; }
+  .lbl { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 6px; display: flex; gap: 6px; align-items: center; }
+  .vmeta { display: grid; grid-template-columns: 200px minmax(0, 1fr) 120px; gap: 16px; align-items: start; }
+  .vmeta select { width: 100%; }
+  .vtitle { font-weight: 600; font-size: 15px; background: none; border: 0; padding: 0; text-align: left; color: var(--text); overflow-wrap: anywhere; }
+  .vtitle:hover { color: var(--accent-hi); }
+  .vtitle small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; margin-top: 2px; }
+  .vmedia { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+  .tbox { aspect-ratio: 16/9; border-radius: 10px; background: var(--card) center/cover no-repeat; border: 1px solid var(--line); display: grid; place-items: center; color: var(--muted); font-size: 13px; text-align: center; cursor: pointer; position: relative; overflow: hidden; }
+  .tbox.empty { border-style: dashed; }
+  .tbox.over { border-color: var(--accent); background-color: var(--accent-soft); }
+  .tbox .hint2 { display: grid; gap: 6px; place-items: center; padding: 10px; }
+  .tbox svg { width: 26px; height: 26px; opacity: .6; }
+  .tbox .swap { position: absolute; right: 8px; bottom: 8px; font-size: 11.5px; padding: 3px 9px; border-radius: 99px; background: rgba(5,3,8,.75); color: #fff; opacity: 0; transition: opacity .15s; }
+  .tbox:hover .swap, .tbox:focus-visible .swap { opacity: 1; }
+  .exbox { border-radius: 10px; border: 1px solid var(--line); background: var(--card); min-height: 120px; display: grid; gap: 8px; padding: 10px; align-content: start; }
+  .exbox a.ex { display: grid; gap: 6px; text-decoration: none; font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+  .exbox a.ex img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; background: #000; }
+  .exbox .none { color: var(--muted); font-size: 13px; text-align: center; padding: 18px 0 4px; }
+  .exbox form { display: flex; gap: 6px; }
+  .exbox input { flex: 1; min-width: 0; font-size: 12.5px; }
+  .exbox .clear { font-size: 12px; background: none; border: 0; color: var(--muted); padding: 0; justify-self: start; }
+  .tstrip { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tmini { width: 72px; aspect-ratio: 16/9; border-radius: 6px; border: 1px solid var(--line); background: var(--card) center/cover no-repeat; padding: 0; }
+  .tmini.on { border: 2px solid var(--gold); }
+  .tmini.add { display: grid; place-items: center; color: var(--muted); font-size: 18px; border-style: dashed; }
+  .vsplit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+  .vsec { min-width: 0; }
+  @media (max-width: 760px) { .vsplit { grid-template-columns: 1fr; } }
+  .vgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; align-items: start; }
+  .vbar a.button { font-size: 12px; padding: 4px 9px; }
+  .vitem { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; position: relative; }
+  .tm { position: relative; display: inline-block; }
+  .trowc { display: flex; gap: 8px; align-items: flex-start; }
+  .pen { flex: none; font-size: 12px; padding: 3px 9px; color: var(--muted); background: transparent; }
+  .pen:hover { color: var(--text); }
+  .tedit { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tedit input { flex: 1; min-width: 180px; font-size: 14px; font-weight: 600; }
+  .trow input.txt { width: 100%; background: transparent; border: 1px solid transparent; padding: 5px 8px; font: inherit; color: var(--text); border-radius: 6px; }
+  .trow input.txt:hover { border-color: var(--line); }
+  .trow input.txt:focus { border-color: var(--accent); background: var(--bg); outline: none; }
+  details.arch { border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.015); }
+  details.arch > summary { cursor: pointer; padding: 12px 14px; font-size: 13.5px; list-style: none; display: flex; align-items: baseline; gap: 2px; }
+  details.arch > summary::-webkit-details-marker { display: none; }
+  details.arch > summary::before { content: "▸"; color: var(--muted); margin-right: 8px; transition: transform .15s; display: inline-block; }
+  details.arch[open] > summary::before { transform: rotate(90deg); }
+  details.arch .archt { font-weight: 600; }
+  details.arch > .vsplit, details.arch > p { margin: 0 14px 14px; }
+  .alist { display: grid; gap: 6px; }
+  .arow2 { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr) auto auto; gap: 8px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 30px 6px 8px; font-size: 12.5px; }
+  .arow2 .aic { font: 600 9.5px var(--mono); color: var(--muted); background: var(--line); border-radius: 4px; padding: 3px 0; text-align: center; }
+  .arow2 > a:not(.button) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: none; }
+  .arow2 small { color: var(--muted); font: 11px var(--mono); white-space: nowrap; }
+  .arow2 .button { font-size: 11.5px; padding: 3px 8px; }
+  .arow2 .xdel.sm { top: 50%; right: 6px; transform: translateY(-50%); }
+  .alist .upl { padding: 12px; }
+  @media (max-width: 600px) { .arow2 { grid-template-columns: 40px minmax(0, 1fr) auto; } .arow2 small { display: none; } }
+  .xdel { position: absolute; top: 8px; right: 8px; z-index: 3; min-width: 28px; height: 28px; padding: 0 8px; border-radius: 99px; display: grid; place-items: center;
+          font-size: 17px; line-height: 1; background: rgba(5,3,8,.82); color: #fff; border: 1px solid rgba(255,255,255,.22); }
+  .xdel:hover { background: var(--err); border-color: var(--err); }
+  .xdel.armed { background: var(--err); border-color: var(--err); font-size: 12px; font-weight: 600; }
+  .xdel.sm { top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; font-size: 13px; }
+  .xdel.sm.armed { font-size: 10.5px; }
+  .vitem video { width: 100%; aspect-ratio: 16/9; background: #000; display: block; }
+  .vbar { display: flex; align-items: center; gap: 6px; padding: 6px 8px; font-size: 12px; }
+  .vbar span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+  .vbar button { font-size: 12px; padding: 4px 9px; }
+  .vgrid .upl { min-height: 90px; display: grid; place-items: center; }
+  .sbox { border: 1px dashed var(--line); border-radius: 10px; padding: 12px 14px; font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+  .sbox.past { border-style: solid; }
+  .sbox.has { border-style: solid; color: var(--text); background: var(--card); cursor: pointer; }
+  .sbox p { margin: 0; white-space: pre-line; }
+  .slotform { display: grid; gap: 8px; grid-template-columns: minmax(0, 1fr) 170px auto; align-items: start; }
+  .slotform textarea { grid-column: 1 / -1; min-height: 60px; }
+  .slotform input, .slotform textarea { width: 100%; font-size: 13.5px; }
+  .slotform .msg { grid-column: 1 / -1; margin: 0; }
+  @media (max-width: 760px) { .vmeta, .vmedia, .slotform { grid-template-columns: 1fr; } }
+  .st { display: inline-block; flex: none; font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--line); color: var(--muted); white-space: nowrap; }
+  .st.st-scripted, .st.st-filming { background: var(--accent-soft); color: var(--accent-hi); }
+  .st.st-editing { background: #1c2b45; color: #8db6ff; }
+  .st.st-ready, .st.st-posted { background: #163326; color: #6fd6a4; }
+  .st.q { background: var(--accent-soft); color: var(--accent); }
+
+  .board-wrap { overflow-x: auto; padding-bottom: 6px; }
+  .board { display: grid; grid-template-columns: repeat(7, minmax(170px, 1fr)); gap: 10px; min-width: 1240px; }
+  .col { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: grid; gap: 8px; align-content: start; min-height: 140px; }
+  .col h3 { margin: 0 2px 2px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; }
+  .col h3 i { font: normal 11px var(--mono); color: var(--accent-hi); }
+  .pcard { text-align: left; display: grid; gap: 6px; padding: 10px; border-radius: 10px; background: var(--card); border: 1px solid var(--line); font-size: 13px; }
+  .pcard b { font-weight: 600; line-height: 1.3; }
+  .pcard.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .pcard small { color: var(--muted); font-size: 11.5px; }
+  .col .empty { color: var(--muted); font-size: 12px; padding: 4px 2px; }
+
+  /* the open plan */
+  .detail { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 16px; align-items: start; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .waiting { background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; display: grid; gap: 6px; }
+  .waiting code { background: var(--bg); border-radius: 6px; padding: 2px 8px; }
+  .info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .info div { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font-size: 11.5px; color: var(--muted); }
+  .info b { display: block; color: var(--text); font: 600 14px var(--mono); }
+  .sheet-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+  .sheet-tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--muted); padding: 8px 12px; font-weight: 600; white-space: nowrap; }
+  .sheet-tabs button.on { color: var(--text); border-bottom-color: var(--accent); }
+  .sheet-tabs button i { font: normal 11px var(--mono); color: var(--accent-hi); margin-left: 4px; }
+  .sheet { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px clamp(16px, 3vw, 36px); min-height: 360px; min-width: 0; }
+  .sheet .t { font-size: 22px; font-weight: 800; letter-spacing: -.02em; margin: 0 0 4px; text-wrap: balance; }
+  .sheet h4 { font-size: 15px; font-weight: 800; margin: 24px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--accent); text-wrap: balance; }
+  .sheet h5 { font: 600 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; margin: 16px 0 6px; color: var(--accent-hi); display: flex; gap: 8px; align-items: center; }
+  .sheet h5.loop { color: var(--loop); }
+  .sheet h5.loop::before { content: ""; width: 7px; height: 7px; border-radius: 50%; border: 2px solid var(--loop); }
+  .sheet h5.pay::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+  .sheet p { margin: 0 0 7px; max-width: 70ch; }
+  .cue { font: 600 10.5px var(--mono); padding: 1px 6px; border-radius: 5px; background: var(--accent-soft); color: var(--accent-hi); margin-left: 6px; white-space: nowrap; }
+  .cue.ph { background: #3a2a10; color: var(--gold); }
+  .sheet .none { color: var(--muted); }
+  .sec { display: grid; gap: 10px; margin-bottom: 26px; }
+  .sec > h3 { margin: 0; font-size: 14px; }
+  .sec > p.muted { margin: -4px 0 0; }
+  .trow { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+  .trow.chosen { border-color: var(--gold); }
+  .trow .txt { overflow-wrap: anywhere; }
+  .trow input[type=radio] { accent-color: var(--gold); }
+  .thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+  .thumb { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: grid; }
+  .thumb.chosen { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+  .thumb img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: #000; }
+  .thumb .bar2 { display: flex; justify-content: space-between; gap: 6px; padding: 6px 8px; font-size: 12px; align-items: center; }
+  .thumb .bar2 span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+  .chosen-tag { font-size: 11px; padding: 1px 7px; border-radius: 99px; background: #3a2a10; color: var(--gold); }
+  .upl { border: 1.5px dashed var(--line); border-radius: 10px; padding: 14px; text-align: center; color: var(--muted); font-size: 13px; cursor: pointer; }
+  .upl.over { border-color: var(--accent); background: var(--accent-soft); color: var(--text); }
+  .note { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 4px; }
+  .note p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .note div { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+  .note button { padding: 0 6px; font-size: 12px; background: none; border: 0; color: var(--muted); }
+  .arow { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto auto; gap: 10px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; font-size: 13px; }
+  .arow .ic { width: 56px; aspect-ratio: 16/10; border-radius: 6px; background: var(--line) center/cover; display: grid; place-items: center; font: 600 10px var(--mono); color: var(--muted); }
+  .arow a { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: none; }
+  .arow small { color: var(--muted); font: 11.5px var(--mono); white-space: nowrap; }
+  details.bp summary { cursor: pointer; font-weight: 600; }
+  details.bp textarea { min-height: 260px; width: 100%; margin-top: 10px; font-size: 13px; }
+  @media (max-width: 900px) { .toprow, .detail { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="top bar-top">
+  <a class="brand" href="/"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.5v11l9-5.5z" fill="currentColor"/></svg></span>Video Studio</a>
+  <nav class="navseg" aria-label="Studio"><a href="/plan" class="on" aria-current="page">Plan</a><a href="/script">Script</a><a href="/">Edit</a></nav>
+  <span class="status" id="status"><i></i><span>Ready</span></span>
+</header>
+
+<main class="plan-wrap">
+  <section class="plan-hero">
+    <p class="eyebrow">Plan · long form</p>
+    <h1>Plan the year. <em>Four a month.</em></h1>
+    <p class="lede">Every long-form video in one place: its type, titles, thumbnails, notes, raw footage and finished edit. Write the scripts on the Script tab, edit on the Edit tab.</p>
+  </section>
+
+  <section>
+    <section class="panel chanpanel" id="chan" aria-live="polite">
+      <div class="row" style="justify-content:space-between"><h2 id="chanName">Your YouTube channel</h2><button type="button" id="ytRefresh">Refresh</button></div>
+      <div class="chan-stats">
+        <div class="stat"><b id="ytCount">—</b><small>Recent videos</small></div>
+        <div class="stat"><b id="ytViews">—</b><small>Views on them</small></div>
+        <div class="stat"><b id="ytLikes">—</b><small>Likes on them</small></div>
+      </div>
+      <div class="vids" id="ytList"><span class="muted">Loading your latest uploads…</span></div>
+      <span class="muted" id="ytNote"></span>
+    </section>
+  </section>
+
+  <section>
+    <div class="viewbar">
+      <div><h2 id="viewTitle">Your year</h2><span class="sub" id="yearSum"></span></div>
+      <div class="seg2" role="tablist" aria-label="View"><button role="tab" data-view="year" aria-selected="true">Year plan</button><button role="tab" data-view="board" aria-selected="false">By stage</button></div>
+    </div>
+    <div class="year" id="year"></div>
+    <div class="board-wrap" id="boardWrap" hidden><div class="board" id="board"></div></div>
+  </section>
+
+  <section class="detail" id="detail" hidden>
+    <form class="panel" id="editForm">
+      <div class="row" style="justify-content:space-between"><h2 id="dHead">Video</h2><div class="row"><select id="eStatus" aria-label="Stage"></select><button type="button" class="ghost" id="closeDetail" title="Close this panel">Close ✕</button></div></div>
+      <label class="field"><span>Working title</span><input type="text" id="eTitle" required></label>
+      <div class="two">
+        <label class="field"><span>Month</span><select id="eMonth"></select></label>
+        <label class="field"><span>Due date</span><input type="date" id="eDue"></label>
+      </div>
+      <label class="field"><span>Angle, stories and real proof</span><textarea id="eNotes"></textarea></label>
+      <div class="row"><button type="submit">Save</button><span class="msg" id="editMsg"></span></div>
+      <div class="info" id="info"></div>
+      <a class="button primary" id="toScript" href="/script" style="text-align:center">Write the script on the Script tab</a>
+      <div class="row" style="justify-content:flex-end"><button type="button" class="ghost" id="delBtn">Delete video</button></div>
+    </form>
+    <div style="display:grid;gap:10px;min-width:0">
+      <div class="sheet-tabs" role="tablist" id="tabs">
+        <button role="tab" data-tab="pack">Titles &amp; thumbnails</button>
+        <button role="tab" data-tab="notes">Notes</button>
+        <button role="tab" data-tab="assets">Assets</button>
+      </div>
+      <article class="sheet" id="sheet"></article>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const LABEL = { idea: 'Idea', outlined: 'Outlined', scripted: 'Scripted', filming: 'Filming', editing: 'Editing', ready: 'Ready', posted: 'Posted' };
+const PER_MONTH = 4;
+let plans = [], statuses = Object.keys(LABEL), current = null, tab = 'script', view = 'year', poll = null;
+try { view = localStorage.getItem('plan-view') || 'year'; } catch {}
+
+const api = async (url, body) => {
+  const r = await fetch(url, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || 'Something went wrong');
+  return j;
+};
+const fmt = (n) => Number(n || 0).toLocaleString();
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const fileUrl = (p, a) => `/plan-files/${p.id}/${a.path.split('/').map(encodeURIComponent).join('/')}`;
+const thumbOf = (p) => p.thumb && p.assets?.find((a) => a.kind === 'thumb' && a.name === p.thumb);
+const chosenTitle = (p) => p.titles?.find((t) => t.chosen)?.text;
+const size = (b) => b > 1e9 ? (b / 1e9).toFixed(1) + ' GB' : b > 1e6 ? (b / 1e6).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1e3)) + ' KB';
+const dateStr = (d) => d ? new Date(d + (d.length === 10 ? 'T12:00' : '')).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '—';
+for (const sel of [$('eMonth')]) for (let m = 1; m <= 12; m++) sel.append(Object.assign(el('option', null, 'Month ' + m), { value: m }));
+
+function setStatus() {
+  const busy = plans.some((p) => p.request);
+  const s = $('status'); s.className = 'status' + (busy ? ' busy' : '');
+  s.lastElementChild.textContent = busy ? 'Waiting on Claude' : 'Ready';
+}
+// One stage everywhere: the pill always shows the plan's stage (the same one the By stage board uses);
+// a waiting outline/script request gets its own pill next to it.
+function stPill(p) { return el('span', 'st st-' + p.status, LABEL[p.status] || p.status); }
+function qPill(p) { return el('span', 'st q', p.requestLabel + ' · queued'); }
+const pastScript = (p) => STAGE_ORDER.indexOf(p.status) > STAGE_ORDER.indexOf('scripted');   // filming, editing, ready, posted
+const STAGE_ORDER = ['idea', 'outlined', 'scripted', 'filming', 'editing', 'ready', 'posted'];
+
+// ---- Year plan: 12 collapsible months, 4 video cards each (filled cards, or an inline "New video" form).
+const drafts = {}, exDrafts = {}, titleEdits = {};
+let justOpened = null;   // the card whose ✎ was just clicked: its title box takes the cursor once
+let focusKey = null, styles = [];
+let openMonths = null;
+try { const o = JSON.parse(localStorage.getItem('plan-open') || 'null'); if (Array.isArray(o)) openMonths = new Set(o); } catch {}
+const saveOpen = () => { try { localStorage.setItem('plan-open', JSON.stringify([...openMonths])); } catch {} };
+const monthItems = (m) => plans.filter((p) => (p.month || 1) === m).sort((a, b) => (a.due || '9').localeCompare(b.due || '9') || a.created.localeCompare(b.created));
+// "Current" = the first month whose four videos aren't all done.
+const currentMonth = () => { for (let m = 1; m <= 12; m++) { const it = monthItems(m); if (it.length < PER_MONTH || it.some((p) => !['ready', 'posted'].includes(p.status))) return m; } return 12; };
+const ytId = (u) => (String(u).match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/) || [])[1];
+const ICON_IMG = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="10" r="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m21 16-5-5-9 9" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+const ICON_DOC = '<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z M14 3v6h6" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+const ICON_CHEV = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+function alertLine(box, text) { const m = el('p', 'msg err', text); m.style.margin = '6px 0 0'; box.after(m); setTimeout(() => m.remove(), 5000); }
+const openTab = (id, t) => open(id).then(() => { tab = t; renderTabs(); });
+
+function slotForm(m, n) {
+  const key = `m${m}s${n}`, d = (drafts[key] ||= { title: '', due: '', notes: '' });
+  const card = el('div', 'vcard');
+  const top = el('div', 'vtop'); top.append(el('h3', null, `Video ${n}`), el('span', 'st', 'Open slot'));
+  const f = el('form', 'slotform'); f.noValidate = true;
+  const title = Object.assign(el('input'), { type: 'text', id: key + 't', value: d.title, placeholder: 'Working title' });
+  title.setAttribute('aria-label', `Month ${m}, video ${n}: working title`);
+  const due = Object.assign(el('input'), { type: 'date', id: key + 'd', value: d.due }); due.setAttribute('aria-label', 'Due date (optional)'); due.title = 'Due date (optional)';
+  const add = Object.assign(el('button', 'primary', 'Add video'), { type: 'submit' });
+  const notes = Object.assign(el('textarea'), { id: key + 'n', value: d.notes, placeholder: 'Angle, stories and real proof (optional). Anything missing becomes a placeholder, never a made-up number.' });
+  notes.setAttribute('aria-label', 'Angle, stories and real proof (optional)');
+  const msg = el('p', 'msg');
+  for (const [inp, k] of [[title, 'title'], [due, 'due'], [notes, 'notes']]) inp.oninput = () => { d[k] = inp.value; };
+  f.append(title, due, add, notes, msg);
+  f.onsubmit = async (e) => {
+    e.preventDefault();
+    if (!d.title.trim()) { msg.className = 'msg err'; msg.textContent = 'Give it a working title first.'; title.focus(); return; }
+    add.disabled = true;
+    try {
+      const p = await api('/api/plans', { title: d.title, notes: d.notes, month: m, cta: 'Point to a related video, then: book a call below.', acts: 3 });
+      if (d.due) await api('/api/plans/' + p.id, { due: d.due });
+      delete drafts[key]; focusKey = null; load();
+    } catch (err) { msg.className = 'msg err'; msg.textContent = err.message; add.disabled = false; }
+  };
+  card.append(top, f);
+  return card;
+}
+
+// Folded cards (remembered in this browser): just the header line, so a month can be scanned at a glance.
+let folded = new Set();
+try { folded = new Set(JSON.parse(localStorage.getItem('plan-folded') || '[]')); } catch {}
+const saveFolded = () => { try { localStorage.setItem('plan-folded', JSON.stringify([...folded])); } catch {} };
+function toggleFold(id) { folded.has(id) ? folded.delete(id) : folded.add(id); saveFolded(); renderYear(); }
+
+function videoCard(p, n) {
+  const isFolded = folded.has(p.id);
+  const card = el('div', 'vcard' + (isFolded ? ' folded' : ''));
+  const top = el('div', 'vtop'); const acts = el('div', 'row');
+  const openBtn = el('button', null, 'Open'); openBtn.type = 'button'; openBtn.onclick = (e) => { e.stopPropagation(); open(p.id); };
+  const fold = el('button', 'foldbtn'); fold.type = 'button'; fold.innerHTML = ICON_CHEV;
+  fold.setAttribute('aria-expanded', !isFolded); fold.setAttribute('aria-label', isFolded ? 'Expand this video' : 'Collapse this video');
+  fold.title = isFolded ? 'Expand' : 'Collapse';
+  fold.onclick = (e) => { e.stopPropagation(); toggleFold(p.id); };
+  const head = el('div', 'vhead'); head.append(fold, el('h3', null, `Video ${n}`));
+  if (isFolded) {   // one line: tiny thumbnail and the title
+    const t0 = thumbOf(p); const mini = el('span', 'vmini'); if (t0) mini.style.backgroundImage = `url("${fileUrl(p, t0)}")`;
+    head.append(mini, el('span', 'vfoldtitle', chosenTitle(p) || p.title));
+  }
+  acts.append(...(p.request ? [qPill(p)] : []), stPill(p), openBtn); top.append(head, acts);
+  top.onclick = (e) => { if (!e.target.closest('button, a, input, select')) toggleFold(p.id); };
+  if (isFolded) { card.append(top); return card; }
+
+  // Video type (the long-form edit style), title, due
+  const meta = el('div', 'vmeta');
+  const typeCol = el('div'); typeCol.append(el('div', 'lbl', 'Video type'));
+  const sel = el('select'); sel.id = 'type-' + p.id; sel.setAttribute('aria-label', 'Video type');
+  sel.append(Object.assign(el('option', null, 'Not assigned'), { value: '' }), ...styles.map((s) => Object.assign(el('option', null, s.name), { value: s.id })));
+  if (p.style && !styles.some((s) => s.id === p.style)) sel.append(Object.assign(el('option', null, p.style), { value: p.style }));
+  sel.value = p.style || '';
+  sel.onchange = async () => { await api('/api/plans/' + p.id, { style: sel.value }); load(); };
+  typeCol.append(sel);
+  const titleCol = el('div'); titleCol.append(el('div', 'lbl', 'Title'));
+  // The title shown is the chosen title option, else the working title. ✎ edits that same text right here.
+  const shown = chosenTitle(p) || p.title;
+  if (titleEdits[p.id] !== undefined) {
+    const f = el('form', 'tedit');
+    const ti = Object.assign(el('input'), { type: 'text', id: 'ttl-' + p.id, value: titleEdits[p.id] }); ti.setAttribute('aria-label', 'Title');
+    ti.oninput = () => { titleEdits[p.id] = ti.value; };
+    ti.onkeydown = (e) => { if (e.key === 'Escape') { delete titleEdits[p.id]; renderYear(); } };
+    const cancel = el('button', 'ghost', 'Cancel'); cancel.type = 'button'; cancel.onclick = () => { delete titleEdits[p.id]; renderYear(); };
+    f.append(ti, Object.assign(el('button', 'primary', 'Save'), { type: 'submit' }), cancel);
+    f.onsubmit = async (e) => {
+      e.preventDefault(); const v = ti.value.trim(); if (!v) { ti.focus(); return; }
+      const body = chosenTitle(p) ? { titles: p.titles.map((t) => (t.chosen ? { ...t, text: v } : t)) } : { title: v };
+      try { await api('/api/plans/' + p.id, body); delete titleEdits[p.id]; load(); } catch (err) { alertLine(f, err.message); }
+    };
+    titleCol.append(f);
+    if (justOpened === p.id) { justOpened = null; setTimeout(() => { ti.focus(); ti.select(); }); }
+  } else {
+    const row = el('div', 'trowc');
+    const tb = el('button', 'vtitle', shown); tb.type = 'button'; tb.onclick = () => openTab(p.id, 'pack'); tb.title = 'Title options';
+    if (chosenTitle(p) && chosenTitle(p) !== p.title) tb.append(el('small', null, 'Working title: ' + p.title));
+    else if (!p.titles?.length) tb.append(el('small', null, 'Add title options'));
+    const pen = el('button', 'pen', '✎ Edit'); pen.type = 'button'; pen.title = 'Edit this title'; pen.setAttribute('aria-label', 'Edit this title');
+    pen.onclick = () => { titleEdits[p.id] = shown; justOpened = p.id; renderYear(); };
+    row.append(tb, pen); titleCol.append(row);
+  }
+  const dueCol = el('div'); dueCol.append(el('div', 'lbl', 'Due'), el('div', null, p.due ? dateStr(p.due) : '—'));
+  meta.append(typeCol, titleCol, dueCol);
+
+  // Thumbnail (drop or click to upload; the first upload is chosen) and example video
+  const media = el('div', 'vmedia');
+  const thCol = el('div'); thCol.append(el('div', 'lbl', 'Thumbnail'));
+  const t = thumbOf(p);
+  const tbox = el('label', 'tbox' + (t ? '' : ' empty')); tbox.tabIndex = 0;
+  const inp = Object.assign(el('input'), { type: 'file', accept: 'image/png,image/jpeg,image/webp,image/gif', hidden: true });
+  if (t) { tbox.style.backgroundImage = `url("${fileUrl(p, t)}")`; tbox.append(el('span', 'swap', 'Upload another'), xDelete(p, t, 'this thumbnail')); }
+  else { const h = el('span', 'hint2'); h.innerHTML = ICON_IMG; h.append(el('span', null, 'Drop a thumbnail here, or click to upload')); tbox.append(h); }
+  tbox.append(inp);
+  const upload = async (files) => {
+    for (const f of files) {
+      const r = await fetch(`/api/plans/${p.id}/upload?kind=thumb`, { method: 'POST', headers: { 'x-filename': encodeURIComponent(f.name) }, body: f });
+      if (!r.ok) { alertLine(tbox, (await r.json().catch(() => ({}))).error || 'Upload failed.'); return; }
+    }
+    load();
+  };
+  inp.onchange = () => inp.files.length && upload([...inp.files]);
+  tbox.ondragover = (e) => { e.preventDefault(); tbox.classList.add('over'); };
+  tbox.ondragleave = () => tbox.classList.remove('over');
+  tbox.ondrop = (e) => { e.preventDefault(); tbox.classList.remove('over'); if (e.dataTransfer.files.length) upload([...e.dataTransfer.files]); };
+  tbox.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inp.click(); } };
+  thCol.append(tbox);
+  // Every uploaded thumbnail as a strip: click one to make it the chosen thumbnail, + to upload more.
+  const allThumbs = p.assets.filter((a) => a.kind === 'thumb');
+  const strip = el('div', 'tstrip');
+  for (const a of allThumbs) {
+    const b = el('button', 'tmini' + (a.name === p.thumb ? ' on' : '')); b.type = 'button';
+    b.style.backgroundImage = `url("${fileUrl(p, a)}")`; b.title = a.name === p.thumb ? `${a.name} (chosen)` : `Use ${a.name}`;
+    b.setAttribute('aria-label', b.title);
+    b.onclick = async () => { await api('/api/plans/' + p.id, { thumb: a.name }); load(); };
+    const wrap = el('span', 'tm'); wrap.append(b, xDelete(p, a, a.name, true));
+    strip.append(wrap);
+  }
+  const plus = el('button', 'tmini add', '+'); plus.type = 'button'; plus.title = 'Upload thumbnails'; plus.setAttribute('aria-label', 'Upload thumbnails');
+  plus.onclick = () => { inp.multiple = true; inp.click(); };
+  strip.append(plus);
+  thCol.append(strip);
+
+  const exCol = el('div'); exCol.append(el('div', 'lbl', 'Example video'));
+  const ex = el('div', 'exbox');
+  if (p.example) {
+    const a = Object.assign(el('a', 'ex'), { href: p.example, target: '_blank', rel: 'noopener' });
+    const yid = ytId(p.example);
+    if (yid) a.append(Object.assign(el('img'), { src: `https://i.ytimg.com/vi/${yid}/mqdefault.jpg`, alt: 'Example video', loading: 'lazy' }));
+    a.append(el('span', null, p.example));
+    const clr = el('button', 'clear', 'Remove'); clr.type = 'button';
+    clr.onclick = async () => { await api('/api/plans/' + p.id, { example: '' }); load(); };
+    ex.append(a, clr);
+  } else {
+    ex.append(el('div', 'none', 'No example'));
+    const fx = el('form'); const ei = Object.assign(el('input'), { type: 'url', id: 'ex-' + p.id, placeholder: 'Paste a video link to copy the style of', value: exDrafts[p.id] || '' });
+    ei.setAttribute('aria-label', 'Example video link'); ei.oninput = () => { exDrafts[p.id] = ei.value; };
+    fx.append(ei, Object.assign(el('button', null, 'Save'), { type: 'submit' }));
+    fx.onsubmit = async (e) => {
+      e.preventDefault();
+      const r = await api('/api/plans/' + p.id, { example: ei.value }).catch((err) => ({ error: err.message }));
+      if (!r.example) { alertLine(ex, 'Paste a full link starting with https://'); return; }
+      delete exDrafts[p.id]; load();
+    };
+    ex.append(fx);
+  }
+  exCol.append(ex);
+  media.append(thCol, exCol);
+
+  // Raw footage (what was filmed; send a clip to the editor) and the finished edit (the final video), side by side.
+  const vCol = el('div', 'vsplit');
+  vCol.append(videoSection(p, 'raw', 'Raw footage', 'Drop what you filmed here, or click to upload'),
+              videoSection(p, 'final', 'Finished edit', 'Drop the final edited video here, or click to upload'));
+
+  // Script preview
+  const sCol = el('div'); const sl = el('div', 'lbl'); sl.innerHTML = ICON_DOC; sl.append('Script');
+  // Scripts are written on the Script tab; the card only previews them and links there.
+  const sb = el('div', 'sbox' + (p.scriptPreview ? ' has' : ''));
+  const toScript = Object.assign(el('a', 'button', p.scriptPreview ? 'Open in Script' : 'Write in Script'), { href: '/script?plan=' + p.id });
+  if (p.scriptPreview) { sb.append(el('p', null, p.scriptPreview + '…'), toScript); sb.onclick = (e) => { if (e.target === sb || e.target.tagName === 'P') location.href = toScript.href; }; }
+  else {
+    // Past scripting (Filming → Posted) without a saved script: say so plainly, don't ask for one.
+    const msg = p.request ? `${p.requestLabel} is queued. Say "run my studio jobs".`
+      : pastScript(p) ? `${LABEL[p.status]}. No script saved here.`
+      : p.hasOutline ? 'Outlined, no script yet' : 'No script added yet';
+    if (pastScript(p) && !p.request) { toScript.textContent = 'Add the script'; toScript.classList.add('ghost'); sb.classList.add('past'); }
+    sb.append(el('span', null, msg), toScript);
+  }
+  sCol.append(sl, sb);
+  card.append(top, meta, media, vCol, sCol, archiveSection(p));
+  return card;
+}
+
+// Archive: storage only, for raw files and edited videos to keep for later. Any file type; nothing here is
+// sent to the editor or changes the video's stage. Collapsed unless opened (remembered while the page is open).
+const archOpen = new Set();
+function archiveSection(p) {
+  const raw = p.assets.filter((a) => a.kind === 'archraw'), edited = p.assets.filter((a) => a.kind === 'archedit');
+  const total = raw.length + edited.length, bytes = [...raw, ...edited].reduce((s, a) => s + a.size, 0);
+  const d = el('details', 'arch'); d.open = archOpen.has(p.id);
+  d.ontoggle = () => { d.open ? archOpen.add(p.id) : archOpen.delete(p.id); };
+  const sum = el('summary'); sum.append(el('span', 'archt', 'Archive'), el('span', 'muted', total ? ` · ${total} file${total > 1 ? 's' : ''}, ${size(bytes)} · kept for later` : ' · keep raw files and edited videos here for later'));
+  d.append(sum);
+  const cols = el('div', 'vsplit');
+  for (const [kind, label, files, hint] of [['archraw', 'Raw files', raw, 'Drop raw files to keep (any type: MP4, MOV, BRAW, MXF, audio…)'], ['archedit', 'Edited videos', edited, 'Drop edited videos to keep (old cuts, alternate versions, exports)']]) {
+    const col = el('div', 'vsec'); col.append(el('div', 'lbl', label));
+    const list = el('div', 'alist');
+    for (const a of files) {
+      const row = el('div', 'arow2');
+      const name = Object.assign(el('a', null, a.name), { href: fileUrl(p, a), target: '_blank', rel: 'noopener', title: 'Open' });
+      row.append(el('span', 'aic', a.type === 'video' ? 'VID' : a.type === 'image' ? 'IMG' : (a.name.split('.').pop() || 'FILE').toUpperCase().slice(0, 4)), name,
+        el('small', null, `${size(a.size)} · ${new Date(a.added).toLocaleDateString([], { month: 'short', day: 'numeric' })}`),
+        Object.assign(el('a', 'button', 'Download'), { href: fileUrl(p, a), download: a.name }), xDelete(p, a, a.name, true));
+      list.append(row);
+    }
+    list.append(dropZone(p.id, kind, '', hint));
+    col.append(list); cols.append(col);
+  }
+  d.append(cols, el('p', 'muted', 'Stored privately in this video\'s folder (plans/). Nothing here is sent to the editor or posted.'));
+  return d;
+}
+// One video section of a card: its players, and a drop box. Raw clips can go to the editor; a finished edit marks the video Ready.
+function videoSection(p, kind, label, dropLabel) {
+  const sec = el('div', 'vsec'); sec.append(el('div', 'lbl', label));
+  const vgrid = el('div', 'vgrid');
+  for (const a of p.assets.filter((x) => x.kind === kind)) {
+    const v = el('div', 'vitem');
+    const player = Object.assign(el('video'), { src: fileUrl(p, a), controls: true, preload: 'metadata' });
+    const bar = el('div', 'vbar');
+    bar.append(el('span', null, `${a.name} · ${size(a.size)}`));
+    if (kind === 'raw') {
+      const send = el('button', p.job ? null : 'primary', p.job ? 'Send again' : 'Send to editor'); send.type = 'button';
+      send.title = 'Makes a studio job from this clip, like dropping it on Edit';
+      send.onclick = async () => {
+        send.disabled = true; send.textContent = 'Sending…';
+        try { const r = await api(`/api/plans/${p.id}/to-edit`, { path: a.path }); sentNote(vgrid, r.job); load(); }
+        catch (err) { send.disabled = false; send.textContent = 'Send to editor'; alertLine(vgrid, err.message); }
+      };
+      bar.append(send);
+    } else {
+      bar.append(Object.assign(el('a', 'button', 'Download'), { href: fileUrl(p, a), download: a.name }));
+    }
+    const del = el('button', 'ghost', 'Delete'); del.type = 'button';
+    del.onclick = async () => { if (!confirmTwice(del)) return; await api(`/api/plans/${p.id}/files/delete`, { path: a.path }); load(); };
+    bar.append(del);
+    v.append(player, bar, xDelete(p, a, a.name)); vgrid.append(v);
+  }
+  vgrid.append(dropZone(p.id, kind, 'video/*', dropLabel));
+  sec.append(vgrid);
+  if (kind === 'raw' && p.job) { const j = el('p', 'muted', ''); j.style.margin = '8px 0 0'; j.append('In the editor as ', Object.assign(el('a', null, p.job), { href: '/?job=' + p.job }), '. Say "run my studio jobs" to start it.'); sec.append(j); }
+  if (kind === 'final' && p.assets.some((x) => x.kind === 'final')) sec.append(Object.assign(el('p', 'muted', p.status === 'posted' ? 'Posted.' : 'Ready to post. Set the stage to Posted once it\'s live.'), { style: 'margin:8px 0 0' }));
+  return sec;
+}
+
+// A drop-or-click upload box for one plan (used on the cards).
+function dropZone(planId, kind, accept, label) {
+  const box = el('label', 'upl'); box.tabIndex = 0;
+  const input = Object.assign(el('input'), { type: 'file', multiple: true, hidden: true, accept });
+  const txt = el('span', null, label); box.append(input, txt);
+  const send = async (files) => {
+    for (const [i, f] of [...files].entries()) {
+      txt.textContent = `Uploading ${i + 1} of ${files.length}: ${f.name}…`;
+      const r = await fetch(`/api/plans/${planId}/upload?kind=${kind}`, { method: 'POST', headers: { 'x-filename': encodeURIComponent(f.name) }, body: f });
+      if (!r.ok) { txt.textContent = (await r.json().catch(() => ({}))).error || 'Upload failed.'; return; }
+    }
+    load();
+  };
+  input.onchange = () => input.files.length && send(input.files);
+  box.ondragover = (e) => { e.preventDefault(); box.classList.add('over'); };
+  box.ondragleave = () => box.classList.remove('over');
+  box.ondrop = (e) => { e.preventDefault(); box.classList.remove('over'); if (e.dataTransfer.files.length) send(e.dataTransfer.files); };
+  box.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } };
+  return box;
+}
+function sentNote(box, job) { const m = el('p', 'msg ok', ''); m.style.margin = '6px 0 0'; m.append('Sent to the editor as ', Object.assign(el('a', null, job), { href: '/?job=' + job })); box.after(m); }
+// Two clicks to delete a file: the first arms the button for 4 seconds.
+// The × in the corner of a thumbnail or video: first click turns it into a red "Delete?", second click deletes.
+function xDelete(p, a, what, small) {
+  const x = el('button', 'xdel' + (small ? ' sm' : ''), '×'); x.type = 'button';
+  x.title = `Delete ${what}`; x.setAttribute('aria-label', `Delete ${what}`);
+  x.onclick = async (e) => {
+    e.preventDefault(); e.stopPropagation();   // inside the thumbnail box (a label): don't open the file picker
+    if (!x.dataset.armed) {
+      x.dataset.armed = '1'; x.classList.add('armed'); x.textContent = small ? 'Delete?' : 'Delete?';
+      setTimeout(() => { if (x.isConnected) { delete x.dataset.armed; x.classList.remove('armed'); x.textContent = '×'; } }, 4000);
+      return;
+    }
+    x.disabled = true;
+    try { await api(`/api/plans/${p.id}/files/delete`, { path: a.path }); load(); }
+    catch (err) { x.disabled = false; alertLine(x.parentElement, err.message); }
+  };
+  return x;
+}
+function confirmTwice(btn) {
+  if (btn.dataset.armed) return true;
+  btn.dataset.armed = '1'; const t = btn.textContent; btn.textContent = 'Click again';
+  setTimeout(() => { delete btn.dataset.armed; btn.textContent = t; }, 4000);
+  return false;
+}
+
+function renderYear() {
+  const act = document.activeElement;
+  if (act?.id && act.closest?.('#year')) { try { focusKey = { id: act.id, s: act.selectionStart, e: act.selectionEnd }; } catch { focusKey = { id: act.id }; } }
+  else focusKey = null;
+  const cur = currentMonth();
+  if (!openMonths) openMonths = new Set([cur]);
+  const wrap = $('year'); wrap.replaceChildren();
+  for (let m = 1; m <= 12; m++) {
+    const items = monthItems(m), done = items.filter((p) => ['ready', 'posted'].includes(p.status)).length;
+    const isOpen = openMonths.has(m);
+    const box = el('section', 'macc' + (isOpen ? ' open' : '') + (m === cur ? ' current' : ''));
+    const head = el('button', 'mhead'); head.type = 'button'; head.setAttribute('aria-expanded', isOpen);
+    head.innerHTML = ICON_CHEV;
+    head.append(el('b', null, 'Month ' + m));
+    if (m === cur) head.append(el('span', 'curpill', 'Current'));
+    head.append(el('span', 'count' + (items.length >= PER_MONTH ? ' full' : ''), `${items.length}/${PER_MONTH} planned${done ? ` · ${done} done` : ''}`));
+    head.onclick = () => { openMonths.has(m) ? openMonths.delete(m) : openMonths.add(m); saveOpen(); renderYear(); };
+    box.append(head);
+    if (isOpen) {
+      const body = el('div', 'mbody');
+      items.forEach((p, i) => body.append(videoCard(p, i + 1)));
+      for (let i = items.length; i < PER_MONTH; i++) body.append(slotForm(m, i + 1));
+      box.append(body);
+    }
+    wrap.append(box);
+  }
+  // Re-rendering (polling, saves) must not lose what's being typed: restore focus and caret.
+  if (focusKey) { const f = document.getElementById(focusKey.id); if (f) { f.focus(); try { if (focusKey.s != null) f.setSelectionRange(focusKey.s, focusKey.e); } catch {} } }
+  const total = plans.length, posted = plans.filter((p) => ['ready', 'posted'].includes(p.status)).length;
+  $('yearSum').textContent = ` · ${total} of ${PER_MONTH * 12} videos planned, ${posted} done`;
+}
+
+function renderBoard() {
+  const board = $('board'); board.replaceChildren();
+  for (const st of statuses) {
+    const col = el('div', 'col');
+    const items = plans.filter((p) => p.status === st);
+    const h = el('h3'); h.append(LABEL[st] || st, Object.assign(el('i'), { textContent: items.length || '' })); col.append(h);
+    if (!items.length) col.append(el('div', 'empty', '—'));
+    for (const p of items) {
+      const b = el('button', 'pcard' + (current?.id === p.id ? ' on' : '')); b.type = 'button';
+      b.append(el('b', null, chosenTitle(p) || p.title), el('small', null, `Month ${p.month || 1}${p.due ? ' · due ' + dateStr(p.due) : ''}`));
+      if (p.request) b.append(qPill(p));
+      b.onclick = () => open(p.id);
+      col.append(b);
+    }
+    board.append(col);
+  }
+}
+
+function renderViews() {
+  document.querySelectorAll('.seg2 button').forEach((b) => b.setAttribute('aria-selected', b.dataset.view === view));
+  $('year').hidden = view !== 'year'; $('boardWrap').hidden = view !== 'board';
+  $('viewTitle').textContent = view === 'year' ? 'Your year' : 'By stage';
+  renderYear(); renderBoard(); setStatus();
+}
+document.querySelectorAll('.seg2 button').forEach((b) => (b.onclick = () => { view = b.dataset.view; try { localStorage.setItem('plan-view', view); } catch {} renderViews(); }));
+
+async function load() {
+  const j = await api('/api/plans');
+  plans = j.plans; statuses = j.statuses;
+  if (current) { const fresh = await api('/api/plans/' + current.id).catch(() => null); if (fresh) showDetail(fresh); else closeDetail(); }
+  renderViews();
+  clearInterval(poll);
+  if (plans.some((p) => p.request)) poll = setInterval(load, 5000);
+}
+function closeDetail() { current = null; $('detail').hidden = true; try { history.replaceState(null, '', '/plan'); } catch {} renderViews(); }
+$('closeDetail').onclick = closeDetail;
+async function open(id) {
+  showDetail(await api('/api/plans/' + id)); renderViews();
+  $('detail').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  try { history.replaceState(null, '', '?plan=' + id); } catch {}
+}
+
+function showDetail(p) {
+  const same = current?.id === p.id; current = p; $('detail').hidden = false;
+  if (!same || !document.activeElement?.closest('#editForm')) {
+    $('eTitle').value = p.title; $('eNotes').value = p.notes || '';
+    $('eMonth').value = String(p.month || 1); $('eDue').value = p.due || '';
+  }
+  $('dHead').textContent = `Month ${p.month || 1} video`;
+  const sel = $('eStatus'); sel.replaceChildren(...statuses.map((s) => Object.assign(el('option', null, LABEL[s] || s), { value: s }))); sel.value = p.status;
+  const info = $('info'); info.replaceChildren();
+  for (const [k, v] of [['Due', dateStr(p.due)], ['Files', p.assets.length], ['Notes', p.notesLog.length]]) { const d = el('div'); d.append(el('b', null, String(v)), k); info.append(d); }
+  $('toScript').href = '/script?plan=' + p.id;
+  $('toScript').textContent = p.request ? `${p.requestLabel} is queued: open Script` : p.script ? 'Open the script on the Script tab' : pastScript(p) ? 'Add the script on the Script tab' : 'Write the script on the Script tab';
+  if (!same) tab = 'pack';
+  renderTabs();
+}
+
+function renderTabs() {
+  const counts = { pack: (current.titles.length + current.assets.filter((a) => a.kind === 'thumb').length) || '', notes: current.notesLog.length || '', assets: current.assets.filter((a) => a.kind === 'file').length || '' };
+  document.querySelectorAll('#tabs button').forEach((b) => {
+    const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on);
+    b.querySelector('i')?.remove(); if (counts[b.dataset.tab]) b.append(Object.assign(el('i'), { textContent: counts[b.dataset.tab] }));
+  });
+  // The page refreshes itself while Claude works: keep whatever is being typed in the tab (focus and caret).
+  const act = document.activeElement, keep = act?.id && act.closest?.('#sheet') ? { id: act.id, s: act.selectionStart, e: act.selectionEnd } : null;
+  const sheet = $('sheet'); sheet.replaceChildren();
+  ({ pack: renderPack, notes: renderNotes, assets: renderAssets }[tab] || renderPack)(sheet);
+  if (keep) { const f = document.getElementById(keep.id); if (f) { f.focus(); try { if (keep.s != null) f.setSelectionRange(keep.s, keep.e); } catch {} } }
+}
+// Unsaved text in the tabs, per plan, so a refresh never wipes it: new title option, edited title options, new note.
+const sheetDrafts = {};
+const draft = (k, v) => (v === undefined ? sheetDrafts[current.id + k] : (sheetDrafts[current.id + k] = v));
+const clearDraft = (k) => { delete sheetDrafts[current.id + k]; };
+document.querySelectorAll('#tabs button').forEach((b) => (b.onclick = () => { tab = b.dataset.tab; renderTabs(); }));
+
+// Titles & thumbnails
+async function saveTitles(titles) { showDetail(await api('/api/plans/' + current.id, { titles })); renderViews(); }
+function renderPack(sheet) {
+  const ts = el('div', 'sec'); ts.append(el('h3', null, 'Title options'), el('p', 'muted', 'Write a few, then pick the one you\'ll publish. The chosen title shows on the year plan.'));
+  for (const t of current.titles) {
+    const row = el('div', 'trow' + (t.chosen ? ' chosen' : ''));
+    const r = Object.assign(el('input'), { type: 'radio', name: 'chosenTitle', checked: t.chosen, title: 'Use this title' });
+    r.setAttribute('aria-label', 'Use this title');
+    r.onchange = () => saveTitles(current.titles.map((x) => ({ ...x, chosen: x.id === t.id })));
+    // Each title is editable in place: type, then Enter or click away to save.
+    const txt = Object.assign(el('input', 'txt'), { type: 'text', id: 'topt-' + t.id, value: draft('o' + t.id) ?? t.text });
+    txt.setAttribute('aria-label', 'Title option');
+    txt.oninput = () => draft('o' + t.id, txt.value);
+    const save = () => { const v = txt.value.trim(); clearDraft('o' + t.id); if (v && v !== t.text) saveTitles(current.titles.map((x) => (x.id === t.id ? { ...x, text: v } : x))); };
+    txt.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); txt.blur(); } if (e.key === 'Escape') { clearDraft('o' + t.id); txt.value = t.text; txt.blur(); } };
+    txt.onchange = save;
+    const del = el('button', 'ghost', 'Remove'); del.type = 'button';
+    del.onclick = (e) => { e.preventDefault(); saveTitles(current.titles.filter((x) => x.id !== t.id)); };
+    row.append(r, txt, del); ts.append(row);
+  }
+  const add = el('form', 'row'); const inp = Object.assign(el('input'), { type: 'text', placeholder: 'Add a title option', id: 'newTitleOpt', value: draft('new') || '' });
+  inp.oninput = () => draft('new', inp.value);
+  add.append(inp, Object.assign(el('button', null, 'Add'), { type: 'submit' }));
+  add.onsubmit = (e) => { e.preventDefault(); const v = inp.value.trim(); if (!v) return; clearDraft('new'); saveTitles([...current.titles, { text: v, chosen: !current.titles.length }]); };
+  ts.append(add); sheet.append(ts);
+
+  const th = el('div', 'sec'); th.append(el('h3', null, 'Thumbnail options'), el('p', 'muted', 'Upload your drafts and pick one. PNG, JPG or WEBP, 1280×720 is the YouTube size.'));
+  const grid = el('div', 'thumbs');
+  for (const a of current.assets.filter((x) => x.kind === 'thumb')) {
+    const chosen = current.thumb === a.name;
+    const card = el('div', 'thumb' + (chosen ? ' chosen' : ''));
+    const img = Object.assign(el('img'), { src: fileUrl(current, a), alt: a.name, loading: 'lazy' });
+    const bar = el('div', 'bar2');
+    const pick = el('button', chosen ? 'ghost' : null, chosen ? 'Chosen' : 'Use this'); pick.type = 'button';
+    pick.onclick = async () => { showDetail(await api('/api/plans/' + current.id, { thumb: chosen ? null : a.name })); renderViews(); };
+    const del = el('button', 'ghost', 'Delete'); del.type = 'button';
+    del.onclick = () => removeFile(a);
+    bar.append(chosen ? el('span', 'chosen-tag', 'Chosen') : el('span', null, a.name), pick, del);
+    card.append(img, bar); grid.append(card);
+  }
+  th.append(grid, uploader('thumb', 'image/png,image/jpeg,image/webp,image/gif', 'Drop thumbnail images here, or click to choose')); sheet.append(th);
+}
+
+// Notes
+function renderNotes(sheet) {
+  const sec = el('div', 'sec');
+  sec.append(el('h3', null, 'Production notes'), el('p', 'muted', 'Shot ideas, thumbnail ideas, things to say, feedback. Newest first.'));
+  const f = el('form'); f.style.cssText = 'display:grid;gap:8px';
+  const ta = Object.assign(el('textarea'), { id: 'newNote', value: draft('note') || '', placeholder: 'Film the CRM screen-share in Act 3. Thumbnail: me pointing at a 5-star review…' });
+  ta.oninput = () => draft('note', ta.value);
+  f.append(ta, Object.assign(el('button', 'primary', 'Add note'), { type: 'submit' }));
+  f.querySelector('button').style.justifySelf = 'start';
+  f.onsubmit = async (e) => { e.preventDefault(); if (!ta.value.trim()) return; const text = ta.value; clearDraft('note'); showDetail(await api(`/api/plans/${current.id}/notes`, { text })); };
+  sec.append(f);
+  if (!current.notesLog.length) sec.append(el('p', 'none', 'No notes yet.'));
+  for (const n of current.notesLog) {
+    const card = el('div', 'note'); const meta = el('div');
+    const del = el('button', null, 'Delete'); del.type = 'button';
+    del.onclick = async () => showDetail(await api(`/api/plans/${current.id}/notes`, { remove: n.id }));
+    meta.append(el('span', null, new Date(n.at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })), del);
+    card.append(el('p', null, n.text), meta); sec.append(card);
+  }
+  sheet.append(sec);
+}
+
+// Assets
+function renderAssets(sheet) {
+  const sec = el('div', 'sec');
+  sec.append(el('h3', null, 'Files & assets'), el('p', 'muted', 'B-roll, screenshots, logos, proof, documents. When this video is edited, Claude uses these for proof and image moments before asking you for anything.'));
+  const files = current.assets.filter((a) => a.kind === 'file');
+  if (!files.length) sec.append(el('p', 'none', 'No files yet.'));
+  for (const a of files) {
+    const row = el('div', 'arow'); const ic = el('span', 'ic', a.type === 'image' ? '' : a.type === 'video' ? 'VIDEO' : (a.name.split('.').pop() || 'FILE').toUpperCase().slice(0, 4));
+    if (a.type === 'image') ic.style.backgroundImage = `url("${fileUrl(current, a)}")`;
+    const link = Object.assign(el('a', null, a.name), { href: fileUrl(current, a), target: '_blank', rel: 'noopener' });
+    const del = el('button', 'ghost', 'Delete'); del.type = 'button'; del.onclick = () => removeFile(a);
+    row.append(ic, link, el('small', null, size(a.size)), del); sec.append(row);
+  }
+  sec.append(uploader('file', '', 'Drop files here, or click to choose (any type, several at once)'));
+  sheet.append(sec);
+}
+
+function uploader(kind, accept, label) {
+  const box = el('label', 'upl'); box.tabIndex = 0;
+  const input = Object.assign(el('input'), { type: 'file', multiple: true, hidden: true }); if (accept) input.accept = accept;
+  const txt = el('span', null, label); box.append(input, txt);
+  const send = async (files) => {
+    for (const [i, f] of [...files].entries()) {
+      txt.textContent = `Uploading ${i + 1} of ${files.length}: ${f.name}…`;
+      const r = await fetch(`/api/plans/${current.id}/upload?kind=${kind}`, { method: 'POST', headers: { 'x-filename': encodeURIComponent(f.name) }, body: f });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) { txt.textContent = j.error || 'Upload failed.'; return; }
+      current = j;
+    }
+    showDetail(current); renderViews();
+  };
+  input.onchange = () => input.files.length && send(input.files);
+  box.ondragover = (e) => { e.preventDefault(); box.classList.add('over'); };
+  box.ondragleave = () => box.classList.remove('over');
+  box.ondrop = (e) => { e.preventDefault(); box.classList.remove('over'); if (e.dataTransfer.files.length) send(e.dataTransfer.files); };
+  box.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } };
+  return box;
+}
+async function removeFile(a) { showDetail(await api(`/api/plans/${current.id}/files/delete`, { path: a.path })); renderViews(); }
+
+// Forms
+const formBody = () => ({ title: $('eTitle').value, notes: $('eNotes').value, month: $('eMonth').value, due: $('eDue').value });
+$('editForm').onsubmit = async (e) => {
+  e.preventDefault();
+  try { showDetail(await api('/api/plans/' + current.id, formBody())); $('editMsg').className = 'msg ok'; $('editMsg').textContent = 'Saved.'; load(); }
+  catch (err) { $('editMsg').className = 'msg err'; $('editMsg').textContent = err.message; }
+};
+$('eStatus').onchange = async () => { await api('/api/plans/' + current.id, { status: $('eStatus').value }); load(); };
+let delArmed = false;
+$('delBtn').onclick = async () => {
+  if (!delArmed) { delArmed = true; $('delBtn').textContent = 'Click again to delete (files too)'; setTimeout(() => { delArmed = false; $('delBtn').textContent = 'Delete video'; }, 4000); return; }
+  await api(`/api/plans/${current.id}/delete`, {}); delArmed = false; $('delBtn').textContent = 'Delete video';
+  try { history.replaceState(null, '', '/plan'); } catch {}
+  closeDetail(); load();
+};
+
+// Channel
+async function loadYT(refresh) {
+  $('ytRefresh').disabled = true; $('ytRefresh').textContent = 'Loading…';
+  try {
+    const d = await api('/api/youtube' + (refresh ? '?refresh' : ''));
+    if (d.error && !d.videos) { $('ytList').replaceChildren(el('span', 'muted', d.error)); return; }
+    if (d.channel) $('chanName').textContent = d.channel;
+    $('ytCount').textContent = fmt(d.videos.length);
+    $('ytViews').textContent = fmt(d.videos.reduce((a, v) => a + v.views, 0));
+    $('ytLikes').textContent = fmt(d.videos.reduce((a, v) => a + v.likes, 0));
+    $('ytList').replaceChildren(...d.videos.slice(0, 5).map((v) => {
+      const a = el('a', 'vid'); a.href = 'https://www.youtube.com/watch?v=' + v.id; a.target = '_blank'; a.rel = 'noopener';
+      a.append(el('span', null, v.title), el('span', null, `${fmt(v.views)} views · ${new Date(v.published).toLocaleDateString([], { month: 'short', day: 'numeric' })}`));
+      return a;
+    }));
+    $('ytNote').textContent = `Updated ${new Date(d.at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}${d.stale ? ' (YouTube didn\'t answer, showing the last copy)' : ''}. From your public feed: latest uploads only, no subscriber count.`;
+  } catch (err) { $('ytList').replaceChildren(el('span', 'muted', err.message)); }
+  finally { $('ytRefresh').disabled = false; $('ytRefresh').textContent = 'Refresh'; }
+}
+$('ytRefresh').onclick = () => loadYT(true);
+
+api('/api/catalog').then((c) => { styles = (c.styles || []).filter((x) => x.scriptShape === 'long-form'); renderViews(); }).catch(() => {});
+load().then(() => { const id = new URLSearchParams(location.search).get('plan'); if (id) open(id).catch(() => {}); });
+loadYT(false);
+</script>
+</body>
+</html>

@@ -9,6 +9,8 @@
 <body class="home-page">
 <header class="top bar-top">
   <a class="brand" href="/" id="homeLink"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.5v11l9-5.5z" fill="currentColor"/></svg></span>Video Studio</a>
+  <span class="planlink" style="justify-self:center;display:inline-flex;gap:6px"><a class="button ghost" href="/plan" style="font-size:12.5px;padding:4px 14px">Plan</a><a class="button ghost" href="/script" style="font-size:12.5px;padding:4px 14px">Script</a></span>
+  <span class="steppill" id="stepPill" hidden></span>
   <span class="status" id="status"><i></i><span>Ready</span></span>
 </header>
 
@@ -50,23 +52,23 @@
       </form>
     </div>
     <p id="dropMsg" class="msg"></p>
-    <ul class="features">
-      <li><i>✂</i>Cuts pauses &amp; retakes</li>
-      <li><i>◆</i>Best 3 of 67 formats</li>
-      <li><i>✦</i>Motion graphics &amp; sound</li>
-      <li><i>●</i>Notes at the exact second</li>
-    </ul>
   </section>
 
   <section id="job" class="jobview" hidden></section>
 
-  <section id="recent" class="recent" hidden>
-    <div class="sec-head"><h2>Your videos</h2></div>
+  <nav class="hometabs" id="homeTabs" role="tablist" aria-label="Home">
+    <button role="tab" data-hometab="recent" aria-selected="true" class="on">Your videos <span id="jobCount"></span></button>
+    <button role="tab" data-hometab="gallery" aria-selected="false">Every format</button>
+  </nav>
+
+  <section id="recent" class="recent">
     <div id="jobs" class="jobcards"></div>
+    <p class="muted" id="noJobs" hidden>Videos you drop show up here.</p>
   </section>
 
-  <section id="gallery" class="gallery">
-    <div class="sec-head"><h2>Every format</h2><p class="muted">Drop a video and Claude picks the best 3, or choose any of these yourself. Each preview loops so you can compare them.</p>
+  <section id="gallery" class="gallery" hidden>
+    <div class="sec-head"><button class="foldbtn" id="galleryToggle" hidden aria-expanded="false">Every format</button>
+      <p class="muted">Drop a video and Claude picks the best 3, or choose any of these yourself. Each preview loops so you can compare them.</p>
       <div class="seg aspect" role="group" aria-label="Formats to show">
         <button data-aspect="all" class="on">All</button>
         <button data-aspect="short"><i class="ic v"></i>Vertical</button>
@@ -76,11 +78,15 @@
   </section>
 </main>
 
+<!-- Always on screen while a job needs you: approve / reject and the step's other moves. -->
+<div class="actionbar" id="actionbar" hidden></div>
+
 <template id="claudeHint">
+  <details class="fold small"><summary>How to start Claude on this</summary>
   <div class="hint">
     <p>Claude does this part. In Claude Code, opened on the Video Studio folder, say:</p>
     <div class="row"><code>run my studio jobs</code><button class="copy" data-copy="run my studio jobs">Copy</button></div>
-  </div>
+  </div></details>
 </template>
 
 <script>
@@ -93,6 +99,9 @@ let pick = { job: null, style: null, ideas: new Set(), combo: null };
 let intake = { mode: 'video', reels: { count: 'auto', length: '30-60' } };
 // Reels ticked on the pick-reels screen, and notes typed on the graphics screen (survive the refresh).
 let reelPick = { job: null, ids: new Set() }, gfxNotes = {};
+// Approve / reject marks per graphic and per finished reel, plus reel notes and the video's overall note.
+let gfxDecision = {}, reelDecision = {}, reelNotes = {}, videoNote = '', reelTab = null, homeTab = 'recent', galleryOpen = false;
+let integrations = { instagram: false, sheets: false }, videoCaption = null;
 
 async function api(url, opts = {}) {
   const res = await fetch(url, opts);
@@ -160,7 +169,7 @@ const slugOf = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(
 function styleCard(s, opts = {}) {
   const shape = s.group === 'short' ? 'tall' : s.group === 'long' ? 'wide' : 'tool';
   const src = opts.preview || previews[slugOf(s.name)];
-  const thumb = src ? `<video src="${src}" muted loop playsinline autoplay preload="metadata"></video>`
+  const thumb = src ? `<video src="${src}" muted loop playsinline autoplay preload="metadata"></video>${opts.preview ? `<span class="watch" data-watch="${src}">▶ Watch with sound</span>` : ''}`
     : `<span class="ph-${shape}"><em>${esc(s.name)}</em></span>`;
   return `<button class="sc ${opts.best ? 'best' : ''} ${opts.on ? 'on' : ''}" data-${opts.as || 'style'}="${s.id}">
     <span class="thumb ${shape}">${thumb}${opts.rank ? `<span class="rank">${opts.rank === 1 ? 'Best fit' : '#' + opts.rank}</span>` : ''}</span>
@@ -196,6 +205,7 @@ const STEPS_REELS = [
   { key: 'design', label: 'Designing the motion graphics', who: 'claude' },
   { key: 'graphics', label: 'Approve the graphics', who: 'you' },
   { key: 'final', label: 'Rendering your reels', who: 'claude' },
+  { key: 'review', label: 'Review your reels', who: 'you', also: ['revise'] },
 ];
 let STEPS = STEPS_VIDEO;
 const stepsFor = (job) => (job.mode === 'reels' ? STEPS_REELS : STEPS_VIDEO);
@@ -209,6 +219,7 @@ function stepDetail(job, s) {
   if (s.key === 'design') return gfx.length ? `${gfx.length} graphics` : '';
   if (s.key === 'graphics') return gfx.length ? `${gfx.filter((g) => g.status === 'approved').length} of ${gfx.length} approved` : '';
   if (job.mode === 'reels' && s.key === 'final') return (job.reels || []).length ? `${job.reels.length} reels` : '';
+  if (job.mode === 'reels' && s.key === 'review') { const r = job.reels || []; return r.length ? `${r.filter((x) => x.status === 'approved').length} of ${r.length} approved` : ''; }
   if (s.key === 'formats') return job.formats ? `top 3 of ${catalog.filter((c) => c.kind === 'style').length}` : (job.duration ? fmtTime(job.duration) : '');
   if (s.key === 'pick') return job.style ? styleOf(job.style).name + ((job.picked || []).length ? ` + ${job.picked.length} ideas` : '') : '';
   if (s.key === 'edit') return (job.edits || []).length ? `${job.edits.length} edits` : (job.style ? styleOf(job.style).name : '');
@@ -220,9 +231,12 @@ const fmtTime = (s) => { s = Math.round(Number(s) || 0); return `${Math.floor(s 
 
 function mediaFor(job) {
   // What the phone frame plays: the final, then the preview, then the raw clip. Reels mode, done: reel 1.
-  if (job.mode === 'reels' && job.stage === 'done' && job.reels?.[0]) return { src: fileUrl(job, job.reels[0].file), badge: 'Reel 1' };
+  if (job.mode === 'reels' && ['review', 'revise', 'done'].includes(job.stage) && job.reels?.[0]) return { src: fileUrl(job, job.reels[0].file), badge: 'Reel 1' };
   if (job.final && !compareRaw) return { src: fileUrl(job, job.final), badge: 'Edited' };
   if (job.preview && !compareRaw && job.stage !== 'done') return { src: fileUrl(job, job.preview), badge: 'Preview' };
+  // While Claude works: a light 720p copy of the latest cut (rough cut, then drafts), so the edit in progress is always watchable.
+  // The raw upload is often 4K HEVC .mov, which the browser can't play.
+  if (job.progress && !compareRaw) return { src: fileUrl(job, job.progress), badge: 'Edit so far' };
   if (job.source) return { src: fileUrl(job, job.source), badge: 'Raw' };
   return { src: null, badge: job.url ? 'Link' : 'Raw' };
 }
@@ -244,27 +258,35 @@ function renderJob(job) {
   const meta = [style && style.name, job.duration && fmtTime(job.duration), new Date(job.created).toLocaleString()].filter(Boolean).join(' · ');
 
   let side;
-  if (done && job.mode === 'reels') {
+  const reelsOut = job.mode === 'reels' && ['review', 'done'].includes(job.stage) && (job.reels || []).length;
+  if (reelsOut) {
     const reels = job.reels || [], gfx = job.graphics || [];
     const total = reels.reduce((s, r) => s + ((r.end ?? 0) - (r.start ?? 0)), 0);
+    const ok = reels.filter((r) => r.status === 'approved').length, posted = reels.filter((r) => r.ig?.status === 'posted').length;
     side = `<span class="okpill"><i>✓</i>${reels.length} reels cut</span>
-      <h1 class="ready">Your reels are <em>ready.</em></h1>
-      <p class="mono">${esc(job.title)}</p>
+      <h1 class="ready">${ok === reels.length ? 'Your reels are <em>approved.</em>' : 'Review your <em>reels.</em>'}</h1>
+      <p class="muted">${ok} of ${reels.length} approved${posted ? ` · ${posted} on Instagram` : ''}. ${ok < reels.length ? 'Watch each one, leave a note, then approve or reject it below.' : 'Post the ones you want from the Approved tab.'}</p>
+      <details class="fold"><summary>Details</summary>
       <div class="stats">
         <div><span>Reels</span><b>${reels.length}</b><small>9:16 · with captions</small></div>
         <div><span>Source</span><b>${job.duration ? fmtTime(job.duration) : '—'}</b><small>${total ? fmtTime(total) + ' used' : 'long video'}</small></div>
         <div><span>Graphics</span><b>${gfx.length}</b><small>${gfx.filter((g) => g.status === 'approved').length} approved by you</small></div>
         <div><span>Captions</span><b>${reels.filter((r) => r.caption).length}</b><small>ready to paste</small></div>
       </div>
-      <div class="actions">
-        ${reels.length ? `<button class="cta" id="getAll">⤓ Download all ${reels.length}</button>` : ''}
-        <a class="button" href="#reelgrid">See the reels ↓</a>
-        <button class="ghost" id="another">Edit another</button>
-      </div>`;
+      <p class="mono">${esc(job.title)}</p>
+      <div class="actions">${reels.length ? `<button id="getAll">⤓ Download all ${reels.length}</button>` : ''}<button class="ghost" id="another">Edit another</button></div>
+      </details>`;
   } else if (done) {
     const notes = job.notes || [], edits = job.edits || [];
     side = `<span class="okpill"><i>✓</i>Edited${style ? ' in ' + esc(style.name) : ''}</span>
       <h1 class="ready">Your video is <em>ready.</em></h1>
+      <div class="actions">
+        ${job.final ? `<a class="button cta" href="${fileUrl(job, job.final)}" download>⤓ Download MP4</a>` : ''}
+        ${job.final && job.source ? `<button id="compare">${compareRaw ? 'Show the edit' : 'Compare with raw'}</button>` : ''}
+        <button class="ghost" id="another">Edit another</button>
+      </div>
+      ${job.final ? videoPostBlock(job) : ''}
+      <details class="fold"><summary>Details and files</summary>
       <p class="mono">${esc(job.final || '')}${job.final ? ' · ' : ''}${esc(job.title)}</p>
       <div class="stats">
         <div><span>Format</span><b>${esc(style ? style.name : 'Tool')}</b><small>${esc(style ? style.aspect : '')}</small></div>
@@ -274,11 +296,7 @@ function renderJob(job) {
       </div>
       ${edits.length ? `<p class="label">Edits</p><div class="editstrip">${edits.slice(0, 18).map((e) => `<span title="${esc(e.label || e.type)}">${esc((e.type || 'edit').slice(0, 1).toUpperCase())}</span>`).join('')}</div>` : ''}
       ${(job.outputs || []).length ? `<p class="label">Files</p><div class="files">${job.outputs.map((f) => `<a class="chip" href="${fileUrl(job, f)}" target="_blank">${esc(f)}</a>`).join('')}</div>` : ''}
-      <div class="actions">
-        ${job.final ? `<a class="button cta" href="${fileUrl(job, job.final)}" download>⤓ Download MP4</a>` : ''}
-        ${job.final && job.source ? `<button id="compare">${compareRaw ? 'Show the edit' : 'Compare with raw'}</button>` : ''}
-        <button class="ghost" id="another">Edit another</button>
-      </div>`;
+      </details>`;
   } else {
     const steps = STEPS.map((s, i) => `<li class="${i < idx ? 'done' : i === idx ? 'now ' + s.who : ''}">
         <i></i><span>${s.label}${i === idx && s.who === 'you' ? ' <em>· your turn</em>' : ''}</span><code>${esc(stepDetail(job, s))}</code></li>`).join('');
@@ -293,7 +311,7 @@ function renderJob(job) {
         <div class="actions"><a class="button cta" href="#reelpick">See the reels ↓</a></div></div>`;
     } else if (job.stage === 'design') {
       const fixes = gfx.filter((g) => g.status === 'changes').length;
-      card = `<div class="ctx"><p class="label">Now</p><p>${fixes ? `Claude is changing the ${fixes} graphic${fixes > 1 ? 's' : ''} you noted.` : `Claude is designing the motion graphics${job.mode === 'reels' ? ` for your ${(job.chosen || []).length} reels` : ''}.`} You'll see stills of each one to approve before anything renders.</p>${$('#claudeHint').innerHTML}</div>`;
+      card = `<div class="ctx"><p class="label">Now</p><p>${fixes ? `Claude is changing the ${fixes} graphic${fixes > 1 ? 's' : ''} you noted.` : `Claude is designing the motion graphics${job.mode === 'reels' ? ` for your ${(job.chosen || []).length} reels` : ''}.`} You'll see stills of each one to approve before anything renders.</p>${gfx.length ? `<div class="actions"><a class="button" href="#gfx">See the graphics so far ↓</a></div>` : ''}${$('#claudeHint').innerHTML}</div>`;
     } else if (job.stage === 'graphics') {
       const left = gfx.filter((g) => g.status !== 'approved').length;
       card = `<div class="ctx shout"><p class="label">Your turn</p>
@@ -315,19 +333,61 @@ function renderJob(job) {
     } else {
       const ideasN = (job.picked || []).length, combo = (job.combos || []).find((c) => c.id === job.combo);
       const say = job.stage === 'edit' ? `Claude is editing this in ${esc(style ? style.name : 'the chosen format')}${combo ? ` with the <b>${esc(combo.name)}</b> combo (${ideasN} effects)` : ideasN ? ` with your ${ideasN} picked idea${ideasN > 1 ? 's' : ''}` : ''}. You'll get a preview to review first.`
+        : job.stage === 'revise' && job.mode === 'reels' ? `Claude is fixing the ${(job.reels || []).filter((r) => r.status === 'changes').length || ''} reels you rejected, using your notes. They come back here for another look.`
         : job.stage === 'revise' ? `Claude is working through your ${(job.notes || []).filter((n) => n.status === 'open').length || ''} notes.`
         : job.mode === 'reels' ? `Claude is rendering your ${(job.chosen || []).length || ''} reels with the graphics you approved, and writing a caption for each.` : 'Claude is rendering the final version.';
       card = `<div class="ctx"><p class="label">Now</p><p>${say}</p>${$('#claudeHint').innerHTML}</div>`;
     }
     side = `<div class="filehead"><span class="fileicon">▣</span><div><b>${esc(job.title)}</b><p class="mono">${esc(meta)}</p></div></div>
-      <div class="pct"><b>${pct}<small>%</small></b><span>${STEPS[idx]?.who === 'you' ? 'Waiting on you' : 'Waiting on Claude'}</span></div>
-      <div class="pbar"><span style="width:${pct}%"></span></div>
-      <ol class="steps">${steps}</ol>${card}`;
+      ${card}
+      <details class="fold"><summary>Progress <span class="muted">${pct}% · ${STEPS[idx]?.who === 'you' ? 'waiting on you' : 'waiting on Claude'}</span></summary>
+        <div class="pbar"><span style="width:${pct}%"></span></div>
+        <ol class="steps">${steps}</ol></details>`;
   }
   const board = job.stage === 'pick' ? ideasBoard(job) : job.stage === 'clips' ? reelsBoard(job)
-    : job.stage === 'graphics' ? graphicsBoard(job) : done && job.mode === 'reels' ? reelGrid(job) : '';
-  return `<button class="back ghost" id="back">← All videos</button><div class="jobgrid">${phone}<div class="side">${side}</div></div>${board}`;
+    : job.stage === 'graphics' ? graphicsBoard(job)
+    // While Claude works on them (or edits with them), the graphics stay on the page to look at, read-only.
+    : ['design', 'edit', 'revise', 'final'].includes(job.stage) && (job.graphics || []).length ? graphicsBoard(job, true) : job.mode === 'reels' && (job.reels || []).length && ['review', 'revise', 'done'].includes(job.stage) ? reelGrid(job) : '';
+  return `<button class="back ghost" id="back">← All videos</button><div class="jobgrid${wide ? ' wide' : ''}"><div class="playcol">${phone}${captionCard(job)}</div><div class="side">${side}</div></div>${board}`;
 }
+
+// ---------- the pinned toolbar: the step's approve / reject, always on screen ----------
+function actionBar(job) {
+  if (!job) return '';
+  const msg = '<span class="msg" id="barMsg" role="status"></span>';
+  if (job.stage === 'clips') {
+    const n = reelPick.ids.size;
+    return `<span class="bar-sum">${n ? `<b>${n} reel${n > 1 ? 's' : ''}</b> picked · motion graphics next` : 'Tick the reels you want'}</span>${msg}
+      <span class="bar-btns"><button class="cta" id="makeReels">Make these reels</button></span>`;
+  }
+  if (job.stage === 'pick') {
+    const base = pick.style ? styleOf(pick.style) : null, combo = (job.combos || []).find((c) => c.id === pick.combo);
+    return `<span class="bar-sum">${combo ? `<b>${esc(combo.name)}</b> · ` : ''}${base ? `<b>${esc(base.name)}</b>` : 'Pick a base format'}${pick.ideas.size ? ` + <b>${pick.ideas.size} idea${pick.ideas.size > 1 ? 's' : ''}</b>` : ''}</span>${msg}
+      <span class="bar-btns"><button class="cta" id="go">Start editing</button></span>`;
+  }
+  if (job.stage === 'graphics') {
+    const open = (job.graphics || []).filter((g) => g.status !== 'approved');
+    const rej = open.filter((g) => gfxRejected(g.id)).length;
+    return `<span class="bar-sum"><b>${open.length}</b> graphic${open.length === 1 ? '' : 's'} to approve${rej ? ` · <b class="bad">${rej} rejected</b>` : ''}</span>${msg}
+      <span class="bar-btns"><button class="reject" id="gfxReject">Reject${rej ? ` ${rej}` : ''}</button><button class="cta" id="gfxGo">${rej ? 'Approve the rest' : 'Approve all'}</button></span>`;
+  }
+  if (job.stage === 'review' && job.mode !== 'reels') {
+    const open = (job.notes || []).filter((n) => n.status === 'open').length;
+    return `<label class="bar-note"><span class="sr-only">Notes on this video</span><textarea id="videoNote" rows="1" placeholder="Notes on this video before you approve">${esc(videoNote)}</textarea></label>${msg}
+      <span class="bar-btns"><a class="button ghost" href="/review?job=${job.id}">Open review${open ? ` (${open} notes)` : ''}</a><button class="reject" id="videoReject">Reject</button><button class="cta" id="videoApprove">Approve</button></span>`;
+  }
+  if (job.mode === 'reels' && ['review', 'done'].includes(job.stage) && (job.reels || []).length) {
+    const open = job.reels.filter((r) => r.status !== 'approved' && r.ig?.status !== 'posted');
+    const rej = open.filter((r) => reelRejected(r.id)).length;
+    if (!open.length) return '';
+    return `<span class="bar-sum"><b>${open.length}</b> reel${open.length === 1 ? '' : 's'} to review${rej ? ` · <b class="bad">${rej} rejected</b>` : ''}</span>${msg}
+      <span class="bar-btns"><button class="reject" id="reelReject">Reject${rej ? ` ${rej}` : ''}</button><button class="cta" id="reelApprove">${rej ? 'Approve the rest' : 'Approve all'}</button></span>`;
+  }
+  return '';
+}
+const gfxRejected = (id) => gfxDecision[id] === 'reject' || (gfxDecision[id] !== 'approve' && !!(gfxNotes[id] || '').trim());
+const reelRejected = (id) => reelDecision[id] === 'reject';
+function barMsg(text, err = true) { const m = $('#barMsg'); if (m) { m.textContent = text; m.className = 'msg' + (err ? ' err' : ''); } }
 
 // ---------- reels mode: pick the reels (clips.json) ----------
 function reelsBoard(job) {
@@ -352,53 +412,104 @@ function reelsBoard(job) {
       <p class="muted">Each one is a moment Claude would cut into its own 9:16 reel, with the hook it opens on. Click the time to watch it.</p></div>
     <p class="label">${n} of ${clips.length} picked <button class="ghost small" id="reelsAll">${n === clips.length ? 'Clear all' : 'Take them all'}</button></p>
     <div class="reelrows">${clips.map(row).join('')}</div>
-    <div class="gobar"><span>${n ? `<b>${n} reel${n > 1 ? 's' : ''}</b> · motion graphics next, for you to approve` : 'Tick at least one reel'}</span>
-      <button class="cta" id="makeReels" ${n ? '' : 'disabled'}>Make these reels →</button></div>
-    <p class="msg" id="reelMsg"></p>
   </section>`;
 }
 
 // ---------- every job: approve the motion graphics (graphics.json) before rendering ----------
-function graphicsBoard(job) {
+// readOnly: Claude is working on them (design) or editing with them, so they show with where each stands and no buttons.
+function graphicsBoard(job, readOnly = false) {
   const gfx = job.graphics || [];
   const groups = [...new Set(gfx.map((g) => g.reel ?? ''))];
   const titleOf = (r) => (job.clips || []).find((c) => c.id === r)?.title;
+  const where = (g) => g.status === 'approved' ? '<span class="chip ok">Approved</span>'
+    : g.status === 'changes' ? '<span class="chip busy">Being changed</span>' : '<span class="chip">Waiting on you</span>';
   const card = (g) => {
-    const ok = g.status === 'approved';
-    return `<div class="gfx ${ok ? 'ok' : ''}">
+    const ok = g.status === 'approved', rej = !readOnly && !ok && gfxRejected(g.id), yes = !readOnly && !ok && gfxDecision[g.id] === 'approve';
+    return `<div class="gfx ${ok ? 'ok' : ''} ${rej ? 'rej' : ''} ${yes ? 'yes' : ''}" id="gfx-${esc(g.id)}">
       <span class="gfx-img">${g.still ? `<img src="${fileUrl(job, g.still)}" alt="${esc(g.label || 'Graphic')} at ${fmtTime(g.t)}" loading="lazy">` : '<span class="ph-tall"><em>No still</em></span>'}</span>
       <span class="gfx-body">
-        <span class="sc-head"><span class="when">${fmtTime(g.t)}</span><b>${esc(g.label || 'Graphic')}</b>${ok ? '<span class="chip ok">Approved</span>' : ''}</span>
+        <span class="sc-head"><span class="when">${fmtTime(g.t)}</span><b>${esc(g.label || 'Graphic')}</b>${readOnly ? where(g) : ok ? '<span class="chip ok">Approved</span>' : ''}</span>
         ${g.line ? `<q>${esc(g.line)}</q>` : ''}
+        ${readOnly && g.status === 'changes' && g.note ? `<span class="muted">Your note: ${esc(g.note)}</span>` : ''}
         ${g.reply ? `<span class="muted">Changed: ${esc(g.reply)}</span>` : ''}
-        ${ok ? '' : `<textarea data-gnote="${esc(g.id)}" rows="2" placeholder="What should change? Leave empty to approve">${esc(gfxNotes[g.id] ?? '')}</textarea>`}
+        ${ok || readOnly ? '' : `<label class="notes"><span>Notes</span><textarea data-gnote="${esc(g.id)}" rows="2" placeholder="What should change?">${esc(gfxNotes[g.id] ?? '')}</textarea></label>
+          ${decideBtns('gdec', g.id, yes, rej)}`}
       </span>
     </div>`;
   };
-  const open = gfx.filter((g) => g.status !== 'approved');
-  const typed = open.filter((g) => (gfxNotes[g.id] || '').trim()).length;
+  const done = gfx.filter((g) => g.status === 'approved').length;
   return `<section class="board" id="gfx">
-    <div class="board-head"><h2 class="shout-h">Approve the <em>motion graphics</em></h2>
-      <p class="muted">Stills of each graphic over the real frame, at the moment it plays, with the line it's timed to.</p></div>
+    <div class="board-head">${readOnly
+      ? `<h2 class="shout-h">The <em>motion graphics</em> so far</h2>
+      <p class="muted">${done} of ${gfx.length} approved. ${job.stage === 'design' ? 'Claude is working on the ones marked Being changed; they come back here to approve.' : 'These are going into the edit.'}</p>`
+      : `<h2 class="shout-h">Approve the <em>motion graphics</em></h2>
+      <p class="muted">Each still shows the graphic over the real frame, with the line it's timed to. Reject one with a note to send it back.</p>`}</div>
     ${groups.map((r) => `${r ? `<p class="label">${esc(titleOf(r) || r)}</p>` : ''}<div class="gfxgrid">${gfx.filter((g) => (g.reel ?? '') === r).map(card).join('')}</div>`).join('')}
-    <div class="gobar"><span>${typed ? `<b>${typed} change${typed > 1 ? 's' : ''}</b> go back to Claude, the rest are approved` : `<b>${open.length}</b> to approve`}</span>
-      <button class="cta" id="gfxGo" ${open.length ? '' : 'disabled'}>${typed ? 'Send changes →' : 'Approve all →'}</button></div>
-    <p class="msg" id="gfxMsg"></p>
   </section>`;
 }
+const decideBtns = (attr, id, yes, rej) => `<span class="decide" role="group" aria-label="Decision">
+  <button class="small approve ${yes ? 'on' : ''}" data-${attr}="${esc(id)}:approve" aria-pressed="${yes}">✓ Approve</button>
+  <button class="small reject ${rej ? 'on' : ''}" data-${attr}="${esc(id)}:reject" aria-pressed="${rej}">✕ Reject</button></span>`;
 
 // ---------- reels mode: the finished reels (reels.json) ----------
+// Where a post stands: posting (with the step), failed, or live with its link and whether it's in the retention sheet.
+function igLine(ig = {}) {
+  if (ig.status === 'posting') return `<p class="igline busy"><i></i>${esc(ig.step || 'Posting')}…</p>`;
+  if (ig.status === 'error') return `<p class="igline err">Couldn't post: ${esc(ig.error)}</p>`;
+  if (ig.status === 'posted') return `<p class="igline ok">Posted ${esc((ig.postedAt || '').slice(0, 10))}${ig.permalink ? ` · <a href="${esc(ig.permalink)}" target="_blank" rel="noopener">View on Instagram</a>` : ''}${ig.sheet ? ' · in the retention sheet' : ig.sheetError ? ` · <span class="err">not in the sheet yet: ${esc(ig.sheetError)}</span>` : ''}</p>`;
+  return '';
+}
+// The post caption, under the video whenever it's open (written to styles/POST-CAPTIONS.md). Edit it in place; it saves when you click away.
+function captionCard(job) {
+  if (job.mode === 'reels') return '';
+  const text = videoCaption ?? job.caption ?? '';
+  if (!text && !job.final && !job.preview) return '';
+  return `<div class="capcard"><div class="capcard-head"><p class="label">Caption</p>${text ? `<button class="small ghost" data-copy="${esc(text)}">Copy</button>` : ''}</div>
+    <textarea id="videoCaption" maxlength="2200" rows="${Math.min(16, Math.max(3, text.split('\n').reduce((n, l) => n + Math.max(1, Math.ceil(l.length / 32)), 0)))}" placeholder="Claude writes the caption with the edit. You can type one here.">${esc(text)}</textarea>
+    <small class="muted" id="capSaved">${text.length} / 2200</small></div>`;
+}
+// A finished single edit: the Post to Instagram button.
+function videoPostBlock(job) {
+  const ig = job.ig || {};
+  if (ig.status === 'posted' || ig.status === 'posting') return `<div class="ctx">${igLine(ig)}</div>`;
+  return `<div class="ctx"><p class="label">Instagram</p>
+    ${!integrations.instagram ? '<p class="muted">Instagram isn\'t connected yet. Fill in the Instagram lines in <code>.env</code> (see <code>.env.example</code>) and restart the studio.</p>' : ''}
+    <p class="muted">Posts with the caption under the video.</p>
+    ${igLine(ig)}
+    <div class="actions"><button class="cta small ig" id="videoPost">${ig.status === 'error' ? 'Try posting again' : 'Post to Instagram'}</button></div></div>`;
+}
+// Which tab a reel sits in: still to review, approved (ready to post), or already on Instagram.
+const reelBucket = (r) => (r.ig?.status === 'posted' ? 'posted' : r.status === 'approved' ? 'approved' : 'review');
 function reelGrid(job) {
   const reels = job.reels || [];
-  return `<section class="board" id="reelgrid">
-    <div class="board-head"><h2 class="shout-h">Your <em>reels</em></h2><p class="muted">Each one comes with its Instagram caption, ready to paste.</p></div>
-    <div class="reelgrid">${reels.map((r, i) => `<article class="reelcard">
+  const count = (b) => reels.filter((r) => reelBucket(r) === b).length;
+  if (!reelTab || !count(reelTab)) reelTab = ['review', 'approved', 'posted'].find((b) => count(b)) || 'review';
+  const tabs = [['review', 'To review'], ['approved', 'Approved'], ['posted', 'Posted']];
+  const igState = (r) => igLine(r.ig);
+  const card = (r) => {
+    const i = reels.indexOf(r), b = reelBucket(r), rej = b === 'review' && reelRejected(r.id), yes = b === 'review' && reelDecision[r.id] === 'approve';
+    const canPost = b === 'approved' && r.ig?.status !== 'posting';
+    return `<article class="reelcard ${rej ? 'rej' : ''} ${yes ? 'yes' : ''}" id="reel-${esc(r.id)}">
       <video src="${fileUrl(job, r.file)}" muted loop playsinline controls preload="metadata"></video>
       <div class="reelcard-body">
-        <span class="sc-head"><span class="num">${i + 1}</span><b>${esc(r.title || 'Reel ' + (i + 1))}</b></span>
-        ${r.caption ? `<pre class="caption">${esc(r.caption)}</pre>` : ''}
-        <div class="actions">${r.caption ? `<button class="small" data-copy="${esc(r.caption)}">Copy caption</button>` : ''}<a class="button small" href="${fileUrl(job, r.file)}" download>⤓ MP4</a></div>
-      </div></article>`).join('')}</div>
+        <span class="sc-head"><span class="num">${i + 1}</span><b>${esc(r.title || 'Reel ' + (i + 1))}</b>${r.status === 'changes' ? '<span class="chip warn">Sent back</span>' : ''}</span>
+        ${r.reply ? `<span class="muted">Changed: ${esc(r.reply)}</span>` : ''}
+        ${r.caption ? `<div class="capcard small"><div class="capcard-head"><p class="label">Caption</p><button class="small ghost" data-copy="${esc(r.caption)}">Copy</button></div><pre class="caption">${esc(r.caption)}</pre></div>` : ''}
+        ${b === 'posted' ? (r.note ? `<p class="muted">Your note: ${esc(r.note)}</p>` : '')
+          : `<label class="notes"><span>Notes</span><textarea data-rnote="${esc(r.id)}" rows="2" placeholder="Feedback or revision notes">${esc(reelNotes[r.id] ?? r.note ?? '')}</textarea></label>`}
+        ${b === 'review' && job.stage !== 'revise' ? decideBtns('rdec', r.id, yes, rej) : ''}
+        ${igState(r)}
+        <div class="actions">
+          ${canPost ? `<button class="cta small ig" data-igpost="${esc(r.id)}">${r.ig?.status === 'error' ? 'Try posting again' : 'Post to Instagram'}</button>` : ''}
+          <a class="button small ghost" href="${fileUrl(job, r.file)}" download>⤓ MP4</a></div>
+      </div></article>`;
+  };
+  const list = reels.filter((r) => reelBucket(r) === reelTab);
+  return `<section class="board" id="reelgrid">
+    <div class="board-head"><h2 class="shout-h">Your <em>reels</em></h2>
+      ${!integrations.instagram && count('approved') ? '<p class="muted">Instagram isn\'t connected yet. Fill in the Instagram lines in <code>.env</code> (see <code>.env.example</code>) and restart the studio.</p>' : ''}</div>
+    <div class="tabs reeltabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" data-reeltab="${k}" class="${reelTab === k ? 'on' : ''}" aria-selected="${reelTab === k}">${l} <span>${count(k)}</span></button>`).join('')}</div>
+    <div class="reelgrid">${list.map(card).join('') || '<p class="muted">Nothing here.</p>'}</div>
   </section>`;
 }
 
@@ -411,7 +522,9 @@ function comboCard(job, c, ideas) {
   const dur = Number(job.duration) || Math.max(1, ...ideas.map((i) => i.end || 0));
   const timed = mine.filter((i) => i.start != null).sort((a, b) => a.start - b.start), whole = mine.filter((i) => i.start == null);
   const seg = (i, n) => `<span class="seg c${n % 4}" style="left:${(i.start / dur) * 100}%;width:${Math.max(2, ((i.end ?? i.start + 1) - i.start) / dur * 100)}%" title="${fmtTime(i.start)} ${esc(styleOf(i.style).name)}"></span>`;
+  const pv = c.preview && fileUrl(job, c.preview);
   return `<button class="combo ${on ? 'on' : ''}" data-combo="${esc(c.id)}" aria-pressed="${on}">
+    ${pv ? `<span class="thumb tall combo-thumb"><video src="${pv}" muted loop playsinline autoplay preload="metadata"></video><span class="watch" data-watch="${pv}">▶ Watch with sound</span></span>` : ''}
     <span class="combo-top"><span class="combo-name">${esc(c.name)}</span>${c.fav ? '<span class="fav">Claude’s pick</span>' : ''}
       <span class="muted">${mine.length} effects${c.base ? ' · on ' + esc(styleOf(c.base).name) : ''}</span><span class="tick">${on ? '✓' : '+'}</span></span>
     <span class="pitch">${esc(c.pitch)}</span>
@@ -450,10 +563,7 @@ function ideasBoard(job) {
       <div class="ideas">${ideas.map(card).join('')}</div>` : ''}
     <p class="label">${ideas.length ? (combos.length ? '3 · ' : '2 · ') : ''}Base format <span class="muted">pick one; the ideas go on top of it</span></p>
     <div class="top3 bases">${top.map((f, i) => styleCard(styleOf(f.style), { as: 'base', on: f.style === pick.style, rank: job.formats?.[i]?.style === f.style ? i + 1 : 0, reason: f.reason, preview: f.preview && fileUrl(job, f.preview) })).join('')}</div>
-    <p class="muted">Want another base? <a href="#gallery">Every format is below</a>; clicking one picks it here.</p>
-    <div class="gobar"><span>${combo ? `<b>${esc(combo.name)}</b>${tweaked ? ' (your tweaks)' : ''} · ` : ''}${base ? `<b>${esc(base.name)}</b>` : 'No base format yet'}${pick.ideas.size ? ` + <b>${pick.ideas.size} ${combo ? 'effect' : 'idea'}${pick.ideas.size > 1 ? 's' : ''}</b>` : ''}</span>
-      <button class="cta" id="go" ${base ? '' : 'disabled'}>Start editing →</button></div>
-    <p class="msg" id="pickMsg"></p>
+    <p class="muted">Want another base? <a href="#gallery" data-opengallery>Open every format</a>; clicking one picks it here.${tweaked ? ' You tweaked the combo.' : ''}</p>
   </section>`;
 }
 
@@ -463,10 +573,32 @@ function render() {
   const job = jobs.find((j) => j.id === current);
   document.body.classList.toggle('job-open', !!job);
   $('#hero').hidden = !!job;
+  // Home: one tab at a time. A job: only its step; every format folds away unless a format is being chosen.
+  $('#homeTabs').hidden = !!job;
+  $('#recent').hidden = !!job || homeTab !== 'recent';
+  const choosing = job && ['formats', 'pick'].includes(job.stage);
+  $('#gallery').hidden = job ? !choosing : homeTab !== 'gallery';
+  $('#galleryToggle').hidden = !job;
+  $('#gallery').classList.toggle('collapsed', !!job && !galleryOpen);
+  $('#galleryToggle').setAttribute('aria-expanded', String(!!galleryOpen));
+  const pill = $('#stepPill');
+  if (job && job.stage !== 'done') {
+    STEPS = stepsFor(job);
+    const i = stepIndex(job.stage);
+    pill.hidden = false; pill.className = 'steppill ' + job.waitingOn;
+    pill.textContent = `Step ${i + 1} of ${STEPS.length} · ${job.waitingOn === 'you' ? STEPS[i]?.label || job.stageLabel : job.stageLabel}`;
+  } else pill.hidden = true;
+  const bar = $('#actionbar'), barHtml = actionBar(job);
+  bar.hidden = !barHtml; bar.innerHTML = barHtml;
+  document.body.classList.toggle('has-bar', !!barHtml);
   const box = $('#job');
   if (!job) { box.hidden = true; box.innerHTML = ''; return; }
   box.hidden = false;
+  // Keep folded sections the way you left them across the 3 s refresh.
+  const wasOpen = [...box.querySelectorAll('details')].map((d) => d.open);
   box.innerHTML = renderJob(job);
+  const now = box.querySelectorAll('details');
+  if (now.length === wasOpen.length) now.forEach((d, i) => { d.open = wasOpen[i]; });
   // Fit the frame to the clip itself (a 16:9 source sits in a wide frame).
   const v = $('#pv');
   if (v) v.addEventListener('loadedmetadata', () => $('#phone')?.classList.toggle('wide', v.videoWidth > v.videoHeight));
@@ -482,7 +614,8 @@ function renderStatus() {
 }
 
 function renderJobs() {
-  $('#recent').hidden = !jobs.length;
+  $('#noJobs').hidden = !!jobs.length;
+  $('#jobCount').textContent = jobs.length || '';
   $('#jobs').innerHTML = jobs.map((j) => {
     const done = j.stage === 'done';
     return `<button class="jobcard ${j.id === current ? 'on' : ''}" data-job="${j.id}">
@@ -495,10 +628,84 @@ function renderJobs() {
 document.addEventListener('click', async (ev) => {
   const seek = ev.target.closest('[data-seek]'), pv = $('#pv');
   if (seek && pv) { pv.currentTime = Number(seek.dataset.seek); pv.muted = false; pv.play(); $('#phone').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+  const watch = ev.target.closest('[data-watch]');
+  if (watch) { ev.preventDefault(); ev.stopPropagation(); window.open(watch.dataset.watch, '_blank'); return; }
   const t = ev.target.closest('button, a');
   if (!t) return;
   const job = jobs.find((j) => j.id === current);
   const opt = t.closest('[data-opt]');
+  const d = t.dataset;
+  if (d.hometab) {
+    homeTab = d.hometab;
+    document.querySelectorAll('[data-hometab]').forEach((b) => { const on = b === t; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+    render(); return;
+  }
+  if (t.id === 'galleryToggle' || d.opengallery !== undefined || (t.getAttribute('href') === '#gallery' && job)) {
+    ev.preventDefault(); galleryOpen = t.id === 'galleryToggle' ? !galleryOpen : true; render();
+    if (galleryOpen) $('#gallery').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+  if (d.reeltab) { reelTab = d.reeltab; render(); return; }
+  if (d.gdec || d.rdec) {
+    const [id, choice] = (d.gdec || d.rdec).split(':'), map = d.gdec ? gfxDecision : reelDecision;
+    map[id] = map[id] === choice ? undefined : choice;
+    render();
+    if (map[id] === 'reject') $(`[data-${d.gdec ? 'gnote' : 'rnote'}="${CSS.escape(id)}"]`)?.focus();
+    return;
+  }
+  if (t.id === 'gfxReject' || t.id === 'gfxGo') {
+    const open = (job?.graphics || []).filter((g) => g.status !== 'approved');
+    const rejected = open.filter((g) => gfxRejected(g.id));
+    if (rejected.some((g) => !(gfxNotes[g.id] || '').trim())) { barMsg('Add a note to every graphic you reject, so Claude knows what to change.'); $(`#gfx-${CSS.escape(rejected.find((g) => !(gfxNotes[g.id] || '').trim()).id)}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    if (t.id === 'gfxReject' && !rejected.length) { barMsg('Press Reject on a graphic and write what to change first.'); return; }
+    const notes = Object.fromEntries(rejected.map((g) => [g.id, gfxNotes[g.id].trim()]));
+    const approve = t.id === 'gfxGo' ? open.filter((g) => !notes[g.id]).map((g) => g.id) : [];
+    try {
+      await post(`/api/jobs/${current}/graphics`, { notes, approve });
+      gfxNotes = {}; gfxDecision = {}; await refresh(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) { barMsg(e.message); }
+    return;
+  }
+  if (t.id === 'reelReject' || t.id === 'reelApprove') {
+    const open = (job?.reels || []).filter((r) => reelBucket(r) === 'review');
+    const rejected = open.filter((r) => reelRejected(r.id));
+    const noteOf = (r) => (reelNotes[r.id] ?? r.note ?? '').trim();
+    if (rejected.some((r) => !noteOf(r))) { barMsg('Add a note to every reel you reject, so Claude knows what to fix.'); return; }
+    if (t.id === 'reelReject' && !rejected.length) { barMsg('Press Reject on a reel and write what to fix first.'); return; }
+    const decisions = {};
+    for (const r of job.reels) {
+      if (rejected.includes(r)) decisions[r.id] = { status: 'changes', note: noteOf(r) };
+      else if (t.id === 'reelApprove' && open.includes(r)) decisions[r.id] = { status: 'approved', note: noteOf(r) };
+      else if (reelNotes[r.id] !== undefined) decisions[r.id] = { note: reelNotes[r.id] };
+    }
+    try { await post(`/api/jobs/${current}/reel-review`, { decisions }); reelDecision = {}; reelNotes = {}; await refresh(); }
+    catch (e) { barMsg(e.message); }
+    return;
+  }
+  if (d.igpost) {
+    const r = job?.reels.find((x) => x.id === d.igpost);
+    if (!confirm(`Post "${r?.title || 'this reel'}" to Instagram now, with its caption?`)) return;
+    t.disabled = true;
+    try { await post(`/api/jobs/${current}/reels/${d.igpost}/instagram`); await refresh(); }
+    catch (e) { t.disabled = false; alert(e.message); }
+    return;
+  }
+  if (t.id === 'videoPost') {
+    const caption = $('#videoCaption')?.value ?? job?.caption ?? '';
+    if (!confirm(`Post "${job?.title || 'this video'}" to Instagram now${caption.trim() ? ', with this caption' : ' with no caption'}?`)) return;
+    t.disabled = true;
+    try { await post(`/api/jobs/${current}/instagram`, { caption }); videoCaption = null; await refresh(); }
+    catch (e) { t.disabled = false; alert(e.message); }
+    return;
+  }
+  if (t.id === 'videoApprove' || t.id === 'videoReject') {
+    const open = (job?.notes || []).some((n) => n.status === 'open');
+    if (t.id === 'videoReject' && !videoNote.trim() && !open) { barMsg('Write what should change in the notes box first.'); $('#videoNote')?.focus(); return; }
+    if (t.id === 'videoApprove' && open && !confirm('Some notes are still open. Approve and render the final anyway?')) return;
+    try { await post(`/api/jobs/${current}/${t.id === 'videoApprove' ? 'approve' : 'request-changes'}`, { note: videoNote }); videoNote = ''; await refresh(); }
+    catch (e) { barMsg(e.message); }
+    return;
+  }
   if (t.dataset.mode) { setMode(t.dataset.mode); return; }
   if (opt && t.dataset.v) {
     intake.reels[opt.dataset.opt] = t.dataset.v;
@@ -508,17 +715,9 @@ document.addEventListener('click', async (ev) => {
   if (t.dataset.reel) { reelPick.ids.has(t.dataset.reel) ? reelPick.ids.delete(t.dataset.reel) : reelPick.ids.add(t.dataset.reel); render(); return; }
   if (t.id === 'reelsAll') { const all = (job?.clips || []).map((c) => c.id); reelPick.ids = new Set(reelPick.ids.size === all.length ? [] : all); render(); return; }
   if (t.id === 'makeReels') {
+    if (!reelPick.ids.size) { barMsg('Tick at least one reel first.'); return; }
     try { await post(`/api/jobs/${current}/reels`, { ids: [...reelPick.ids] }); await refresh(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    catch (e) { $('#reelMsg').className = 'msg err'; $('#reelMsg').textContent = e.message; }
-    return;
-  }
-  if (t.id === 'gfxGo') {
-    const open = (job?.graphics || []).filter((g) => g.status !== 'approved');
-    const notes = Object.fromEntries(open.map((g) => [g.id, (gfxNotes[g.id] || '').trim()]).filter(([, v]) => v));
-    try {
-      await post(`/api/jobs/${current}/graphics`, { notes, approve: open.filter((g) => !notes[g.id]).map((g) => g.id) });
-      gfxNotes = {}; await refresh(); window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (e) { $('#gfxMsg').className = 'msg err'; $('#gfxMsg').textContent = e.message; }
+    catch (e) { barMsg(e.message); }
     return;
   }
   if (t.id === 'getAll') {
@@ -538,8 +737,9 @@ document.addEventListener('click', async (ev) => {
   else if (t.dataset.idea) { pick.ideas.has(t.dataset.idea) ? pick.ideas.delete(t.dataset.idea) : pick.ideas.add(t.dataset.idea); render(); }
   else if (t.id === 'ideasAll') { const all = (job?.ideas || []).map((i) => i.id); pick.ideas = new Set(pick.ideas.size === all.length ? [] : all); render(); }
   else if (t.id === 'go') {
+    if (!pick.style) { barMsg('Pick a base format first.'); return; }
     try { await post(`/api/jobs/${current}/choose`, { style: pick.style, ideas: [...pick.ideas], combo: pick.combo }); await refresh(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    catch (e) { $('#pickMsg').className = 'msg err'; $('#pickMsg').textContent = e.message; }
+    catch (e) { barMsg(e.message); }
   }
   else if (t.dataset.style && job?.stage === 'pick') { pick.style = t.dataset.style; render(); $('#ideas').scrollIntoView({ behavior: 'smooth' }); }
   else if (t.dataset.job) open(t.dataset.job);
@@ -566,15 +766,28 @@ document.addEventListener('click', async (ev) => {
   }
 });
 
+// The caption saves when you leave the box.
+document.addEventListener('focusout', async (ev) => {
+  if (ev.target.id !== 'videoCaption' || videoCaption === null) return;
+  const job = jobs.find((j) => j.id === current);
+  if (!job || videoCaption === (job.caption ?? '')) { videoCaption = null; return; }
+  try { const j = await post(`/api/jobs/${current}/caption`, { caption: videoCaption }); Object.assign(job, j); videoCaption = null; const s = $('#capSaved'); if (s) s.textContent = 'Saved'; }
+  catch (e) { alert(e.message); }
+});
+
 // Typing a graphic note: keep it across refreshes and update the button without re-rendering (keeps focus).
+// Typing a note: keep it across refreshes and update the toolbar without re-rendering the board (keeps focus).
 document.addEventListener('input', (ev) => {
-  const id = ev.target.dataset?.gnote;
-  if (!id) return;
-  gfxNotes[id] = ev.target.value;
-  const typed = Object.values(gfxNotes).filter((v) => v.trim()).length, go = $('#gfxGo');
-  if (go) go.textContent = typed ? 'Send changes →' : 'Approve all →';
-  const bar = go?.previousElementSibling;
-  if (bar) bar.innerHTML = typed ? `<b>${typed} change${typed > 1 ? 's' : ''}</b> go back to Claude, the rest are approved` : 'Leave a box empty to approve that graphic';
+  const ds = ev.target.dataset || {};
+  if (ev.target.id === 'videoNote') { videoNote = ev.target.value; return; }
+  if (ev.target.id === 'videoCaption') { videoCaption = ev.target.value; const s = $('#capSaved'); if (s) s.textContent = `${videoCaption.length} / 2200`; return; }
+  if (ds.gnote) gfxNotes[ds.gnote] = ev.target.value;
+  else if (ds.rnote) reelNotes[ds.rnote] = ev.target.value;
+  else return;
+  const job = jobs.find((j) => j.id === current), bar = $('#actionbar');
+  if (bar && job) bar.innerHTML = actionBar(job);
+  // A typed graphic note marks it rejected unless you approved it on purpose; show that on the card.
+  if (ds.gnote) { const c = $(`#gfx-${CSS.escape(ds.gnote)}`); c?.classList.toggle('rej', gfxRejected(ds.gnote)); c?.querySelector('.reject')?.classList.toggle('on', gfxRejected(ds.gnote)); }
 });
 
 async function refresh() {
@@ -586,6 +799,7 @@ async function refresh() {
   if (current) $('#hero').hidden = true;   // opening a job link: don't flash the drop screen while it loads
   catalog = (await api('/api/catalog')).styles;
   previews = await api('/api/previews').catch(() => ({}));
+  integrations = await api('/api/integrations').catch(() => integrations);
   $('#galleryBody').innerHTML = allStyles();
   await refresh();
   let last = JSON.stringify(jobs.map((j) => [j.id, j.stage, j.updated]));
@@ -596,8 +810,10 @@ async function refresh() {
     if (sig === last) return;
     last = sig; jobs = next;
     // Don't restart a video someone is watching; the next change re-renders.
+    // Nor wipe a note you're typing.
     const playing = [...document.querySelectorAll('#job video')].some((v) => !v.paused && !v.muted);
-    if (!playing) render(); else { renderJobs(); renderStatus(); }
+    const typing = document.activeElement?.matches?.('#job textarea, #actionbar textarea');
+    if (!playing && !typing) render(); else { renderJobs(); renderStatus(); }
   }, 3000);
 })();
 </script>

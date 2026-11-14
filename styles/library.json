@@ -1147,6 +1147,26 @@
   "from": "202611082355-untitled-youtube-video"
  },
  {
+  "id": "S01-climb",
+  "kind": "story",
+  "group": "metaphor machine",
+  "name": "every lead climbs; no follow-up knocks it back to the start; a follow-up system holds it until it's signed",
+  "use": "every lead climbs; no follow-up knocks it back to the start; a follow-up system holds it until it's signed",
+  "say": "A lot of contractors feel like they're starting over every single time",
+  "file": "assets/boards/story/S01-climb.html",
+  "how": "write a new scene for this story with assets/boards/story/kit.js, starting from this one"
+ },
+ {
+  "id": "S02-first-back",
+  "kind": "story",
+  "group": "process / timeline",
+  "name": "a form comes in at 2 while he is up on a job; at 7 he calls back to nothing; someone else got there first and booked it",
+  "use": "a form comes in at 2 while he is up on a job; at 7 he calls back to nothing; someone else got there first and booked it",
+  "say": "A homeowner fills out your form at like 2 in the afternoon",
+  "file": "assets/boards/story/S02-first-back.html",
+  "how": "write a new scene for this story with assets/boards/story/kit.js, starting from this one"
+ },
+ {
   "id": "search-bar",
   "kind": "effect",
   "group": "Ready-made effects",
