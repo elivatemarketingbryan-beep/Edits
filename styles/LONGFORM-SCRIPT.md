@@ -127,6 +127,10 @@ keep Bryan's voice, faith, recap and cue tags, and add these.
   later act ("I'll tell you what it was in month two").
 - **CTA curiosity gap by elimination:** "It's not price. It's not your reviews. It's not even how
   fast you call back." Then point to the video that answers it.
+- **Never throw away ads** (Bryan's rule, 2026-11-14: "don't throw away ads, just talk about doors if
+  they have no funding for ads"). Meta ads are part of his offer. Free moves (doors, reviews, past
+  customers) are what to do when there's no ad budget yet, and they keep going once ads start. Never
+  "not ads, doors", "ads don't work" or "don't spend a dollar on ads".
 - **Keep provenance honest:** a story from Bryan's notes stays as he told it ("One sales guy told
   me…"); never add details to a public story (where, when, who) that aren't in the source.
 
