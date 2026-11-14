@@ -75,5 +75,10 @@ If the plan has a `style` (its Video type), that style goes first in `formats.js
 In the edit, look in `plans/<plan>/assets/files/` for `[PROOF]`, `[IMAGE]` and `[BROLL]` cues before
 asking Bryan for anything, and use the chosen title and thumbnail for the end card and the YouTube upload.
 
+**One stage per video.** `plan.status` is the single stage every view shows (Year plan pill, By stage
+column, Script list). Moving a video to Ready or Posted (by hand, a finished-edit upload, or the job
+finishing) drops any waiting outline/script request; past Scripted, a missing script is shown as
+"no script saved here", never as work still to do.
+
 After that, `jobs.mjs setStage` keeps the plan's column in step: any stage → Editing, `done` → Ready.
 Bryan moves it to Posted himself (or the Instagram/YouTube posting flow does).

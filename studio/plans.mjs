@@ -115,7 +115,7 @@ export function syncFromJob(job) {
   const plan = readPlan(job.plan, { files: false });
   if (!plan) return;
   const status = job.stage === 'done' ? 'ready' : 'editing';
-  if (plan.status !== status && plan.status !== 'posted') writePlan({ ...plan, status, job: job.id });
+  if (plan.status !== status && plan.status !== 'posted') writePlan({ ...plan, status, job: job.id, ...(status === 'ready' ? { request: null } : {}) });
 }
 
 // Spoken lines only (headings and the packaging angles dropped), cue tags kept.
@@ -184,6 +184,8 @@ export function planRoutes({ send, readBody, serveFile, inside }) {
       const body = await readBody(req);
       const next = { ...plan, ...clean({ ...plan, ...body }) };
       if (body.status && STATUSES.includes(body.status)) next.status = body.status;
+      // A video that's Ready or Posted doesn't need an outline or script any more: drop a waiting request.
+      if (['ready', 'posted'].includes(next.status) && next.request) next.request = null;
       if ('due' in body) next.due = /^\d{4}-\d{2}-\d{2}$/.test(body.due) ? body.due : null;
       if (Array.isArray(body.titles)) {
         const titles = body.titles.slice(0, 30).map((t) => ({ id: clip(t.id, 20) || shortId(), text: clip(t.text, 200), chosen: !!t.chosen })).filter((t) => t.text);
@@ -242,7 +244,7 @@ export function planRoutes({ send, readBody, serveFile, inside }) {
         const plan = readPlan(id, { files: false });
         if (kind === 'thumb' && !plan.thumb) writePlan({ ...plan, thumb: name });   // the first thumbnail is chosen until another is picked
         // A finished edit means the video is ready to post (unless it already went out).
-        if (kind === 'final' && !['ready', 'posted'].includes(plan.status)) writePlan({ ...plan, status: 'ready' });
+        if (kind === 'final' && !['ready', 'posted'].includes(plan.status)) writePlan({ ...plan, status: 'ready', request: null });
         send(res, 200, readPlan(id));
       } catch (e) { send(res, 400, { error: e.message }); }
     }],
