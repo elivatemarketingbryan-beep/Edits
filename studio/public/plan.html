@@ -151,6 +151,11 @@
   .slotform textarea { grid-column: 1 / -1; min-height: 60px; }
   .slotform input, .slotform textarea { width: 100%; font-size: 13.5px; }
   .slotform .msg { grid-column: 1 / -1; margin: 0; }
+  .slotform .research { grid-column: 3; white-space: nowrap; }
+  .resbox { display: grid; gap: 6px; }
+  .resbox textarea { min-height: 180px; font-size: 13px; }
+  .resbox .actions { margin-top: 0; }
+  @media (max-width: 760px) { .slotform .research { grid-column: auto; } }
   @media (max-width: 760px) { .vmeta, .vmedia, .slotform { grid-template-columns: 1fr; } }
   .st { display: inline-block; flex: none; font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--line); color: var(--muted); white-space: nowrap; }
   .st.st-scripted, .st.st-filming { background: var(--accent-soft); color: var(--accent-hi); }
@@ -266,6 +271,15 @@
         <label class="field"><span>Due date</span><input type="date" id="eDue"></label>
       </div>
       <label class="field"><span>Angle, stories and real proof</span><textarea id="eNotes"></textarea></label>
+      <div class="field resbox">
+        <label for="eResearch"><span>Research: what others in your niche say</span></label>
+        <textarea id="eResearch" placeholder="Click &quot;Research videos talking about this&quot;: Claude puts the research here (who's covering it, what matches, what to fix, how to stand out) and fills your outline template in the angle box above. Edit either one, Save, then Generate script."></textarea>
+        <div class="actions">
+          <button type="button" id="resBtn">Research videos talking about this</button>
+          <button type="button" class="primary" id="genBtn">Generate script</button>
+          <span class="msg" id="resMsg"></span>
+        </div>
+      </div>
       <div class="row"><button type="submit">Save</button><span class="msg" id="editMsg"></span></div>
       <div class="info" id="info"></div>
       <a class="button primary" id="toScript" href="/script" style="text-align:center">Write the script on the Script tab</a>
@@ -343,21 +357,27 @@ function slotForm(m, n) {
   title.setAttribute('aria-label', `Month ${m}, video ${n}: working title`);
   const due = Object.assign(el('input'), { type: 'date', id: key + 'd', value: d.due }); due.setAttribute('aria-label', 'Due date (optional)'); due.title = 'Due date (optional)';
   const add = Object.assign(el('button', 'primary', 'Add video'), { type: 'submit' });
+  const research = Object.assign(el('button', 'research', 'Research videos talking about this'), { type: 'button', title: 'Adds the video, then Claude researches what others in your niche say about it, puts the research in the Research box and fills your outline template in the angle box. Then Generate script.' });
   const notes = Object.assign(el('textarea'), { id: key + 'n', value: d.notes, placeholder: 'Angle, stories and real proof (optional). Anything missing becomes a placeholder, never a made-up number.' });
   notes.setAttribute('aria-label', 'Angle, stories and real proof (optional)');
   const msg = el('p', 'msg');
   for (const [inp, k] of [[title, 'title'], [due, 'due'], [notes, 'notes']]) inp.oninput = () => { d[k] = inp.value; };
-  f.append(title, due, add, notes, msg);
-  f.onsubmit = async (e) => {
-    e.preventDefault();
+  f.append(title, due, add, research, notes, msg);
+  // Add the video; with withResearch, also queue the research request and open the new video.
+  const create = async (withResearch) => {
     if (!d.title.trim()) { msg.className = 'msg err'; msg.textContent = 'Give it a working title first.'; title.focus(); return; }
-    add.disabled = true;
+    add.disabled = research.disabled = true;
     try {
       const p = await api('/api/plans', { title: d.title, notes: d.notes, month: m, cta: 'Point to a related video, then: book a call below.', acts: 3 });
       if (d.due) await api('/api/plans/' + p.id, { due: d.due });
-      delete drafts[key]; focusKey = null; load();
-    } catch (err) { msg.className = 'msg err'; msg.textContent = err.message; add.disabled = false; }
+      if (withResearch) await api(`/api/plans/${p.id}/request`, { kind: 'research' });
+      delete drafts[key]; focusKey = null;
+      if (withResearch) await open(p.id);
+      load();
+    } catch (err) { msg.className = 'msg err'; msg.textContent = err.message; add.disabled = research.disabled = false; }
   };
+  f.onsubmit = (e) => { e.preventDefault(); create(false); };
+  research.onclick = () => create(true);
   card.append(top, f);
   return card;
 }
@@ -695,6 +715,7 @@ async function open(id) {
 
 function showDetail(p) {
   const same = current?.id === p.id; current = p; $('detail').hidden = false;
+  if (!same) { $('eResearch').value = p.research || ''; delete $('eResearch').dataset.dirty; }
   if (!same || !document.activeElement?.closest('#editForm')) {
     $('eTitle').value = p.title; $('eNotes').value = p.notes || '';
     $('eMonth').value = String(p.month || 1); $('eDue').value = p.due || '';
@@ -704,6 +725,12 @@ function showDetail(p) {
   const info = $('info'); info.replaceChildren();
   for (const [k, v] of [['Due', dateStr(p.due)], ['Files', p.assets.length], ['Notes', p.notesLog.length]]) { const d = el('div'); d.append(el('b', null, String(v)), k); info.append(d); }
   $('toScript').href = '/script?plan=' + p.id;
+  // Research arrives while the panel is open: fill the box unless Bryan is typing in it.
+  if (same && document.activeElement !== $('eResearch') && ($('eResearch').value || '') !== (p.research || '') && !$('eResearch').dataset.dirty) $('eResearch').value = p.research || '';
+  $('resBtn').textContent = p.research ? 'Research again' : 'Research videos talking about this';
+  $('resBtn').disabled = $('genBtn').disabled = !!p.request;
+  $('resMsg').className = 'msg';
+  $('resMsg').textContent = p.request?.kind === 'research' ? 'Research is queued. Say "run my studio jobs" in Claude Code.' : p.request ? `${p.requestLabel} is queued.` : '';
   $('toScript').textContent = p.request ? `${p.requestLabel} is queued: open Script` : p.script ? 'Open the script on the Script tab' : pastScript(p) ? 'Add the script on the Script tab' : 'Write the script on the Script tab';
   if (!same) tab = 'pack';
   renderTabs();
@@ -833,12 +860,25 @@ function uploader(kind, accept, label) {
 async function removeFile(a) { showDetail(await api(`/api/plans/${current.id}/files/delete`, { path: a.path })); renderViews(); }
 
 // Forms
-const formBody = () => ({ title: $('eTitle').value, notes: $('eNotes').value, month: $('eMonth').value, due: $('eDue').value });
+const formBody = () => ({ title: $('eTitle').value, notes: $('eNotes').value, research: $('eResearch').value, month: $('eMonth').value, due: $('eDue').value });
+$('eResearch').oninput = () => { $('eResearch').dataset.dirty = '1'; };
 $('editForm').onsubmit = async (e) => {
   e.preventDefault();
-  try { showDetail(await api('/api/plans/' + current.id, formBody())); $('editMsg').className = 'msg ok'; $('editMsg').textContent = 'Saved.'; load(); }
+  try { delete $('eResearch').dataset.dirty; showDetail(await api('/api/plans/' + current.id, formBody())); $('editMsg').className = 'msg ok'; $('editMsg').textContent = 'Saved.'; load(); }
   catch (err) { $('editMsg').className = 'msg err'; $('editMsg').textContent = err.message; }
 };
+// Research, then the script: both save what's typed first, then queue a request for "run my studio jobs".
+async function queue(kind) {
+  try {
+    delete $('eResearch').dataset.dirty;
+    await api('/api/plans/' + current.id, formBody());
+    showDetail(await api(`/api/plans/${current.id}/request`, { kind })); load();
+    if (kind === 'gate') location.href = '/script?plan=' + current.id;
+  } catch (err) { $('resMsg').className = 'msg err'; $('resMsg').textContent = err.message; }
+}
+$('resBtn').onclick = () => queue('research');
+// "Generate script" starts the same way "Write script" does on the Script tab: the pre-write gate check.
+$('genBtn').onclick = () => queue('gate');
 $('eStatus').onchange = async () => { await api('/api/plans/' + current.id, { status: $('eStatus').value }); load(); };
 let delArmed = false;
 $('delBtn').onclick = async () => {

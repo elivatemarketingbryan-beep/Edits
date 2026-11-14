@@ -89,6 +89,15 @@ Older wording and replaced rules: `docs/history/EDIT-PREFERENCES-2026-11-09.md`.
 
 ## How we work
 
+- DO: when a research request runs, fill Bryan's outline template in the angle box (`styles/OUTLINE-TEMPLATE.md`) from the research and his angles, in exactly that shape, every slot filled, his own lines kept, before any script is generated. (Bryan: "auto fill this before it generates the script with the research and angles it should be filled exactly as shown"; 2026-11-14)
+
+- DO: spell the company "Elivate Marketing" (never "Elevate") and name it where the offer comes in ("we built at Elivate Marketing", "we build it for you at Elivate Marketing"). (Bryan: "we are elivate marketing"; 2026-11-14)
+- DO: keep the office-assistant salary comparison (about $45K–$65K a year, "call it $60,000") when a script is about admin or office work, with a stage note on the BLS source, then show our system doing the same job without the salary. (Bryan: "keep the salary reference"; 2026-11-14)
+
+- DO: when a script says "don't fake your hours" or "don't fake 24/7", follow it with how our 24/7 AI assistant lets them be open 24/7 for real: it answers every lead within two minutes, asks availability, books the estimate and texts them the details. (Bryan: "when it says dont fake ur hours say how our 24/7 assistant allows them to put open 24/7"; 2026-11-14)
+
+- DON'T: offer client results, client stories, client before/afters or `[CLIENT]` proof in scripts, outlines or gate options. Bryan has no clients yet; use his dad's business, his own work, live demos on public profiles, or named public sources. (Bryan: "i dont have clients"; 2026-11-14)
+
 - DO: when Bryan sends a screen recording of a tool, rebuild those screens in our look from it: the same buttons, labels, menu order and results, the cursor following his clicks. Never invent a UI or show the raw recording. Leave out account names, spend and audience sizes. (Bryan: "should I drop a screen recording and you re-render it in our animation style following the UI"; 2026-11-12)
 - DO: change only the part of a graphic his note is about. Keep everything else exactly as it was. (Bryan: "everything past the beginning should've stayed how it was before"; 2026-11-11; 80-20 strategy hook)
 

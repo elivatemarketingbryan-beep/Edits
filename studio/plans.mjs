@@ -19,8 +19,8 @@ export const BLUEPRINT = path.join(PLANS, 'blueprint.md');
 
 // Board columns, in order. Requests sit on top of a status; Claude answers them.
 export const STATUSES = ['idea', 'outlined', 'scripted', 'filming', 'editing', 'ready', 'posted'];
-const REQUESTS = { outline: 'outlined', gate: null, script: 'scripted', lock: 'scripted', revise: null };
-const REQUEST_LABEL = { outline: 'Outline & check', gate: 'Pre-write gate check', script: 'Write the script', lock: 'Story-lock pass', revise: 'Revise' };
+const REQUESTS = { research: null, outline: 'outlined', gate: null, script: 'scripted', lock: 'scripted', revise: null };
+const REQUEST_LABEL = { research: 'Research', outline: 'Outline & check', gate: 'Pre-write gate check', script: 'Write the script', lock: 'Story-lock pass', revise: 'Revise' };
 
 const planDir = (id) => path.join(PLANS, path.basename(id));
 const read = (f, fallback = '') => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : fallback);
@@ -48,6 +48,7 @@ export function readPlan(id, { files = true } = {}) {
   if (files) {
     plan.outline = read(path.join(planDir(id), 'outline.md'));
     plan.script = read(path.join(planDir(id), 'script.md'));
+    plan.research = read(path.join(planDir(id), 'research.md'));   // what others in the niche say (the "Research" button)
   }
   // A few spoken lines for the month cards, without loading whole scripts into the list.
   const sf = path.join(planDir(id), 'script.md');
@@ -63,7 +64,7 @@ export function readPlan(id, { files = true } = {}) {
 
 export function writePlan(plan) {
   const rest = { ...plan };
-  for (const k of ['outline', 'script', 'waitingOn', 'requestLabel', 'assets', 'scriptPreview', 'hasOutline', 'gate']) delete rest[k];
+  for (const k of ['outline', 'script', 'research', 'waitingOn', 'requestLabel', 'assets', 'scriptPreview', 'hasOutline', 'gate']) delete rest[k];
   fs.mkdirSync(planDir(plan.id), { recursive: true });
   rest.updated = new Date().toISOString();
   fs.writeFileSync(path.join(planDir(plan.id), 'plan.json'), JSON.stringify(rest, null, 2));
@@ -202,8 +203,8 @@ export function planRoutes({ send, readBody, serveFile, inside }) {
         next.titles = titles;
       }
       if ('thumb' in body) next.thumb = plan.assets?.some((a) => a.kind === 'thumb' && a.name === body.thumb) || !body.thumb ? body.thumb || null : plan.thumb;
-      // Bryan's own edits on the Script tab (Save script / Save outline). An empty save removes the file.
-      for (const k of ['script', 'outline']) {
+      // Bryan's own edits (Save script / Save outline on the Script tab, the Research box on the Plan page). An empty save removes the file.
+      for (const k of ['script', 'outline', 'research']) {
         if (typeof body[k] !== 'string') continue;
         const f = path.join(planDir(id), `${k}.md`);
         if (body[k].trim()) fs.writeFileSync(f, body[k].replace(/\r\n/g, '\n').slice(0, 200000));
@@ -213,7 +214,7 @@ export function planRoutes({ send, readBody, serveFile, inside }) {
       if (!next.title) return send(res, 400, { error: 'A plan needs a title.' });
       send(res, 200, writePlan(next));
     }],
-    // Ask Claude for something: outline | script | lock | revise (with a note). One request at a time.
+    // Ask Claude for something: research | outline | gate | script | lock | revise (with a note). One request at a time.
     ['POST', /^\/api\/plans\/([\w-]+)\/request$/, async (req, res, [id]) => {
       const plan = readPlan(id);
       if (!plan) return send(res, 404, { error: 'No such plan' });
@@ -334,6 +335,12 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const status = to && STATUSES.indexOf(to) > STATUSES.indexOf(p.status) ? to : p.status;
     writePlan({ ...p, request: null, status, lastDone: { kind: p.request.kind, at: new Date().toISOString() } });
     console.log(`${id} -> ${status} (request cleared)`);
+  } else if (cmd === 'notes') {
+    // Fill the "Angle, stories and real proof" box (plan.notes) from a file: the outline a research request writes.
+    const p = readPlan(id, { files: false });
+    if (!p || !arg || !fs.existsSync(arg)) { console.log('usage: node studio/plans.mjs notes <plan id> <file>'); process.exit(1); }
+    writePlan({ ...p, notes: fs.readFileSync(arg, 'utf8').split('\r\n').join('\n').trim().slice(0, 20000) });
+    console.log(`${id} notes filled from ${arg}`);
   } else if (cmd === 'export') {
     const md = read(path.join(planDir(id), 'script.md'));
     if (!md) { console.log(`${id} has no script.md`); process.exit(1); }
@@ -353,6 +360,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     writePlan({ ...p, job: arg, status: 'editing' });
     console.log(`${id} linked to job ${arg} -> editing`);
   } else {
-    console.log('usage: node studio/plans.mjs pending | show <id> | done <id> | export <id> [out] | scripts | link <plan> <job>');
+    console.log('usage: node studio/plans.mjs pending | show <id> | done <id> | notes <id> <file> | export <id> [out] | scripts | link <plan> <job>');
   }
 }

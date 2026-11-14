@@ -25,6 +25,7 @@ plans/<id>/assets/finished/   the final edited video; uploading one moves the pl
 plans/<id>/assets/archive/    raw/ and edited/: storage only, kept "in case it's needed later" (any file type).
                               Never send these to the editor or use them in an edit unless Bryan asks.
 plans/<id>/assets/files/      b-roll, screenshots, logos, proof, documents for this video
+plans/<id>/research.md        written by Claude for "Research videos talking about this" (Bryan can edit it in the Research box)
 plans/<id>/outline.md         written by Claude for "Outline & check"
 plans/<id>/gate.json          the pre-write gate check: Claude's checks and proof options, Bryan's picks
 plans/<id>/script.md          written by Claude for "Write script", "Story-lock pass" and "Revise"
@@ -47,8 +48,11 @@ For each, oldest first:
    list: Bryan's finished scripts in `plans/examples/` (the model to match), the blueprint, voice-dna,
    and Joe Aquino's transcripts for his speaking pattern only.
 2. Do the request:
+   - **research**: research what others in the niche say about this video's topic and outline, and write
+     `plans/<id>/research.md` (it shows in the Research box under the angle on the Plan page). See
+     "Research requests" below. It doesn't move the card.
    - **outline**: write `plans/<id>/outline.md` in the outline format.
-   - **gate**: the pre-write gate check. Write `plans/<id>/gate.json` (checks, then proof options per
+   - **gate**: the pre-write gate check ("Generate script" on the Plan page queues this too). Read `research.md` first if it exists. Write `plans/<id>/gate.json` (checks, then proof options per
      section) as `styles/LONGFORM-SCRIPT.md` "Pre-write gate check" describes. Bryan picks on the Script
      page; confirming queues the script.
    - **script**: write `plans/<id>/script.md` in the format of `plans/examples/` with cue tags. If `outline.md`
@@ -60,6 +64,37 @@ For each, oldest first:
 3. `node studio/plans.mjs done <id>` clears the request and moves the card (outline → outlined, script → scripted).
 
 Never invent numbers, results or testimonials (Bryan has none); use `[PLACEHOLDER: …]`.
+
+## Research requests
+
+The "Research videos talking about this" button (under Add video, and in the open video's Research box)
+queues `research`. Search the web (several searches in one go) for who else covers the topic (YouTube,
+podcasts, trade magazines, Jobber/ServiceTitan/Hook Agency and the like), the real studies and numbers,
+and the myths. Check every claim in the outline (`notes`) against what you find. Write `research.md` in
+this order, plain and short:
+
+```
+# Niche Research: <topic>
+*Researched <date>. <one line on how much of the content is vendor marketing>*
+## Who's already covering this        (named videos/episodes/articles, what they say, the closest competitor)
+## Where your outline matches (keep it)
+## Numbers you can actually use       (each with its named source; say what's correlation or a vendor claim)
+## Fix before filming                 (claims with no source, wrong facts, [CLIENT] lines, a borrowed last line)
+## What others mention that your outline doesn't
+## How to stand out
+## Sources                            (markdown links)
+```
+
+**Then fill the outline.** Right after `research.md`, fill Bryan's outline template in the video's
+`notes` (the "Angle, stories and real proof" box), exactly in the shape of `styles/OUTLINE-TEMPLATE.md`:
+every slot filled from the research, his own typed lines kept in their slots. Write it to a file and run
+`node studio/plans.mjs notes <id> <file>`. The script is generated from this outline afterwards
+("Generate script" queues the gate).
+
+Bryan's rules apply here too (`styles/EDIT-PREFERENCES.md`, `styles/LONGFORM-SCRIPT.md`): he has no clients,
+so flag every `[CLIENT]` line and suggest real proof instead; the company is Elivate Marketing; never pass a
+stat on without its source. When the gate or the script is written later, read `research.md` first and use
+its numbers and fixes.
 
 ## From script to edit
 

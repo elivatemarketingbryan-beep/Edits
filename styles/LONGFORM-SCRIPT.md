@@ -16,6 +16,8 @@ How Claude writes outlines and scripts for the Plan page (`/plan`). The job flow
 4. Two Joe Aquino transcripts for his speaking pattern only: `engines/content-os/transcripts/url/style-ref_thejoeaquino-assets-funnel.md`
    and `style-ref_thejoeaquino-trust-recession.md`. Borrow how he talks, never his clients, numbers or stories.
 5. `styles/SCRIPT-SHAPES.md` "Cue tags".
+6. `plans/<id>/research.md` when it exists (the Research box on the Plan page): use its numbers with
+   their sources, apply its "Fix before filming" list, and offer its outside proof as gate options.
 
 ## The format (from Bryan's finished scripts)
 
@@ -79,8 +81,9 @@ Bryan's and Kallaway's. Never borrow Joe's clients, numbers, stories or offers.
   and $6; premium $48K, standard $29K, basic $18K). Example math is fine; client results must be real.
 - **Simple analogies** a kid would get: the package that gets verified, packed, tracked and handed
   off; the $50 toy that makes the $20 toy look cheap.
-- **Client stories** ("I had a client, a landscaper, sitting at 6 reviews…") only from Bryan's notes
-  or blueprint. Otherwise `[PLACEHOLDER: client story with real numbers]`.
+- **No client stories or client results** (Bryan, 2026-11-14: "i dont have clients"). Drop any `[CLIENT]`
+  line from his outline. Proof comes from his dad's business, his own work, a live demo on a public
+  profile or ad library, or a named public source.
 - **Honest caveats:** "availability can vary by account", "a starting framework, not a guarantee",
   "Don't assume the broad audience will automatically be worse. Watch the actual results."
 - **Engagement deal** (optional): "So here's the deal between me and you…"
@@ -164,6 +167,15 @@ keep Bryan's voice, faith, recap and cue tags, and add these.
   form filters with questions they must answer (timeline, budget, homeowner/decision-maker). Weak
   creatives and no filter are why form leads go cold. A qualifying landing page is the option while
   the creatives aren't there yet, not a replacement for them.
+- **Hours and the 24/7 assistant** (Bryan, 2026-11-14): after "don't fake your hours / 24/7", say how
+  Elivate's AI assistant answers every lead 24/7 (replies within two minutes, asks availability, books
+  the estimate, texts the contractor), so "Open 24 hours" is true. Add a stage note to check Google's
+  current hours guidelines before filming.
+- **Hold back the answer in the hook** (learned comparing the GBP script with another AI's, 2026-11-14):
+  name the source and the stakes, then withhold the answer. "Whitespark ranks 187 factors. Number one
+  isn't reviews or photos. It's a dropdown menu." Reveal it in a later act and call back to it there
+  ("Remember the dropdown menu?"). Borrow an outside script's analogies and mechanism lines; never its
+  facts without checking them against the research.
 - **Keep provenance honest:** a story from Bryan's notes stays as he told it ("One sales guy told
   me…"); never add details to a public story (where, when, who) that aren't in the source.
 
@@ -199,7 +211,7 @@ picked the proof (the "artefact") for every section. Answer the `gate` request b
   ],
   "sections": [
     { "id": "intro", "name": "Intro", "options": [
-      { "id": "a", "star": true, "label": "Bryan's own story", "detail": "Why it works here, in one or two lines.", "needs": "Your real client result: from what, to what, in how long." },
+      { "id": "a", "star": true, "label": "Bryan's own story", "detail": "Why it works here, in one or two lines.", "needs": "What really happened in your dad's business: from what, to what, in how long." },
       { "id": "b", "label": "Hormozi coaching the roofing/gutter owner", "detail": "Outside credibility for the \"no ads in month one\" angle." }
     ] }
   ],
@@ -216,7 +228,7 @@ picked the proof (the "artefact") for every section. Answer the `gate` request b
   proof). Two to four options each. The ⭐ (`star: true`, one per section) is the recommended one.
 - **Options are proof, never invented.** Use what's in the plan's notes, notesLog, outline and the
   blueprint, and named public sources (a study, a platform policy, a public video) with the source in
-  `detail`. An option that only works with Bryan's own data (his client results, his CRM numbers)
+  `detail`. An option that only works with Bryan's own data (his dad's business, his own profile or test; never client results, he has none)
   gets `needs`: the exact fact he must type. Put Bryan's own proof as the ⭐ when it can exist; the
   alternatives are outside sources or stories already in the notes.
 - A new gate request replaces `gate.json` (picks and confirmation start over).
