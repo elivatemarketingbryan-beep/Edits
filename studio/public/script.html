@@ -32,6 +32,12 @@
   .sst.done { background: #163326; color: #6fd6a4; }
   .sst.q { background: var(--accent-soft); color: var(--accent); }
   .picker .empty { color: var(--muted); font-size: 13px; }
+  .picker .mname { display: flex; justify-content: space-between; gap: 8px; }
+  .picker .mname i { font-style: normal; letter-spacing: 0; }
+  .addv { display: flex; gap: 6px; }
+  .addv input { flex: 1; min-width: 0; font-size: 13px; padding: 6px 8px; }
+  .addv button { font-size: 12px; padding: 6px 10px; white-space: nowrap; }
+  .addv-msg { font-size: 12px; color: #f08a8a; margin: 0 2px; }
 
   /* the writing desk */
   .desk { display: grid; gap: 14px; min-width: 0; }
@@ -171,13 +177,39 @@ const scriptState = (p) => p.request ? ['q', REQ[p.request.kind] + ' · queued']
   : ORDER.indexOf(p.status) > ORDER.indexOf('scripted') ? ['done', STAGE[p.status] + (p.scriptPreview ? '' : ' · no script saved')]
   : p.scriptPreview ? ['done', 'Scripted'] : p.hasOutline ? ['out', 'Outlined'] : ['', 'No script'];
 
+// Every month is listed, so any month can be scripted ahead (no need to post the one before).
+// A month with an open slot gets a one-line "add a video" box; the new video opens here, ready to script.
+const PER_MONTH = 4, addDrafts = {};
+function addRow(m) {
+  const id = 'add' + m, f = el('form', 'addv'); f.noValidate = true;
+  const inp = Object.assign(el('input'), { type: 'text', id, value: addDrafts[m] || '', placeholder: 'Working title' });
+  inp.setAttribute('aria-label', `Month ${m}: working title of a new video`);
+  inp.oninput = () => { addDrafts[m] = inp.value; };
+  const btn = Object.assign(el('button', 'ghost', 'Add'), { type: 'submit' });
+  f.append(inp, btn);
+  f.onsubmit = async (e) => {
+    e.preventDefault();
+    const title = (addDrafts[m] || '').trim();
+    f.parentElement.querySelector('.addv-msg')?.remove();
+    if (!title) { f.after(el('p', 'addv-msg', 'Give it a working title first.')); inp.focus(); return; }
+    btn.disabled = true;
+    try {
+      const p = await api('/api/plans', { title, month: m, cta: 'Point to a related video, then: book a call below.', acts: 3 });
+      delete addDrafts[m];
+      await load(); await pick(p.id);
+    } catch (err) { btn.disabled = false; f.after(el('p', 'addv-msg', err.message)); }
+  };
+  return f;
+}
 function renderPicker() {
-  const box = $('picker'); box.replaceChildren();
-  if (!plans.length) { box.append(el('span', 'empty', 'No videos planned yet. Add them on the Plan tab.')); return; }
+  const box = $('picker');
+  const act = document.activeElement, keep = act?.id && box.contains(act) ? { id: act.id, s: act.selectionStart, e: act.selectionEnd } : null;
+  box.replaceChildren();
   for (let m = 1; m <= 12; m++) {
     const items = plans.filter((p) => (p.month || 1) === m).sort((a, b) => (a.due || '9').localeCompare(b.due || '9') || a.created.localeCompare(b.created));
-    if (!items.length) continue;
-    const g = el('div', 'mgroup'); g.append(el('div', 'mname', 'Month ' + m));
+    const g = el('div', 'mgroup'), name = el('div', 'mname', 'Month ' + m);
+    name.append(el('i', null, `${items.length}/${PER_MONTH}`));
+    g.append(name);
     for (const p of items) {
       const b = el('button', 'pick' + (current?.id === p.id ? ' on' : '')); b.type = 'button';
       const [cls, txt] = scriptState(p);
@@ -185,8 +217,11 @@ function renderPicker() {
       b.onclick = () => pick(p.id);
       g.append(b);
     }
+    if (items.length < PER_MONTH) g.append(addRow(m));
     box.append(g);
   }
+  // Polling re-renders the list: don't lose a title being typed.
+  if (keep) { const f = document.getElementById(keep.id); if (f) { f.focus(); try { f.setSelectionRange(keep.s, keep.e); } catch {} } }
 }
 function setStatus() {
   const busy = plans.some((p) => p.request);
