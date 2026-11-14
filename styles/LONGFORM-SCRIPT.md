@@ -131,6 +131,12 @@ keep Bryan's voice, faith, recap and cue tags, and add these.
   they have no funding for ads"). Meta ads are part of his offer. Free moves (doors, reviews, past
   customers) are what to do when there's no ad budget yet, and they keep going once ads start. Never
   "not ads, doors", "ads don't work" or "don't spend a dollar on ads".
+- **Lead forms work with good creatives and a good filter** (Bryan, 2026-11-14: "lead form ads work
+  only if u have good creatives" / "and u filter good"). Never call Meta lead forms bad or junk. The
+  creative qualifies first (real jobs, owner on camera, before and afters, a price range), then the
+  form filters with questions they must answer (timeline, budget, homeowner/decision-maker). Weak
+  creatives and no filter are why form leads go cold. A qualifying landing page is the option while
+  the creatives aren't there yet, not a replacement for them.
 - **Keep provenance honest:** a story from Bryan's notes stays as he told it ("One sales guy told
   me…"); never add details to a public story (where, when, who) that aren't in the source.
 
