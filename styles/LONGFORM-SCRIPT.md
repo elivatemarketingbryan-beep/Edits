@@ -102,6 +102,34 @@ Bryan's and Kallaway's. Never borrow Joe's clients, numbers, stories or offers.
   answering a blueprint objection; at least one negative frame ("This is where most guys burn their money").
 - **Recap** before the CTA, listing the parts in order.
 
+### Engagement moves (every script)
+
+Learned from comparing a script against another AI's version of the same outline (2026-11-14):
+keep Bryan's voice, faith, recap and cue tags, and add these.
+
+- **Every section, four beats:** the situation → proof or a story → how to do it → what to do this
+  week. A section with no proof beat is unfinished.
+- **Flip the counter-evidence.** Don't just say "you're probably thinking X". Show the real data that
+  seems to prove X, then "But here's what he was actually measuring…" and flip it. One per video at least.
+- **Say why it works.** After a tactic, one short line on the mechanism: "You're giving something
+  before you ask for anything. That's why it works." "A vague guarantee sounds like marketing. A
+  specific one sounds like confidence."
+- **Name the source** of every stat: "Whitespark surveys local SEO experts every year…",
+  "ServiceTitan surveyed contractors in 2026…". Only sources from the notes or the gate; each stat
+  keeps its own source (never let a stat borrow the source of the line before it).
+- **Specific do-it-now steps:** who, when and how often. "Every customer from the last two years."
+  "Every Friday." "Yard sign on day one." "Every quiet estimate from the last six months." Not "do it today".
+- **Spell out the stakes** in short, concrete lines: "Profiles get wiped." "Every lead. Every campaign.
+  Gone." "The first one to call back gets the estimate. The other two get nothing."
+- **Empathy for the customer:** say why homeowners behave the way they do ("They're busy. They're
+  comparing. They're waiting on a spouse.") before the fix.
+- **Tease a story in the intro, pay it off later:** open a story in the intro and land it in a
+  later act ("I'll tell you what it was in month two").
+- **CTA curiosity gap by elimination:** "It's not price. It's not your reviews. It's not even how
+  fast you call back." Then point to the video that answers it.
+- **Keep provenance honest:** a story from Bryan's notes stays as he told it ("One sales guy told
+  me…"); never add details to a public story (where, when, who) that aren't in the source.
+
 ## Cue tags for the edit
 
 At the end of the spoken line they belong to: `[HOOK]` on the first intro line, `[CHAPTER: <short
@@ -116,6 +144,53 @@ Never invent client names, results, testimonials, screenshots or statistics. Bry
 testimonials: never claim any. Use what's in the plan's notes and the blueprint; everything else is a
 `[PLACEHOLDER: what real fact goes here]`. Don't promise viewers specific income. Keep platform facts
 (Google, Meta, Angi) accurate, with a caveat where they vary.
+
+## Pre-write gate check (before every script)
+
+"Write script" on the Script page queues a `gate` request first. Nothing gets written until Bryan has
+picked the proof (the "artefact") for every section. Answer the `gate` request by writing
+`plans/<id>/gate.json`, then `node studio/plans.mjs done <id>`:
+
+```json
+{
+  "checks": [
+    { "label": "Title", "value": "If I Had to Get a Contracting Business to $30K/Month in 90 Days, I'd Do This", "ok": true },
+    { "label": "Viewer expectations", "value": "A 90-day plan, in order, with the math", "ok": true },
+    { "label": "Framework", "value": "Kallaway: confirm the click, flip the belief, loops between acts, recap", "ok": true },
+    { "label": "Outline", "value": "Intro, the $30K math, Month 1, Month 2, Month 3, recap, CTA", "ok": true },
+    { "label": "Artefacts", "value": "Pick one per section below", "ok": false }
+  ],
+  "sections": [
+    { "id": "intro", "name": "Intro", "options": [
+      { "id": "a", "star": true, "label": "Bryan's own story", "detail": "Why it works here, in one or two lines.", "needs": "Your real client result: from what, to what, in how long." },
+      { "id": "b", "label": "Hormozi coaching the roofing/gutter owner", "detail": "Outside credibility for the \"no ads in month one\" angle." }
+    ] }
+  ],
+  "picks": null,
+  "confirmed": null
+}
+```
+
+- **Checks:** Title (the chosen title, else the working title, else propose one), Viewer expectations
+  (what the click promises), Framework, Outline (the sections in order: the outline's if `outline.md`
+  exists). Set `ok: false` with a `note` on anything Bryan must fix first (e.g. no real title yet). The
+  last check is always Artefacts, `ok: false`, "Pick one per section below".
+- **Sections:** one per `##` section the script will have (Intro, each act, the recap if it carries
+  proof). Two to four options each. The ⭐ (`star: true`, one per section) is the recommended one.
+- **Options are proof, never invented.** Use what's in the plan's notes, notesLog, outline and the
+  blueprint, and named public sources (a study, a platform policy, a public video) with the source in
+  `detail`. An option that only works with Bryan's own data (his client results, his CRM numbers)
+  gets `needs`: the exact fact he must type. Put Bryan's own proof as the ⭐ when it can exist; the
+  alternatives are outside sources or stories already in the notes.
+- A new gate request replaces `gate.json` (picks and confirmation start over).
+
+When Bryan confirms, the page saves `picks` (`{ "<section id>": { "option": "a", "fact": "…" } }`) and
+`confirmed`, and queues `script` with the note "Gate confirmed". Writing that script:
+
+- Use the picked option for each section as that section's proof, and use the title and outline from the checks.
+- A picked option with a `fact`: use Bryan's words and numbers exactly, nothing added.
+- A picked option with `needs` but no `fact`: write the line with `[PLACEHOLDER: <the needs text>]`.
+- Options he didn't pick stay out of the script.
 
 ## Outline (the "Outline & check" button)
 

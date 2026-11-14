@@ -26,6 +26,7 @@ plans/<id>/assets/archive/    raw/ and edited/: storage only, kept "in case it's
                               Never send these to the editor or use them in an edit unless Bryan asks.
 plans/<id>/assets/files/      b-roll, screenshots, logos, proof, documents for this video
 plans/<id>/outline.md         written by Claude for "Outline & check"
+plans/<id>/gate.json          the pre-write gate check: Claude's checks and proof options, Bryan's picks
 plans/<id>/script.md          written by Claude for "Write script", "Story-lock pass" and "Revise"
 plans/youtube.json            cached channel feed (styles/brand.json youtubeChannelId)
 ```
@@ -47,8 +48,13 @@ For each, oldest first:
    and Joe Aquino's transcripts for his speaking pattern only.
 2. Do the request:
    - **outline**: write `plans/<id>/outline.md` in the outline format.
+   - **gate**: the pre-write gate check. Write `plans/<id>/gate.json` (checks, then proof options per
+     section) as `styles/LONGFORM-SCRIPT.md` "Pre-write gate check" describes. Bryan picks on the Script
+     page; confirming queues the script.
    - **script**: write `plans/<id>/script.md` in the format of `plans/examples/` with cue tags. If `outline.md`
-     exists, follow its points and order and sharpen anything marked COMMON.
+     exists, follow its points and order and sharpen anything marked COMMON. If `gate.json` is confirmed,
+     use its title, outline and the picked proof per section (Bryan's typed facts word for word; a pick
+     that needs his data but has none becomes a `[PLACEHOLDER]`).
    - **lock**: rewrite `script.md` with a story-lock pass (or the outline, if there is no script).
    - **revise**: apply `request.note` to the script (or the outline if there is no script), keeping what works.
 3. `node studio/plans.mjs done <id>` clears the request and moves the card (outline → outlined, script → scripted).

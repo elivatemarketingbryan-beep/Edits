@@ -39,6 +39,28 @@
   .addv button { font-size: 12px; padding: 6px 10px; white-space: nowrap; }
   .addv-msg { font-size: 12px; color: #f08a8a; margin: 0 2px; }
 
+  /* pre-write gate check */
+  .gate { display: grid; gap: 14px; }
+  .gate h3 { margin: 0; font-size: 17px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .gate .gstate { font: 600 11px var(--mono); padding: 2px 8px; border-radius: 99px; background: var(--accent-soft); color: var(--accent-hi); }
+  .gate .gstate.ok { background: #163326; color: #6fd6a4; }
+  .checks { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .checks li { display: grid; grid-template-columns: 22px 150px minmax(0, 1fr); gap: 8px; font-size: 13.5px; align-items: baseline; }
+  .checks li b { color: var(--muted); font-weight: 600; }
+  .checks li small { display: block; color: var(--gold); font-size: 12px; }
+  .gsec { display: grid; gap: 8px; }
+  .gsec > h4 { margin: 6px 0 0; font: 600 11.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent-hi); }
+  .gopt { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); cursor: pointer; }
+  .gopt:has(input:checked) { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .gopt input[type=radio] { margin-top: 3px; accent-color: var(--accent); }
+  .gopt b { font-weight: 600; }
+  .gopt .star { color: var(--gold); margin-right: 4px; }
+  .gopt p { margin: 3px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+  .gopt .needs { margin-top: 8px; display: grid; gap: 4px; }
+  .gopt .needs span { font-size: 12px; color: var(--gold); }
+  .gopt .needs textarea { min-height: 54px; font-size: 13px; }
+  @media (max-width: 640px) { .checks li { grid-template-columns: 22px minmax(0, 1fr); } .checks li > span:last-child { grid-column: 2; } }
+
   /* the writing desk */
   .desk { display: grid; gap: 14px; min-width: 0; }
   .deskhead { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
@@ -126,8 +148,9 @@
             <button type="button" class="ghost" id="copyBtn">Copy script</button>
           </div>
           <div class="actions"><input type="text" id="reviseNote" style="flex:1;min-width:200px" placeholder="Change something: punchier hook, add a myth-bust in Act 2…" aria-label="What to change"><button type="button" id="reviseBtn">Revise</button></div>
-          <p class="muted" style="margin:0">Buttons queue the work. Then say <b>run my studio jobs</b> in Claude Code, the same as for edits. This page updates by itself when it's done.</p>
+          <p class="muted" style="margin:0">Buttons queue the work. Then say <b>run my studio jobs</b> in Claude Code, the same as for edits. This page updates by itself when it's done. <b>Write script</b> runs the pre-write gate check first: you pick the proof for each section, then it writes.</p>
         </div>
+        <div class="panel gate" id="gatePanel" hidden></div>
         <div style="display:grid;gap:10px;min-width:0">
           <div class="sheetbar">
             <div class="sheet-tabs" role="tablist"><button role="tab" data-tab="script">Script</button><button role="tab" data-tab="outline">Outline</button></div>
@@ -159,7 +182,7 @@
 
 <script>
 const $ = (id) => document.getElementById(id);
-const REQ = { outline: 'Outline & check', script: 'Write the script', lock: 'Story-lock pass', revise: 'Revise' };
+const REQ = { outline: 'Outline & check', gate: 'Pre-write gate check', script: 'Write the script', lock: 'Story-lock pass', revise: 'Revise' };
 let plans = [], current = null, tab = 'script', poll = null;
 
 const api = async (url, body) => {
@@ -258,6 +281,7 @@ function show(p) {
   } else w.hidden = true;
   document.querySelectorAll('#askBtns button[data-ask], #reviseBtn').forEach((b) => (b.disabled = !!p.request));
   if (!same) { tab = p.script ? 'script' : p.outline ? 'outline' : 'script'; editing = null; }
+  renderGate(p);
   renderSheet();
 }
 
@@ -352,7 +376,68 @@ async function ask(kind, note) {
     $('briefMsg').textContent = ''; load();
   } catch (err) { $('briefMsg').className = 'msg err'; $('briefMsg').textContent = err.message; }
 }
-document.querySelectorAll('#askBtns button[data-ask]').forEach((b) => (b.onclick = () => ask(b.dataset.ask)));
+// "Write script" goes through the pre-write gate first; once the gate is confirmed, the gate panel's button writes it.
+document.querySelectorAll('#askBtns button[data-ask]').forEach((b) => (b.onclick = () => {
+  if (b.dataset.ask === 'script' && !current.gate?.confirmed) return ask('gate');
+  ask(b.dataset.ask);
+}));
+
+// ---- Pre-write gate check: Claude's checks + one proof option per section; Bryan picks, then it writes.
+const gateDrafts = {};   // plan id -> { section id: { option, fact } }, so polling never loses a pick or typed fact
+function renderGate(p) {
+  const box = $('gatePanel'), g = p.gate;
+  if (!g?.sections?.length) { box.hidden = true; box.replaceChildren(); return; }
+  const act = document.activeElement, keep = act?.id && box.contains(act) ? { id: act.id, s: act.selectionStart, e: act.selectionEnd } : null;
+  const d = (gateDrafts[p.id] ||= structuredClone(g.picks || {}));
+  for (const sec of g.sections) d[sec.id] ||= { option: (sec.options.find((o) => o.star) || sec.options[0])?.id };
+  box.hidden = false; box.replaceChildren();
+
+  const h = el('h3', null, 'Pre-write gate check');
+  h.append(el('span', 'gstate' + (g.confirmed ? ' ok' : ''), g.confirmed ? 'Confirmed ' + new Date(g.confirmed).toLocaleDateString([], { month: 'short', day: 'numeric' }) : 'Pick the proof for each section'));
+  box.append(h);
+  if (g.checks?.length) {
+    const ul = el('ul', 'checks');
+    for (const c of g.checks) {
+      const li = el('li'); li.append(el('span', null, c.ok ? '✅' : '⚠️'), el('b', null, c.label));
+      const v = el('span', null, c.value || ''); if (c.note) v.append(el('small', null, c.note));
+      li.append(v); ul.append(li);
+    }
+    box.append(ul);
+  }
+  for (const sec of g.sections) {
+    const s = el('fieldset', 'gsec'); s.style.cssText = 'border:0;margin:0;padding:0;min-width:0';
+    s.append(Object.assign(el('legend'), { hidden: true, textContent: sec.name }), el('h4', null, sec.name));
+    for (const o of sec.options) {
+      const lab = el('label', 'gopt');
+      const r = Object.assign(el('input'), { type: 'radio', name: 'g-' + sec.id, value: o.id, checked: d[sec.id].option === o.id, id: `g-${sec.id}-${o.id}` });
+      r.onchange = () => { d[sec.id].option = o.id; renderGate(current); };
+      const body = el('div'); const t = el('b');
+      if (o.star) t.append(el('span', 'star', '⭐'));
+      t.append(o.label); body.append(t);
+      if (o.detail) body.append(el('p', null, o.detail));
+      if (o.needs && d[sec.id].option === o.id) {
+        const n = el('div', 'needs'); n.append(el('span', null, o.needs + ' Leave it blank and it stays a gold placeholder, never a made-up number.'));
+        const ta = Object.assign(el('textarea'), { id: `gf-${sec.id}`, value: d[sec.id].fact || '', placeholder: 'The real fact, in your words' });
+        ta.setAttribute('aria-label', `${sec.name}: ${o.needs}`);
+        ta.oninput = () => { d[sec.id].fact = ta.value; };
+        n.append(ta); body.append(n);
+      }
+      lab.append(r, body); s.append(lab);
+    }
+    box.append(s);
+  }
+  const row = el('div', 'actions'), msg = el('span', 'msg');
+  const go = Object.assign(el('button', 'primary', g.confirmed ? 'Update picks and rewrite' : 'Confirm and write script'), { type: 'button', disabled: !!p.request });
+  go.onclick = async () => {
+    go.disabled = true;
+    try { await api('/api/plans/' + p.id, brief()); show(await api(`/api/plans/${p.id}/gate`, { picks: d })); delete gateDrafts[p.id]; load(); }
+    catch (err) { go.disabled = false; msg.className = 'msg err'; msg.textContent = err.message; }
+  };
+  const redo = Object.assign(el('button', 'ghost', 'Redo gate check'), { type: 'button', disabled: !!p.request });
+  redo.onclick = () => { delete gateDrafts[p.id]; ask('gate'); };
+  row.append(go, redo, msg); box.append(row);
+  if (keep) { const f = document.getElementById(keep.id); if (f) { f.focus(); try { f.setSelectionRange(keep.s, keep.e); } catch {} } }
+}
 $('reviseBtn').onclick = () => { ask('revise', $('reviseNote').value); $('reviseNote').value = ''; };
 $('copyBtn').onclick = async () => {
   // Teleprompter copy: headings without #, cue tags (for the edit) removed, placeholders and stage notes kept.

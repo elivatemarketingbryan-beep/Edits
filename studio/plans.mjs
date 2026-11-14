@@ -19,8 +19,8 @@ export const BLUEPRINT = path.join(PLANS, 'blueprint.md');
 
 // Board columns, in order. Requests sit on top of a status; Claude answers them.
 export const STATUSES = ['idea', 'outlined', 'scripted', 'filming', 'editing', 'ready', 'posted'];
-const REQUESTS = { outline: 'outlined', script: 'scripted', lock: 'scripted', revise: null };
-const REQUEST_LABEL = { outline: 'Outline & check', script: 'Write the script', lock: 'Story-lock pass', revise: 'Revise' };
+const REQUESTS = { outline: 'outlined', gate: null, script: 'scripted', lock: 'scripted', revise: null };
+const REQUEST_LABEL = { outline: 'Outline & check', gate: 'Pre-write gate check', script: 'Write the script', lock: 'Story-lock pass', revise: 'Revise' };
 
 const planDir = (id) => path.join(PLANS, path.basename(id));
 const read = (f, fallback = '') => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : fallback);
@@ -32,6 +32,14 @@ export function newPlanId(title = 'video') {
   while (fs.existsSync(planDir(id))) id = `${stamp}-${slug}-${n++}`;
   return id;
 }
+
+// Pre-write gate check (plans/<id>/gate.json): Claude writes the checks and the proof options per
+// section; Bryan picks one per section (typing the real fact where an option needs one), then confirms.
+export function readGate(id) {
+  const f = path.join(planDir(id), 'gate.json');
+  try { return fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : null; } catch { return null; }
+}
+const writeGate = (id, gate) => fs.writeFileSync(path.join(planDir(id), 'gate.json'), JSON.stringify(gate, null, 2));
 
 export function readPlan(id, { files = true } = {}) {
   const f = path.join(planDir(id), 'plan.json');
@@ -45,6 +53,7 @@ export function readPlan(id, { files = true } = {}) {
   const sf = path.join(planDir(id), 'script.md');
   plan.scriptPreview = fs.existsSync(sf) ? spokenScript(fs.readFileSync(sf, 'utf8')).replace(/\s*\[[A-Z]+(?::[^\]]*)?\]/g, '').trim().split('\n').slice(0, 3).join('\n') : '';
   plan.hasOutline = fs.existsSync(path.join(planDir(id), 'outline.md'));
+  plan.gate = readGate(id);
   plan.assets = listAssets(id);
   plan.titles ||= []; plan.notesLog ||= [];
   plan.waitingOn = plan.request ? 'claude' : 'you';
@@ -54,7 +63,7 @@ export function readPlan(id, { files = true } = {}) {
 
 export function writePlan(plan) {
   const rest = { ...plan };
-  for (const k of ['outline', 'script', 'waitingOn', 'requestLabel', 'assets', 'scriptPreview', 'hasOutline']) delete rest[k];
+  for (const k of ['outline', 'script', 'waitingOn', 'requestLabel', 'assets', 'scriptPreview', 'hasOutline', 'gate']) delete rest[k];
   fs.mkdirSync(planDir(plan.id), { recursive: true });
   rest.updated = new Date().toISOString();
   fs.writeFileSync(path.join(planDir(plan.id), 'plan.json'), JSON.stringify(rest, null, 2));
@@ -213,6 +222,23 @@ export function planRoutes({ send, readBody, serveFile, inside }) {
       if ((kind === 'lock' || kind === 'revise') && !plan.script && !plan.outline) return send(res, 400, { error: 'Write an outline or script first.' });
       if (kind === 'revise' && !String(note).trim()) return send(res, 400, { error: 'Say what should change.' });
       send(res, 200, writePlan({ ...plan, request: { kind, note: String(note).trim().slice(0, 2000), at: new Date().toISOString() } }));
+    }],
+    // Confirm the gate: one pick per section, then queue "Write the script" from those picks.
+    ['POST', /^\/api\/plans\/([\w-]+)\/gate$/, async (req, res, [id]) => {
+      const plan = readPlan(id, { files: false });
+      if (!plan) return send(res, 404, { error: 'No such plan' });
+      const gate = plan.gate;
+      if (!gate?.sections?.length) return send(res, 400, { error: 'Run the gate check first.' });
+      const { picks = {} } = await readBody(req);
+      const clean = {};
+      for (const sec of gate.sections) {
+        const pk = picks[sec.id] || {}, opt = (sec.options || []).find((o) => o.id === pk.option);
+        if (!opt) return send(res, 400, { error: `Pick one for ${sec.name}.` });
+        const fact = String(pk.fact || '').trim().slice(0, 1000);
+        clean[sec.id] = fact ? { option: opt.id, fact } : { option: opt.id };
+      }
+      writeGate(id, { ...gate, picks: clean, confirmed: new Date().toISOString() });
+      send(res, 200, writePlan({ ...readPlan(id, { files: false }), request: { kind: 'script', note: 'Gate confirmed: write from the picks in gate.json.', at: new Date().toISOString() } }));
     }],
     ['POST', /^\/api\/plans\/([\w-]+)\/cancel$/, (req, res, [id]) => {
       const plan = readPlan(id, { files: false });
