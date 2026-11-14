@@ -84,7 +84,12 @@ Bryan's and Kallaway's. Never borrow Joe's clients, numbers, stories or offers.
 - **Honest caveats:** "availability can vary by account", "a starting framework, not a guarantee",
   "Don't assume the broad audience will automatically be worse. Watch the actual results."
 - **Engagement deal** (optional): "So here's the deal between me and you…"
-- **CTA:** tie the topic back to the full contractor growth system (Google profile, website,
+- **CTA (Bryan, 2026-11-14):** the offer lives in the CTA, never as its own section before it (a
+  separate pitch section breaks momentum right after the last payoff). Shape: the system line →
+  "If you want to learn more about the full system, watch my $500K video" → "You can run this
+  yourself. Or we build it for you" + the $30K-in-90-days guarantee → "book a call below" →
+  optionally the curiosity gap by elimination pointing to a related video → the video's own last line.
+- **CTA, older notes:** tie the topic back to the full contractor growth system (Google profile, website,
   follow-up, CRM, ads, reviews working together), then point to the next video, by default the
   "$500K a year contracting business" video. Optionally "subscribe".
 
@@ -127,6 +132,28 @@ keep Bryan's voice, faith, recap and cue tags, and add these.
   later act ("I'll tell you what it was in month two").
 - **CTA curiosity gap by elimination:** "It's not price. It's not your reviews. It's not even how
   fast you call back." Then point to the video that answers it.
+- **Do-it-now steps carry a number and the exact words.** Not "follow up with old leads" but "Pick
+  five that went quiet, and text them today: 'Hey, this is [Name] from [Business]…'". Not "someone
+  should own the phone" but "Decide today who owns your phone. Write their name down." Any message
+  the viewer should send is written out word for word, and a follow-up schedule shows the message
+  for at least two of its days (e.g. day 1 and day 7).
+- **Explain a time window with a before/after pair:** "Five minutes in, you're the answer. Ten
+  minutes later, you're an interruption."
+- **Land each problem on a two-beat verdict line:** "The lead showed up. The phone didn't." "The
+  lead isn't the problem. The clock is."
+- **Turn a story into the offer when it fits** (Bryan, 2026-11-14: connect the $60K aunt to "our
+  assistant saves them that cost"). Tease it in the intro ("By the end, you won't need to"), tell
+  the story in its act, then show how Elivate's system does the same job without the cost. That is
+  the native offer moment; never a separate sales section (see CTA).
+- **Never invent the intro proof.** A mystery-shopper test, a client result or a personal story is
+  only used with Bryan's real numbers. Without them it's a `[PLACEHOLDER]`, and the gate suggests
+  he run the test for real before filming ("call 20 contractors in your city as a homeowner").
+- **No prices on camera** unless Bryan asks for them in that video. The guarantee is fine, word for
+  word as the contract states it.
+- **Notes to Bryan never sit inside a spoken line.** "Check the clip before you quote it" goes on its
+  own line as a lowercase stage note in brackets.
+- **Each video gets its own last line**, tied to its topic ("Now go answer your phone."), not one
+  copied from another script ("Go run the play" belongs to the 90-day video).
 - **Never throw away ads** (Bryan's rule, 2026-11-14: "don't throw away ads, just talk about doors if
   they have no funding for ads"). Meta ads are part of his offer. Free moves (doors, reviews, past
   customers) are what to do when there's no ad budget yet, and they keep going once ads start. Never
