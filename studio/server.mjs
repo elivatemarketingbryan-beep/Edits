@@ -9,7 +9,6 @@ import { sheetsConfigured } from './sheets.mjs';
 import { startPost, refreshStats, refreshIfDue, statsState } from './ig-stats.mjs';
 import { planRoutes } from './plans.mjs';
 import { trialRoutes } from './trials.mjs';
-import { runRoutes } from './runner.mjs';
 
 const PORT = Number(process.env.PORT) || 4747;
 const PUBLIC = path.join(ROOT, 'studio', 'public');
@@ -240,10 +239,8 @@ const routes = [
   }],
   // The Plan page (long-form planning and scripts): studio/plans.mjs, docs/studio/plans.md.
   ...planRoutes({ send, readBody, serveFile, inside }),
-  // The Trial Reels page (test 2-4 versions of a reel): studio/trials.mjs, docs/studio/trials.md.
+  // The Trial Reels page (test 2-10 versions of a reel): studio/trials.mjs, docs/studio/trials.md.
   ...trialRoutes({ send, readBody, serveFile, inside }),
-  // The "Run studio jobs" button in the header: starts Claude Code headless (studio/runner.mjs).
-  ...runRoutes({ send }),
   ['GET', /^\/(review|sheet|plan|script|trials)?$/, (req, res, [page]) => serveFile(req, res, path.join(PUBLIC, (page || 'index') + '.html'))],
   ['GET', /^\/(.+)$/, (req, res, [rel]) => {
     const file = inside(PUBLIC, rel);

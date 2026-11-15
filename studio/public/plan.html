@@ -913,6 +913,5 @@ api('/api/catalog').then((c) => { styles = (c.styles || []).filter((x) => x.scri
 load().then(() => { const id = new URLSearchParams(location.search).get('plan'); if (id) open(id).catch(() => {}); });
 loadYT(false);
 </script>
-<script src="/run-jobs.js"></script>
 </body>
 </html>
