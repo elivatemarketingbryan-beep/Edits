@@ -12,10 +12,13 @@ versions: `styles/TRIAL-REELS.md`.
 
 ```
 plans/trials/<id>/trial.json     idea, notes, source (a finished long-form video, optional), request,
-                                 variants [{ id: v1, label: A, hook, script, changes, posted, results, job }],
+                                 format: filmed | animated (cartoon story reel in Bryan's cloned voice),
+                                 variants [{ id: v1, label: A, hook, script, changes, approved: { text, at },
+                                   posted, results, job }],
                                  winner, farm [{ date, kind: trial|feed|remake, views, note }]
 plans/trials/<id>/<vid>/raw/     that version's footage ("Send to editor" copies a clip into a new job)
 plans/trials/<id>/<vid>/final/   the finished reel (uploaded, or copied back when its edit is done)
+plans/trials/<id>/<vid>/voice/   animated trials: the joined cloned-voice voiceover (the page plays it)
 ```
 
 `plans/` is gitignored. The trial's stage is worked out from its versions, never stored: Idea →
@@ -34,6 +37,24 @@ For each, oldest first:
 2. Do the request, writing straight into `plans/trials/<id>/trial.json` (keep every version's `id`,
    `label`, `results`, `posted` and `job` as they are):
    - **hooks**: write every version's `hook`, `script` and `changes` (what else differs) from the idea and notes.
+   - **animate** (trials with `format: "animated"`): a cartoon story reel acted out by the faceless
+     figure, voiced by Bryan's cloned voice (`docs/studio/voice.md`, use 2). The page only lets this be
+     queued once every written version has `approved` words, and `approved.text` must equal the
+     version's `hook` + "\n" + `script` right now (`wordsApproved` in `show`). Voice only those
+     exact words, cue tags and stage notes removed; never add, cut or change a word. If a version's
+     words aren't approved, skip it and say so.
+     1. Make the voiceover with `node studio/voice.mjs speak` a sentence or two at a time, 3 takes
+        each; check every take by transcript and pitch (voice.md "Checking a take") and keep the best.
+        The body is the same on every version, so voice it once and reuse it; voice each hook
+        separately. Join hook + body into `plans/trials/<id>/<vid>/voice/<vid>.wav` (the page plays it).
+     2. Build the animation as a studio job: `writeJob` in `studio/jobs.mjs` with the joined voiceover
+        as `source`, `mode: "video"`, `trial: { id, variant }`, and a faceless style first in formats
+        (an audio-only source ranks them first). The story scenes come from `assets/boards/story/`
+        (CLAUDE.md "Stories and scenarios"). Bryan's stages apply: he approves the graphics stills and
+        reviews the first one. When that job reaches `done`, the reel lands in the version's `final/`.
+     3. Make the other versions the same look as the approved one, each with its own hook voiceover
+        and its `changes` (different colors, scene order, b-roll, caption style, length), so none is a
+        near-duplicate.
    - **variations**: one version has a finished reel. Render every other version from it into its
      `<vid>/final/`: re-record or re-cut the hook (the cloned voice only for a fix, `docs/studio/voice.md`;
      otherwise ask Bryan to film the hook lines), then apply that version's `changes` to the body so

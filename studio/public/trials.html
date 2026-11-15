@@ -97,6 +97,7 @@
       <form class="newform" id="newForm" novalidate>
         <h2>New trial</h2>
         <label class="field"><span>What's the reel about?</span><input type="text" id="nIdea" placeholder="e.g. The 5-minute rule"></label>
+        <label class="field"><span>How it's made</span><select id="nFormat"><option value="filmed">Filmed (I record it)</option><option value="animated">Animated, my cloned voice</option></select></label>
         <label class="field"><span>Cut from a finished long-form video (optional)</span><select id="nSource"><option value="">No, a fresh idea</option></select></label>
         <div class="newrow">
           <select id="nCount" aria-label="How many versions"><option value="2">2 versions</option><option value="3">3 versions</option><option value="4">4 versions</option><option value="5" selected>5 versions</option><option value="6">6 versions</option><option value="7">7 versions</option><option value="8">8 versions</option><option value="9">9 versions</option><option value="10">10 versions</option></select>
@@ -132,7 +133,7 @@ const api = async (url, body) => {
   if (!r.ok) throw new Error(j.error || 'Something went wrong');
   return j;
 };
-const REQ = { hooks: 'Write hooks & scripts', cut: 'Cut from long-form', variations: 'Make versions from one reel', farm: 'Make a repost version', revise: 'Revise' };
+const REQ = { hooks: 'Write hooks & scripts', cut: 'Cut from long-form', animate: 'Animate it (my cloned voice)', variations: 'Make versions from one reel', farm: 'Make a repost version', revise: 'Revise' };
 // What a trial reel's views say (Max Tornow, "The Trial Reels Formula That Actually Works").
 const band = (n) => n == null || n === '' ? null : n < 100 ? ['Stuck: a weak video, or flagged as a duplicate of another version', 'err']
   : n < 1000 ? ['Okay, but not landing with new people yet', ''] : n < 10000 ? ['Very good with new people', 'ok'] : ['Over 10K: farm it', 'gold'];
@@ -219,6 +220,7 @@ function renderWork() {
   const head = el('div', 'head'), ht = el('div');
   ht.append(el('h2', null, t.idea));
   const meta = el('span', 'muted', `${t.variants.length} versions · `); meta.append(el('span', 'st' + (t.stage === 'done' ? ' done' : ''), labels[t.stage] || t.stage));
+  meta.append(` · ${t.format === 'animated' ? 'Animated, your cloned voice' : 'Filmed'}`);
   if (t.source) meta.append(` · from "${t.source.label}"`);
   ht.append(meta);
   const del = el('button', 'ghost', 'Delete trial'); del.type = 'button';
@@ -232,12 +234,18 @@ function renderWork() {
   for (const s of sources) sel.append(Object.assign(el('option', null, s.label), { value: s.kind + ':' + s.id }));
   sel.value = t.source ? t.source.kind + ':' + t.source.id : '';
   sf.append(el('span', null, 'Cut from long-form'), sel);
-  brief.append(nf, sf); p.append(brief);
+  const ff = el('label', 'field'); const fsel = el('select'); fsel.id = 'tFormat';
+  fsel.append(Object.assign(el('option', null, 'Filmed (I record it)'), { value: 'filmed' }), Object.assign(el('option', null, 'Animated, my cloned voice'), { value: 'animated' }));
+  fsel.value = t.format || 'filmed';
+  ff.append(el('span', null, 'How it\'s made'), fsel);
+  const side = el('div'); side.style.cssText = 'display:grid;gap:12px'; side.append(ff, sf);
+  brief.append(nf, side); p.append(brief);
+  if (t.format === 'animated') p.append(el('p', 'muted', 'Animated: a cartoon story reel acted out by your faceless figure, voiced by your cloned voice. Your clone only says words you approve: approve each version\'s words, then Animate it. Claude makes the voiceover in short pieces, checks every take, and builds the animation.'));
 
   const msg = el('span', 'msg');
   const saveBrief = async () => {
     const [kind, ...rest] = sel.value.split(':');
-    current = await api('/api/trials/' + t.id, { notes: $('tNotes').value, source: sel.value ? { kind, id: rest.join(':') } : null });
+    current = await api('/api/trials/' + t.id, { notes: $('tNotes').value, format: fsel.value, source: sel.value ? { kind, id: rest.join(':') } : null });
     delete drafts.tNotes;
   };
   const ask = async (kind, note) => {
@@ -258,8 +266,12 @@ function renderWork() {
   sb.onclick = async () => { try { await saveBrief(); msg.className = 'msg ok'; msg.textContent = 'Saved.'; load(); } catch (err) { msg.className = 'msg err'; msg.textContent = err.message; } };
   const b3 = el('button', null, 'Make versions from one reel'); b3.type = 'button'; b3.onclick = () => ask('variations');
   b3.title = 'Once one version is finished, Claude renders the others from it: a new hook on each, plus small changes so Instagram doesn\'t flag duplicates.';
-  [b1, b2, b3].forEach((b) => (b.disabled = !!t.request));
-  btns.append(b1, b2, b3, sb, msg); p.append(btns);
+  const b4 = el('button', 'primary', 'Animate it'); b4.type = 'button'; b4.onclick = () => ask('animate');
+  b4.title = 'Claude voices every approved version with your cloned voice and builds the animated reels.';
+  [b1, b2, b3, b4].forEach((b) => (b.disabled = !!t.request));
+  if (t.format === 'animated') { b1.className = ''; btns.append(b1, b4, b2, b3, sb, msg); }
+  else btns.append(b1, b2, b3, sb, msg);
+  p.append(btns);
   const rv = el('div', 'actions');
   const rn = inp('input', 'tRevise', '', { type: 'text', placeholder: 'Change something: punchier hook on B, shorter scripts…' }); rn.style.cssText = 'flex:1;min-width:200px'; rn.setAttribute('aria-label', 'What to change');
   const rb = el('button', null, 'Revise'); rb.type = 'button'; rb.disabled = !!t.request;
@@ -312,8 +324,11 @@ function vcard(t, v) {
   const row = el('div', 'actions'); row.append(sv, copy, sm);
   s1.append(hook, sc, ch, row); card.append(s1);
 
+  // Animated: approve the exact words for the cloned voice, then hear the voiceover Claude made.
+  if (t.format === 'animated') card.append(voiceSection(t, v, hook, sc));
   // Footage -> editor, and the finished reel.
   const s2 = el('div', 'vsec'); s2.append(el('b', null, 'Footage'));
+  if (t.format === 'animated') s2.hidden = true;
   for (const f of v.raw) {
     const line = el('div', 'file'); line.append(el('span', null, f.name));
     const send = el('button', null, v.job ? 'Sent' : 'Send to editor'); send.type = 'button'; send.disabled = !!v.job;
@@ -330,7 +345,7 @@ function vcard(t, v) {
     const vid = Object.assign(el('video'), { src: `/trial-files/${t.id}/${encodeURI(fin.path)}`, controls: true, preload: 'metadata', playsInline: true });
     const line = el('div', 'file'); line.append(el('span', null, fin.name), xBtn(t, fin));
     s3.append(vid, line);
-  } else s3.append(el('span', 'muted', v.job ? 'Comes back here when the edit is done.' : 'Upload it, or send the footage to the editor.'));
+  } else s3.append(el('span', 'muted', t.format === 'animated' ? 'Comes back here when Claude animates it.' : v.job ? 'Comes back here when the edit is done.' : 'Upload it, or send the footage to the editor.'));
   s3.append(uploader(t, v, 'final', fin ? 'Replace' : 'Upload finished reel'));
   card.append(s3);
 
@@ -367,6 +382,41 @@ function vcard(t, v) {
   rrow.append(rmsg); s4.append(rrow);
   card.append(s4);
   return card;
+}
+
+function voiceSection(t, v, hook, sc) {
+  const s = el('div', 'vsec'); s.append(el('b', null, 'Your cloned voice'));
+  const typedChanged = () => hook.value !== (v.hook || '') || sc.value !== (v.script || '');
+  if (v.wordsApproved) {
+    const ok = el('span', 'msg ok', `✓ Words approved ${new Date(v.approved.at).toLocaleDateString([], { month: 'short', day: 'numeric' })}. Your clone will say exactly these.`);
+    const un = el('button', 'ghostlink', 'Take back approval'); un.type = 'button';
+    un.onclick = async () => { current = await api(`/api/trials/${t.id}/variants/${v.id}`, { approve: false }); renderWork(); };
+    s.append(ok, un);
+  } else {
+    if (v.approved) s.append(el('span', 'msg err', 'The words changed since you approved them. Read them again and approve.'));
+    const ap = el('button', 'primary', 'Approve these words for my voice'); ap.type = 'button';
+    ap.title = 'Saves the hook and script as they are now and approves them word for word.';
+    const m = el('span', 'msg');
+    if (!v.hook) ap.textContent = 'Save and approve these words';
+    ap.onclick = async () => {
+      if (!hook.value.trim()) { m.className = 'msg err'; m.textContent = 'Write the hook first.'; hook.focus(); return; }
+      try {
+        current = await api(`/api/trials/${t.id}/variants/${v.id}`, { hook: hook.value, script: sc.value, approve: true });
+        delete drafts[`${v.id}-hook`]; delete drafts[`${v.id}-script`]; renderWork(); renderList();
+      } catch (err) { m.className = 'msg err'; m.textContent = err.message; }
+    };
+    hook.addEventListener('input', () => { ap.textContent = typedChanged() ? 'Save and approve these words' : 'Approve these words for my voice'; });
+    sc.addEventListener('input', () => { ap.textContent = typedChanged() ? 'Save and approve these words' : 'Approve these words for my voice'; });
+    const row = el('div', 'actions'); row.append(ap, m); s.append(row);
+  }
+  for (const f of v.voice) {
+    const a = Object.assign(el('audio'), { src: `/trial-files/${t.id}/${encodeURI(f.path)}`, controls: true, preload: 'none' });
+    a.style.width = '100%';
+    const line = el('div', 'file'); line.append(el('span', null, f.name), xBtn(t, f));
+    s.append(a, line);
+  }
+  if (!v.voice.length && v.wordsApproved) s.append(el('span', 'muted', 'Claude puts the voiceover here when you Animate it.'));
+  return s;
 }
 
 // Farming the winner: re-upload it natively, repost a varied trial version about every 7 days,
@@ -450,7 +500,7 @@ $('newForm').onsubmit = async (e) => {
   if (!idea) { m.className = 'msg err'; m.textContent = 'Say what the reel is about first.'; $('nIdea').focus(); return; }
   const sv = $('nSource').value, [kind, ...rest] = sv.split(':');
   try {
-    const t = await api('/api/trials', { idea, count: $('nCount').value, source: sv ? { kind, id: rest.join(':') } : null });
+    const t = await api('/api/trials', { idea, count: $('nCount').value, format: $('nFormat').value, source: sv ? { kind, id: rest.join(':') } : null });
     $('nIdea').value = ''; $('nSource').value = ''; m.textContent = '';
     await load(); pick(t.id);
   } catch (err) { m.className = 'msg err'; m.textContent = err.message; }

@@ -20,13 +20,17 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const TRIALS = path.join(ROOT, 'plans', 'trials');
 const JOBS = path.join(ROOT, 'jobs');
 
-export const REQUESTS = { hooks: 'Write hooks & scripts', cut: 'Cut from long-form', variations: 'Make versions from one reel', farm: 'Make a repost version', revise: 'Revise' };
+export const REQUESTS = { hooks: 'Write hooks & scripts', cut: 'Cut from long-form', animate: 'Animate it (my cloned voice)', variations: 'Make versions from one reel', farm: 'Make a repost version', revise: 'Revise' };
+// filmed: Bryan films it. animated: a cartoon story reel voiced by his cloned voice (docs/studio/voice.md, use 2).
+export const FORMATS = { filmed: 'Filmed', animated: 'Animated, my cloned voice' };
 // The stage is worked out from the versions, so every view agrees (no stage to keep in sync by hand).
 export const STAGES = ['idea', 'scripted', 'filming', 'ready', 'testing', 'done'];
 export const STAGE_LABEL = { idea: 'Idea', scripted: 'Scripted', filming: 'Filming', ready: 'Ready to post', testing: 'Testing', done: 'Farming the winner' };
 export const MAX_VERSIONS = 10;   // Max Tornow: post 5-10 slightly different versions of one reel
-const KINDS = { raw: 'raw', final: 'final' };
-const VID = /\.(mp4|mov|m4v|webm|mkv)$/i;
+const KINDS = { raw: 'raw', final: 'final', voice: 'voice' };
+const VID = /\.(mp4|mov|m4v|webm|mkv)$/i, AUD = /\.(wav|mp3|m4a|aac|flac|ogg)$/i;
+// The words Bryan approved for his cloned voice, exactly: any edit after approving needs a new OK.
+const spokenText = (v) => `${(v.hook || '').trim()}\n${(v.script || '').trim()}`;
 // views..follows from Instagram's numbers; skipRate (%), avgWatch (seconds) and length (seconds) are
 // what heyDominik's data says decides a breakout (docs/studio/trials.md, styles/TRIAL-REELS.md).
 const RESULT_KEYS = ['views', 'nonFollowerPct', 'likes', 'comments', 'shares', 'saves', 'follows', 'skipRate', 'avgWatch', 'length'];
@@ -61,10 +65,14 @@ export function readTrial(id) {
   if (!fs.existsSync(f)) return null;
   const t = JSON.parse(fs.readFileSync(f, 'utf8'));
   t.variants ||= [];
-  for (const v of t.variants) { v.raw = files(id, v.id, 'raw'); v.final = files(id, v.id, 'final'); v.results ||= {}; }
+  t.format ||= 'filmed';
+  for (const v of t.variants) {
+    v.raw = files(id, v.id, 'raw'); v.final = files(id, v.id, 'final'); v.voice = files(id, v.id, 'voice'); v.results ||= {};
+    v.wordsApproved = !!(v.approved && v.approved.text === spokenText(v) && v.hook);
+  }
   const vs = t.variants;
   t.stage = t.winner ? 'done' : vs.some((v) => v.posted) ? 'testing' : vs.some((v) => v.final.length) ? 'ready'
-    : vs.some((v) => v.raw.length || v.job) ? 'filming' : vs.some((v) => v.hook) ? 'scripted' : 'idea';
+    : vs.some((v) => v.raw.length || v.voice.length || v.job) ? 'filming' : vs.some((v) => v.hook) ? 'scripted' : 'idea';
   const measured = vs.filter((v) => Number(v.results.views) > 0);
   t.leader = measured.length >= 2 ? measured.reduce((a, b) => (score(b.results) > score(a.results) ? b : a)).id : null;
   t.requestLabel = t.request ? REQUESTS[t.request.kind] : null;
@@ -77,7 +85,7 @@ export function readTrial(id) {
 }
 
 export function writeTrial(t) {
-  const rest = { ...t, variants: (t.variants || []).map(({ raw, final, ...v }) => v) };
+  const rest = { ...t, variants: (t.variants || []).map(({ raw, final, voice, wordsApproved, ...v }) => v) };
   for (const k of ['stage', 'leader', 'requestLabel', 'totalViews', 'nextTrialRepost']) delete rest[k];
   fs.mkdirSync(dir(t.id), { recursive: true });
   rest.updated = new Date().toISOString();
@@ -111,6 +119,9 @@ function cleanVariant(v, prev = {}) {
   if (v.hook !== undefined) out.hook = String(v.hook).slice(0, 400);
   if (v.script !== undefined) out.script = String(v.script).slice(0, 6000);
   if (v.changes !== undefined) out.changes = String(v.changes).slice(0, 300);
+  // Approving stores the exact words; un-approving (or changing them) means Claude may not voice them.
+  if (v.approve === true) out.approved = { text: spokenText(out), at: new Date().toISOString() };
+  if (v.approve === false) out.approved = null;
   if (v.posted !== undefined) out.posted = /^\d{4}-\d{2}-\d{2}$/.test(v.posted) ? v.posted : null;
   if (v.results) { out.results = { ...(prev.results || {}) }; for (const k of RESULT_KEYS) if (k in v.results) out.results[k] = num(v.results[k]); }
   return out;
@@ -119,7 +130,7 @@ function cleanVariant(v, prev = {}) {
 function saveUpload(id, vid, kind, filename, req) {
   return new Promise((ok, fail) => {
     if (!KINDS[kind]) return fail(new Error('Unknown upload kind'));
-    if (!VID.test(filename)) return fail(new Error('Reels must be MP4, MOV, M4V, WEBM or MKV.'));
+    if (kind === 'voice' ? !AUD.test(filename) : !VID.test(filename)) return fail(new Error(kind === 'voice' ? 'Voiceovers must be WAV, MP3, M4A, AAC, FLAC or OGG.' : 'Reels must be MP4, MOV, M4V, WEBM or MKV.'));
     const d = vdir(id, vid, kind);
     fs.mkdirSync(d, { recursive: true });
     const base = path.basename(filename).replace(/[^\w.() -]+/g, '_').slice(-120) || 'reel.mp4';
@@ -151,7 +162,7 @@ export function syncTrialFromJob(job) {
 export function trialRoutes({ send, readBody, serveFile, inside }) {
   const need = (res, id) => { const t = readTrial(id); if (!t) send(res, 404, { error: 'No such trial' }); return t; };
   return [
-    ['GET', /^\/api\/trials$/, (req, res) => send(res, 200, { trials: listTrials(), stages: STAGES, labels: STAGE_LABEL, farmKinds: FARM_KINDS, maxVersions: MAX_VERSIONS })],
+    ['GET', /^\/api\/trials$/, (req, res) => send(res, 200, { trials: listTrials(), stages: STAGES, labels: STAGE_LABEL, farmKinds: FARM_KINDS, maxVersions: MAX_VERSIONS, formats: FORMATS })],
     ['GET', /^\/api\/trials\/sources$/, (req, res) => send(res, 200, { sources: sources() })],
     ['POST', /^\/api\/trials$/, async (req, res) => {
       const b = await readBody(req);
@@ -160,7 +171,7 @@ export function trialRoutes({ send, readBody, serveFile, inside }) {
       const id = newTrialId(idea), src = sources().find((s) => s.kind === b.source?.kind && s.id === b.source?.id) || null;
       const count = Math.min(MAX_VERSIONS, Math.max(2, Number(b.count) || 5));
       const variants = Array.from({ length: count }, (_, i) => ({ id: 'v' + (i + 1), label: LETTERS[i], hook: '', script: '', results: {} }));
-      send(res, 200, writeTrial({ id, idea, notes: String(b.notes || '').slice(0, 8000), source: src, variants, request: null, winner: null, farm: [], created: new Date().toISOString() }));
+      send(res, 200, writeTrial({ id, idea, notes: String(b.notes || '').slice(0, 8000), source: src, format: FORMATS[b.format] ? b.format : 'filmed', variants, request: null, winner: null, farm: [], created: new Date().toISOString() }));
     }],
     ['GET', /^\/api\/trials\/([\w-]+)$/, (req, res, [id]) => { const t = need(res, id); if (t) send(res, 200, t); }],
     ['POST', /^\/api\/trials\/([\w-]+)$/, async (req, res, [id]) => {
@@ -168,6 +179,7 @@ export function trialRoutes({ send, readBody, serveFile, inside }) {
       const b = await readBody(req);
       if (b.idea !== undefined) { const idea = String(b.idea).trim().slice(0, 200); if (!idea) return send(res, 400, { error: 'The idea can\'t be empty.' }); t.idea = idea; }
       if (b.notes !== undefined) t.notes = String(b.notes).slice(0, 8000);
+      if (b.format !== undefined && FORMATS[b.format]) t.format = b.format;
       if (b.source !== undefined) t.source = b.source ? sources().find((s) => s.kind === b.source.kind && s.id === b.source.id) || null : null;
       if (b.winner !== undefined) t.winner = b.winner && t.variants.some((v) => v.id === b.winner) ? b.winner : null;
       send(res, 200, writeTrial(t));
@@ -203,6 +215,12 @@ export function trialRoutes({ send, readBody, serveFile, inside }) {
       if (kind === 'revise' && !String(note).trim()) return send(res, 400, { error: 'Say what should change.' });
       if (kind === 'variations' && !t.variants.some((v) => v.final.length)) return send(res, 400, { error: 'Finish one version first (upload it or send it to the editor), then the rest are made from it.' });
       if (kind === 'farm' && !t.winner) return send(res, 400, { error: 'Pick the winner first.' });
+      if (kind === 'animate') {
+        const written = t.variants.filter((v) => v.hook);
+        if (!written.length) return send(res, 400, { error: 'Write the versions first.' });
+        const unapproved = written.filter((v) => !v.wordsApproved).map((v) => v.label);
+        if (unapproved.length) return send(res, 400, { error: `Approve the words on version ${unapproved.join(', ')} first. Your cloned voice only says words you've OK'd.` });
+      }
       t.request = { kind, note: String(note).trim().slice(0, 2000), at: new Date().toISOString() };
       send(res, 200, writeTrial(t));
     }],
@@ -239,7 +257,7 @@ export function trialRoutes({ send, readBody, serveFile, inside }) {
     ['POST', /^\/api\/trials\/([\w-]+)\/files\/delete$/, async (req, res, [id]) => {
       if (!readTrial(id)) return send(res, 404, { error: 'No such trial' });
       const { path: rel } = await readBody(req);
-      const file = /^v\d+\/(raw|final)\/[^/\\]+$/.test(rel || '') && inside(dir(id), rel);
+      const file = /^v\d+\/(raw|final|voice)\/[^/\\]+$/.test(rel || '') && inside(dir(id), rel);
       if (!file || !fs.existsSync(file)) return send(res, 404, { error: 'No such file' });
       fs.rmSync(file);
       send(res, 200, readTrial(id));
@@ -262,7 +280,7 @@ export function trialRoutes({ send, readBody, serveFile, inside }) {
       v.job = job.id;
       send(res, 200, { job: job.id, trial: writeTrial(t) });
     }],
-    ['GET', /^\/trial-files\/([\w-]+)\/(v\d+\/(?:raw|final)\/.+)$/, (req, res, [id, rel]) => {
+    ['GET', /^\/trial-files\/([\w-]+)\/(v\d+\/(?:raw|final|voice)\/.+)$/, (req, res, [id, rel]) => {
       const file = inside(dir(id), rel);
       file ? serveFile(req, res, file) : send(res, 403, { error: 'Forbidden' });
     }],
@@ -274,7 +292,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   if (cmd === 'pending') {
     const todo = listTrials().filter((t) => t.request);
     if (!todo.length) console.log('No trial reels waiting on Claude.');
-    for (const t of todo) console.log(`${t.id}  ${t.request.kind}${t.request.note ? `  note="${t.request.note}"` : ''}  idea="${t.idea}"${t.source ? `  source=${t.source.kind}:${t.source.id}` : ''}`);
+    for (const t of todo) console.log(`${t.id}  ${t.request.kind}${t.request.note ? `  note="${t.request.note}"` : ''}  idea="${t.idea}"  format=${t.format}${t.source ? `  source=${t.source.kind}:${t.source.id}` : ''}`);
   } else if (cmd === 'show') {
     const t = readTrial(id);
     if (!t) { console.log(`No trial ${id}`); process.exit(1); }

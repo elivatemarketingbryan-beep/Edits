@@ -105,6 +105,24 @@ version wins:
 - A `farm` request asks Claude for the next repost version: new variations, different from every
   earlier upload, saved in the winner's `final/` folder as `repost-<date>.mp4`.
 
+## Animated trials (Bryan's cloned voice)
+
+For trials made as cartoon story reels (format "Animated, my cloned voice"):
+
+- **Write a story, not a lecture:** a contractor (the faceless figure) in one situation the viewer
+  knows (the phone ringing on a roof, the estimate that went quiet, the shared lead), what goes
+  wrong, the fix, the result. Same rules as above: hook, second hook by 3 to 5 seconds, one idea.
+- **Write it to be heard.** Short sentences, every word sayable: money as words is handled by the
+  voice tool ($500,000 is read right), but spell out anything odd. No cue tags or stage notes in
+  what's voiced; they stay for the edit.
+- **Bryan approves every word** with "Approve these words for my voice" before anything is voiced,
+  and the approval breaks if a word changes. Never voice a number, result or claim he didn't give.
+- **Versions:** each version gets its own voiced hook; the body can be voiced once and shared. Make
+  versions differ in what's seen as well as heard (scene colors, scene order, the opening scene,
+  caption style, total length), so none gets duplicate-flagged.
+- How the voice is made and checked: `docs/studio/voice.md`. How the request is answered:
+  `docs/studio/trials.md` "animate".
+
 ## Cutting from long-form
 
 A `cut` request turns a finished long-form video into versions: find self-contained moments that

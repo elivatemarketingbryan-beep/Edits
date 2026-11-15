@@ -16,7 +16,9 @@ didn't give (CLAUDE.md "Never invent").
    (`assets/boards/story/`, CLAUDE.md "Stories and scenarios"). Write the story in his voice
    (`engines/content-os/voice-dna.md`), get his OK on every word, generate it in short pieces (a sentence or two each,
    checked like any take), join them, then drop the joined voiceover into the studio: an audio-only drop ranks the
-   faceless styles first.
+   faceless styles first. On the **Trial Reels** page (`/trials`, format "Animated, my cloned voice"), his OK is the
+   "Approve these words for my voice" button on each version: it stores the exact words, and changing any word
+   takes the approval away. Voice only a version whose words are approved (`docs/studio/trials.md` "animate").
 
 Nothing else: no full talking-head videos voiced without him, and no lines he hasn't approved word for word.
 
