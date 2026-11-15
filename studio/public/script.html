@@ -34,7 +34,8 @@
   .picker .empty { color: var(--muted); font-size: 13px; }
   .picker .mname { display: flex; justify-content: space-between; gap: 8px; }
   .picker .mname i { font-style: normal; letter-spacing: 0; }
-  .addv { display: flex; gap: 6px; }
+  .addv { display: flex; flex-wrap: wrap; gap: 6px; }
+  .addv .research { flex-basis: 100%; }
   .addv input { flex: 1; min-width: 0; font-size: 13px; padding: 6px 8px; }
   .addv button { font-size: 12px; padding: 6px 10px; white-space: nowrap; }
   .addv-msg { font-size: 12px; color: #f08a8a; margin: 0 2px; }
@@ -106,7 +107,7 @@
 <body>
 <header class="top bar-top">
   <a class="brand" href="/"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.5v11l9-5.5z" fill="currentColor"/></svg></span>Video Studio</a>
-  <nav class="navseg" aria-label="Studio"><a href="/plan">Plan</a><a href="/script" class="on" aria-current="page">Script</a><a href="/">Edit</a></nav>
+  <nav class="navseg" aria-label="Studio"><a href="/plan">Plan</a><a href="/script" class="on" aria-current="page">Script</a><a href="/trials">Trial Reels</a><a href="/">Edit</a></nav>
   <span class="status" id="status"><i></i><span>Ready</span></span>
 </header>
 
@@ -141,6 +142,7 @@
           </form>
           <div id="waiting" class="waiting" hidden></div>
           <div class="actions" id="askBtns">
+            <button type="button" data-ask="research" id="researchBtn">Research videos talking about this</button>
             <button type="button" data-ask="outline">1. Outline &amp; check</button>
             <button type="button" class="primary" data-ask="script">2. Write script</button>
             <button type="button" data-ask="lock">Story-lock pass</button>
@@ -209,19 +211,24 @@ function addRow(m) {
   inp.setAttribute('aria-label', `Month ${m}: working title of a new video`);
   inp.oninput = () => { addDrafts[m] = inp.value; };
   const btn = Object.assign(el('button', 'ghost', 'Add'), { type: 'submit' });
-  f.append(inp, btn);
-  f.onsubmit = async (e) => {
-    e.preventDefault();
+  // Same as on the Plan page: add the video, then queue research (it lands in the outline and the Research box).
+  const research = Object.assign(el('button', 'ghost research', 'Research videos talking about this'), { type: 'button' });
+  research.title = 'Adds the video, then Claude researches what others in your niche say about it and fills your outline. Then Write script.';
+  f.append(inp, btn, research);
+  const create = async (withResearch) => {
     const title = (addDrafts[m] || '').trim();
     f.parentElement.querySelector('.addv-msg')?.remove();
     if (!title) { f.after(el('p', 'addv-msg', 'Give it a working title first.')); inp.focus(); return; }
-    btn.disabled = true;
+    btn.disabled = research.disabled = true;
     try {
       const p = await api('/api/plans', { title, month: m, cta: 'Point to a related video, then: book a call below.', acts: 3 });
+      if (withResearch) await api(`/api/plans/${p.id}/request`, { kind: 'research' });
       delete addDrafts[m];
       await load(); await pick(p.id);
-    } catch (err) { btn.disabled = false; f.after(el('p', 'addv-msg', err.message)); }
+    } catch (err) { btn.disabled = research.disabled = false; f.after(el('p', 'addv-msg', err.message)); }
   };
+  f.onsubmit = (e) => { e.preventDefault(); create(false); };
+  research.onclick = () => create(true);
   return f;
 }
 function renderPicker() {
@@ -280,6 +287,7 @@ function show(p) {
     w.append(line, cancel);
   } else w.hidden = true;
   document.querySelectorAll('#askBtns button[data-ask], #reviseBtn').forEach((b) => (b.disabled = !!p.request));
+  $('researchBtn').textContent = p.research ? 'Research again' : 'Research videos talking about this';
   if (!same) { tab = p.script ? 'script' : p.outline ? 'outline' : 'script'; editing = null; }
   renderGate(p);
   renderSheet();
@@ -452,5 +460,6 @@ $('bpSave').onclick = async () => { await api('/api/blueprint', { text: $('bpTex
 
 load().then(() => { const id = new URLSearchParams(location.search).get('plan'); if (id) pick(id).catch(() => {}); });
 </script>
+<script src="/run-jobs.js"></script>
 </body>
 </html>

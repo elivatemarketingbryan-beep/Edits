@@ -229,7 +229,7 @@
 <body>
 <header class="top bar-top">
   <a class="brand" href="/"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.5v11l9-5.5z" fill="currentColor"/></svg></span>Video Studio</a>
-  <nav class="navseg" aria-label="Studio"><a href="/plan" class="on" aria-current="page">Plan</a><a href="/script">Script</a><a href="/">Edit</a></nav>
+  <nav class="navseg" aria-label="Studio"><a href="/plan" class="on" aria-current="page">Plan</a><a href="/script">Script</a><a href="/trials">Trial Reels</a><a href="/">Edit</a></nav>
   <span class="status" id="status"><i></i><span>Ready</span></span>
 </header>
 
@@ -913,5 +913,6 @@ api('/api/catalog').then((c) => { styles = (c.styles || []).filter((x) => x.scri
 load().then(() => { const id = new URLSearchParams(location.search).get('plan'); if (id) open(id).catch(() => {}); });
 loadYT(false);
 </script>
+<script src="/run-jobs.js"></script>
 </body>
 </html>

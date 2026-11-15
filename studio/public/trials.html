@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trial Reels · Video Studio</title>
+<link rel="stylesheet" href="/studio.css">
+<style>
+  /* Trial Reels: one idea, 2-4 versions, posted as Instagram trial reels, numbers in, winner out.
+     Purple is structure, gold is the winner and placeholders. */
+  :root { --gold: #e8c77a; }
+  .navseg { justify-self: center; display: inline-flex; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 3px; gap: 2px; }
+  .navseg a { color: var(--muted); font-size: 12.5px; padding: 4px 14px; border-radius: 7px; text-decoration: none; font-weight: 600; }
+  .navseg a.on { background: var(--card); color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+  .tr-wrap { max-width: 1320px; margin: 0 auto; padding: 24px 20px 80px; display: grid; gap: 22px; }
+  .tr-wrap > * { min-width: 0; }
+  .tr-hero h1 { margin: 0; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; font-size: clamp(28px, 4vw, 40px); }
+  .tr-hero h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--accent-hi); }
+  .tr-hero .lede { margin: 10px 0 0; max-width: 70ch; }
+  .tr { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 18px; align-items: start; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .panel h2 { margin: 0; font-size: 15px; }
+  .muted { color: var(--muted); }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .msg { font-size: 13px; color: var(--muted); }
+  .msg.err { color: #f08a8a; } .msg.ok { color: var(--ok); }
+  textarea { resize: vertical; min-height: 64px; }
+  .field { display: grid; gap: 4px; min-width: 0; }
+  .field > span { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .field input, .field textarea, .field select { width: 100%; }
+
+  /* left: new trial + list by stage */
+  .side { position: sticky; top: 70px; max-height: calc(100vh - 90px); overflow: auto; }
+  .newform { display: grid; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .newrow { display: flex; gap: 8px; } .newrow select { flex: 1; min-width: 0; }
+  .sgroup { display: grid; gap: 4px; }
+  .sname { font: 600 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 8px 2px 2px; display: flex; justify-content: space-between; }
+  .pick { text-align: left; display: grid; gap: 3px; padding: 8px 10px; border-radius: 9px; background: var(--card); border: 1px solid var(--line); font-size: 13px; }
+  .pick b { font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+  .pick small { color: var(--muted); font-size: 11.5px; }
+  .pick.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .empty { color: var(--muted); font-size: 13px; }
+
+  /* right: the trial */
+  .head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+  .head h2 { margin: 0; font-size: 20px; letter-spacing: -.01em; text-wrap: balance; }
+  .st { display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 99px; background: var(--accent-soft); color: var(--accent-hi); white-space: nowrap; }
+  .st.done { background: #3a2a10; color: var(--gold); }
+  .brief { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 12px; align-items: start; }
+  .waiting { background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; display: flex; gap: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+  .waiting code { background: var(--bg); border-radius: 6px; padding: 2px 8px; }
+  .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; counter-reset: s; }
+  .steps li { font-size: 12.5px; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px; counter-increment: s; }
+  .steps li::before { content: counter(s); font: 700 11px var(--mono); color: var(--accent-hi); margin-right: 6px; }
+  .steps li b { color: var(--text); font-weight: 600; }
+
+  .vgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .vcard { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .vcard.lead { border-color: var(--accent); }
+  .vcard.win { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+  .vtop { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .vtop h3 { margin: 0; font-size: 15px; display: flex; gap: 8px; align-items: center; }
+  .badge { font: 600 10.5px var(--mono); padding: 2px 7px; border-radius: 99px; background: var(--accent-soft); color: var(--accent-hi); }
+  .badge.win { background: #3a2a10; color: var(--gold); }
+  .vsec { display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 10px; }
+  .vsec > b { font: 600 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .hookin { font-weight: 600; }
+  .script { min-height: 120px; font-size: 13px; line-height: 1.5; }
+  .file { display: flex; gap: 6px; align-items: center; font-size: 12.5px; }
+  .file span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .x { width: 26px; height: 26px; padding: 0; border-radius: 7px; line-height: 1; }
+  video { width: 100%; max-height: 360px; aspect-ratio: 9/16; object-fit: contain; background: #000; border-radius: 10px; }
+  .results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 8px; }
+  .results label { display: grid; gap: 2px; font-size: 11.5px; color: var(--muted); }
+  .results input { font: 13px var(--mono); padding: 5px 7px; }
+  .due { font-size: 12px; color: var(--gold); }
+  .ghostlink { background: none; border: 0; color: var(--muted); padding: 0; font-size: 12.5px; text-decoration: underline; cursor: pointer; }
+  @media (max-width: 960px) { .tr { grid-template-columns: 1fr; } .side { position: static; max-height: none; } .brief { grid-template-columns: 1fr; } .steps { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<header class="top bar-top">
+  <a class="brand" href="/"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.5v11l9-5.5z" fill="currentColor"/></svg></span>Video Studio</a>
+  <nav class="navseg" aria-label="Studio"><a href="/plan">Plan</a><a href="/script">Script</a><a href="/trials" class="on" aria-current="page">Trial Reels</a><a href="/">Edit</a></nav>
+  <span class="status" id="status"><i></i><span>Ready</span></span>
+</header>
+
+<main class="tr-wrap">
+  <section class="tr-hero">
+    <p class="eyebrow">Trial reels · Instagram</p>
+    <h1>Test it on strangers, <em>keep the winner</em>.</h1>
+    <p class="lede">One idea, five to ten slightly different versions. Post each as an Instagram trial reel (it goes to non-followers only), keep the one that wins, then farm it: repost it with small changes every week for as long as it keeps bringing views and leads.</p>
+  </section>
+
+  <section class="tr">
+    <aside class="panel side" aria-label="Your trial reels">
+      <form class="newform" id="newForm" novalidate>
+        <h2>New trial</h2>
+        <label class="field"><span>What's the reel about?</span><input type="text" id="nIdea" placeholder="e.g. The 5-minute rule"></label>
+        <label class="field"><span>Cut from a finished long-form video (optional)</span><select id="nSource"><option value="">No, a fresh idea</option></select></label>
+        <div class="newrow">
+          <select id="nCount" aria-label="How many versions"><option value="2">2 versions</option><option value="3">3 versions</option><option value="4">4 versions</option><option value="5" selected>5 versions</option><option value="6">6 versions</option><option value="7">7 versions</option><option value="8">8 versions</option><option value="9">9 versions</option><option value="10">10 versions</option></select>
+          <button type="submit" class="primary">Add trial</button>
+        </div>
+        <p class="msg" id="nMsg"></p>
+      </form>
+      <div id="list"><span class="empty">Loading…</span></div>
+    </aside>
+
+    <div id="desk" style="display:grid;gap:14px;min-width:0">
+      <div class="panel" id="none">
+        <h2>How a trial works</h2>
+        <ol class="steps">
+          <li><b>Write 5–10 versions.</b> A different hook on each, plus small changes in the body so Instagram doesn't flag them as duplicates. Claude writes them, or cuts them from a long-form video.</li>
+          <li><b>Film once, edit once.</b> Finish one version, then "Make versions from one reel" builds the rest from it.</li>
+          <li><b>Post them all as trial reels.</b> In Instagram, turn on "Trial" when you share. Log the date.</li>
+          <li><b>After 16–24 hours, log the views and pick the winner.</b> Re-upload the winner to your feed (don't tap "Share to anyone"), then farm it.</li>
+        </ol>
+        <p class="muted" style="margin:0">Pick a trial on the left, or add one.</p>
+      </div>
+      <div id="work" hidden style="display:grid;gap:14px;min-width:0"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const api = async (url, body) => {
+  const r = await fetch(url, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || 'Something went wrong');
+  return j;
+};
+const REQ = { hooks: 'Write hooks & scripts', cut: 'Cut from long-form', variations: 'Make versions from one reel', farm: 'Make a repost version', revise: 'Revise' };
+// What a trial reel's views say (Max Tornow, "The Trial Reels Formula That Actually Works").
+const band = (n) => n == null || n === '' ? null : n < 100 ? ['Stuck: a weak video, or flagged as a duplicate of another version', 'err']
+  : n < 1000 ? ['Okay, but not landing with new people yet', ''] : n < 10000 ? ['Very good with new people', 'ok'] : ['Over 10K: farm it', 'gold'];
+let farmKinds = {}, maxVersions = 10;
+const RESULTS = [['views', 'Views'], ['nonFollowerPct', 'Non-followers %'], ['skipRate', 'Skip rate %'], ['avgWatch', 'Avg watch (sec)'], ['length', 'Reel length (sec)'], ['shares', 'Shares'], ['saves', 'Saves'], ['likes', 'Likes'], ['comments', 'Comments'], ['follows', 'Follows']];
+// heyDominik's breakout benchmarks: skip rate 45% or less, average watch time by reel length, share rate.
+const watchTarget = (len) => len <= 10 ? Math.round(len * 0.95) : len <= 30 ? 8 : len <= 60 ? 13 : len <= 90 ? 18 : 28;
+function checks(r) {
+  const out = [], n = (k) => (r[k] == null || r[k] === '' ? null : Number(r[k]));
+  const skip = n('skipRate'), watch = n('avgWatch'), len = n('length'), views = n('views'), shares = n('shares');
+  if (skip != null) out.push([skip <= 45, `Skip rate ${skip}%: ${skip <= 31 ? 'top 10%' : skip <= 45 ? 'breakout range (45% or less)' : 'too many skip the hook (breakouts are 45% or less)'}`]);
+  if (watch != null && len) { const tg = watchTarget(len); out.push([watch >= tg, `Avg watch ${watch}s on a ${len}s reel: ${watch >= tg ? 'holds people past the first 5–10 seconds' : `breakouts this long hold about ${tg}s`}`]); }
+  if (views && shares != null) { const sr = (shares / views) * 100; out.push([sr >= 2, `Share rate ${sr.toFixed(1)}%: ${sr >= 5 ? 'the algorithm goes haywire at 5%' : sr >= 2 ? 'enough to lift it (2%+)' : sr >= 1 ? 'a slight lift (1–2%)' : 'average (under 1%)'}`]); }
+  return out;
+}
+let trials = [], labels = {}, stages = [], sources = [], current = null, poll = null;
+const drafts = {};   // input id -> typed value, so the 5-second refresh never eats what's being typed
+const dateStr = (d) => new Date(d + 'T12:00').toLocaleDateString([], { month: 'short', day: 'numeric' });
+const plus1 = (d) => { const x = new Date(d + 'T12:00'); x.setDate(x.getDate() + 1); return x.toISOString().slice(0, 10); };
+const today = () => new Date().toISOString().slice(0, 10);
+const fmt = (n) => (n == null ? '' : Number(n).toLocaleString());
+
+function setStatus() {
+  const busy = trials.some((t) => t.request);
+  const s = $('status'); s.className = 'status' + (busy ? ' busy' : '');
+  s.lastElementChild.textContent = busy ? 'Waiting on Claude' : 'Ready';
+}
+
+function renderList() {
+  const box = $('list'); box.replaceChildren();
+  if (!trials.length) { box.append(el('p', 'empty', 'No trials yet. Add one above.')); return; }
+  for (const st of [...stages].reverse()) {
+    const items = trials.filter((t) => t.stage === st);
+    if (!items.length) continue;
+    const g = el('div', 'sgroup'), n = el('div', 'sname', labels[st] || st);
+    n.append(el('span', null, String(items.length))); g.append(n);
+    for (const t of items) {
+      const b = el('button', 'pick' + (current?.id === t.id ? ' on' : '')); b.type = 'button';
+      b.append(el('b', null, t.idea), el('small', null, t.request ? t.requestLabel + ' · queued' : `${t.variants.length} versions${t.source ? ' · from long-form' : ''}`));
+      b.onclick = () => pick(t.id);
+      g.append(b);
+    }
+    box.append(g);
+  }
+}
+
+function fillSources() {
+  const sel = $('nSource'), keep = sel.value;
+  sel.replaceChildren(Object.assign(el('option', null, 'No, a fresh idea'), { value: '' }));
+  for (const s of sources) sel.append(Object.assign(el('option', null, s.label), { value: s.kind + ':' + s.id }));
+  sel.value = keep;
+}
+
+async function load() {
+  const r = await api('/api/trials');
+  trials = r.trials; labels = r.labels; stages = r.stages; farmKinds = r.farmKinds || {}; maxVersions = r.maxVersions || 10;
+  if (current) current = trials.find((t) => t.id === current.id) || null;
+  renderList(); setStatus();
+  current ? renderWork() : ($('work').hidden = true, $('none').hidden = false);
+  clearInterval(poll);
+  if (trials.some((t) => t.request)) poll = setInterval(load, 5000);
+}
+async function pick(id) {
+  current = await api('/api/trials/' + id);
+  renderList(); renderWork();
+  try { history.replaceState(null, '', '?trial=' + id); } catch {}
+}
+
+// Inputs keep what was typed across refreshes; focus and caret come back too.
+function inp(tag, id, value, attrs = {}) {
+  const e = Object.assign(el(tag), attrs, { id });
+  e.value = id in drafts ? drafts[id] : (value ?? '');
+  e.addEventListener('input', () => { drafts[id] = e.value; });
+  return e;
+}
+
+function renderWork() {
+  const t = current, w = $('work');
+  const act = document.activeElement, keep = act?.id && w.contains(act) ? { id: act.id, s: act.selectionStart, e: act.selectionEnd } : null;
+  $('none').hidden = true; w.hidden = false; w.replaceChildren();
+
+  // The trial: idea, notes, source, requests.
+  const p = el('div', 'panel');
+  const head = el('div', 'head'), ht = el('div');
+  ht.append(el('h2', null, t.idea));
+  const meta = el('span', 'muted', `${t.variants.length} versions · `); meta.append(el('span', 'st' + (t.stage === 'done' ? ' done' : ''), labels[t.stage] || t.stage));
+  if (t.source) meta.append(` · from "${t.source.label}"`);
+  ht.append(meta);
+  const del = el('button', 'ghost', 'Delete trial'); del.type = 'button';
+  del.onclick = async () => { if (!confirm(`Delete "${t.idea}" and its files? This can't be undone.`)) return; await api(`/api/trials/${t.id}/delete`, {}); current = null; load(); };
+  head.append(ht, del); p.append(head);
+
+  const brief = el('div', 'brief');
+  const nf = el('label', 'field'); nf.append(el('span', null, 'Angle, stories and real proof'), inp('textarea', 'tNotes', t.notes, { placeholder: 'What the reel says, the proof you have, who it\'s for. Anything missing becomes a placeholder, never a made-up number.' }));
+  const sf = el('label', 'field'); const sel = el('select'); sel.id = 'tSource';
+  sel.append(Object.assign(el('option', null, 'Fresh idea (no long-form video)'), { value: '' }));
+  for (const s of sources) sel.append(Object.assign(el('option', null, s.label), { value: s.kind + ':' + s.id }));
+  sel.value = t.source ? t.source.kind + ':' + t.source.id : '';
+  sf.append(el('span', null, 'Cut from long-form'), sel);
+  brief.append(nf, sf); p.append(brief);
+
+  const msg = el('span', 'msg');
+  const saveBrief = async () => {
+    const [kind, ...rest] = sel.value.split(':');
+    current = await api('/api/trials/' + t.id, { notes: $('tNotes').value, source: sel.value ? { kind, id: rest.join(':') } : null });
+    delete drafts.tNotes;
+  };
+  const ask = async (kind, note) => {
+    try { await saveBrief(); await api(`/api/trials/${t.id}/request`, { kind, note }); msg.textContent = ''; load(); }
+    catch (err) { msg.className = 'msg err'; msg.textContent = err.message; }
+  };
+  if (t.request) {
+    const wt = el('div', 'waiting'), line = el('div');
+    line.append(el('b', null, REQ[t.request.kind] + ' is queued. '), 'Say ', el('code', null, 'run my studio jobs'), ' in Claude Code.');
+    const c = el('button', 'ghost', 'Cancel'); c.type = 'button'; c.onclick = async () => { await api(`/api/trials/${t.id}/cancel`, {}); load(); };
+    wt.append(line, c); p.append(wt);
+  }
+  const btns = el('div', 'actions');
+  const b1 = el('button', 'primary', 'Write hooks & scripts'); b1.type = 'button'; b1.onclick = () => ask('hooks');
+  const b2 = el('button', null, 'Cut from long-form'); b2.type = 'button'; b2.onclick = () => ask('cut');
+  b2.title = 'Pick the long-form video first; Claude finds the moments and cuts one version per hook.';
+  const sb = el('button', 'ghost', 'Save'); sb.type = 'button';
+  sb.onclick = async () => { try { await saveBrief(); msg.className = 'msg ok'; msg.textContent = 'Saved.'; load(); } catch (err) { msg.className = 'msg err'; msg.textContent = err.message; } };
+  const b3 = el('button', null, 'Make versions from one reel'); b3.type = 'button'; b3.onclick = () => ask('variations');
+  b3.title = 'Once one version is finished, Claude renders the others from it: a new hook on each, plus small changes so Instagram doesn\'t flag duplicates.';
+  [b1, b2, b3].forEach((b) => (b.disabled = !!t.request));
+  btns.append(b1, b2, b3, sb, msg); p.append(btns);
+  const rv = el('div', 'actions');
+  const rn = inp('input', 'tRevise', '', { type: 'text', placeholder: 'Change something: punchier hook on B, shorter scripts…' }); rn.style.cssText = 'flex:1;min-width:200px'; rn.setAttribute('aria-label', 'What to change');
+  const rb = el('button', null, 'Revise'); rb.type = 'button'; rb.disabled = !!t.request;
+  rb.onclick = () => { ask('revise', rn.value); delete drafts.tRevise; };
+  rv.append(rn, rb); p.append(rv);
+  if (t.leader && !t.winner) {
+    const lv = t.variants.find((v) => v.id === t.leader);
+    p.append(el('p', 'muted', `Leading: version ${lv.label} (most views, with shares and saves weighted in). Pick the winner on its card once every version has had 16–24 hours.`));
+  }
+  w.append(p);
+  if (t.winner) w.append(farmPanel(t));
+
+  // The versions.
+  const grid = el('div', 'vgrid');
+  for (const v of t.variants) grid.append(vcard(t, v));
+  w.append(grid);
+  if (t.variants.length < maxVersions) {
+    const add = el('button', 'ghost', '+ Add a version'); add.type = 'button'; add.style.justifySelf = 'start';
+    add.onclick = async () => { current = await api(`/api/trials/${t.id}/variants`, {}); renderWork(); renderList(); };
+    w.append(add);
+  }
+  if (keep) { const f = document.getElementById(keep.id); if (f) { f.focus(); try { if (keep.s != null) f.setSelectionRange(keep.s, keep.e); } catch {} } }
+}
+
+function vcard(t, v) {
+  const k = (s) => `${v.id}-${s}`;
+  const card = el('section', 'vcard' + (t.winner === v.id ? ' win' : t.leader === v.id ? ' lead' : ''));
+  const top = el('div', 'vtop'), h = el('h3', null, 'Version ' + v.label);
+  if (t.winner === v.id) h.append(el('span', 'badge win', 'Winner'));
+  else if (t.leader === v.id) h.append(el('span', 'badge', 'Leading'));
+  const rm = el('button', 'x ghost', '×'); rm.type = 'button'; rm.title = 'Remove this version'; rm.setAttribute('aria-label', 'Remove version ' + v.label);
+  rm.onclick = async () => { if (!confirm(`Remove version ${v.label} and its files?`)) return; try { current = await api(`/api/trials/${t.id}/variants/${v.id}/delete`, {}); renderWork(); renderList(); } catch (err) { alert(err.message); } };
+  top.append(h, rm); card.append(top);
+
+  // Hook + script.
+  const s1 = el('div', 'vsec'); s1.append(el('b', null, 'Hook and script'));
+  const hook = inp('input', k('hook'), v.hook, { type: 'text', placeholder: 'The first line. This is what changes between versions.', className: 'hookin' });
+  hook.setAttribute('aria-label', `Version ${v.label} hook`);
+  const sc = inp('textarea', k('script'), v.script, { placeholder: 'The rest of the reel (same body on every version).', className: 'script' });
+  sc.setAttribute('aria-label', `Version ${v.label} script`);
+  const ch = inp('input', k('changes'), v.changes, { type: 'text', placeholder: 'What else is different: length, 1.1x on the middle, mirrored, caption colors…' });
+  ch.setAttribute('aria-label', `Version ${v.label}: what else is different`);
+  const sv = el('button', null, 'Save'); sv.type = 'button'; const sm = el('span', 'msg');
+  sv.onclick = async () => {
+    try { current = await api(`/api/trials/${t.id}/variants/${v.id}`, { hook: hook.value, script: sc.value, changes: ch.value }); delete drafts[k('hook')]; delete drafts[k('script')]; delete drafts[k('changes')]; sm.className = 'msg ok'; sm.textContent = 'Saved.'; renderList(); }
+    catch (err) { sm.className = 'msg err'; sm.textContent = err.message; }
+  };
+  const copy = el('button', 'ghost', 'Copy'); copy.type = 'button';
+  copy.onclick = async () => { try { await navigator.clipboard.writeText(`${hook.value}\n\n${sc.value}`.replace(/\s*\[(?!PLACEHOLDER)[A-Z]+(?::[^\]]*)?\]/g, '')); sm.className = 'msg ok'; sm.textContent = 'Copied.'; } catch { sm.className = 'msg err'; sm.textContent = 'Copy was blocked.'; } };
+  const row = el('div', 'actions'); row.append(sv, copy, sm);
+  s1.append(hook, sc, ch, row); card.append(s1);
+
+  // Footage -> editor, and the finished reel.
+  const s2 = el('div', 'vsec'); s2.append(el('b', null, 'Footage'));
+  for (const f of v.raw) {
+    const line = el('div', 'file'); line.append(el('span', null, f.name));
+    const send = el('button', null, v.job ? 'Sent' : 'Send to editor'); send.type = 'button'; send.disabled = !!v.job;
+    send.onclick = async () => { send.disabled = true; send.textContent = 'Sending…'; try { current = (await api(`/api/trials/${t.id}/variants/${v.id}/to-edit`, { path: f.path })).trial; renderWork(); renderList(); } catch (err) { send.disabled = false; send.textContent = 'Send to editor'; alert(err.message); } };
+    line.append(send, xBtn(t, f)); s2.append(line);
+  }
+  if (v.job) { const a = Object.assign(el('a', null, 'Open the edit'), { href: '/?job=' + v.job }); a.style.fontSize = '12.5px'; s2.append(a); }
+  s2.append(uploader(t, v, 'raw', v.raw.length ? 'Add another clip' : 'Upload footage'));
+  card.append(s2);
+
+  const s3 = el('div', 'vsec'); s3.append(el('b', null, 'Finished reel'));
+  const fin = v.final[0];
+  if (fin) {
+    const vid = Object.assign(el('video'), { src: `/trial-files/${t.id}/${encodeURI(fin.path)}`, controls: true, preload: 'metadata', playsInline: true });
+    const line = el('div', 'file'); line.append(el('span', null, fin.name), xBtn(t, fin));
+    s3.append(vid, line);
+  } else s3.append(el('span', 'muted', v.job ? 'Comes back here when the edit is done.' : 'Upload it, or send the footage to the editor.'));
+  s3.append(uploader(t, v, 'final', fin ? 'Replace' : 'Upload finished reel'));
+  card.append(s3);
+
+  // Posted + numbers.
+  const s4 = el('div', 'vsec'); s4.append(el('b', null, 'Posted as a trial reel'));
+  const posted = inp('input', k('posted'), v.posted || '', { type: 'date' }); posted.setAttribute('aria-label', `Version ${v.label}: date posted`);
+  const prow = el('div', 'actions'); prow.append(posted);
+  if (!v.posted) { const now = el('button', 'ghost', 'Posted today'); now.type = 'button'; now.onclick = () => { posted.value = today(); drafts[k('posted')] = posted.value; }; prow.append(now); }
+  s4.append(prow);
+  if (v.posted) s4.append(el('span', 'due', plus1(v.posted) <= today() ? 'A day is up: log the views.' : `Log the views tomorrow (after 16–24 hours).`));
+  const b = band(v.results.views);
+  if (b) { const bs = el('span', 'msg ' + (b[1] === 'gold' ? '' : b[1]), b[0]); if (b[1] === 'gold') bs.style.color = 'var(--gold)'; s4.append(bs); }
+  const res = el('div', 'results');
+  for (const [key, label] of RESULTS) {
+    const l = el('label', null, label);
+    l.append(inp('input', k(key), v.results[key] ?? '', { type: 'number', min: 0, inputMode: 'numeric', placeholder: '—' }));
+    res.append(l);
+  }
+  s4.append(res);
+  for (const [ok, text] of checks(v.results)) { const c = el('span', 'msg ' + (ok ? 'ok' : 'err'), (ok ? '✓ ' : '✗ ') + text); c.style.fontSize = '12px'; s4.append(c); }
+  const rrow = el('div', 'actions'), rmsg = el('span', 'msg');
+  const rs = el('button', null, 'Save numbers'); rs.type = 'button';
+  rs.onclick = async () => {
+    const results = {}; for (const [key] of RESULTS) results[key] = $(k(key)).value;
+    try { current = await api(`/api/trials/${t.id}/variants/${v.id}`, { posted: $(k('posted')).value || null, results }); for (const [key] of RESULTS) delete drafts[k(key)]; delete drafts[k('posted')]; renderWork(); renderList(); }
+    catch (err) { rmsg.className = 'msg err'; rmsg.textContent = err.message; }
+  };
+  rrow.append(rs);
+  if (Number(v.results.views) > 0) {
+    const wb = el('button', t.winner === v.id ? 'ghost' : 'primary', t.winner === v.id ? 'Unpick winner' : 'Pick as winner'); wb.type = 'button';
+    wb.onclick = async () => { current = await api('/api/trials/' + t.id, { winner: t.winner === v.id ? null : v.id }); renderWork(); renderList(); };
+    rrow.append(wb);
+  }
+  rrow.append(rmsg); s4.append(rrow);
+  card.append(s4);
+  return card;
+}
+
+// Farming the winner: re-upload it natively, repost a varied trial version about every 7 days,
+// remake it in a new format, and watch the total views (one reel's views are a vanity metric).
+function farmPanel(t) {
+  const wv = t.variants.find((v) => v.id === t.winner);
+  const p = el('div', 'panel');
+  const h = el('h2', null, `Farm the winner: version ${wv.label}`); p.append(h);
+  const steps = el('ol', 'steps');
+  [['Re-upload it to your feed.', ' Upload the file as a new post. Don\'t tap "Share to anyone" on the trial: that won\'t restart its reach.'],
+   ['Repost it as a trial about every 7 days,', ' with small changes each time so it isn\'t flagged as a duplicate.'],
+   ['Repost it on your feed every 1–4 weeks,', ' with other posts in between.'],
+   ['Remake it:', ' same script, new location or format. When it stops working, rest it a few weeks and start again.']]
+    .forEach(([b, rest]) => { const li = el('li'); li.append(el('b', null, b), rest); steps.append(li); });
+  p.append(steps);
+  const stat = el('p', null); stat.style.margin = '0';
+  stat.append(el('b', null, `${fmt(t.totalViews)} total views`), ' across every version and repost.');
+  if (t.nextTrialRepost) stat.append(el('span', 'due', ` Next trial repost: ${t.nextTrialRepost <= today() ? 'due now' : dateStr(t.nextTrialRepost)}.`));
+  p.append(stat);
+
+  if (t.farm.length) {
+    const ul = el('div'); ul.style.cssText = 'display:grid;gap:6px';
+    for (const r of t.farm) {
+      const row = el('div', 'file');
+      row.append(el('span', null, `${dateStr(r.date)} · ${farmKinds[r.kind] || r.kind}${r.note ? ' · ' + r.note : ''}`));
+      const vi = inp('input', 'farm-' + r.id, r.views ?? '', { type: 'number', min: 0, placeholder: 'views' }); vi.style.width = '110px';
+      vi.setAttribute('aria-label', 'Views for the repost on ' + dateStr(r.date));
+      vi.onchange = async () => { current = await api(`/api/trials/${t.id}/farm/${r.id}`, { views: vi.value }); delete drafts['farm-' + r.id]; renderWork(); };
+      const x = el('button', 'x ghost', '×'); x.type = 'button'; x.setAttribute('aria-label', 'Remove this repost');
+      x.onclick = async () => { current = await api(`/api/trials/${t.id}/farm/${r.id}`, { delete: true }); renderWork(); };
+      row.append(vi, x); ul.append(row);
+    }
+    p.append(ul);
+  }
+  const add = el('div', 'actions'), am = el('span', 'msg');
+  const kind = el('select'); kind.id = 'farmKind'; kind.setAttribute('aria-label', 'Kind of repost');
+  for (const [v, l] of Object.entries(farmKinds)) kind.append(Object.assign(el('option', null, l), { value: v }));
+  const date = inp('input', 'farmDate', today(), { type: 'date' }); date.setAttribute('aria-label', 'Date it went up');
+  const views = inp('input', 'farmViews', '', { type: 'number', min: 0, placeholder: 'views (later)' }); views.style.width = '130px'; views.setAttribute('aria-label', 'Views');
+  const ab = el('button', null, 'Log repost'); ab.type = 'button';
+  ab.onclick = async () => {
+    try { current = await api(`/api/trials/${t.id}/farm`, { kind: kind.value, date: date.value, views: views.value }); delete drafts.farmDate; delete drafts.farmViews; renderWork(); renderList(); }
+    catch (err) { am.className = 'msg err'; am.textContent = err.message; }
+  };
+  const mk = el('button', 'primary', 'Make a repost version'); mk.type = 'button'; mk.disabled = !!t.request;
+  mk.title = 'Claude makes a new varied version of the winner for the next repost.';
+  mk.onclick = async () => { try { await api(`/api/trials/${t.id}/request`, { kind: 'farm' }); load(); } catch (err) { am.className = 'msg err'; am.textContent = err.message; } };
+  add.append(kind, date, views, ab, mk, am); p.append(add);
+  return p;
+}
+
+function xBtn(t, f) {
+  const x = el('button', 'x ghost', '×'); x.type = 'button'; x.title = 'Delete ' + f.name; x.setAttribute('aria-label', 'Delete ' + f.name);
+  x.onclick = async () => { if (!confirm(`Delete ${f.name}?`)) return; x.disabled = true; try { current = await api(`/api/trials/${t.id}/files/delete`, { path: f.path }); renderWork(); renderList(); } catch (err) { x.disabled = false; alert(err.message); } };
+  return x;
+}
+
+function uploader(t, v, kind, label) {
+  const wrap = el('div', 'actions');
+  const fileIn = Object.assign(el('input'), { type: 'file', accept: 'video/*', hidden: true });
+  const b = el('button', 'ghost', label); b.type = 'button'; b.onclick = () => fileIn.click();
+  const m = el('span', 'msg');
+  fileIn.onchange = async () => {
+    const f = fileIn.files[0]; if (!f) return;
+    b.disabled = true; m.className = 'msg'; m.textContent = 'Uploading…';
+    try {
+      // A finished reel replaces the old one, so a version only ever has one.
+      if (kind === 'final') for (const old of v.final) await api(`/api/trials/${t.id}/files/delete`, { path: old.path });
+      const r = await fetch(`/api/trials/${t.id}/upload?variant=${v.id}&kind=${kind}`, { method: 'POST', headers: { 'x-filename': encodeURIComponent(f.name) }, body: f });
+      const j = await r.json(); if (!r.ok) throw new Error(j.error || 'Upload failed');
+      current = j; renderWork(); renderList();
+    } catch (err) { b.disabled = false; m.className = 'msg err'; m.textContent = err.message; }
+  };
+  wrap.append(b, fileIn, m);
+  return wrap;
+}
+
+$('newForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const idea = $('nIdea').value.trim(), m = $('nMsg');
+  if (!idea) { m.className = 'msg err'; m.textContent = 'Say what the reel is about first.'; $('nIdea').focus(); return; }
+  const sv = $('nSource').value, [kind, ...rest] = sv.split(':');
+  try {
+    const t = await api('/api/trials', { idea, count: $('nCount').value, source: sv ? { kind, id: rest.join(':') } : null });
+    $('nIdea').value = ''; $('nSource').value = ''; m.textContent = '';
+    await load(); pick(t.id);
+  } catch (err) { m.className = 'msg err'; m.textContent = err.message; }
+};
+
+api('/api/trials/sources').then((r) => { sources = r.sources; fillSources(); if (current) renderWork(); }).catch(() => {});
+load().then(() => { const id = new URLSearchParams(location.search).get('trial'); if (id) pick(id).catch(() => {}); });
+</script>
+</body>
+</html>
