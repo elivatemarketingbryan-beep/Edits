@@ -6,16 +6,21 @@
 <title>Edit Review</title>
 <link rel="stylesheet" href="/studio.css">
 </head>
-<body>
+<body class="rv-page">
 <header class="top">
   <div class="row"><a href="/" class="muted">← Studio</a><strong id="title">Edit review</strong><span id="meta" class="muted"></span><span id="status" class="pill"></span></div>
   <div class="row">
     <a id="sheetLink" class="button" hidden>Breakdown sheet</a>
-    <button id="copyNotes">Copy notes for Claude</button>
-    <button id="requestChanges">Request changes</button>
-    <button id="approve" class="primary">Approve and render final</button>
+    <button id="copyNotes" class="ghost">Copy notes for Claude</button>
   </div>
 </header>
+
+<!-- Always on screen: an overall note, then reject or approve. -->
+<div class="rv-bar" id="rvBar">
+  <label class="bar-note"><span class="sr-only">Notes on this video</span><textarea id="overallNote" rows="1" placeholder="Notes on the whole video before you approve"></textarea></label>
+  <span id="barMsg" class="msg" role="status"></span>
+  <span class="bar-btns"><button id="requestChanges" class="reject">Reject</button><button id="approve" class="primary">Approve and render final</button></span>
+</div>
 
 <div class="rv">
   <div class="rv-main">
@@ -73,10 +78,10 @@ async function load() {
   $('#status').className = 'pill ' + job.waitingOn;
   if (!video.src) setSource();
   if (job.transcript && !transcript.length) transcript = await fetch(`/files/${id}/${job.transcript}`).then((r) => r.json()).catch(() => []);
-  $('#approve').hidden = job.stage !== 'review';
+  $('#rvBar').hidden = job.stage !== 'review';
+  $('.rv').style.height = job.stage === 'review' ? '' : 'calc(100vh - 53px)';
   $('#sheetLink').hidden = !job.sheet?.length;
   $('#sheetLink').href = '/sheet?job=' + encodeURIComponent(id);
-  $('#requestChanges').hidden = job.stage !== 'review';
   renderAll();
 }
 
@@ -128,7 +133,7 @@ function renderList() {
   if (tab === 'notes') {
     const notes = job.notes.filter((n) => filter === 'all' || n.status === filter).sort((a, b) => a.t - b.t);
     list.innerHTML = notes.map((n) => `<div class="note ${n.status}">
-      <span class="t" data-seek="${n.t}">${fmt(n.t)}</span> <span class="tag">${n.edit != null && job.edits[n.edit] ? NAMES[typeOf(job.edits[n.edit])] : 'Other'}</span>
+      ${n.general ? '<span class="t">Whole video</span>' : `<span class="t" data-seek="${n.t}">${fmt(n.t)}</span>`} <span class="tag">${n.edit != null && job.edits[n.edit] ? NAMES[typeOf(job.edits[n.edit])] : 'Other'}</span>
       <div>${esc(n.text)}</div>
       ${n.reply ? `<div class="reply"><b>Claude:</b> ${esc(n.reply)}</div>` : ''}
       <div class="acts">${n.status === 'done' ? `<button data-reopen="${n.id}">Reopen</button>` : `<button data-done="${n.id}">Mark done</button>`}
@@ -215,15 +220,20 @@ $('#copyNotes').onclick = () => {
   navigator.clipboard?.writeText(text);
   $('#msg').textContent = open.length ? `${open.length} open notes copied` : 'No open notes to copy';
 };
+const barMsg = (t, err = true) => { $('#barMsg').textContent = t; $('#barMsg').className = 'msg' + (err ? ' err' : ''); };
+$('#overallNote').addEventListener('input', () => barMsg(''));
 $('#requestChanges').onclick = async () => {
-  if (!job.notes.some((n) => n.status === 'open')) { $('#msg').textContent = 'Add at least one note first, so Claude knows what to change.'; return; }
-  job = await api(`/api/jobs/${id}/request-changes`, {});
+  const note = $('#overallNote').value.trim();
+  if (!note && !job.notes.some((n) => n.status === 'open')) { barMsg('Write what should change in the notes box, or press N to note a moment.'); $('#overallNote').focus(); return; }
+  try { job = await api(`/api/jobs/${id}/request-changes`, { note }); } catch (e) { barMsg(e.message); return; }
+  $('#overallNote').value = '';
   $('#msg').textContent = 'Sent. In Claude Code, say "run my studio jobs" and it will work through your notes.';
   load();
 };
 $('#approve').onclick = async () => {
   if (job.notes.some((n) => n.status === 'open') && !confirm('Some notes are still open. Render the final anyway?')) return;
-  job = await api(`/api/jobs/${id}/approve`, {});
+  try { job = await api(`/api/jobs/${id}/approve`, { note: $('#overallNote').value.trim() }); } catch (e) { barMsg(e.message); return; }
+  $('#overallNote').value = '';
   $('#msg').textContent = 'Approved. In Claude Code, say "run my studio jobs" to render the final.';
   load();
 };

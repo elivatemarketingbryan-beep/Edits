@@ -1796,5 +1796,36 @@
   ],
   "reject": null,
   "summary": "0.17 s short transient (attack 4 ms, decays in 143 ms). Sounds most like: an enter key press (z +3.0), a quick swipe (z +2.8), a soft key release click (z +2.6)"
+ },
+ "keyboard": {
+  "mtime": 1792797162,
+  "tags": [
+   [
+    "a single mechanical keyboard key press",
+    5.1
+   ],
+   [
+    "slow typing with separate key presses",
+    4.7
+   ],
+   [
+    "a keyboard typing fast",
+    4.6
+   ],
+   [
+    "a laptop keyboard typing",
+    4.3
+   ],
+   [
+    "a clicky mechanical keyboard",
+    4.1
+   ],
+   [
+    "a deep thocky mechanical keyboard",
+    4.0
+   ]
+  ],
+  "reject": null,
+  "summary": "4.11 s busy, 6.8 onsets/s (attack 227 ms, decays in 39 ms). Sounds most like: a single mechanical keyboard key press (z +5.0), slow typing with separate key pre"
  }
 }

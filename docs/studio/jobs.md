@@ -23,14 +23,14 @@
 
 Stage paths:
 - `video`: `formats` → `pick` → `design` → `graphics` → `edit` → `review` ⇄ `revise` → `final` → `done`
-- `reels`: `formats` → `clips` → `design` → `graphics` → `final` → `done`
+- `reels`: `formats` → `clips` → `design` → `graphics` → `final` → `review` ⇄ `revise` → `done`
 
 | Stage | Who | What Claude does | Writes | Next |
 |---|---|---|---|---|
 | `formats` | Claude | Get the video (`source` in the job folder, or download `url` with yt-dlp into it). Intake into `projects/<id>/` and transcribe once (rough-cut skill). Rank styles (below). Render a ~5s preview of each of the top 3 from the strongest moment. Pitch ideas for its moments (see "Claude's ideas"). Reels mode: find the reels instead (see "Reels mode"). | `formats.json`, `ideas.json`, `previews/<style>.mp4`, `job.json` `transcript` = `transcript.json` (segments `{start,end,text}`), `duration`; reels mode: `clips.json` | `pick` (reels: `clips`) |
 | `design` | Claude | Design the motion graphics for the chosen style and picked ideas (reels mode: for every reel in `job.json` `chosen`), take a still of each at its key pose over the real frame, write them to `graphics.json`. On a return from `graphics`, change only the graphics with `status: "changes"`: set `reply` (one line), clear the status to `open`. A tool with no graphics skips straight to `edit`. | `graphics.json`, `graphics/*.jpg` | `graphics` |
 | `edit` | Claude | Build the chosen `style` (or run the chosen tool) per its catalog recipe, STYLE-GUIDE section and brand.json, plus every idea in `job.json` `picked` at its moment (unpicked ideas are skipped). Write the breakdown sheet first (see "Video Breakdown Sheet"; long-form renders one file per scene). Render a draft without sounds, then add sounds (see "Sound effects"), then `sheet.mjs thumbs`. | `sheet.json`, `.nosfx.mp4`, `sfx.json`, `preview.mp4`, `edits.json`, `job.json` `preview` | `review` (tools with no video: put files in `outputs/`, list them in `job.json` `outputs`, go to `done`) |
-| `revise` | Claude | Run `node studio/sheet.mjs md <id>` to see which scenes have open notes. For every note with `status: "open"`: change that scene only, then set its `reply` (one line: what changed) and `status: "done"`. If a note can't be done, say why in `reply` and leave it open. Long-form: re-render only the noted scenes, `assemble`, re-place sounds, `thumbs`. Short-form: re-render the preview. | `notes.json`, `preview.mp4`, `edits.json` | `review` |
+| `revise` | Claude | Run `node studio/sheet.mjs md <id>` to see which scenes have open notes. For every note with `status: "open"`: change that scene only, then set its `reply` (one line: what changed) and `status: "done"`. If a note can't be done, say why in `reply` and leave it open. Long-form: re-render only the noted scenes, `assemble`, re-place sounds, `thumbs`. Short-form: re-render the preview. Notes with `general: true` are about the whole video (typed in the page's notes box, `t` is 0); `kind: "approve"` ones were left while approving, so apply them in `final`. Reels mode: see "Reels mode" step 6. | `notes.json`, `preview.mp4`, `edits.json` | `review` |
 | `final` | Claude | Full-quality render of the approved edit. Copy it into the job folder. Run the content step if the user asked for it. | `final.mp4`, `job.json` `final`, `finalDuration` (seconds, for the "ready" screen's runtime stat), `outputs` | `done` |
 
 Motion-graphic edits run the `edit` stage through `studio/edit.mjs` (plan, fit, build, cut, check); see CLAUDE.md "How an edit runs".
@@ -38,6 +38,15 @@ Motion-graphic edits run the `edit` stage through `studio/edit.mjs` (plan, fit, 
 If the user picks a style during `formats` (the page allows it), the job is already in
 `design`; skip ranking. The user's moves (`pick`, `clips`, `graphics`, `review`) happen on the
 page; never move a job out of them yourself.
+
+### The edit so far (job.json `progress`, every video job)
+
+Bryan should be able to open a job at any stage and watch where the edit is. The raw upload is often 4K HEVC `.mov`,
+which the browser can't play, so whenever there is a new cut (the rough cut, then each draft), write a light copy to
+`jobs/<id>/progress.mp4` and set `job.json` `progress: "progress.mp4"`:
+`ffmpeg -i <latest cut> -vf scale=1280:-2 -c:v libx264 -preset veryfast -crf 26 -c:a aac -b:a 128k -movflags +faststart jobs/<id>/progress.mp4`.
+The page plays it as "Edit so far" until there's a `preview` or `final`. During `design`, `edit`, `revise` and `final`
+the page also keeps the graphics board up, read-only, so the stills never disappear while Claude works.
 
 ### Graphics approval (graphics.json, every job)
 
@@ -68,5 +77,13 @@ The drop screen sets `job.json` `mode: "reels"` and `reelOpts: { "count": "auto"
    `jobs/<id>/reels/<n>-<slug>.mp4`, write its Instagram caption following
    `engines/content-os/knowledge/ig-caption-patterns.md` (hashtags from its list), and write
    `jobs/<id>/reels.json`: `[{ "id": "r1", "title": "...", "file": "reels/01-every-review-has-a-window.mp4", "start": 312.4, "end": 356.0, "caption": "..." }]`.
-   List the files in `job.json` `outputs`, then move to `done`. The page shows them as a grid with
-   each caption, Copy and Download.
+   List the files in `job.json` `outputs`, then move to `review` (not `done`: Bryan reviews every reel).
+5. **`review` (user): Reels review.** The page shows each reel with a notes box and Approve / Reject, and writes
+   `status: "approved"` or `status: "changes"` plus `note` onto each reel in `reels.json`. Any rejected reel moves
+   the job to `revise`; every reel approved moves it to `done`.
+6. **`revise` (Claude):** re-cut only the reels with `status: "changes"`, following `note`. Set `reply` (one line:
+   what changed) and `status: "open"`, keep approved reels as they are, then `node studio/jobs.mjs stage <id> review`.
+7. **Posting:** approved reels get a Post to Instagram button (`studio/instagram.mjs`), which writes `ig`
+   (`status`, `id`, `permalink`, `postedAt`, `sheet`) and a `design` snapshot onto the reel and logs a row in the
+   retention sheet. Finished single edits (`done`, with `final`) get the same button; theirs lands on `job.json`. Never post
+   for Bryan; the button is his. Setup and the weekly stats refresh: `docs/studio/instagram-and-sheets.md`.

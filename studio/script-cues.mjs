@@ -31,7 +31,7 @@ export function parseScript(text) {
 
 export function loadWords(file) {
   const j = JSON.parse(fs.readFileSync(file, 'utf8'));
-  return (j.words || []).map((w) => ({ t: norm(w.w), s: w.s, e: w.e })).filter((w) => w.t);
+  return (j.words || []).map((w) => ({ t: norm(w.w ?? w.word ?? ''), s: w.s ?? w.start, e: w.e ?? w.end })).filter((w) => w.t);   // {w,s,e} or WhisperX {word,start,end}
 }
 
 // Longest common subsequence between a script line and a window of transcript words,

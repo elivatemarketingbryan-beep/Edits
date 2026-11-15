@@ -32,7 +32,8 @@ and stores it on a Notion page (schema: that folder's `notion-pipeline.md`; data
    **Studio job**), and the same in the personal account's pipeline
    (`collection://2681fcbe-9a1c-4d38-acb3-3bf490293f67`, see `engines/content-os/notion-pipeline.md`);
    status flips and `Studio job` go to whichever pipeline the matched page is in. For each, fetch the page and save its body to
-   `projects/<id>/scripts/<notion-page-id>.md`.
+   `projects/<id>/scripts/<notion-page-id>.md`. Also export every scripted plan from the Plan
+   page into the same folder (`docs/studio/plans.md` "From script to edit") so they are scored too.
 2. `node studio/script-cues.mjs score projects/<id>/transcript/words.json projects/<id>/scripts/*.md`.
    The highest score at or above 0.6 is this clip's script. Below 0.6 for all: no script;
    rank formats as usual and say so in one line.

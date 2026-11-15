@@ -21,6 +21,8 @@ const plans = () => fs.existsSync(boards) ? fs.readdirSync(boards).filter((f) =>
 
 // How Bryan talks -> which graphics fit. Add a row when a new phrasing should trigger something.
 const RULES = [
+  // a story or scenario: act it out with the faceless figure (styles/REFERENCES.md "Moonshot Motion"); premium ones that already act a scene out
+  [/\bimagine\b|\bpicture this\b|\blet's say\b|\bthink of\b|\bfor example\b|\ba client of mine\b|\bone of my clients\b|\bi remember\b|\bthere was\b|\bwhen i was\b|\bstarting over\b/i, ['S01-climb'], 'a story or scenario', 4],
   [/\$\s?\d/, ['C239PriceCard', 'P198Odometer', 'C108Waterfall'], 'a price or money figure', 3],
   [/\bfrom \$?\d.*\bto \$?\d|\bused to\b|\bbefore\b.*\bnow\b/i, ['C111Slope', 'P209Flip'], 'before and after', 3],
   [/\bversus\b|\bvs\b|\bbut only has\b|\bcompare\b|\binstead of\b/i, ['C249VersusCards', 'Y164Versus'], 'comparing two things', 3],
@@ -59,7 +61,7 @@ function plan() {
   for (const h of hits) {
     if (picks.some((p) => Math.abs(p.start - h.s.start) < GAP)) continue;
     const pick = h.ids.slice().sort((a, b) => (used.get(a) ?? 0) - (used.get(b) ?? 0))[0];
-    if ((used.get(pick) ?? 0) >= 1 && h.ids.every((x) => (used.get(x) ?? 0) >= 1)) continue;   // never the same graphic twice in one video
+    if (byId[pick]?.kind !== 'story' && (used.get(pick) ?? 0) >= 1 && h.ids.every((x) => (used.get(x) ?? 0) >= 1)) continue;   // a story gets a new scene each time   // never the same graphic twice in one video
     used.set(pick, (used.get(pick) ?? 0) + 1);
     const it = byId[pick];
     picks.push({ start: h.s.start, end: h.s.end, line: h.s.text.trim(), id: pick, kind: it.kind, name: it.name, why: h.why, also: h.ids.filter((x) => x !== pick).slice(0, 4), how: it.how });
@@ -75,6 +77,7 @@ function fit() {
   fs.mkdirSync(boards, { recursive: true });
   let made = 0;
   for (const b of brief) {
+    if (b.kind === 'story') { console.log(`  ${t(b.start)} story: write a new scene for "${b.line.slice(0, 50)}" with assets/boards/story/kit.js (start from ${b.id})`); continue; }
     if (b.kind !== 'board') { console.log(`  ${t(b.start)} ${b.id}: approved graphic, copy it and change the words and times by hand`); continue; }
     const name = `${b.id.toLowerCase()}-${Math.round(b.start)}`, f = path.join(boards, `${name}.plan.json`);
     if (fs.existsSync(f)) continue;
